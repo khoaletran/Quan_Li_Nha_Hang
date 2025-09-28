@@ -1,16 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.quan_li_nha_hang.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<BorderPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1">
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="15" prefWidth="200" style="-fx-background-color: #f5f5f5;" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="20" left="10" right="10" bottom="20"/>
+            </padding>
+
+            <!-- Avatar + Info -->
+            <ImageView fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true"/>
+            <Label text="Nguyen Ha Nhat Khanh" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+            <Label text="Nhân Viên" style="-fx-text-fill: gray;"/>
+
+            <Separator/>
+
+            <!-- Menu -->
+            <Button text="🏠 Đặt Bàn" prefWidth="180"/>
+            <Button text="🔍 Danh Sách Đặt" prefWidth="180"/>
+            <Button text="📻 Radio" prefWidth="180"/>
+            <Button text="🎶 Playlists" prefWidth="180"/>
+            <Button text="🎵 Songs" prefWidth="180"/>
+            <Button text="😊 Personalized Picks" prefWidth="180"/>
+        </VBox>
+    </left>
+
+    <!-- Top Menu -->
+    <top>
+        <VBox>
+            <MenuBar>
+                <menus>
+                    <Menu text="File">
+                        <items>
+                            <MenuItem text="Close"/>
+                        </items>
+                    </Menu>
+                    <Menu text="Edit">
+                        <items>
+                            <MenuItem text="Delete"/>
+                        </items>
+                    </Menu>
+                    <Menu text="Help">
+                        <items>
+                            <MenuItem text="About"/>
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
+
+            <!-- Search Bar -->
+            <HBox spacing="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <TextField promptText="🔍 Tìm kiếm..." HBox.hgrow="ALWAYS"/>
+                <Button text="Tìm"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Đặt Bàn">
+                    <AnchorPane>
+                        <Label text="Form đặt bàn ở đây" layoutX="50" layoutY="50"/>
+                    </AnchorPane>
+                </Tab>
+                <Tab text="Danh Sách Đặt">
+                    <AnchorPane>
+                        <Label text="Danh sách đặt bàn hiển thị ở đây" layoutX="50" layoutY="50"/>
+                    </AnchorPane>
+                </Tab>
+                <Tab text="Thống kê">
+                    <AnchorPane>
+                        <Label text="Biểu đồ, báo cáo ở đây" layoutX="50" layoutY="50"/>
+                    </AnchorPane>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+
+</BorderPane>
