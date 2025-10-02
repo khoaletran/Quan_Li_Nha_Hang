@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="500.0" prefWidth="800.0">
+
+    <!-- Khối chính -->
+    <center>
+        <HBox alignment="CENTER" spacing="20.0">
+            <children>
+                <!-- Logo -->
+                <VBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <ImageView fx:id="logoImage" fitHeight="150.0" fitWidth="150.0"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="@../IMG/logo_1.png" />
+                            </image>
+                        </ImageView>
+                        <Label text="CRABKING" styleClass="logo-title"/>
+                        <Label text="RESTAURANT" styleClass="logo-subtitle"/>
+                    </children>
+                </VBox>
+
+                <!-- Form đăng nhập -->
+                <VBox alignment="CENTER_LEFT" spacing="15.0" styleClass="login-card">
+                    <children>
+                        <Label text="ĐĂNG NHẬP" styleClass="login-title"/>
+
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <children>
+                                <Label text="👤"/>
+                                <TextField fx:id="usernameField" promptText="Nhập tên đăng nhập" styleClass="text-field"/>
+                            </children>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <children>
+                                <Label text="🔒"/>
+                                <PasswordField fx:id="passwordField" promptText="Nhập mật khẩu" styleClass="password-field"/>
+                            </children>
+                        </HBox>
+
+                        <Hyperlink text="Quên mật khẩu?" styleClass="hyperlink"/>
+
+                        <Button fx:id="loginButton" text="Đăng nhập" styleClass="button"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </center>
+</BorderPane>

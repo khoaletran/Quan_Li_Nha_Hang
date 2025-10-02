@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="600.0" prefWidth="900.0">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="15" prefWidth="200" alignment="TOP_CENTER" styleClass="sidebar">
+            <children>
+                <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
+                    <image>
+                        <Image url="@../IMG/avatar.png" />
+                    </image>
+                </ImageView>
+                <Label text="Nguyễn Hà Nhật Khanh" styleClass="sidebar-username"/>
+                <Button text="QUẢN LÍ ĐẶT BÀN" styleClass="sidebar-button"/>
+                <Button text="QUẢN LÍ THÀNH VIÊN" styleClass="sidebar-button"/>
+                <Button text="TRA CỨU" styleClass="sidebar-button"/>
+                <Button text="Bàn Giao Ca" styleClass="sidebar-exit"/>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Trung tâm (Danh sách bàn) -->
+    <center>
+        <VBox spacing="15" alignment="TOP_CENTER" styleClass="center-box">
+            <children>
+                <TitledPane text="Khu Vực - Số Lượng - Thời Gian" expanded="true">
+                    <content>
+                        <VBox spacing="15">
+                            <children>
+
+                                <!-- Hàng 1 -->
+                                <HBox spacing="30" alignment="CENTER">
+                                    <children>
+                                        <Label text="IN"/>
+                                        <RadioButton text="A">
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="tableGroup1"/>
+                                            </toggleGroup>
+                                        </RadioButton>
+                                        <RadioButton text="B" toggleGroup="$tableGroup1"/>
+                                        <RadioButton text="C" toggleGroup="$tableGroup1"/>
+                                        <RadioButton text="D" toggleGroup="$tableGroup1"/>
+                                    </children>
+                                </HBox>
+
+                                <!-- Hàng 2 -->
+                                <HBox spacing="30" alignment="CENTER">
+                                    <children>
+                                        <Label text="IN"/>
+                                        <RadioButton text="A">
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="tableGroup2"/>
+                                            </toggleGroup>
+                                        </RadioButton>
+                                        <RadioButton text="B" toggleGroup="$tableGroup2"/>
+                                        <RadioButton text="C" toggleGroup="$tableGroup2"/>
+                                        <RadioButton text="D" toggleGroup="$tableGroup2"/>
+                                    </children>
+                                </HBox>
+
+                                <!-- Hàng 3 -->
+                                <HBox spacing="30" alignment="CENTER">
+                                    <children>
+                                        <Label text="IN"/>
+                                        <RadioButton text="A">
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="tableGroup3"/>
+                                            </toggleGroup>
+                                        </RadioButton>
+                                        <RadioButton text="B" toggleGroup="$tableGroup3"/>
+                                        <RadioButton text="C" toggleGroup="$tableGroup3"/>
+                                        <RadioButton text="D" toggleGroup="$tableGroup3"/>
+                                    </children>
+                                </HBox>
+
+                            </children>
+                        </VBox>
+                    </content>
+                </TitledPane>
+            </children>
+        </VBox>
+    </center>
+
+    <!-- Form đặt bàn -->
+    <right>
+        <VBox spacing="10" alignment="TOP_CENTER" prefWidth="250" styleClass="form-box">
+            <children>
+                <Label text="Thông tin đặt bàn" styleClass="form-title"/>
+
+                <Label text="Tên Khách Hàng"/>
+                <TextField fx:id="txtTenKhach"/>
+
+                <Label text="Số điện thoại"/>
+                <TextField fx:id="txtSDT"/>
+
+                <Label text="Số lượng"/>
+                <TextField fx:id="txtSoLuong"/>
+
+                <Label text="Mô tả"/>
+                <TextField fx:id="txtMoTa"/>
+
+                <Button text="Check-in/Check-out/Wait List" styleClass="form-button"/>
+            </children>
+        </VBox>
+    </right>
+</BorderPane>

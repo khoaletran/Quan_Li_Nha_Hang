@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="600.0" prefWidth="900.0">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="15" prefWidth="500" alignment="TOP_CENTER" styleClass="sidebar">
+            <children>
+                <!-- Avatar -->
+                <ImageView fitHeight="120" fitWidth="120" preserveRatio="true">
+                    <image>
+                        <Image url="@../IMG/avatar.png" />
+                    </image>
+                </ImageView>
+
+                <!-- Tên & Chức vụ -->
+                <Label text="Nguyễn Hà Nhật Khanh" styleClass="sidebar-username"/>
+                <Label text="Nhân Viên" styleClass="sidebar-cv"/>
+
+                <!-- Các nút -->
+                <Button text="QUẢN LÍ ĐẶT BÀN" styleClass="sidebar-button"/>
+                <Button text="QUẢN LÍ THÀNH VIÊN" styleClass="sidebar-button"/>
+                <Button text="TRA CỨU" styleClass="sidebar-button"/>
+
+                <!-- Nút exit cuối -->
+                <Button text="Bàn Giao Ca" styleClass="sidebar-exit"/>
+            </children>
+        </VBox>
+    </left>
+
+</BorderPane>
