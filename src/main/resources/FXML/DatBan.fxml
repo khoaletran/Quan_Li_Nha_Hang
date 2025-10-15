@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" spacing="12" padding="12">
+    <!-- Trái: danh sách bàn -->
+    <VBox spacing="10" HBox.hgrow="ALWAYS">
+        <HBox spacing="8">
+            <Button text="OUT" styleClass="chip chip-green"/>
+            <Button text="IN"  styleClass="chip chip-orange"/>
+            <Button text="VIP" styleClass="chip chip-red"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Mới" styleClass="btn-primary"/>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <content>
+                <FlowPane hgap="10" vgap="10" padding="6">
+                    <!-- 12 ô bàn -->
+                    <VBox styleClass="card" prefWidth="150" alignment="CENTER">
+                        <Pane styleClass="thumb" prefHeight="90"/>
+                        <Label text="A-01"/>
+                        <Label text="2 chỗ" styleClass="chip chip-green"/>
+                    </VBox>
+                    <VBox styleClass="card" prefWidth="150" alignment="CENTER"><Pane styleClass="thumb" prefHeight="90"/><Label text="A-02"/><Label text="4 chỗ" styleClass="chip chip-orange"/></VBox>
+                    <VBox styleClass="card" prefWidth="150" alignment="CENTER"><Pane styleClass="thumb" prefHeight="90"/><Label text="VIP-01"/><Label text="8 chỗ" styleClass="chip chip-red"/></VBox>
+                    <!-- … thêm bớt tương tự -->
+                </FlowPane>
+            </content>
+        </ScrollPane>
+    </VBox>
+
+    <!-- Phải: form thông tin đặt -->
+    <VBox spacing="10" prefWidth="320">
+        <VBox styleClass="side-panel" spacing="8">
+            <Label text="Thông tin đặt bàn" styleClass="card-title"/>
+            <TextField promptText="Tên khách"/>
+            <TextField promptText="SĐT"/>
+            <HBox spacing="8">
+                <TextField promptText="Số người" prefWidth="120"/>
+                <DatePicker promptText="Ngày"/>
+            </HBox>
+            <TextField promptText="Khung giờ (vd: 18:00)"/>
+            <HBox spacing="8">
+                <Button text="Giữ chỗ" styleClass="btn-primary" HBox.hgrow="ALWAYS"/>
+                <Button text="Huỷ" styleClass="btn-danger"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</HBox>

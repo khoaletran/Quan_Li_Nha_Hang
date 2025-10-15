@@ -1,0 +1,77 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #1e1e1e;
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: #f9f9f9;
+    -fx-pref-width: 200;
+    -fx-border-color: #ddd;
+}
+
+.sidebar-name {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+.sidebar-role {
+    -fx-text-fill: gray;
+    -fx-font-size: 13px;
+}
+
+.sidebar-btn {
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: #eee;
+}
+
+.logout-btn {
+    -fx-background-color: #d33;
+    -fx-text-fill: white;
+    -fx-background-radius: 6;
+}
+
+/* Dashboard */
+.dashboard-bg {
+    -fx-background-color: #ffffff;
+}
+
+.title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222;
+}
+
+.info-card {
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 10;
+    -fx-background-radius: 8;
+}
+
+.status-active {
+    -fx-text-fill: green;
+}
+
+.card {
+    -fx-background-color: #fff5e6;
+    -fx-padding: 12;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
+    -fx-pref-width: 160;
+}
+
+.subtitle {
+    -fx-font-weight: bold;
+}
+
+.alert {
+    -fx-background-color: #ffcccc;
+    -fx-padding: 4 8 4 8;
+    -fx-background-radius: 4;
+}

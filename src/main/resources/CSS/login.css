@@ -1,78 +1,66 @@
-/* Toàn bộ nền */
 .root {
-    -fx-background-color: #f5f5f5;
     -fx-font-family: "Segoe UI", sans-serif;
 }
 
-/* Card đăng nhập */
-.login-card {
-    -fx-background-color: #faebd7;   /* pastel nâu nhạt */
-    -fx-background-radius: 15;
-    -fx-padding: 30;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 8, 0, 2, 2);
+/* --- Khung trái --- */
+.left-card {
+    -fx-background-color: #fbe8d3; /* pastel beige */
+    -fx-spacing: 10;
 }
 
-/* Tiêu đề đăng nhập */
-.login-title {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2c2c2c;
-    -fx-padding: 0 0 15 0;
-}
-
-/* Logo text */
 .logo-title {
-    -fx-font-size: 24px;
+    -fx-font-size: 28px;
     -fx-font-weight: bold;
+    -fx-text-fill: #3b1f10;
 }
 
-.logo-subtitle {
-    -fx-font-size: 14px;
-    -fx-text-fill: #444;
+.logo-sub {
+    -fx-font-size: 16px;
+    -fx-text-fill: #3b1f10;
 }
 
-/* TextField & PasswordField */
-.text-field, .password-field {
-    -fx-pref-width: 220px;
-    -fx-background-radius: 8;
-    -fx-background-color: #ffffff;
-    -fx-border-color: #ddd;
-    -fx-border-radius: 8;
-    -fx-padding: 6 8 6 8;
-    -fx-font-size: 13px;
+.sub-button {
+    -fx-background-color: white;
+    -fx-text-fill: #3b1f10;
+    -fx-background-radius: 15;
+    -fx-padding: 4 12 4 12;
 }
 
-.text-field:focused, .password-field:focused {
-    -fx-border-color: #d17c45;
-    -fx-background-color: #fffaf5;
+/* --- Khung phải --- */
+.right-card {
+    -fx-background-color: #ff7643; /* màu cam chủ đạo */
+    -fx-background-radius: 0 20 20 0;
 }
 
-/* Nút đăng nhập */
-.button {
-    -fx-background-color: #4b2e2e;
+.title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
-    -fx-background-radius: 8;
+}
+
+.input {
+    -fx-background-radius: 6;
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-padding: 8 10;
+}
+
+.login-btn {
+    -fx-background-color: #3b1f10;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-pref-width: 120px;
-    -fx-pref-height: 32px;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
     -fx-cursor: hand;
 }
 
-.button:hover {
-    -fx-background-color: #663333;
+.login-btn:hover {
+    -fx-background-color: #5a2e18;
 }
 
-.button:pressed {
-    -fx-background-color: #2b1a1a;
-}
-
-/* Hyperlink quên mật khẩu */
-.hyperlink {
-    -fx-text-fill: #8c5c3b;
-    -fx-font-size: 11px;
-}
-
-.hyperlink:hover {
-    -fx-text-fill: #d17c45;
+.forgot-link {
+    -fx-text-fill: white;
     -fx-underline: true;
+    -fx-font-size: 12px;
+    -fx-padding: 0 0 0 5;
 }

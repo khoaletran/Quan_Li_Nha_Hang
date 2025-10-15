@@ -1,0 +1,65 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #222; /* Nền đen nhẹ */
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: #f6f6f6;
+    -fx-alignment: top-center;
+    -fx-padding: 20;
+    -fx-pref-width: 220;
+    -fx-border-width: 0 1 0 0;
+    -fx-border-color: #ddd;
+}
+
+.avatar {
+    -fx-border-radius: 50;
+    -fx-background-radius: 50;
+}
+
+.username {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.role {
+    -fx-text-fill: #777;
+    -fx-font-size: 12px;
+}
+
+.menu-item {
+    -fx-background-color: #fff;
+    -fx-border-color: #ccc;
+    -fx-pref-width: 180;
+    -fx-cursor: hand;
+}
+
+.menu-item:hover {
+    -fx-background-color: #eaeaea;
+}
+
+.logout-btn {
+    -fx-background-color: #ff3b30;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Phần phải */
+.right-panel {
+    -fx-background-color: #fff;
+    -fx-padding: 20;
+}
+
+.info-card, .notify-card, .stat-card {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 10;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.btn-warning {
+    -fx-background-color: #ffcc00;
+    -fx-text-fill: #222;
+    -fx-font-weight: bold;
+}

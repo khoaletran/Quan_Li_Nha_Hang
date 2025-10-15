@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane stylesheets="@../CSS/dashboard.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- Sidebar -->
+    <left>
+        <fx:include source="sidebar_QL.fxml" />
+    </left>
+
+    <!-- Main Content -->
+    <center>
+        <VBox prefHeight="662.0" prefWidth="729.0" spacing="16" styleClass="dashboard-bg">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- Header -->
+            <Label styleClass="title" text="🏠 Trang Chủ Quản Lí" />
+
+            <!-- Top Info -->
+            <HBox spacing="16">
+            <HBox prefHeight="173.0" prefWidth="444.0">
+               <children>
+                  <ImageView fitHeight="172.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true" />
+                      <VBox prefWidth="280" spacing="8" styleClass="info-card">
+                          <Label text="Mã Nhân Viên: NV0002" />
+                          <Label text="Họ Tên: Đỗ Minh Quân" />
+                          <Label text="SĐT: 0968456323" />
+                          <Label text="Chức Vụ: Quản Lí" />
+                          <Label text="Giới Tính: Nam" />
+                          <Label text="Ngày Vào Làm: 28/04/2005" />
+                          <Label styleClass="status-active" text="Trạng Thái: Đã hoạt động" />
+                      </VBox>
+               </children>
+            </HBox>
+
+                <VBox alignment="CENTER" prefHeight="167.0" prefWidth="225.0" spacing="8" styleClass="info-card">
+                    <Label styleClass="subtitle" text="📢 Thông Báo" />
+                    <Label fx:id="alertLabel" styleClass="alert" text="Hết hàng: Cua Hoàng Đế" />
+                </VBox>
+            </HBox>
+
+            <!-- Summary Cards -->
+            <HBox spacing="16">
+                <VBox alignment="CENTER" prefWidth="200" styleClass="card">
+                    <Label styleClass="card-title" text="SỐ ĐƠN" />
+                    <Label text="50 Hoàn Thành" />
+                    <Label text="17 Đang Dùng" />
+                    <Label text="13 Đang Đợi" />
+                </VBox>
+
+                <VBox alignment="CENTER" prefWidth="200" styleClass="card">
+                    <Label styleClass="card-title" text="KHU VỰC" />
+                    <Label text="OUT: 23/30" />
+                    <Label text="VIP: 2/10" />
+                </VBox>
+
+                <VBox alignment="CENTER" prefWidth="200" styleClass="card">
+                    <Label styleClass="card-title" text="DOANH THU" />
+                    <Label text="12,000,000 VNĐ" />
+                </VBox>
+
+                <VBox alignment="CENTER" prefWidth="200" styleClass="card">
+                    <Label styleClass="card-title" text="TỔNG KHÁCH" />
+                    <Label text="23" />
+                </VBox>
+            </HBox>
+
+            <!-- Chart Section -->
+            <HBox spacing="24">
+                <padding>
+                    <Insets bottom="10" left="10" right="10" top="10" />
+                </padding>
+
+                <VBox alignment="CENTER" spacing="8">
+                    <Label styleClass="subtitle" text="Biểu đồ số lượng khách theo khu vực" />
+                    <BarChart fx:id="barChart" prefHeight="250" prefWidth="500">
+                        <xAxis>
+                            <CategoryAxis label="Khu Vực" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Số Lượng Khách" />
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="8">
+                    <Label styleClass="subtitle" text="Biểu đồ lượng khách theo giờ trong ngày" />
+                    <LineChart fx:id="lineChart" prefHeight="250" prefWidth="500">
+                        <xAxis>
+                            <CategoryAxis label="Giờ trong ngày" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Lượng Khách" />
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+            </HBox>
+
+        </VBox>
+    </center>
+</BorderPane>
