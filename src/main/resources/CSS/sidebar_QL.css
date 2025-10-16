@@ -1,65 +1,76 @@
 .root {
     -fx-font-family: "Segoe UI", sans-serif;
-    -fx-background-color: #222; /* Nền đen nhẹ */
 }
 
-/* Sidebar */
+/* Tổng sidebar */
 .sidebar {
-    -fx-background-color: #f6f6f6;
-    -fx-alignment: top-center;
-    -fx-padding: 20;
-    -fx-pref-width: 220;
+    -fx-background-color: #ffffff;
+    -fx-pref-width: 320;
+    -fx-pref-height: 1000;
     -fx-border-width: 0 1 0 0;
     -fx-border-color: #ddd;
+    -fx-spacing: 18;
+    -fx-alignment: top-center;
+    -fx-border-radius: 0 32 0 0;
 }
 
-.avatar {
-    -fx-border-radius: 50;
-    -fx-background-radius: 50;
+/* Phần avatar */
+.avatar_section {
+    -fx-background-color: #FFD2B5;
+    -fx-pref-width: 320;
+    -fx-pref-height: 167;
+    -fx-alignment: center;
+    -fx-spacing: 6;
+    -fx-background-radius: 0 32 0 0;
 }
 
 .username {
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
+    -fx-text-fill: #222;
 }
 
 .role {
-    -fx-text-fill: #777;
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #555;
 }
 
+/* Các nút menu */
 .menu-item {
-    -fx-background-color: #fff;
-    -fx-border-color: #ccc;
-    -fx-pref-width: 180;
+    -fx-pref-width: 320;
+    -fx-pref-height: 60;
+    -fx-background-color: transparent;
+    -fx-text-fill: #111;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 35;
     -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-spacing: 18;
 }
 
 .menu-item:hover {
-    -fx-background-color: #eaeaea;
+    -fx-background-color: #FFE6D1;
 }
+
+.menu-item.selected {
+    -fx-background-color: #FFD2B5;
+}
+
 
 .logout-btn {
-    -fx-background-color: #ff3b30;
+    -fx-pref-width: 200;
+    -fx-pref-height: 45;
+    -fx-background-color: #e53935;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-background-radius: 25;
+    -fx-alignment: center;
 }
 
-/* Phần phải */
-.right-panel {
-    -fx-background-color: #fff;
-    -fx-padding: 20;
-}
-
-.info-card, .notify-card, .stat-card {
-    -fx-background-color: #f9f9f9;
-    -fx-padding: 10;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-}
-
-.btn-warning {
-    -fx-background-color: #ffcc00;
-    -fx-text-fill: #222;
-    -fx-font-weight: bold;
+.logout-btn:hover {
+    -fx-background-color: #d32f2f;
 }

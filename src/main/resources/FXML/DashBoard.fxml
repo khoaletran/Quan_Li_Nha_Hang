@@ -20,7 +20,7 @@
 
     <!-- Main Content -->
     <center>
-        <VBox prefHeight="662.0" prefWidth="729.0" spacing="16" styleClass="dashboard-bg">
+        <VBox prefHeight="1000" prefWidth="729.0" spacing="16" styleClass="dashboard-bg">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>

@@ -9,9 +9,9 @@ public class Dashboard extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/dashboard.fxml"));
-        Scene scene = new Scene(loader.load(), 1200, 700);
+        Scene scene = new Scene(loader.load(), AppConstants.WINDOW_WIDTH, AppConstants.WINDOW_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/CSS/dashboard.css").toExternalForm());
-        stage.setTitle("CrabKing - Trang chủ Quản lí");
+        stage.setTitle(AppConstants.APP_TITLE + " - Trang chủ Quản lí");
         stage.setScene(scene);
         stage.show();
     }
