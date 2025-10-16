@@ -31,7 +31,7 @@
             </padding>
 
             <!-- Hàng 1: Thông tin nhân viên và Thông báo -->
-            <HBox prefHeight="270.0" prefWidth="960.0" spacing="16">
+            <HBox prefHeight="270.0" prefWidth="1174.0" spacing="16">
 
                 <!-- Thông tin nhân viên -->
                 <HBox prefHeight="270.0" prefWidth="695.0" spacing="16" styleClass="info-card">
@@ -56,7 +56,7 @@
                                 <Insets />
                             </VBox.margin></Label>
                         <Label styleClass="info-label" text="Họ Và Tên: Nguyễn Hà Nhật Khanh" />
-                        <Label styleClass="info-label" text="SĐT: 0323385253" />
+                        <Label styleClass="info-label" text="SĐT: 03222385253" />
                         <Label styleClass="info-label" text="Chức Vụ: Quản Lý" />
                         <Label styleClass="info-label" text="Giới Tính: Nam" />
                         <Label styleClass="info-label" text="Ngày Vào Làm: 28/04/2005" />
@@ -71,42 +71,52 @@
                 </HBox>
 
                 <!-- Thông báo -->
-                <VBox alignment="TOP_CENTER" prefHeight="220.0" prefWidth="369.0" spacing="8" styleClass="info-card">
+                <VBox alignment="TOP_CENTER" prefHeight="220.0" prefWidth="369.0" spacing="8" styleClass="notification-card">
                     <Label styleClass="subtitle" text="🔔 Thông Báo" />
                     <VBox alignment="CENTER" spacing="6">
-                        <Label styleClass="alert-red" text="HD12082025001 - Đã quá giới hạn" />
-                        <Label styleClass="alert-green" text="HD12082025007 - Đã quá giới hạn" />
+                        <Label styleClass="alert-red" text="HD12082025001 - Đã quá giờ hẹn" />
+                        <Label styleClass="alert-green" text="HD12082025007 - Đã đến giờ hẹn" />
                     </VBox>
                 </VBox>
+
 
             </HBox>
 
             <!-- Hàng 2: Thống kê -->
-            <HBox prefHeight="213.0" prefWidth="972.0" spacing="16">
-                <VBox alignment="CENTER" prefHeight="210.0" prefWidth="245.0" styleClass="card">
-                    <Label styleClass="card-title" text="SỐ ĐƠN" />
-                    <Label styleClass="text-green" text="30 Đơn Hoàn Thành" />
-                    <Label styleClass="text-orange" text="17 Đơn Đang Dùng" />
-                    <Label styleClass="text-red" text="13 Đơn Đang Đợi" />
-                </VBox>
+            <HBox alignment="CENTER" prefHeight="195.0" prefWidth="974.0" spacing="16">
+                <!-- Thẻ 1 -->
+                <HBox alignment="CENTER" prefHeight="210.0" prefWidth="245.0" styleClass="stat-card">
+                    <VBox alignment="CENTER_LEFT" spacing="6">
+                        <Label styleClass="card-title" text="SỐ ĐƠN" />
+                        <Label styleClass="text-green" text="30 Đơn Hoàn Thành" />
+                        <Label styleClass="text-orange" text="17 Đơn Đang Dùng" />
+                        <Label styleClass="text-red" text="13 Đơn Đang Đợi" />
+                    </VBox>
+                    <Circle fill="#4A90E2" radius="45" />
+                </HBox>
 
-                <VBox alignment="CENTER" prefHeight="210.0" prefWidth="245.0" styleClass="card">
+                <!-- Thẻ 2 -->
+                <VBox alignment="CENTER" prefHeight="210.0" prefWidth="245.0" styleClass="stat-card">
                     <Label styleClass="card-title" text="KHU VỰC" />
                     <Label text="IN: 20/40" />
                     <Label text="OUT: 32/50" />
                     <Label text="VIP: 3/10" />
                 </VBox>
 
-                <VBox alignment="CENTER" prefHeight="210.0" prefWidth="245.0" styleClass="card">
+                <!-- Thẻ 3 -->
+                <VBox alignment="CENTER" prefHeight="210.0" prefWidth="245.0" styleClass="stat-card">
                     <Label styleClass="card-title" text="DOANH THU" />
-                    <Label text="12,000,000 VNĐ" />
+                    <Label styleClass="money-text" text="12,000,000 VNĐ" />
                 </VBox>
 
-                <VBox alignment="CENTER" prefHeight="210.0" prefWidth="245.0" styleClass="card">
+                <!-- Thẻ 4 -->
+                <VBox alignment="CENTER" prefHeight="210.0" prefWidth="245.0" styleClass="stat-card">
                     <Label styleClass="card-title" text="TỔNG KHÁCH" />
-                    <Label text="23" />
+                    <Label styleClass="count-text" text="23" />
                 </VBox>
             </HBox>
+
+
 
             <!-- Hàng 3: Biểu đồ -->
             <HBox spacing="24">

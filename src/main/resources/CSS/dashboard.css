@@ -4,8 +4,8 @@
 
 .info-card {
     -fx-background-color: white;
-    -fx-padding: 16;
     -fx-background-radius: 10;
+    -fx-padding: 16;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
 }
 
@@ -50,18 +50,98 @@
     -fx-background-radius: 6;
 }
 
-.alert-red {
-    -fx-background-color: #f8d7da;
-    -fx-text-fill: #721c24;
-    -fx-padding: 6;
-    -fx-background-radius: 6;
-    -fx-font-size: 12px;
+/* --- Thẻ chứa toàn bộ thông báo --- */
+.notification-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 2, 2);
+    -fx-padding: 16;
 }
 
-.alert-green {
-    -fx-background-color: #d4edda;
-    -fx-text-fill: #155724;
-    -fx-padding: 6;
-    -fx-background-radius: 6;
-    -fx-font-size: 12px;
+/* --- Tiêu đề 🔔 Thông Báo --- */
+.subtitle {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-underline: true;
 }
+
+/* --- Thông báo lỗi (đỏ) --- */
+.alert-red {
+    -fx-background-color: #ffe6e6;
+    -fx-border-color: #ff4d4d;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #b30000;
+    -fx-padding: 6 10 6 10;
+    -fx-font-weight: bold;
+    -fx-pref-width: 220px;
+}
+
+/* --- Thông báo thành công (xanh lá) --- */
+.alert-green {
+    -fx-background-color: #e6ffe6;
+    -fx-border-color: #33cc33;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #006600;
+    -fx-padding: 6 10 6 10;
+    -fx-font-weight: bold;
+    -fx-pref-width: 220px;
+}
+
+/* --- Thẻ chung cho tất cả thống kê --- */
+.stat-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-padding: 16;
+    -fx-spacing: 12;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 3, 3);
+    -fx-transition: 0.3s;
+}
+
+
+/* --- Tiêu đề trong mỗi card --- */
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+/* --- Văn bản phụ --- */
+.text-green {
+    -fx-text-fill: #27ae60;
+    -fx-font-weight: bold;
+}
+
+.text-orange {
+    -fx-text-fill: #f39c12;
+    -fx-font-weight: bold;
+}
+
+.text-red {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}
+
+/* --- Doanh thu --- */
+.money-text {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #16a085;
+}
+
+/* --- Tổng khách --- */
+.count-text {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2980b9;
+}
+
