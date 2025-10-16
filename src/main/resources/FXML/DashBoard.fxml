@@ -56,7 +56,7 @@
                                 <Insets />
                             </VBox.margin></Label>
                         <Label styleClass="info-label" text="Họ Và Tên: Nguyễn Hà Nhật Khanh" />
-                        <Label styleClass="info-label" text="SĐT: 0232385253" />
+                        <Label styleClass="info-label" text="SĐT: 0323385253" />
                         <Label styleClass="info-label" text="Chức Vụ: Quản Lý" />
                         <Label styleClass="info-label" text="Giới Tính: Nam" />
                         <Label styleClass="info-label" text="Ngày Vào Làm: 28/04/2005" />
