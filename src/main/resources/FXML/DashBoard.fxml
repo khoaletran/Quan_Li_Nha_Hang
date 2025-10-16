@@ -55,7 +55,7 @@
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin></Label>
-                        <Label styleClass="info-label" text="Họ Và Tên: Đỗ Minh Quân" />
+                        <Label styleClass="info-label" text="Họ Và Tên: Nguyễn Hà Nhật Khanh" />
                         <Label styleClass="info-label" text="SĐT: 0968685253" />
                         <Label styleClass="info-label" text="Chức Vụ: Quản Lý" />
                         <Label styleClass="info-label" text="Giới Tính: Nam" />
