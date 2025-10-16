@@ -5,6 +5,8 @@
 /* Toàn nền cam */
 .background {
     -fx-fill: #E6763E;
+    -fx-background-radius: 0 60 60 0;
+    -fx-border-radius: 0 60 60 0;
 }
 
 /* Khối bên trái */
@@ -67,6 +69,8 @@
 
 .right-pane {
     -fx-background-color: transparent;
+    -fx-border-radius: 0 60 60 0;
+    -fx-background-radius: 0 60 60 0;
 }
 
 .title-bar {

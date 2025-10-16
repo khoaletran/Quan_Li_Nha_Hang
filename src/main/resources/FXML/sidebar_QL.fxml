@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefWidth="322.0" prefHeight="1000.0"
+<BorderPane prefWidth="322.0"
             styleClass="sidebar"
             stylesheets="@../CSS/sidebar_QL.css"
             xmlns="http://javafx.com/javafx/24.0.1"
