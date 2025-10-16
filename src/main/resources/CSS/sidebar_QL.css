@@ -74,3 +74,28 @@
 .logout-btn:hover {
     -fx-background-color: #d32f2f;
 }
+
+.menu-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-pref-width: 200px;
+}
+
+.menu-btn:hover {
+    -fx-background-color: #ffd8ba;
+}
+
+.sub-btn {
+    -fx-background-color: #ffe5d0;
+    -fx-text-fill: black;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-pref-width: 180px;
+    -fx-background-radius: 6;
+}
+
+.sub-btn:hover {
+    -fx-background-color: #ffcba5;
+}

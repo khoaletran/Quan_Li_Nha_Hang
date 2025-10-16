@@ -14,13 +14,11 @@
 <BorderPane stylesheets="@../CSS/dashboard.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Sidebar -->
-    <left>
-        <fx:include source="sidebar_QL.fxml" />
-    </left>
+
 
     <!-- Main Content -->
     <center>
-        <VBox prefHeight="1000" prefWidth="729.0" spacing="16" styleClass="dashboard-bg">
+        <VBox prefHeight="1000" prefWidth="1600" spacing="16" styleClass="dashboard-bg">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
