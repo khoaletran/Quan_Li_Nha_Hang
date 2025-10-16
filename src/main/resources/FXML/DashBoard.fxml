@@ -5,11 +5,13 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
 <BorderPane stylesheets="@../CSS/dashboard.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
@@ -20,89 +22,94 @@
 
     <!-- Main Content -->
     <center>
-        <VBox prefHeight="662.0" prefWidth="729.0" spacing="16" styleClass="dashboard-bg">
+        <VBox prefHeight="680.0" prefWidth="1000.0" spacing="16" styleClass="dashboard-bg">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <!-- Header -->
-            <Label styleClass="title" text="🏠 Trang Chủ Quản Lí" />
-
-            <!-- Top Info -->
+            <!-- Hàng 1: Thông tin nhân viên và Thông báo -->
             <HBox spacing="16">
-            <HBox prefHeight="173.0" prefWidth="444.0">
-               <children>
-                  <ImageView fitHeight="172.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true" />
-                      <VBox prefWidth="280" spacing="8" styleClass="info-card">
-                          <Label text="Mã Nhân Viên: NV0002" />
-                          <Label text="Họ Tên: Đỗ Minh Quân" />
-                          <Label text="SĐT: 0968456323" />
-                          <Label text="Chức Vụ: Quản Lí" />
-                          <Label text="Giới Tính: Nam" />
-                          <Label text="Ngày Vào Làm: 28/04/2005" />
-                          <Label styleClass="status-active" text="Trạng Thái: Đã hoạt động" />
-                      </VBox>
-               </children>
-            </HBox>
 
-                <VBox alignment="CENTER" prefHeight="167.0" prefWidth="225.0" spacing="8" styleClass="info-card">
-                    <Label styleClass="subtitle" text="📢 Thông Báo" />
-                    <Label fx:id="alertLabel" styleClass="alert" text="Hết hàng: Cua Hoàng Đế" />
+                <!-- Thông tin nhân viên -->
+                <HBox prefHeight="220.0" prefWidth="784.0" spacing="16" styleClass="info-card">
+                    <ImageView fx:id="avatarImage" fitHeight="150" fitWidth="150" preserveRatio="true" styleClass="avatar-img" />
+                    <VBox prefHeight="188.0" prefWidth="482.0" spacing="6">
+                        <Label styleClass="info-label" text="Mã Nhân Viên: NV0002" />
+                        <Label styleClass="info-label" text="Họ Và Tên: Đỗ Minh Quân" />
+                        <Label styleClass="info-label" text="SĐT: 0968685253" />
+                        <Label styleClass="info-label" text="Chức Vụ: Quản Lý" />
+                        <Label styleClass="info-label" text="Giới Tính: Nam" />
+                        <Label styleClass="info-label" text="Ngày Vào Làm: 28/04/2005" />
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Circle fill="green" radius="5" />
+                            <Label styleClass="status-label" text="Đã hoạt động" />
+                        </HBox>
+                        <HBox alignment="BOTTOM_RIGHT">
+                            <Button styleClass="small-btn" text="Đổi Mật Khẩu" />
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <!-- Thông báo -->
+                <VBox alignment="TOP_CENTER" prefHeight="220.0" prefWidth="369.0" spacing="8" styleClass="info-card">
+                    <Label styleClass="subtitle" text="🔔 Thông Báo" />
+                    <VBox alignment="CENTER" spacing="6">
+                        <Label styleClass="alert-red" text="HD12082025001 - Đã quá giới hạn" />
+                        <Label styleClass="alert-green" text="HD12082025007 - Đã quá giới hạn" />
+                    </VBox>
                 </VBox>
+
             </HBox>
 
-            <!-- Summary Cards -->
+            <!-- Hàng 2: Thống kê -->
             <HBox spacing="16">
-                <VBox alignment="CENTER" prefWidth="200" styleClass="card">
+                <VBox alignment="CENTER" prefWidth="220" styleClass="card">
                     <Label styleClass="card-title" text="SỐ ĐƠN" />
-                    <Label text="50 Hoàn Thành" />
-                    <Label text="17 Đang Dùng" />
-                    <Label text="13 Đang Đợi" />
+                    <Label styleClass="text-green" text="30 Đơn Hoàn Thành" />
+                    <Label styleClass="text-orange" text="17 Đơn Đang Dùng" />
+                    <Label styleClass="text-red" text="13 Đơn Đang Đợi" />
                 </VBox>
 
-                <VBox alignment="CENTER" prefWidth="200" styleClass="card">
+                <VBox alignment="CENTER" prefWidth="220" styleClass="card">
                     <Label styleClass="card-title" text="KHU VỰC" />
-                    <Label text="OUT: 23/30" />
-                    <Label text="VIP: 2/10" />
+                    <Label text="IN: 20/40" />
+                    <Label text="OUT: 32/50" />
+                    <Label text="VIP: 3/10" />
                 </VBox>
 
-                <VBox alignment="CENTER" prefWidth="200" styleClass="card">
+                <VBox alignment="CENTER" prefWidth="220" styleClass="card">
                     <Label styleClass="card-title" text="DOANH THU" />
                     <Label text="12,000,000 VNĐ" />
                 </VBox>
 
-                <VBox alignment="CENTER" prefWidth="200" styleClass="card">
+                <VBox alignment="CENTER" prefWidth="220" styleClass="card">
                     <Label styleClass="card-title" text="TỔNG KHÁCH" />
                     <Label text="23" />
                 </VBox>
             </HBox>
 
-            <!-- Chart Section -->
+            <!-- Hàng 3: Biểu đồ -->
             <HBox spacing="24">
-                <padding>
-                    <Insets bottom="10" left="10" right="10" top="10" />
-                </padding>
-
                 <VBox alignment="CENTER" spacing="8">
-                    <Label styleClass="subtitle" text="Biểu đồ số lượng khách theo khu vực" />
-                    <BarChart fx:id="barChart" prefHeight="250" prefWidth="500">
+                    <Label styleClass="subtitle" text="Biểu đồ lượng top 5 món bán chạy nhất trong ngày" />
+                    <BarChart fx:id="barChart" prefHeight="280" prefWidth="520">
                         <xAxis>
-                            <CategoryAxis label="Khu Vực" />
+                            <CategoryAxis label="Tên Món" />
                         </xAxis>
                         <yAxis>
-                            <NumberAxis label="Số Lượng Khách" />
+                            <NumberAxis label="Số lượng" />
                         </yAxis>
                     </BarChart>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="8">
                     <Label styleClass="subtitle" text="Biểu đồ lượng khách theo giờ trong ngày" />
-                    <LineChart fx:id="lineChart" prefHeight="250" prefWidth="500">
+                    <LineChart fx:id="lineChart" prefHeight="280" prefWidth="520.0">
                         <xAxis>
                             <CategoryAxis label="Giờ trong ngày" />
                         </xAxis>
                         <yAxis>
-                            <NumberAxis label="Lượng Khách" />
+                            <NumberAxis label="Lượng khách" />
                         </yAxis>
                     </LineChart>
                 </VBox>
@@ -110,4 +117,5 @@
 
         </VBox>
     </center>
+
 </BorderPane>
