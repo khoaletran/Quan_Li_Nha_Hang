@@ -1,27 +1,41 @@
 package ui.controllers;
 
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class LoginController {
 
-    @FXML
-    private TextField usernameField;
+    @FXML private VBox loginPane;
+    @FXML private VBox forgotPane;
+    @FXML private VBox resetPane;
+    @FXML private Button closeBtn;
+    @FXML private Button minimizeBtn;
 
-    @FXML
-    private PasswordField passwordField;
+    // Hiệu ứng fade mượt
+    private void switchPane(VBox hide, VBox show) {
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(250), hide);
+        fadeOut.setFromValue(1);
+        fadeOut.setToValue(0);
+        fadeOut.setOnFinished(e -> {
+            hide.setVisible(false);
+            hide.setManaged(false);
+            show.setVisible(true);
+            show.setManaged(true);
 
-    @FXML
-    private Button minimizeBtn, maximizeBtn, closeBtn, loginBtn;
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(250), show);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+            fadeIn.play();
+        });
+        fadeOut.play();
+    }
 
-    @FXML
-    private Hyperlink forgotLink;
+    // ===== Sự kiện chuyển màn hình =====
 
-    private double xOffset = 0;
-    private double yOffset = 0;
-
-    // ====== Các hàm điều khiển cửa sổ ======
     @FXML
     private void close() {
         Stage stage = (Stage) closeBtn.getScene().getWindow();
@@ -35,37 +49,26 @@ public class LoginController {
     }
 
 
-    // ====== Xử lý đăng nhập ======
+
+    @FXML
+    private void showForgot() { switchPane(loginPane, forgotPane); }
+
+    @FXML
+    private void showLogin() {
+        if (forgotPane.isVisible()) switchPane(forgotPane, loginPane);
+        else switchPane(resetPane, loginPane);
+    }
+
+    @FXML
+    private void showReset() { switchPane(forgotPane, resetPane); }
+
+    @FXML
+    private void resetDone() { switchPane(resetPane, loginPane); }
+
+    // Placeholder login action
     @FXML
     private void login() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Thiếu thông tin", "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu.");
-            return;
-        }
-
-        // Giả lập kiểm tra đăng nhập (sau này thay bằng DAO)
-        if (username.equals("admin") && password.equals("123")) {
-            showAlert(Alert.AlertType.INFORMATION, "Đăng nhập thành công", "Chào mừng " + username + " đến với CrabKing!");
-            // TODO: Chuyển scene sang Trang Chủ Quản Lý
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Đăng nhập thất bại", "Tên đăng nhập hoặc mật khẩu không đúng.");
-        }
+        System.out.println("Đăng nhập...");
     }
 
-    @FXML
-    private void forgotPassword() {
-        showAlert(Alert.AlertType.INFORMATION, "Quên mật khẩu", "Liên hệ quản lý hệ thống để được cấp lại mật khẩu.");
-    }
-
-    // ====== Hàm tiện ích ======
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

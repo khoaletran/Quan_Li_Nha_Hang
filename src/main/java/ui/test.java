@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class test extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/sidebar_NV.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/sidebar_QL.fxml"));
         Scene scene = new Scene(loader.load(), 322, AppConstants.WINDOW_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/CSS/sidebar_QL.css").toExternalForm());
         stage.setTitle(AppConstants.APP_TITLE + " - Trang chủ Quản lí");
