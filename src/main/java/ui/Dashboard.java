@@ -12,6 +12,7 @@ public class Dashboard extends Application {
         Scene scene = new Scene(loader.load(), AppConstants.WINDOW_WIDTH, AppConstants.WINDOW_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/CSS/dashboard.css").toExternalForm());
         stage.setTitle(AppConstants.APP_TITLE + " - Trang chủ Quản lí");
+        stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }
