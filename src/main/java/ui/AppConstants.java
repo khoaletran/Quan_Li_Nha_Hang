@@ -27,7 +27,7 @@ public class AppConstants {
     public static final String COLOR_TEXT = "#6B240C";      // nâu đậm
 
     // ⚙️ Kích thước màn hình
-    public static final int WINDOW_WIDTH = 1500;
+    public static final int WINDOW_WIDTH = 1920;
     public static final int WINDOW_HEIGHT = 1000;
 
     private AppConstants() {

@@ -4,41 +4,54 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="sidebar" prefHeight="1000" prefWidth="322.0" styleClass="sidebar" stylesheets="@../CSS/sidebar_QL.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <HBox prefHeight="100.0" prefWidth="334.0" styleClass="avatar_section">
-      <children>
-            <ImageView fitHeight="115" fitWidth="115" preserveRatio="true">
-                <image>
-                    <Image url="@../IMG/avatar.png" />
-                </image>
-            </ImageView>
-      
-          <!-- Phần avatar + thông tin -->
-          <VBox alignment="CENTER">
-              <children>
-                  <Label styleClass="username" text="Đỗ Minh Quân" />
-                  <Label styleClass="role" text="Quản Lí" />
-              </children>
-          </VBox>
-      </children>
-   </HBox>
+<BorderPane prefWidth="322.0" prefHeight="1000.0"
+            styleClass="sidebar"
+            stylesheets="@../CSS/sidebar_QL.css"
+            xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
 
-    <!-- Nút menu -->
-    <Button styleClass="menu-item" text="  ⚙  DASHBOARD" />
-    <Button styleClass="menu-item" text="  ⚙  QUẢN LÍ MENU" />
-    <Button styleClass="menu-item" text="  ⚙  QUẢN LÍ BÀN" />
-    <Button styleClass="menu-item" text="  ⚙  QUẢN LÍ NHÂN VIÊN" />
-    <Button styleClass="menu-item" text="  ⚙  QUẢN LÍ KHUYẾN MÃI" />
-    <Button styleClass="menu-item" text="  ⚙  QUẢN LÍ CHÍNH SÁCH" />
-    <Button styleClass="menu-item" text="  ⚙  THỐNG KÊ" />
-    <Button styleClass="menu-item" text="  ⚙  HỖ TRỢ" />
+    <!-- 🔹 Phần trên cùng (Avatar + tên + vai trò) -->
+    <top>
+        <HBox styleClass="avatar_section">
+            <children>
+                <ImageView fitHeight="115" fitWidth="115" preserveRatio="true">
+                    <image>
+                        <Image url="@../IMG/avatar.png"/>
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER">
+                    <children>
+                        <Label styleClass="username" text="Đỗ Minh Quân"/>
+                        <Label styleClass="role" text="Quản Lí"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </top>
 
-    <Region prefHeight="70.0" prefWidth="319.0" />
+    <!-- 🔸 Menu chính ở giữa -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="8">
+            <Button styleClass="menu-item" text="⚙ DASHBOARD"/>
+            <Button styleClass="menu-item" text="⚙ QUẢN LÍ MENU"/>
+            <Button styleClass="menu-item" text="⚙ QUẢN LÍ BÀN"/>
+            <Button styleClass="menu-item" text="⚙ QUẢN LÍ NHÂN VIÊN"/>
+            <Button styleClass="menu-item" text="⚙ QUẢN LÍ KHUYẾN MÃI"/>
+            <Button styleClass="menu-item" text="⚙ QUẢN LÍ CHÍNH SÁCH"/>
+            <Button styleClass="menu-item" text="⚙ THỐNG KÊ"/>
+            <Button styleClass="menu-item" text="⚙ HỖ TRỢ"/>
+        </VBox>
+    </center>
 
-    <!-- Đăng xuất -->
-    <Button prefWidth="185.0" styleClass="logout-btn" text="Đăng Xuất" />
-</VBox>
+    <!-- 🔻 Nút Đăng Xuất cố định dưới đáy -->
+    <bottom>
+        <VBox alignment="CENTER" style="-fx-padding: 20 0 25 0;">
+            <Button prefWidth="185.0" styleClass="logout-btn" text="Đăng Xuất"/>
+        </VBox>
+    </bottom>
+
+</BorderPane>
