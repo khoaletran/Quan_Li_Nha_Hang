@@ -142,6 +142,10 @@
     -fx-font-weight: bold;
 }
 
+.label_CardInfo{
+    -fx-font-size: 15;
+}
+
 /* --- Doanh thu --- */
 .money-text {
     -fx-font-size: 20px;
@@ -155,4 +159,23 @@
     -fx-font-weight: bold;
     -fx-text-fill: #2980b9;
 }
+
+/*css biểu đồ*/
+.chart_Background {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: #dcdcdc;
+    -fx-border-width: 1;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 6, 0, 0, 2);
+}
+
+.subtitle_Chart {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+
 
