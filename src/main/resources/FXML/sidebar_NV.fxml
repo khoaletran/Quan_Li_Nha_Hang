@@ -8,45 +8,62 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="sidebar" prefHeight="1000" prefWidth="322.0"
-      styleClass="sidebar"
-      stylesheets="@../CSS/sidebar_QL.css"
-      fx:controller="ui.controllers.SidebarController_NV"
-      xmlns="http://javafx.com/javafx/24.0.1"
-      xmlns:fx="http://javafx.com/fxml/1">
-    <HBox prefHeight="100.0" prefWidth="334.0" styleClass="avatar_section">
-        <children>
-            <ImageView fitHeight="115" fitWidth="115" preserveRatio="true">
-                <image>
-                    <Image url="@../IMG/avatar.png" />
-                </image>
-            </ImageView>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane prefWidth="322" xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ui.controllers.SidebarController_NV"
+            styleClass="sidebar">
 
-            <!-- Phần avatar + thông tin -->
-            <VBox alignment="CENTER">
+    <!-- Phần trên cùng -->
+    <top>
+        <VBox spacing="10">
+            <!-- Avatar -->
+            <HBox styleClass="avatar_section">
                 <children>
-                    <Label styleClass="username" text="Đỗ Minh Quân" />
-                    <Label styleClass="role" text="Quản Lí" />
+                    <ImageView fitHeight="115" fitWidth="115" preserveRatio="true">
+                        <image>
+                            <Image url="@../IMG/avatar.png" />
+                        </image>
+                    </ImageView>
+                    <VBox alignment="CENTER">
+                        <children>
+                            <Label styleClass="username" text="Đỗ Minh Quân"/>
+                            <Label styleClass="role" text="Quản Lí"/>
+                        </children>
+                    </VBox>
                 </children>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Phần menu chính -->
+    <center>
+        <VBox fx:id="menuContainer" spacing="8" alignment="TOP_CENTER">
+            <Button styleClass="menu-item" text="  ⚙  DASHBOARD"/>
+            <Button fx:id="btnQuanLiDatBan" onAction="#toggleSubMenu"
+                    styleClass="menu-item" text="  ⚙  QUẢN LÍ ĐẶT BÀN"/>
+
+            <!-- Submenu -->
+            <VBox fx:id="subMenuDatBan" alignment="CENTER" spacing="5"
+                  visible="false" managed="false">
+                <Button styleClass="sub-btn" text="Đặt Bàn"/>
+                <Button styleClass="sub-btn" text="Check In"/>
+                <Button styleClass="sub-btn" text="Check Out"/>
+                <Button styleClass="sub-btn" text="Cập Nhật Đơn Bàn"/>
             </VBox>
-        </children>
-    </HBox>
 
-    <!-- Nút menu -->
-    <Button text="DASHBOARD" styleClass="menu-item"/>
-    <Button fx:id="btnQuanLiDatBan" text="QUẢN LÍ ĐẶT BÀN" styleClass="menu-item" onAction="#toggleSubMenu"/>
-    <VBox fx:id="subMenuDatBan" spacing="5" visible="false" managed="false" style="-fx-padding: 0 0 0 20;">
-        <Button text="Đặt Bàn" styleClass="sub-btn"/>
-        <Button text="Check In" styleClass="sub-btn"/>
-        <Button text="Check Out" styleClass="sub-btn"/>
-        <Button text="Cập Nhật Đơn Bàn" styleClass="sub-btn"/>
-    </VBox>
-    <Button text="QUẢN LÍ THÀNH VIÊN" styleClass="menu-item"/>
-    <Button text="TRA CỨU" styleClass="menu-item"/>
-    <Button text="HỖ TRỢ" styleClass="menu-item"/>
+            <Button styleClass="menu-item" text="  ⚙  QUẢN LÍ THÀNH VIÊN"/>
+            <Button styleClass="menu-item" text="  ⚙  TRA CỨU"/>
+            <Button styleClass="menu-item" text="  ⚙  HỖ TRỢ"/>
+        </VBox>
+    </center>
 
-    <Region prefHeight="70.0" prefWidth="319.0" />
+    <!-- Nút cố định dưới cùng -->
+    <bottom>
+        <VBox alignment="CENTER" style="-fx-padding: 15 0 20 0;">
+            <Button prefWidth="185" styleClass="logout-btn" text="Kết Ca"/>
+        </VBox>
+    </bottom>
 
-    <!-- Đăng xuất -->
-    <Button prefWidth="185.0" styleClass="logout-btn" text="Đăng Xuất" />
-</VBox>
+</BorderPane>
+

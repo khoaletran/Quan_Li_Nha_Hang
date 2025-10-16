@@ -51,9 +51,22 @@
     -fx-spacing: 18;
 }
 
+
 .menu-item:hover {
     -fx-background-color: #FFE6D1;
+    -fx-scale-x: 1.05; /* phóng to 5% */
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
+    -fx-cursor: hand;
 }
+
+.menu-item:selected, .menu-item.selected {
+    -fx-background-color: #FFD2B5;
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+    -fx-effect: none;
+}
+
 
 .menu-item.selected {
     -fx-background-color: #FFD2B5;
@@ -61,41 +74,58 @@
 
 
 .logout-btn {
-    -fx-pref-width: 200;
-    -fx-pref-height: 45;
     -fx-background-color: #e53935;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
     -fx-background-radius: 25;
+    -fx-pref-height: 45;
     -fx-alignment: center;
 }
 
 .logout-btn:hover {
-    -fx-background-color: #d32f2f;
+    -fx-background-color: #c62828;
 }
 
-.menu-btn {
-    -fx-background-color: transparent;
-    -fx-text-fill: black;
-    -fx-font-size: 14px;
-    -fx-alignment: CENTER_LEFT;
-    -fx-pref-width: 200px;
-}
+
 
 .menu-btn:hover {
-    -fx-background-color: #ffd8ba;
+    -fx-pref-width: 320;
+    -fx-pref-height: 60;
+    -fx-background-color: transparent;
+    -fx-text-fill: #111;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 35;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-spacing: 18;
 }
 
-.sub-btn {
-    -fx-background-color: #ffe5d0;
-    -fx-text-fill: black;
-    -fx-font-size: 13px;
-    -fx-alignment: CENTER_LEFT;
-    -fx-pref-width: 180px;
-    -fx-background-radius: 6;
+#subMenuDatBan {
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
 }
+
+/* Nút con trong submenu */
+.sub-btn {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #111;
+    -fx-font-size: 14px;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 50;
+    -fx-opacity: 1;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3,0,0,1);
+    -fx-transition: all 0.3s ease;
+}
+
 
 .sub-btn:hover {
-    -fx-background-color: #ffcba5;
+    -fx-background-color: #FFE6D1;
 }
