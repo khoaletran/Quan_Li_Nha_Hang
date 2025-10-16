@@ -1,0 +1,397 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f5f5f5;
+}
+
+/* ===== NỘI DUNG CHÍNH ===== */
+.main-content {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+}
+
+.main-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 20 0;
+}
+
+/* ===== TÌM KIẾM ===== */
+.search-container {
+    -fx-padding: 0 0 20 0;
+}
+
+.search-field {
+    -fx-pref-width: 400px;
+    -fx-pref-height: 45px;
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1px;
+    -fx-padding: 0 20 0 20;
+    -fx-font-size: 15px;
+    -fx-background-color: white;
+}
+
+.search-field:focused {
+    -fx-border-color: #3498db;
+    -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.3), 5, 0, 0, 2);
+}
+
+.search-btn {
+    -fx-pref-width: 120px;
+    -fx-pref-height: 45px;
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+    -fx-cursor: hand;
+}
+
+.search-btn:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* ===== MENU MÓN ĂN - 3 CARD/HÀNG ===== */
+.menu-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.menu-flowpane {
+    -fx-alignment: center;
+    -fx-pref-wrap-length: 1050px; /* 3 card * 320px + 2 gap * 20px = 1000px */
+}
+
+.menu-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 20px;
+    -fx-alignment: center;
+    -fx-spacing: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 6, 0, 0, 2);
+    -fx-pref-width: 320px;
+    -fx-pref-height: 300px;
+    -fx-border-color: #ecf0f1;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12;
+}
+
+.menu-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3);
+    -fx-border-color: #3498db;
+}
+
+.food-image {
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);
+}
+
+.menu-item-name {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #2c3e50;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+    -fx-max-width: 200px;
+}
+
+.menu-item-price {
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-text-fill: #e74c3c;
+}
+
+.quantity-controls {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}
+
+.qty-btn {
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 17;
+    -fx-border-radius: 17;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.qty-btn.minus {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+}
+
+.qty-btn.minus:hover {
+    -fx-background-color: #c0392b;
+}
+
+.qty-btn.plus {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+}
+
+.qty-btn.plus:hover {
+    -fx-background-color: #219653;
+}
+
+.qty-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-text-fill: #2c3e50;
+    -fx-min-width: 40px;
+    -fx-alignment: center;
+}
+
+/* ===== SIDEBAR PHẢI ===== */
+.right-sidebar {
+    -fx-background-color: #ecf0f1;
+    -fx-pref-width: 380px;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 0 1px;
+}
+
+.sidebar-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 15 0;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ===== FORM NHẬP LIỆU ===== */
+.customer-info {
+    -fx-padding: 15 0 15 0;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 1 0;
+}
+
+.form-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 10 0;
+}
+
+.info-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-pref-width: 110px;
+}
+
+.form-field {
+    -fx-pref-height: 35px;
+    -fx-pref-width: 200px;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1px;
+    -fx-padding: 0 12 0 12;
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+}
+
+.form-field:focused {
+    -fx-border-color: #3498db;
+}
+
+/* ===== CHI TIẾT ĐƠN HÀNG ===== */
+.payment-section {
+    -fx-padding: 15 0 15 0;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 1 0;
+}
+
+.section-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 10 0;
+}
+
+.payment-buttons {
+    -fx-spacing: 10;
+    -fx-padding: 8 0 0 0;
+}
+
+.payment-btn {
+    -fx-pref-height: 35px;
+    -fx-pref-width: 130px;
+    -fx-background-color: #bdc3c7;
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 17;
+    -fx-border-radius: 17;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.payment-btn:hover {
+    -fx-background-color: #95a5a6;
+}
+
+.payment-btn.active {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.4), 4, 0, 0, 2);
+}
+
+.order-details {
+    -fx-padding: 15 0 15 0;
+}
+
+.order-header {
+    -fx-spacing: 15;
+    -fx-padding: 0 0 10 0;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 1 0;
+}
+
+.order-header .order-col {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.order-col.product {
+    -fx-pref-width: 140px;
+    -fx-alignment: center-left;
+}
+
+.order-col.quantity {
+    -fx-pref-width: 40px;
+    -fx-alignment: center;
+}
+
+.order-col.price {
+    -fx-pref-width: 80px;
+    -fx-alignment: center-right;
+}
+
+.order-col.total {
+    -fx-pref-width: 90px;
+    -fx-alignment: center-right;
+}
+
+.order-items {
+    -fx-max-height: 200px;
+    -fx-spacing: 8;
+}
+
+.order-item {
+    -fx-spacing: 15;
+    -fx-padding: 6 0 6 0;
+}
+
+.order-item .order-col {
+    -fx-font-size: 13px;
+    -fx-text-fill: #34495e;
+}
+
+.order-item .order-col.total {
+    -fx-font-weight: bold;
+    -fx-text-fill: #e74c3c;
+}
+
+.total-section {
+    -fx-padding: 15 0 15 0;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1 0 0 0;
+    -fx-spacing: 8;
+}
+
+.total-row {
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+
+.total-label, .deposit-label, .final-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-pref-width: 70px;
+}
+
+.total-amount, .deposit-amount, .final-amount {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e74c3c;
+}
+
+.final-amount {
+    -fx-text-fill: #27ae60;
+}
+
+.action-buttons {
+    -fx-spacing: 10;
+    -fx-padding: 15 0 0 0;
+}
+
+.action-btn {
+    -fx-pref-height: 45px;
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 2);
+    -fx-alignment: center;
+}
+
+.action-btn.primary {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+}
+
+.action-btn.primary:hover {
+    -fx-background-color: #219653;
+}
+
+.action-btn.secondary {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+.action-btn.secondary:hover {
+    -fx-background-color: #2980b9;
+}
+
+.action-btn.tertiary {
+    -fx-background-color: #e67e22;
+    -fx-text-fill: white;
+}
+
+.action-btn.tertiary:hover {
+    -fx-background-color: #d35400;
+}
+
+/* ===== RESPONSIVE - LUÔN GIỮ 3 CARD/HÀNG ===== */
+@media (max-width: 1300px) {
+    .menu-flowpane {
+        -fx-pref-wrap-length: 1000px;
+    }
+    .menu-card {
+        -fx-pref-width: 300px;
+        -fx-pref-height: 280px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .menu-flowpane {
+        -fx-pref-wrap-length: 940px;
+    }
+    .menu-card {
+        -fx-pref-width: 290px;
+    }
+    .food-image {
+        -fx-fit-height: 140px;
+        -fx-fit-width: 180px;
+    }
+}
