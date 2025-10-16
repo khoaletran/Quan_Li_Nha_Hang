@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.image.Image?>
+<BorderPane prefWidth="1400.0" stylesheets="@../CSS/qlmenu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- Sidebar -->
+    <left>
+        <fx:include source="sidebar_QL.fxml" />
+    </left>
+
+    <!-- Main content -->
+    <center>
+        <VBox prefHeight="1000" prefWidth="729.0" spacing="20" styleClass="menu-bg">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- Thanh tiêu đề -->
+            <Label styleClass="menu-title" text="🍽️ Quản Lí Menu" />
+
+            <!-- Thanh tìm kiếm -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="menu-search-container">
+
+                <!-- Ô tìm kiếm -->
+                <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="709.0" spacing="8" styleClass="menu-search-box">
+                    <Label styleClass="search-icon" text="🔍" />
+                    <TextField prefHeight="27.0" prefWidth="434.0" promptText="Tìm món ăn" styleClass="search-field" />
+                </HBox>
+
+                <!-- ComboBox chọn danh mục -->
+                <ComboBox fx:id="comboDanhMuc" prefWidth="140" promptText="Hải sản">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Hải sản" />
+                            <String fx:value="Đồ uống" />
+                            <String fx:value="Món chính" />
+                            <String fx:value="Tráng miệng" />
+                        </FXCollections>
+                    </items>
+               <HBox.margin>
+                  <Insets left="40.0" />
+               </HBox.margin>
+                </ComboBox>
+
+                <!-- Phần co giãn để đẩy nút “+” ra phải -->
+                <Region fx:id="spacer" HBox.hgrow="ALWAYS" />
+
+                <!-- Nút thêm món -->
+                <Label styleClass="menu-add-btn" text="+" />
+
+            </HBox>
+
+
+            <!-- Lưới món ăn -->
+            <ScrollPane fitToWidth="true" styleClass="menu-scroll">
+                <content>
+                    <FlowPane hgap="50" vgap="30" styleClass="menu-grid">
+
+                        <!-- ========== MÓN 1 ========== -->
+                        <VBox styleClass="menu-item">
+                            <ImageView styleClass="menu-image">
+                                <image>
+                                    <Image url="@../IMG/banhmi.png" />
+                                </image>
+                            </ImageView>
+                            <HBox styleClass="item-info">
+                                <Label styleClass="item-name" text="Bánh mì" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label styleClass="item-price" text="50.000 đ" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- ========== MÓN 2 ========== -->
+                        <VBox styleClass="menu-item">
+                            <ImageView styleClass="menu-image">
+                                <image>
+                                    <Image url="@../IMG/banhmi.png" />
+                                </image>
+                            </ImageView>
+                            <HBox styleClass="item-info">
+                                <Label styleClass="item-name" text="Nước cam" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label styleClass="item-price" text="35.000 đ" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- ========== MÓN 3 ========== -->
+                        <VBox styleClass="menu-item">
+                            <ImageView styleClass="menu-image">
+                                <image>
+                                    <Image url="@../IMG/banhmi.png" />
+                                </image>
+                            </ImageView>
+                            <HBox styleClass="item-info">
+                                <Label styleClass="item-name" text="Cơm tấm" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label styleClass="item-price" text="65.000 đ" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- ========== MÓN 4 ========== -->
+                        <VBox styleClass="menu-item">
+                            <ImageView styleClass="menu-image">
+                                <image>
+                                    <Image url="@../IMG/banhmi.png" />
+                                </image>
+                            </ImageView>
+                            <HBox styleClass="item-info">
+                                <Label styleClass="item-name" text="Cá hồi nướng" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label styleClass="item-price" text="120.000 đ" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- ========== MÓN 5 ========== -->
+                        <VBox styleClass="menu-item">
+                            <ImageView styleClass="menu-image">
+                                <image>
+                                    <Image url="@../IMG/banhmi.png" />
+                                </image>
+                            </ImageView>
+                            <HBox styleClass="item-info">
+                                <Label styleClass="item-name" text="Bánh kem" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label styleClass="item-price" text="80.000 đ" />
+                            </HBox>
+                        </VBox>
+
+                        <!-- ========== MÓN 6 ========== -->
+                        <VBox styleClass="menu-item">
+                            <ImageView styleClass="menu-image">
+                                <image>
+                                    <Image url="@../IMG/banhmi.png" />
+                                </image>
+                            </ImageView>
+                            <HBox styleClass="item-info">
+                                <Label styleClass="item-name" text="Trà sữa" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label styleClass="item-price" text="45.000 đ" />
+                            </HBox>
+                        </VBox>
+
+                    </FlowPane>
+                </content>
+            </ScrollPane>
+
+        </VBox>
+    </center>
+</BorderPane>
