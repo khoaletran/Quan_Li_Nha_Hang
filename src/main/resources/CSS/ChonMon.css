@@ -22,7 +22,7 @@
 }
 
 .search-field {
-    -fx-pref-width: 400px;
+    -fx-pref-width: 500px;
     -fx-pref-height: 45px;
     -fx-background-radius: 22;
     -fx-border-radius: 22;
@@ -39,7 +39,7 @@
 }
 
 .search-btn {
-    -fx-pref-width: 120px;
+    -fx-pref-width: 100px;
     -fx-pref-height: 45px;
     -fx-background-color: #3498db;
     -fx-text-fill: white;
@@ -63,7 +63,7 @@
 
 .menu-flowpane {
     -fx-alignment: center;
-    -fx-pref-wrap-length: 1050px; /* 3 card * 320px + 2 gap * 20px = 1000px */
+    -fx-pref-wrap-length: 1100px;
 }
 
 .menu-card {
@@ -73,7 +73,7 @@
     -fx-alignment: center;
     -fx-spacing: 12;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 6, 0, 0, 2);
-    -fx-pref-width: 320px;
+    -fx-pref-width: 500px;
     -fx-pref-height: 300px;
     -fx-border-color: #ecf0f1;
     -fx-border-width: 1px;
@@ -97,6 +97,7 @@
     -fx-text-alignment: center;
     -fx-wrap-text: true;
     -fx-max-width: 200px;
+    -fx-alignment: center;
 }
 
 .menu-item-price {
@@ -153,6 +154,7 @@
     -fx-pref-width: 380px;
     -fx-border-color: #bdc3c7;
     -fx-border-width: 0 0 0 1px;
+    -fx-alignment: center;
 }
 
 .sidebar-title {
@@ -162,11 +164,13 @@
     -fx-padding: 0 0 15 0;
     -fx-border-color: #bdc3c7;
     -fx-border-width: 0 0 1 0;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 /* ===== FORM NHẬP LIỆU ===== */
 .customer-info {
-    -fx-padding: 15 0 15 0;
+    -fx-padding: 0 0 25 0;
     -fx-border-color: #bdc3c7;
     -fx-border-width: 0 0 1 0;
 }
@@ -176,6 +180,9 @@
     -fx-font-weight: bold;
     -fx-text-fill: #2c3e50;
     -fx-padding: 0 0 10 0;
+    -fx-alignment: center;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 .info-label {
@@ -183,11 +190,13 @@
     -fx-font-weight: bold;
     -fx-text-fill: #2c3e50;
     -fx-pref-width: 110px;
+    -fx-alignment: right;
+    -fx-text-alignment: right;
 }
 
 .form-field {
     -fx-pref-height: 35px;
-    -fx-pref-width: 200px;
+    -fx-pref-width: 220px;
     -fx-background-radius: 6;
     -fx-border-radius: 6;
     -fx-border-color: #bdc3c7;
@@ -203,29 +212,36 @@
 
 /* ===== CHI TIẾT ĐƠN HÀNG ===== */
 .payment-section {
-    -fx-padding: 15 0 15 0;
+    -fx-padding: 0 0 22 0;
     -fx-border-color: #bdc3c7;
     -fx-border-width: 0 0 1 0;
+    -fx-alignment: center;
 }
 
 .section-label {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #2c3e50;
-    -fx-padding: 0 0 10 0;
+    -fx-padding: 0;
+    -fx-alignment: left;
+    -fx-text-alignment: left;
+}
+.section-label-total {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
-.payment-buttons {
-    -fx-spacing: 10;
-    -fx-padding: 8 0 0 0;
-}
 
 .payment-btn {
-    -fx-pref-height: 35px;
-    -fx-pref-width: 130px;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 90px;
     -fx-background-color: #bdc3c7;
     -fx-text-fill: #2c3e50;
-    -fx-font-size: 14px;
+    -fx-font-size: 10px;
     -fx-font-weight: bold;
     -fx-background-radius: 17;
     -fx-border-radius: 17;
@@ -242,9 +258,16 @@
     -fx-text-fill: white;
     -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.4), 4, 0, 0, 2);
 }
-
+.order-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 10 0;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
 .order-details {
-    -fx-padding: 15 0 15 0;
+    -fx-padding: 10;
 }
 
 .order-header {
@@ -252,6 +275,8 @@
     -fx-padding: 0 0 10 0;
     -fx-border-color: #bdc3c7;
     -fx-border-width: 0 0 1 0;
+    -fx-font-weight: bold;
+
 }
 
 .order-header .order-col {
@@ -282,12 +307,11 @@
 
 .order-items {
     -fx-max-height: 200px;
-    -fx-spacing: 8;
+    -fx-spacing: 0;
 }
 
 .order-item {
-    -fx-spacing: 15;
-    -fx-padding: 6 0 6 0;
+    -fx-padding: 0 0 10 0;
 }
 
 .order-item .order-col {
@@ -295,10 +319,10 @@
     -fx-text-fill: #34495e;
 }
 
-.order-item .order-col.total {
-    -fx-font-weight: bold;
-    -fx-text-fill: #e74c3c;
-}
+/*.order-item .order-col.total {*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-text-fill: #e74c3c;*/
+/*}*/
 
 .total-section {
     -fx-padding: 15 0 15 0;
@@ -332,45 +356,45 @@
 .action-buttons {
     -fx-spacing: 10;
     -fx-padding: 15 0 0 0;
-}
-
-.action-btn {
-    -fx-pref-height: 45px;
-    -fx-background-radius: 22;
-    -fx-border-radius: 22;
-    -fx-font-weight: bold;
-    -fx-font-size: 15px;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 2);
     -fx-alignment: center;
 }
 
-.action-btn.primary {
-    -fx-background-color: #27ae60;
+.action-btn {
+    -fx-pref-height: 60px;
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 2);
+    -fx-alignment: center;
+    -fx-background-color: green;
     -fx-text-fill: white;
 }
 
-.action-btn.primary:hover {
-    -fx-background-color: #219653;
-}
 
-.action-btn.secondary {
-    -fx-background-color: #3498db;
-    -fx-text-fill: white;
-}
 
-.action-btn.secondary:hover {
-    -fx-background-color: #2980b9;
-}
+/*.action-btn.primary:hover {*/
+/*    -fx-background-color: #219653;*/
+/*}*/
 
-.action-btn.tertiary {
-    -fx-background-color: #e67e22;
-    -fx-text-fill: white;
-}
+/*.action-btn.secondary {*/
+/*    -fx-background-color: #3498db;*/
+/*    -fx-text-fill: white;*/
+/*}*/
 
-.action-btn.tertiary:hover {
-    -fx-background-color: #d35400;
-}
+/*.action-btn.secondary:hover {*/
+/*    -fx-background-color: #2980b9;*/
+/*}*/
+
+/*.action-btn.tertiary {*/
+/*    -fx-background-color: #e67e22;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+/*.action-btn.tertiary:hover {*/
+/*    -fx-background-color: #d35400;*/
+/*}*/
 
 /* ===== RESPONSIVE - LUÔN GIỮ 3 CARD/HÀNG ===== */
 @media (max-width: 1300px) {
