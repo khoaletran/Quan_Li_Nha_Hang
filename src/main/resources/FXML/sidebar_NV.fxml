@@ -7,21 +7,32 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.ImagePattern?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.StackPane?>
 
 <BorderPane prefWidth="322" styleClass="sidebar" stylesheets="@../CSS/sidebar_QL.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.SidebarController_NV">
 
     <!-- Phần trên cùng -->
+    <!-- Phần trên cùng -->
     <top>
         <VBox spacing="10">
             <!-- Avatar -->
-            <HBox styleClass="avatar_section">
+            <HBox styleClass="avatar_section" alignment="CENTER" spacing="15">
                 <children>
-                    <ImageView fitHeight="115" fitWidth="115" preserveRatio="true">
-                        <image>
-                            <Image url="@../IMG/avatar.png" />
-                        </image>
-                    </ImageView>
-                    <VBox alignment="CENTER">
+                    <StackPane alignment="CENTER">
+                        <Circle fill="#f0f0f0" radius="57" stroke="#cccccc" strokeWidth="2" />
+                        <Circle radius="55">
+                            <fill>
+                                <ImagePattern>
+                                    <image>
+                                        <Image url="@../IMG/avatar.png" />
+                                    </image>
+                                </ImagePattern>
+                            </fill>
+                        </Circle>
+                    </StackPane>
+                    <VBox alignment="CENTER_LEFT" spacing="5">
                         <children>
                             <Label styleClass="username" text="Đỗ Minh Quân" />
                             <Label styleClass="role" text="Quản Lí" />
@@ -31,6 +42,7 @@
             </HBox>
         </VBox>
     </top>
+
 
     <!-- Phần menu chính -->
     <center>

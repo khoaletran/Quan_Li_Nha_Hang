@@ -21,7 +21,7 @@
 
     <!-- Sidebar -->
     <left>
-        <fx:include source="sidebar_QL.fxml" />
+        <fx:include source="sidebar_NV.fxml" />
     </left>
 
     <!-- Main Content -->
