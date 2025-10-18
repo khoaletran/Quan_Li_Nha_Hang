@@ -7,12 +7,12 @@
     -fx-background-color: #ffffff;
     -fx-pref-width: 320;
     -fx-pref-height: 1000;
-    -fx-border-width: 0 1 0 0;
-    -fx-border-color: #ddd;
     -fx-spacing: 18;
     -fx-alignment: top-center;
-    -fx-border-radius: 0 32 0 0;
+    -fx-background-radius: 0 32 32 0;
+    -fx-border-radius: 0 32 32 0;
 }
+
 
 /* Phần avatar */
 .avatar_section {
@@ -58,6 +58,7 @@
     -fx-scale-y: 1.05;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
     -fx-cursor: hand;
+    -fx-background-radius: 32;
 }
 
 .menu-item:selected, .menu-item.selected {
@@ -65,6 +66,7 @@
     -fx-scale-x: 1.0;
     -fx-scale-y: 1.0;
     -fx-effect: none;
+    -fx-background-radius: 32;
 }
 
 
@@ -104,12 +106,13 @@
     -fx-spacing: 18;
 }
 
+
 #subMenuDatBan {
     -fx-alignment: CENTER;
     -fx-spacing: 10;
+    -fx-padding: 12;
 }
 
-/* Nút con trong submenu */
 .sub-btn {
     -fx-background-color: #ffffff;
     -fx-text-fill: #111;
@@ -119,11 +122,12 @@
     -fx-background-radius: 10;
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 0 0 0 50;
-    -fx-opacity: 1;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3,0,0,1);
-    -fx-transition: all 0.3s ease;
+    -fx-effect: none;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
+
 
 
 .sub-btn:hover {

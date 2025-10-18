@@ -13,7 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="600" prefWidth="1000" stylesheets="@../CSS/login.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.LoginController">
+<AnchorPane prefHeight="600" prefWidth="1000"
+            stylesheets="@../CSS/login.css"
+            xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ui.controllers.LoginController">
 
     <!-- Nền cam phủ toàn màn hình -->
     <Rectangle height="600" styleClass="background" width="1000" />

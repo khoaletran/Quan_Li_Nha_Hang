@@ -1,0 +1,252 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #F7F7F7;
+}
+
+/* ===================== CENTER ===================== */
+.center-pane {
+    -fx-background-color: #fafafa;
+}
+
+.main-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3436;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+}
+
+
+.top {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+
+.search_box {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20 20 28 28;
+}
+
+/* Ô tìm kiếm */
+.search-field {
+    -fx-background-radius: 20 20 28 28;
+    -fx-padding: 20 20 28 28;
+    -fx-background-color: white;
+}
+.search-btn {
+    -fx-background-color: #E6763E;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 8 16;
+}
+
+.search-btn:hover {
+    -fx-background-color: white;
+    -fx-text-fill: #E6763E;
+    -fx-border-color: #E6763E;
+    -fx-padding: 8 16;
+    -fx-border-radius: 20;
+}
+
+.hbox_one {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20 28 28 20;
+}
+
+/* Hóa đơn */
+.invoice-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 1, 2);
+}
+
+.invoice-card:hover {
+    -fx-background-color: #f9f4ef;
+}
+
+.invoice-id {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+.invoice-phone {
+    -fx-text-fill: #666;
+}
+.time-btn {
+    -fx-background-color: #4BD1A0;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-pref-width: 38;
+    -fx-pref-height: 38;
+}
+
+.time-btn:hover {
+    -fx-background-color: while;
+    -fx-text-fill: #4BD1A0;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #4BD1A0;
+}
+
+/* ===================== MON AN ===================== */
+.detail_box {
+    -fx-background-radius: 20 20 28 28;
+    -fx-padding: 20;
+    -fx-background-color: white;
+    -fx-alignment: center-left;
+    -fx-spacing: 20;
+}
+
+.detail_box > Label {
+    -fx-pref-width: 100;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: center;
+    -fx-text-fill: #333;
+    -fx-font-size: 12px;
+}
+
+/* Dòng món */
+.menu-list {
+    -fx-padding: 10;
+}
+
+.menu-row {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 15;
+    -fx-padding: 10 15;
+    -fx-spacing: 15;
+    -fx-alignment: CENTER_LEFT;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 2);
+}
+
+/* Hover cho dòng món */
+.menu-row:hover {
+    -fx-background-color: #f9f4ef;
+}
+
+/* Cột */
+.col-stt {
+    -fx-pref-width: 80;
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+}
+
+.col-name {
+    -fx-pref-width: 120;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-label-padding: 0 5 0 5;
+}
+
+.col-qty {
+    -fx-pref-width: 100;
+    -fx-alignment: CENTER;
+    -fx-text-fill: #444;
+}
+
+.col-price {
+    -fx-pref-width: 100;
+    -fx-alignment: CENTER;
+    -fx-text-fill: #444;
+}
+.col-discount {
+    -fx-pref-width: 100;
+    -fx-alignment: CENTER;
+    -fx-text-fill: #444;
+}
+
+.col-total {
+    -fx-pref-width: 100;
+    -fx-alignment: CENTER;
+    -fx-text-fill: red;
+}
+
+
+/* ===================== RIGHT PANE ===================== */
+.right-pane {
+    -fx-background-color: #fff;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 1;
+    -fx-background-radius: 32 0 0 32;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: #F5C9A4;
+    -fx-padding: 8;
+    -fx-background-radius: 8;
+    -fx-alignment: center;
+}
+
+.bold-label { -fx-font-weight: bold; }
+.red-label { -fx-text-fill: red; }
+.red-bold-label { -fx-text-fill: red; -fx-font-weight: bold; }
+.green-bold-label { -fx-text-fill: green; -fx-font-weight: bold; }
+
+.radio-button .radio {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+.radio-button {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-font-size: 13px;
+}
+
+.radio-button:selected {
+    -fx-background-color: #E6763E;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.radio-button:hover {
+    -fx-background-color: #f7b98c;
+}
+
+.discount-field, .cash-field {
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+}
+
+/* Nút nhanh */
+.quick-btn {
+    -fx-background-color: #f1f1f1;
+    -fx-background-radius: 8;
+    -fx-alignment: center;
+}
+
+/* Nút xác nhận */
+.confirm-btn {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-pref-height: 45;
+}
+.confirm-btn:hover {
+    -fx-background-color: #43A047;
+}
+
