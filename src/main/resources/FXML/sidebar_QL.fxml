@@ -3,10 +3,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.ImagePattern?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.StackPane?>
 
 <BorderPane prefWidth="322.0"
             styleClass="sidebar"
@@ -16,21 +18,31 @@
 
     <!-- 🔹 Phần trên cùng (Avatar + tên + vai trò) -->
     <top>
-        <HBox styleClass="avatar_section">
-            <children>
-                <ImageView fitHeight="115" fitWidth="115" preserveRatio="true">
-                    <image>
-                        <Image url="@../IMG/avatar.png"/>
-                    </image>
-                </ImageView>
-                <VBox alignment="CENTER">
-                    <children>
-                        <Label styleClass="username" text="Đỗ Minh Quân"/>
-                        <Label styleClass="role" text="Quản Lí"/>
-                    </children>
-                </VBox>
-            </children>
-        </HBox>
+        <VBox spacing="10">
+            <!-- Avatar -->
+            <HBox styleClass="avatar_section" alignment="CENTER" spacing="15">
+                <children>
+                    <StackPane alignment="CENTER">
+                        <Circle fill="#f0f0f0" radius="57" stroke="#cccccc" strokeWidth="2" />
+                        <Circle radius="55">
+                            <fill>
+                                <ImagePattern>
+                                    <image>
+                                        <Image url="@../IMG/avatar.png" />
+                                    </image>
+                                </ImagePattern>
+                            </fill>
+                        </Circle>
+                    </StackPane>
+                    <VBox alignment="CENTER_LEFT" spacing="5">
+                        <children>
+                            <Label styleClass="username" text="Đỗ Minh Quân" />
+                            <Label styleClass="role" text="Quản Lí" />
+                        </children>
+                    </VBox>
+                </children>
+            </HBox>
+        </VBox>
     </top>
 
     <!-- 🔸 Menu chính ở giữa -->
