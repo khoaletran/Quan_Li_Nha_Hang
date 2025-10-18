@@ -47,7 +47,6 @@
         </VBox>
     </center>
 
-    <!-- 🔻 Nút Đăng Xuất cố định dưới đáy -->
     <bottom>
         <VBox alignment="CENTER" style="-fx-padding: 20 0 25 0;">
             <Button prefWidth="185.0" styleClass="logout-btn" text="Đăng Xuất"/>
