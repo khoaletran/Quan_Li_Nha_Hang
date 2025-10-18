@@ -1,0 +1,211 @@
+.root {
+    -fx-background-color: #f6f6f6;
+}
+.search-field {
+    -fx-background-radius: 25;
+    -fx-padding: 8 15;
+    -fx-border-radius: 25;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0;
+    -fx-effect: none;
+    -fx-focus-traversable: false;
+    -fx-highlight-fill: transparent;
+    -fx-highlight-text-fill: black;
+}
+.search-field:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-effect: none;
+    -fx-background-color: transparent;
+    -fx-highlight-fill: transparent;
+    -fx-highlight-text-fill: black;
+}
+
+.invoice-card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10 15;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 0, 1);
+}
+
+.invoice-id {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+
+.summary-section {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);
+}
+.right-sidebar {
+    -fx-background-color: #ffd1b5;
+    -fx-background-radius: 16;
+    -fx-padding: 25;
+    -fx-spacing: 15;
+}
+
+.report-section {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);
+    -fx-spacing: 0;
+}
+
+.title-label {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-alignment: center;
+    -fx-padding: 15 0 10 0;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12 12 0 0;
+}
+
+.form-section {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 0 0 12 12;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+}
+
+.form-section Label {
+    -fx-font-size: 13;
+    -fx-text-fill: #555;
+}
+
+.form-section TextField,
+.form-section TextArea {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 6;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 6;
+    -fx-padding: 6 10;
+    -fx-font-size: 13;
+}
+
+.form-section TextField:focused,
+.form-section TextArea:focused {
+    -fx-border-color: #ff9d7d;
+    -fx-effect: dropshadow(gaussian, rgba(255,77,77,0.15), 6, 0, 0, 0);
+}
+
+/* Nút Kết Ca */
+.end-shift-btn {
+    -fx-background-color: linear-gradient(to right, #ff6b6b, #ff4d4d);
+    -fx-text-fill: white;
+    -fx-background-radius: 25;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.2), 10, 0, 0, 3);
+}
+
+.end-shift-btn:hover {
+    -fx-background-color: linear-gradient(to right, #ff8585, #ff6666);
+}
+
+.anchorPane_LabelBaoCao {
+    -fx-background-color: #efefef;
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+}
+
+.summary-label {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-color: #bfbfbf;
+    -fx-border-width: 1.2;
+    -fx-border-radius: 8;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-pref-width: 250;
+    -fx-pref-height: 50;
+}
+
+.form-container {
+    -fx-background-color: #f3f3f3;
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+}
+
+.menu-search-box {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 25;
+    -fx-padding: 8 15;
+    -fx-alignment: CENTER_LEFT;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+.search-icon {
+    -fx-font-size: 16;
+    -fx-text-fill: #888;
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
+    -fx-border-color: transparent;
+    -fx-border-radius: 20 ;
+    -fx-padding: 5 12;
+    -fx-font-size: 13;
+    -fx-prompt-text-fill: #999;
+}
+
+.search-field:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ff9d7d;
+    -fx-effect: dropshadow(gaussian, rgba(255,77,77,0.15), 6, 0, 0, 0);
+}
+
+.scroll_order {
+    -fx-background-color: #efefef;
+    -fx-background-radius: 12;
+    -fx-background-insets: 0;
+    -fx-background-clip: padding-box;
+    -fx-padding: 10;
+    -fx-border-radius: 12;
+    -fx-border-color: #d0d0d0;
+}
+
+.scroll_order > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+}
+
+.scroll_content {
+    -fx-background-color: #efefef;
+    -fx-background-radius: 12;
+    -fx-padding: 10;
+}
+
+.invoice-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 5, 0, 0, 1);
+}
+
+.invoice-card:hover {
+    -fx-background-color: #f9f9f9;
+}
+
+.label_form-section{
+    -fx-font-weight: bold;
+}
+
+
+
+
+
+
