@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800" prefWidth="1400" stylesheets="@../CSS/checkin.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="800" prefWidth="1400" stylesheets="@../CSS/checkin.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- LEFT SIDEBAR -->
     <left>
@@ -411,7 +411,7 @@
                 <VBox prefHeight="651.0" prefWidth="327.0" spacing="10.0" styleClass="right-sidebar" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
 
                     <!-- Tiêu đề -->
-                    <HBox alignment="CENTER">
+                    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="327.0" style="-fx-background-color: #E6763E; -fx-background-radius: 20;">
                         <Label styleClass="sidebar-title" text="Thông Tin Đặt Bàn" />
                         <VBox.margin>
                             <Insets top="10" />
