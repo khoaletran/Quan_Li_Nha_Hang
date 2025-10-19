@@ -3,18 +3,19 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1400.0" stylesheets="@../CSS/ChonMon.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="800.0" prefWidth="1400.0" style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/ChonMon.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Sidebar trái -->
     <left>
@@ -28,113 +29,162 @@
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-            <!--         <AnchorPane prefHeight="151.0" prefWidth="658.0">-->
-            <!--            <children>-->
-            <!--               <Button layoutX="540.0" layoutY="5.0" styleClass="search-btn" text="Tìm Kiếm" HBox.hgrow="ALWAYS" />-->
-            <!--               <TextField layoutX="14.0" layoutY="7.0" prefHeight="50.0" prefWidth="501.0" promptText="Tìm món ăn..." styleClass="search-field" HBox.hgrow="ALWAYS" />-->
-            <!--            </children>-->
-            <!--         </AnchorPane>-->
-            <HBox spacing="10" alignment="CENTER" prefHeight="80">
-                <TextField layoutX="14.0" layoutY="7.0" prefHeight="50.0" prefWidth="501.0" promptText="Tìm món ăn..." styleClass="search-field" HBox.hgrow="ALWAYS" />
-                <Button layoutX="540.0" layoutY="5.0" styleClass="search-btn" text="Tìm Kiếm" HBox.hgrow="ALWAYS" />
-            </HBox>
-            <!-- Scroll menu -->
-            <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
-                <content>
-                    <FlowPane alignment="CENTER" hgap="20" prefHeight="734.0" prefWidth="658.0" styleClass="menu-flowpane" vgap="20">
-                        <padding>
-                            <Insets bottom="10" left="10" right="10" top="10" />
-                        </padding>
-
-                        <!-- Món mẫu -->
-                        <VBox styleClass="menu-card">
-                            <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
-                                <image>
-                                    <Image url="@../IMG/cua_ca_mau.png" />
-                                </image>
-                            </ImageView>
-                            <Label styleClass="menu-item-name" text="Cua Cà Mau" />
-                            <Label styleClass="menu-item-price" text="200.000 đ" />
-                            <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                <Button styleClass="qty-btn minus" text="-" />
-                                <Label styleClass="qty-label" text="0" />
-                                <Button styleClass="qty-btn plus" text="+" />
-                            </HBox>
-                        </VBox>
-
-                        <VBox styleClass="menu-card">
-                            <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
-                                <image>
+         <VBox prefHeight="780.0" prefWidth="660.0" styleClass="center-p">
+            <children>
+                  <HBox alignment="CENTER" prefHeight="56.0" prefWidth="660.0" spacing="10">
+                      <TextField layoutX="14.0" layoutY="7.0" prefHeight="63.0" prefWidth="577.0" promptText="Tìm món ăn..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                  </HBox>
+                  <!-- Scroll menu -->
+                  <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" prefHeight="678.0" prefWidth="660.0" styleClass="scroll_order" VBox.vgrow="ALWAYS">
+                      <content>
+                          <FlowPane fx:id="menuFlow" alignment="CENTER" hgap="20" prefHeight="600" prefWidth="900" prefWrapLength="900" styleClass="menu-flowpane" vgap="20">
+                          <padding>
+                                  <Insets bottom="10" left="10" right="10" top="10" />
+                              </padding>
+      
+                              <!-- Món mẫu -->
+                              <VBox prefHeight="339.0" prefWidth="176.0" styleClass="menu-card">
+                                  <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
+                                      <image>
+                                          <Image url="@../IMG/cua_ca_mau.png" />
+                                      </image>
+                                  </ImageView>
+                                  <Label styleClass="menu-item-name" text="Cua Cà Mau" />
+                                  <Label styleClass="menu-item-price" text="200.000 đ" />
+                                  <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
+                                      <Button styleClass="qty-btn minus" text="-" />
+                                      <Label styleClass="qty-label" text="0" />
+                                      <Button styleClass="qty-btn plus" text="+" />
+                                  </HBox>
+                              </VBox>
+      
+                              <VBox styleClass="menu-card">
+                                  <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
+                                      <image>
+                                          <Image url="@../IMG/tom_hum.png" />
+                                      </image>
+                                  </ImageView>
+                                  <Label styleClass="menu-item-name" text="Tôm Hùm" />
+                                  <Label styleClass="menu-item-price" text="800.000 đ" />
+                                  <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
+                                      <Button styleClass="qty-btn minus" text="-" />
+                                      <Label styleClass="qty-label" text="0" />
+                                      <Button styleClass="qty-btn plus" text="+" />
+                                  </HBox>
+                              </VBox>
+                        <VBox layoutX="340.0" layoutY="179.0" styleClass="menu-card">
+                           <children>
+                              <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
+                                 <image>
                                     <Image url="@../IMG/tom_hum.png" />
-                                </image>
-                            </ImageView>
-                            <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                            <Label styleClass="menu-item-price" text="800.000 đ" />
-                            <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                <Button styleClass="qty-btn minus" text="-" />
-                                <Label styleClass="qty-label" text="0" />
-                                <Button styleClass="qty-btn plus" text="+" />
-                            </HBox>
+                                 </image>
+                              </ImageView>
+                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
+                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
+                                 <children>
+                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Label styleClass="qty-label" text="0" />
+                                    <Button styleClass="qty-btn plus" text="+" />
+                                 </children>
+                              </HBox>
+                           </children>
                         </VBox>
-                        <VBox styleClass="menu-card">
-                            <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
-                                <image>
+                        <VBox layoutX="176.0" layoutY="738.0" styleClass="menu-card">
+                           <children>
+                              <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
+                                 <image>
                                     <Image url="@../IMG/tom_hum.png" />
-                                </image>
-                            </ImageView>
-                            <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                            <Label styleClass="menu-item-price" text="800.000 đ" />
-                            <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                <Button styleClass="qty-btn minus" text="-" />
-                                <Label styleClass="qty-label" text="0" />
-                                <Button styleClass="qty-btn plus" text="+" />
-                            </HBox>
+                                 </image>
+                              </ImageView>
+                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
+                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
+                                 <children>
+                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Label styleClass="qty-label" text="0" />
+                                    <Button styleClass="qty-btn plus" text="+" />
+                                 </children>
+                              </HBox>
+                           </children>
                         </VBox>
-                        <VBox styleClass="menu-card">
-                            <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
-                                <image>
+                        <VBox layoutX="69.0" layoutY="368.0" styleClass="menu-card">
+                           <children>
+                              <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
+                                 <image>
                                     <Image url="@../IMG/tom_hum.png" />
-                                </image>
-                            </ImageView>
-                            <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                            <Label styleClass="menu-item-price" text="800.000 đ" />
-                            <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                <Button styleClass="qty-btn minus" text="-" />
-                                <Label styleClass="qty-label" text="0" />
-                                <Button styleClass="qty-btn plus" text="+" />
-                            </HBox>
+                                 </image>
+                              </ImageView>
+                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
+                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
+                                 <children>
+                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Label styleClass="qty-label" text="0" />
+                                    <Button styleClass="qty-btn plus" text="+" />
+                                 </children>
+                              </HBox>
+                           </children>
                         </VBox>
-                        <VBox styleClass="menu-card">
-                            <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
-                                <image>
+                        <VBox layoutX="209.0" layoutY="510.0" styleClass="menu-card">
+                           <children>
+                              <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
+                                 <image>
                                     <Image url="@../IMG/tom_hum.png" />
-                                </image>
-                            </ImageView>
-                            <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                            <Label styleClass="menu-item-price" text="800.000 đ" />
-                            <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                <Button styleClass="qty-btn minus" text="-" />
-                                <Label styleClass="qty-label" text="0" />
-                                <Button styleClass="qty-btn plus" text="+" />
-                            </HBox>
+                                 </image>
+                              </ImageView>
+                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
+                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
+                                 <children>
+                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Label styleClass="qty-label" text="0" />
+                                    <Button styleClass="qty-btn plus" text="+" />
+                                 </children>
+                              </HBox>
+                           </children>
                         </VBox>
-                        <VBox styleClass="menu-card">
-                            <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
-                                <image>
+                        <VBox layoutX="349.0" layoutY="510.0" styleClass="menu-card">
+                           <children>
+                              <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
+                                 <image>
                                     <Image url="@../IMG/tom_hum.png" />
-                                </image>
-                            </ImageView>
-                            <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                            <Label styleClass="menu-item-price" text="800.000 đ" />
-                            <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                <Button styleClass="qty-btn minus" text="-" />
-                                <Label styleClass="qty-label" text="0" />
-                                <Button styleClass="qty-btn plus" text="+" />
-                            </HBox>
+                                 </image>
+                              </ImageView>
+                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
+                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
+                                 <children>
+                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Label styleClass="qty-label" text="0" />
+                                    <Button styleClass="qty-btn plus" text="+" />
+                                 </children>
+                              </HBox>
+                           </children>
                         </VBox>
-                    </FlowPane>
-                </content>
-            </ScrollPane>
+                        <VBox layoutX="203.0" layoutY="750.0" styleClass="menu-card">
+                           <children>
+                              <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../IMG/tom_hum.png" />
+                                 </image>
+                              </ImageView>
+                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
+                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
+                                 <children>
+                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Label styleClass="qty-label" text="0" />
+                                    <Button styleClass="qty-btn plus" text="+" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                          </FlowPane>
+                      </content>
+                  </ScrollPane>
+            </children>
+         </VBox>
         </VBox>
     </center>
 
@@ -146,116 +196,116 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <Label prefHeight="54.0" prefWidth="351.0" styleClass="sidebar-title" text="Thông Tin Đặt Bàn" />
+            <Label alignment="CENTER" prefHeight="54.0" prefWidth="351.0" styleClass="section-title" text="Thông Tin Đặt Bàn" textAlignment="CENTER" />
 
-            <VBox prefHeight="271.0" prefWidth="339.0" spacing="12" styleClass="customer-info">
-                <Label prefHeight="16.0" prefWidth="339.0" styleClass="form-label" text="Thông Tin Khách Hàng" />
+            <VBox prefHeight="196.0" prefWidth="340.0" spacing="12" styleClass="customer-info">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Họ và tên:" />
-                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Nhập họ tên" styleClass="form-field" />
+                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Nhập họ tên" styleClass="filter-tf" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="SĐT:" />
-                    <TextField promptText="Nhập số điện thoại" styleClass="form-field" />
+                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Nhập số điện thoại" styleClass="filter-tf" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Số lượng khách:" />
-                    <TextField promptText="Số người" styleClass="form-field" />
+                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Số người" styleClass="filter-tf" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Ghi chú:" />
-                    <TextField promptText="Ghi chú đặc biệt" styleClass="form-field" />
+                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Ghi chú đặc biệt" styleClass="filter-tf" />
                 </HBox>
             </VBox>
 
-            <HBox alignment="CENTER" spacing="10" styleClass="payment-section">
-                <Label prefHeight="21.0" prefWidth="134.0" styleClass="section-label" text="Thanh Toán" />
-                <Button styleClass="payment-btn" text="Chuyển Khoản" />
-                <Button styleClass="payment-btn" text="Tiền Mặt" />
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label styleClass="bold-label" text="Thanh Toán:" />
+                <RadioButton selected="true" text="Chuyển Khoản">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="paymentGroup" />
+                    </toggleGroup></RadioButton>
+                <RadioButton text="Tiền Mặt" toggleGroup="$paymentGroup" />
             </HBox>
-
-            <!-- Scroll để không cắt phần dưới -->
-            <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-                <content>
-                    <VBox prefHeight="426.0" prefWidth="338.0" spacing="12" styleClass="order-details">
-                        <Label prefHeight="34.0" prefWidth="336.0" styleClass="order-title" text="CHI TIẾT ĐƠN HÀNG" />
+              <VBox prefHeight="426.0" prefWidth="338.0" spacing="12" styleClass="order-details">
+                  <Label prefHeight="34.0" prefWidth="336.0" styleClass="order-title" text="CHI TIẾT ĐƠN HÀNG" />
 
                         <!-- Hàng tiêu đề cột -->
-                        <HBox styleClass="order-header">
-                            <Label styleClass="order-col product" text="Tên món" />
-                            <Region HBox.hgrow="ALWAYS" />
-                            <Label styleClass="order-col quantity" text="Số lượng" />
-                            <Region HBox.hgrow="ALWAYS" />
-                            <Label styleClass="order-col price" text="Giá" />
-                            <Region HBox.hgrow="ALWAYS" />
-                            <Label styleClass="order-col total" text="Tổng tiền" />
-                        </HBox>
-
-                        <!-- Dòng dữ liệu đơn hàng -->
-                        <VBox fx:id="orderItems" styleClass="order-items">
+                  <HBox styleClass="order-header">
+                      <Label prefHeight="15.0" prefWidth="59.0" styleClass="order-col product" text="Tên món" textAlignment="RIGHT" />
+                      <Region HBox.hgrow="ALWAYS" />
+                      <Label styleClass="order-col quantity" text="Số lượng" />
+                      <Region HBox.hgrow="ALWAYS" />
+                      <Label styleClass="order-col price" text="Giá" />
+                      <Region HBox.hgrow="ALWAYS" />
+                      <Label prefHeight="15.0" prefWidth="78.0" styleClass="order-col total" text="Tổng tiền" />
+                  </HBox>
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="147.0" prefWidth="320.0" styleClass="scrollp_od">
+               <content>
+      
+                              <!-- Dòng dữ liệu đơn hàng -->
+                        <VBox fx:id="orderItems">
                             <HBox styleClass="order-item">
-                                <Label  text="Cơm chay" />
+                                <Label text="Cơm chay" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="10" />
+                                <Label text="10" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="36000" />
+                                <Label text="36000" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="360000" />
+                                <Label text="360000" />
                             </HBox>
                             <HBox styleClass="order-item">
-                                <Label  text="Cơm chay" />
+                                <Label text="Cơm chay" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="10" />
+                                <Label text="10" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="36000" />
+                                <Label text="36000" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="360000" />
+                                <Label text="360000" />
                             </HBox>
                             <HBox styleClass="order-item">
-                                <Label  text="Cơm chay" />
+                                <Label text="Cơm chay" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="10" />
+                                <Label text="10" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="36000" />
+                                <Label text="36000" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="360000" />
+                                <Label text="360000" />
                             </HBox>
                             <HBox styleClass="order-item">
-                                <Label  text="Cơm chay" />
+                                <Label text="Cơm chay" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="10" />
+                                <Label text="10" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="36000" />
+                                <Label text="36000" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label  text="360000" />
+                                <Label text="360000" />
                             </HBox>
                         </VBox>
+               </content>
+            </ScrollPane>
 
                         <VBox spacing="8" styleClass="total-section">
-                            <HBox spacing="10">
-                                <Label styleClass="total-label" text="Tổng Tiền:" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Label styleClass="total-amount" text="12.100.000 đ" />
-                            </HBox>
-                            <HBox spacing="10">
-                                <Label styleClass="deposit-label" text="Cọc:" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Label styleClass="deposit-amount" text="2.000.000 đ" />
-                            </HBox>
-                            <HBox spacing="10">
-                                <Label styleClass="final-label" text="Còn lại:" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Label styleClass="final-amount" text="10.100.000 đ" />
-                            </HBox>
-                        </VBox>
+                      <HBox spacing="10">
+                          <Label styleClass="total-label" text="Tổng Tiền:" />
+                          <Region HBox.hgrow="ALWAYS" />
+                          <Label styleClass="total-amount" text="12.100.000 đ" />
+                      </HBox>
+                      <HBox spacing="10">
+                          <Label styleClass="deposit-label" text="Cọc:" />
+                          <Region HBox.hgrow="ALWAYS" />
+                          <Label styleClass="deposit-amount" text="2.000.000 đ" />
+                      </HBox>
+                      <HBox spacing="10">
+                          <Label styleClass="final-label" text="Còn lại:" />
+                          <Region HBox.hgrow="ALWAYS" />
+                          <Label styleClass="final-amount" text="10.100.000 đ" />
+                      </HBox>
+                  </VBox>
 
                         <!-- Nút hành động -->
-                        <VBox spacing="10" styleClass="action-buttons">
-                            <Button styleClass="action-btn" text="Đặt Bàn" />
-                        </VBox>
-                    </VBox>
-                </content>
-            </ScrollPane>
+                  <VBox spacing="10" styleClass="action-buttons">
+                      <Button styleClass="action-btn" text="Đặt Bàn" />
+                  </VBox>
+              </VBox>
         </VBox>
     </right>
 </BorderPane>
