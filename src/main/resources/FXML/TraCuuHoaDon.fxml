@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -44,7 +45,7 @@
                   <!-- Danh sách hóa đơn -->
                   <ScrollPane fitToWidth="true" prefWidth="668.0" styleClass="scroll-list" VBox.vgrow="ALWAYS">
                       <content>
-                          <VBox prefHeight="518.0" prefWidth="656.0" spacing="8" styleClass="vbox_center-scroll">
+                          <VBox prefHeight="436.0" prefWidth="656.0" spacing="8" styleClass="vbox_center-scroll">
                               <padding>
                                   <Insets bottom="5" left="5" right="5" top="5" />
                               </padding>
@@ -101,17 +102,17 @@
 
                         <!-- Hàng 1 -->
                         <Label styleClass="label_filter" text="Mã bàn:" GridPane.columnIndex="0" />
-                        <TextField prefHeight="50.0" promptText="Value" GridPane.columnIndex="1" />
+                        <TextField prefHeight="50.0" prefWidth="180.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" />
 
                         <Label styleClass="label_filter" text="Thời gian:" GridPane.columnIndex="2" />
-                        <TextField prefHeight="50.0" promptText="dd/mm/yyyy" GridPane.columnIndex="3" />
+                        <TextField prefHeight="50.0" promptText="dd/mm/yyyy" styleClass="filter-tf" GridPane.columnIndex="3" />
 
                         <!-- Hàng 2 -->
                         <Label styleClass="label_filter" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <TextField prefHeight="50.0" promptText="Value" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField prefHeight="50.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <Label styleClass="label_filter" text="Khu vực:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <ComboBox prefHeight="50.0" promptText="-- chọn --" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <ComboBox prefHeight="27.0" prefWidth="182.0" promptText="-- chọn --" styleClass="filter-tf" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                      <rowConstraints>
                         <RowConstraints />
                         <RowConstraints />
@@ -144,7 +145,7 @@
             </padding>
 
             <!-- Khối trắng chính -->
-            <VBox prefHeight="765.0" prefWidth="320.0" spacing="15" styleClass="right-content">
+            <VBox prefHeight="765.0" prefWidth="320.0" spacing="15" style="-fx-background-color: F3F3F3;" styleClass="right-content">
                 <!-- Tiêu đề -->
                 <Label prefHeight="27.0" prefWidth="280.0" styleClass="title-right" text="Thông tin đặt bàn" />
 
@@ -156,25 +157,25 @@
                     </columnConstraints>
 
                     <Label styleClass="label_infoOrder" text="Mã Hóa Đơn:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <TextField editable="false" text="HD1210820250001" GridPane.columnIndex="1" />
+                    <TextField editable="false" styleClass="filter-tf" text="HD1210820250001" GridPane.columnIndex="1" />
 
                     <Label styleClass="label_infoOrder" text="Tên Khách Hàng:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                    <TextField editable="false" text="Trần Quốc Nhã" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <TextField editable="false" styleClass="filter-tf" text="Trần Quốc Nhã" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                     <Label styleClass="label_infoOrder" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                    <TextField editable="false" text="0398765432" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <TextField editable="false" styleClass="filter-tf" text="0398765432" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                     <Label styleClass="label_infoOrder" text="Số lượng:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                    <TextField editable="false" text="2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <TextField editable="false" styleClass="filter-tf" text="2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                     <Label styleClass="label_infoOrder" text="Sự kiện:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                    <TextField editable="false" text="Không có" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    <TextField editable="false" styleClass="filter-tf" text="Không có" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
                     <Label styleClass="label_infoOrder" text="Khu vực:" GridPane.rowIndex="5" />
-                    <TextField editable="false" text="Trong nhà" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    <TextField editable="false" styleClass="filter-tf" text="Trong nhà" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
                     <Label styleClass="label_infoOrder" text="Mô tả:" GridPane.rowIndex="6" />
-                    <TextArea prefHeight="76.0" prefRowCount="3" prefWidth="162.0" text="Giảm cay của các món ăn" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                    <TextArea prefHeight="76.0" prefRowCount="3" prefWidth="162.0" styleClass="textarea-custom" text="Giảm cay của các món ăn" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                <rowConstraints>
                   <RowConstraints />
                   <RowConstraints />

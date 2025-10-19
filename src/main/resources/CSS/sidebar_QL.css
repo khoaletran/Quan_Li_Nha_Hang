@@ -135,3 +135,32 @@
 .sub-btn:hover {
     -fx-background-color: #FFE6D1;
 }
+
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 8;
+    -fx-max-height: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #c1915f;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
+
