@@ -52,9 +52,10 @@
     -fx-pref-height: 34px;
     -fx-background-color: white;
     -fx-background-radius: 10;
-    -fx-border-color: transparent;
     -fx-padding: 0 10 0 10;
     -fx-font-size: 13px;
+    -fx-border-color: #d2a679;
+    -fx-border-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3,0,0,1);
 }
 
@@ -74,14 +75,15 @@
 .textarea-custom {
     -fx-background-color: white;
     -fx-background-radius: 10;
-    -fx-border-color: transparent;
+    -fx-border-color: #d2a679;
+    -fx-border-radius: 10;
     -fx-padding: 0 10 0 10;
     -fx-wrap-text: true;
 }
 
 .textarea-custom:focused {
     -fx-background-color: #fff;
-    -fx-border-color: #d2a679;
+    -fx-border-color: #E6763E;
     -fx-border-width: 1.2;
     -fx-border-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(210,166,121,0.3), 4,0,0,1);
