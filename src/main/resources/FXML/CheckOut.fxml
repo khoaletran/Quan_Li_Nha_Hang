@@ -20,13 +20,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800"
-            prefWidth="1400"
-            stylesheets="@../CSS/checkout.css"
-            xmlns="http://javafx.com/javafx/24.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            style="-fx-background-color: #D9D9D9"
-            fx:controller="ui.controllers.CheckoutController">
+<BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: #D9D9D9" stylesheets="@../CSS/checkout.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.CheckoutController">
 
     <!-- Sidebar bên trái -->
     <left>
@@ -34,8 +28,8 @@
     </left>
 
     <!-- Khu vực trung tâm -->
-    <center >
-        <VBox spacing="20" styleClass="center-pane" VBox.vgrow="ALWAYS" style="-fx-background-color: #D9D9D9">
+    <center>
+        <VBox spacing="20" style="-fx-background-color: #D9D9D9" styleClass="center-pane" VBox.vgrow="ALWAYS">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
@@ -117,12 +111,12 @@
             <children>
                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="detail_box">
                   <children>
-                     <Label prefHeight="13.0" prefWidth="40.0" text="STT" />
-                     <Label text="TÊN MÓN" />
-                     <Label text="SỐ LƯỢNG" />
-                     <Label text="ĐƠN GIÁ" />
-                     <Label prefHeight="18.0" prefWidth="135.0" text="KHUYẾN MÃI" />
-                     <Label text="THÀNH TIỀN" />
+                     <Label prefHeight="13.0" prefWidth="40.0" text="STT" style="-fx-font-weight: bold"/>
+                     <Label text="TÊN MÓN" style="-fx-font-weight: bold"/>
+                     <Label text="SỐ LƯỢNG" style="-fx-font-weight: bold"/>
+                     <Label text="ĐƠN GIÁ" style="-fx-font-weight: bold"/>
+                     <Label prefHeight="18.0" prefWidth="135.0" text="KHUYẾN MÃI" style="-fx-font-weight: bold"/>
+                     <Label text="THÀNH TIỀN" style="-fx-font-weight: bold"/>
                   </children>
                </HBox>
 
@@ -187,21 +181,6 @@
                 <Label text="Khu vực:" GridPane.rowIndex="6" />
                 <Label text="IN" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <AnchorPane prefHeight="0.0" prefWidth="79.0" GridPane.columnIndex="1" />
-            <columnConstraints>
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-            </rowConstraints>
-
 
             </GridPane>
 
@@ -234,19 +213,6 @@
                 <Label text="Tổng Thanh Toán:" GridPane.rowIndex="4" />
                 <Label styleClass="red-bold-label" text="3.960.000 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <AnchorPane prefHeight="0.0" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <columnConstraints>
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-               <RowConstraints />
-            </rowConstraints>
 
             </GridPane>
 
@@ -280,21 +246,8 @@
 
 
             <GridPane hgap="10">
+                <Label prefHeight="17.0" prefWidth="135.0" style="-fx-font-weight: bold; -fx-font-size: 13" text="Tiền Thừa:" />
                 <Label prefHeight="15.0" prefWidth="106.0" styleClass="green-bold-label" text="40.000 đ" GridPane.columnIndex="4" />
-            <AnchorPane prefHeight="15.0" prefWidth="98.0" GridPane.columnIndex="2">
-               <children>
-                      <Label layoutX="16.0" layoutY="-3.0" prefHeight="15.0" prefWidth="64.0" text="Tiền Thừa:" />
-               </children></AnchorPane>
-            <columnConstraints>
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-               <RowConstraints />
-            </rowConstraints>
             </GridPane>
          <VBox prefHeight="200.0" prefWidth="100.0">
             <children>
