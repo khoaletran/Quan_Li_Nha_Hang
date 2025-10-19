@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -12,16 +13,24 @@ public class SidebarController_NV {
     @FXML
     private VBox subMenuDatBan;
 
+    @FXML
+    private Button btnQuanLiDatBan;
+
     private boolean isSubMenuVisible = false;
 
     @FXML
     private void toggleSubMenu() {
-        if (isSubMenuVisible) {
-            collapse(subMenuDatBan);
+        boolean currentlyVisible = subMenuDatBan.isVisible();
+        subMenuDatBan.setVisible(!currentlyVisible);
+        subMenuDatBan.setManaged(!currentlyVisible);
+
+        if (!currentlyVisible) {
+            // Bật submenu → thêm hiệu ứng chọn
+            btnQuanLiDatBan.getStyleClass().add("selected");
         } else {
-            expand(subMenuDatBan);
+            // Tắt submenu → bỏ hiệu ứng chọn
+            btnQuanLiDatBan.getStyleClass().remove("selected");
         }
-        isSubMenuVisible = !isSubMenuVisible;
     }
 
     private void expand(VBox box) {

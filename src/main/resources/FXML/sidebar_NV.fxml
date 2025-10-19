@@ -6,19 +6,17 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.ImagePattern?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.layout.StackPane?>
 
-<BorderPane prefWidth="322" styleClass="sidebar" stylesheets="@../CSS/sidebar_QL.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.SidebarController_NV">
-
-    <!-- Phần trên cùng -->
-    <!-- Phần trên cùng -->
+<BorderPane prefWidth="320" styleClass="sidebar" stylesheets="@../CSS/sidebar_QL.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.SidebarController_NV">
+    
     <top>
-        <VBox spacing="10">
+        <VBox prefHeight="167.0" prefWidth="320.0" spacing="10">
             <!-- Avatar -->
-            <HBox styleClass="avatar_section" alignment="CENTER" spacing="15">
+            <HBox alignment="CENTER" prefWidth="Infinity" spacing="15" styleClass="avatar_section">
                 <children>
                     <StackPane alignment="CENTER">
                         <Circle fill="#f0f0f0" radius="57" stroke="#cccccc" strokeWidth="2" />
@@ -98,7 +96,7 @@
 
     <!-- Nút cố định dưới cùng -->
     <bottom>
-        <VBox alignment="CENTER" style="-fx-padding: 15 0 20 0;">
+        <VBox alignment="CENTER" prefHeight="80.0" prefWidth="276.0" style="-fx-padding: 15 0 20 0;">
             <Button prefWidth="185" styleClass="logout-btn" text="Kết Ca" />
         </VBox>
     </bottom>
