@@ -39,13 +39,15 @@
 .filter-box {
     -fx-background-color: #efefef;
     -fx-background-radius: 15;
-    -fx-padding: 15;
 }
 
 .filter-title {
     -fx-font-weight: bold;
     -fx-font-size: 18px;
+    -fx-background-color: white;
     -fx-text-fill: #333;
+    -fx-alignment: center;
+    -fx-background-radius: 20 20 28 28;
 }
 
 .tt_box {
@@ -54,8 +56,14 @@
 }
 
 .text-field, .combo-box {
-    -fx-background-radius: 6;
-    -fx-border-color: transparent;
+    -fx-pref-height: 34px;
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 0 10 0 10;
+    -fx-font-size: 13px;
+    -fx-border-color: #d2a679;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3,0,0,1);
 }
 
 .btn-search {
@@ -248,7 +256,6 @@
     -fx-background-color: #fff;
     -fx-background-radius: 20;
     -fx-padding: 5;
-    -fx-border-color: #ccc;
     -fx-border-radius: 20;
 }
 
@@ -290,12 +297,14 @@
 }
 
 .uudai_combobox {
-    -fx-background-color: #fff;
-    -fx-border-color: #ccc;
-    -fx-border-radius: 15;
-    -fx-background-radius: 15;
-    -fx-padding: 5 10;
-    -fx-font-size: 12px;
+    -fx-pref-height: 34px;
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 0 10 0 10;
+    -fx-font-size: 13px;
+    -fx-border-color: #d2a679;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3,0,0,1);
 }
 .scroll-bar:vertical {
     -fx-pref-width: 12px;
@@ -325,7 +334,7 @@
     -fx-pref-width: 0;
 }
 
-.filter-tf {
+filter-tf {
     -fx-pref-height: 34px;
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -337,11 +346,11 @@
 }
 
 
-.filter-tf:hover {
+filter-tf:hover {
     -fx-background-color: #f2eadf;
 }
 
-.filter-tf:focused {
+filter-tf:focused {
     -fx-background-color: #fff;
     -fx-border-color: #d2a679;
     -fx-border-width: 1.2;

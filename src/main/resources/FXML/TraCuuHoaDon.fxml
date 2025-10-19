@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -12,10 +11,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -33,19 +34,17 @@
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
-         <VBox prefHeight="816.0" prefWidth="700.0" styleClass="center_section-background">
+         <VBox prefHeight="816.0" prefWidth="700.0" style="-fx-background-color: #efefef; -fx-background-radius: 20;">
             <children>
-      
-                  <!-- Tiêu đề -->
-                  <Label prefHeight="65.0" prefWidth="700.0" styleClass="center-title" text="Danh sách hóa đơn">
-                  <VBox.margin>
-                     <Insets bottom="5.0" />
-                  </VBox.margin></Label>
-      
+                <HBox prefHeight="55.0" prefWidth="624.0" styleClass="tt_box">
+                    <children>
+                        <Label prefHeight="53.0" prefWidth="672.0" styleClass="center-title" text="Danh Sách Hóa Đơn" />
+                    </children>
+                </HBox>
                   <!-- Danh sách hóa đơn -->
                   <ScrollPane fitToWidth="true" prefWidth="668.0" styleClass="scroll-list" VBox.vgrow="ALWAYS">
                       <content>
-                          <VBox prefHeight="436.0" prefWidth="656.0" spacing="8" styleClass="vbox_center-scroll">
+                          <VBox prefHeight="521.0" prefWidth="690.0" spacing="8" styleClass="vbox_center-scroll">
                               <padding>
                                   <Insets bottom="5" left="5" right="5" top="5" />
                               </padding>
@@ -88,52 +87,55 @@
                   </VBox.margin>
                   </ScrollPane>
 
-                <!-- Bộ lọc và tìm kiếm -->
-                <VBox spacing="8" styleClass="filter-box">
-                    <Label styleClass="filter-title" text="Bộ lọc" />
-
-                    <GridPane hgap="10" prefWidth="626.0" vgap="10">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="20" />
-                            <ColumnConstraints percentWidth="30" />
-                            <ColumnConstraints percentWidth="20" />
-                            <ColumnConstraints percentWidth="30" />
-                        </columnConstraints>
-
-                        <!-- Hàng 1 -->
-                        <Label styleClass="label_filter" text="Mã bàn:" GridPane.columnIndex="0" />
-                        <TextField prefHeight="50.0" prefWidth="180.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" />
-
-                        <Label styleClass="label_filter" text="Thời gian:" GridPane.columnIndex="2" />
-                        <TextField prefHeight="50.0" promptText="dd/mm/yyyy" styleClass="filter-tf" GridPane.columnIndex="3" />
-
-                        <!-- Hàng 2 -->
-                        <Label styleClass="label_filter" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <TextField prefHeight="50.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-                        <Label styleClass="label_filter" text="Khu vực:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <ComboBox prefHeight="27.0" prefWidth="182.0" promptText="-- chọn --" styleClass="filter-tf" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                     <rowConstraints>
-                        <RowConstraints />
-                        <RowConstraints />
-                     </rowConstraints>
-                     <VBox.margin>
-                        <Insets left="10.0" />
-                     </VBox.margin>
-                    </GridPane>
-
-                    <!-- Hàng nút -->
-                    <HBox alignment="CENTER_RIGHT" spacing="10">
-                        <Button styleClass="btn-clear" text="Xóa trắng" />
-                        <Button styleClass="btn-search" text="Tìm kiếm" />
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                    </HBox>
-                </VBox>
-
             </children>
          </VBox>
+
+          <!-- Bộ lọc và tìm kiếm -->
+          <VBox prefHeight="162.0" prefWidth="624.0" spacing="8" styleClass="filter-box">
+              <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 20 20 28 28;">
+                  <children>
+                      <Label prefHeight="39.0" prefWidth="624.0" styleClass="filter-title" text="Bộ lọc" />
+                  </children>
+              </HBox>
+
+              <GridPane hgap="10" prefHeight="98.0" prefWidth="614.0" style="-fx-padding: 10;" vgap="10">
+                  <columnConstraints>
+                      <ColumnConstraints percentWidth="20.0" />
+                      <ColumnConstraints percentWidth="30.0" />
+                      <ColumnConstraints percentWidth="20.0" />
+                      <ColumnConstraints percentWidth="30.0" />
+                  </columnConstraints>
+                  <!-- Hàng 1 -->
+                  <Label styleClass="label_filter" text="Mã bàn:" GridPane.columnIndex="0" />
+                  <TextField prefHeight="21.0" prefWidth="360.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" />
+
+                  <Label styleClass="label_filter" text="Thời gian:" GridPane.columnIndex="2" />
+                  <TextField prefHeight="21.0" prefWidth="220.0" promptText="dd/mm/yyyy" styleClass="filter-tf" GridPane.columnIndex="3" />
+
+                  <!-- Hàng 2 -->
+                  <Label styleClass="label_filter" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <TextField prefHeight="30.0" prefWidth="372.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                  <Label styleClass="label_filter" text="Khu vực:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <ComboBox prefHeight="30.0" prefWidth="312.0" promptText="-- chọn --" styleClass="uudai_combobox filter-tf" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <rowConstraints>
+                      <RowConstraints />
+                      <RowConstraints />
+                  </rowConstraints>
+                  <VBox.margin>
+                      <Insets left="10.0" />
+                  </VBox.margin>
+              </GridPane>
+
+              <!-- Hàng nút -->
+              <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10;">
+                  <Button styleClass="btn-clear" text="Xóa trắng" />
+                  <Button styleClass="btn-search" text="Tìm kiếm" />
+                  <VBox.margin>
+                      <Insets top="10.0" />
+                  </VBox.margin>
+              </HBox>
+          </VBox>
         </VBox>
     </center>
 
@@ -147,7 +149,7 @@
             <!-- Khối trắng chính -->
             <VBox prefHeight="765.0" prefWidth="320.0" spacing="15" style="-fx-background-color: F3F3F3;" styleClass="right-content">
                 <!-- Tiêu đề -->
-                <Label prefHeight="27.0" prefWidth="280.0" styleClass="title-right" text="Thông tin đặt bàn" />
+                <Label prefHeight="48.0" prefWidth="280.0" styleClass="title-right" text="Thông tin đặt bàn" />
 
                 <!-- Form thông tin -->
                 <GridPane hgap="10" vgap="10">
@@ -196,6 +198,18 @@
                         <TableColumn maxWidth="75.0" prefWidth="75.0" text="Tổng" />
                     </columns>
                 </TableView>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <AnchorPane prefHeight="78.0" prefWidth="356.0" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Pane prefHeight="100.0" prefWidth="88.0" />
+
+                                <Button prefWidth="110.0" styleClass="confirm-btn" text="In Hóa Đơn" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
             </VBox>
         </VBox>
     </right>

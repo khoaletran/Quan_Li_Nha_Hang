@@ -52,130 +52,97 @@
                                   <Label styleClass="menu-item-name" text="Cua Cà Mau" />
                                   <Label styleClass="menu-item-price" text="200.000 đ" />
                                   <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                      <Button styleClass="qty-btn minus" text="-" />
+                                      <Button styleClass="qty-btn_minus" text="-" />
                                       <Label styleClass="qty-label" text="0" />
-                                      <Button styleClass="qty-btn plus" text="+" />
+                                      <Button styleClass="qty-btn_plus" text="+" />
                                   </HBox>
                               </VBox>
-      
-                              <VBox styleClass="menu-card">
-                                  <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
-                                      <image>
-                                          <Image url="@../IMG/tom_hum.png" />
-                                      </image>
-                                  </ImageView>
-                                  <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                                  <Label styleClass="menu-item-price" text="800.000 đ" />
-                                  <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                      <Button styleClass="qty-btn minus" text="-" />
-                                      <Label styleClass="qty-label" text="0" />
-                                      <Button styleClass="qty-btn plus" text="+" />
-                                  </HBox>
-                              </VBox>
-                        <VBox layoutX="340.0" layoutY="179.0" styleClass="menu-card">
+                        <VBox layoutX="200.0" layoutY="239.0" prefHeight="339.0" prefWidth="176.0" styleClass="menu-card">
                            <children>
                               <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
                                  <image>
-                                    <Image url="@../IMG/tom_hum.png" />
+                                    <Image url="@../IMG/cua_ca_mau.png" />
                                  </image>
                               </ImageView>
-                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <Label styleClass="menu-item-name" text="Cua Cà Mau" />
+                              <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Button styleClass="qty-btn" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn plus" text="+" />
+                                    <Button styleClass="qty-btn" text="+" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="176.0" layoutY="738.0" styleClass="menu-card">
+                        <VBox layoutX="340.0" layoutY="239.0" prefHeight="339.0" prefWidth="176.0" styleClass="menu-card">
                            <children>
                               <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
                                  <image>
-                                    <Image url="@../IMG/tom_hum.png" />
+                                    <Image url="@../IMG/cua_ca_mau.png" />
                                  </image>
                               </ImageView>
-                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <Label styleClass="menu-item-name" text="Cua Cà Mau" />
+                              <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Button styleClass="qty-btn" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn plus" text="+" />
+                                    <Button styleClass="qty-btn" text="+" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="69.0" layoutY="368.0" styleClass="menu-card">
+                        <VBox layoutX="200.0" layoutY="359.0" prefHeight="339.0" prefWidth="176.0" styleClass="menu-card">
                            <children>
                               <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
                                  <image>
-                                    <Image url="@../IMG/tom_hum.png" />
+                                    <Image url="@../IMG/cua_ca_mau.png" />
                                  </image>
                               </ImageView>
-                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <Label styleClass="menu-item-name" text="Cua Cà Mau" />
+                              <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Button styleClass="qty-btn" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn plus" text="+" />
+                                    <Button styleClass="qty-btn" text="+" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="209.0" layoutY="510.0" styleClass="menu-card">
+                        <VBox layoutX="340.0" layoutY="359.0" prefHeight="339.0" prefWidth="176.0" styleClass="menu-card">
                            <children>
                               <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
                                  <image>
-                                    <Image url="@../IMG/tom_hum.png" />
+                                    <Image url="@../IMG/cua_ca_mau.png" />
                                  </image>
                               </ImageView>
-                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <Label styleClass="menu-item-name" text="Cua Cà Mau" />
+                              <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Button styleClass="qty-btn" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn plus" text="+" />
+                                    <Button styleClass="qty-btn" text="+" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="349.0" layoutY="510.0" styleClass="menu-card">
+                        <VBox layoutX="200.0" layoutY="510.0" prefHeight="339.0" prefWidth="176.0" styleClass="menu-card">
                            <children>
                               <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
                                  <image>
-                                    <Image url="@../IMG/tom_hum.png" />
+                                    <Image url="@../IMG/cua_ca_mau.png" />
                                  </image>
                               </ImageView>
-                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                              <Label styleClass="menu-item-price" text="800.000 đ" />
+                              <Label styleClass="menu-item-name" text="Cua Cà Mau" />
+                              <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn minus" text="-" />
+                                    <Button styleClass="qty-btn" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn plus" text="+" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="203.0" layoutY="750.0" styleClass="menu-card">
-                           <children>
-                              <ImageView fitHeight="200" fitWidth="255" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../IMG/tom_hum.png" />
-                                 </image>
-                              </ImageView>
-                              <Label styleClass="menu-item-name" text="Tôm Hùm" />
-                              <Label styleClass="menu-item-price" text="800.000 đ" />
-                              <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
-                                 <children>
-                                    <Button styleClass="qty-btn minus" text="-" />
-                                    <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn plus" text="+" />
+                                    <Button styleClass="qty-btn" text="+" />
                                  </children>
                               </HBox>
                            </children>

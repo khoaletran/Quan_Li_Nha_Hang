@@ -285,9 +285,10 @@
     -fx-pref-height: 34px;
     -fx-background-color: white;
     -fx-background-radius: 10;
-    -fx-border-color: transparent;
     -fx-padding: 0 10 0 10;
     -fx-font-size: 13px;
+    -fx-border-color: #d2a679;
+    -fx-border-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3,0,0,1);
 }
 
@@ -302,4 +303,35 @@
     -fx-border-width: 1.2;
     -fx-border-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(210,166,121,0.3), 4,0,0,1);
+}
+
+/* ===== NÚT ICON QR ===== */
+.icon-qr {
+    -fx-background-color: #E6763E;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 4, 0, 0, 1);
+    -fx-padding: 0;
+    -fx-transition: all 0.25s ease-in-out;
+}
+
+.icon-qr:hover {
+    -fx-background-color: #f5904d;      /* sáng hơn */
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(230,118,62,0.5), 6, 0, 0, 2);
+}
+
+/* Khi nhấn */
+.icon-qr:pressed {
+    -fx-background-color: #cc5b1e;      /* cam đậm hơn */
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);
 }

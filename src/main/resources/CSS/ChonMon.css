@@ -130,42 +130,65 @@
     -fx-alignment: center;
 }
 
-.qty-btn {
-    -fx-pref-width: 35px;
-    -fx-pref-height: 35px;
-    -fx-background-radius: 17;
-    -fx-border-radius: 17;
+/* Nút tăng giảm chung */
+.qty-btn_minus,.qty-btn_plus {
+    -fx-pref-width: 36px;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 50%; /* tròn hẳn */
+    -fx-border-radius: 50%;
     -fx-font-weight: bold;
-    -fx-font-size: 16px;
+    -fx-font-size: 15px;
+    -fx-text-fill: #fff;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 1);
+    -fx-transition: all 0.25s ease;
 }
 
-.qty-btn.minus {
-    -fx-background-color: #e74c3c;
-    -fx-text-fill: white;
+/* Nút trừ (minus) */
+.qty-btn_minus {
+    -fx-background-color: linear-gradient(to bottom, #f57b7b, #e74c3c);
 }
 
-.qty-btn.minus:hover {
-    -fx-background-color: #c0392b;
+.qty-btn_minus:hover {
+    -fx-background-color: linear-gradient(to bottom, #ff9b9b, #c0392b);
+    -fx-effect: dropshadow(gaussian, rgba(231,76,60,0.4), 6, 0, 0, 2);
 }
 
-.qty-btn.plus {
-    -fx-background-color: #27ae60;
-    -fx-text-fill: white;
+.qty-btn_minus:pressed {
+    -fx-background-color: #b03a2e;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 0);
 }
 
-.qty-btn.plus:hover {
-    -fx-background-color: #219653;
+/* Nút cộng (plus) */
+.qty-btn_plus {
+    -fx-background-color: linear-gradient(to bottom, #7bd88f, #27ae60);
 }
 
+.qty-btn_plus:hover {
+    -fx-background-color: linear-gradient(to bottom, #9ce3ad, #219653);
+    -fx-effect: dropshadow(gaussian, rgba(39,174,96,0.4), 6, 0, 0, 2);
+}
+
+.qty-btn_plus:pressed {
+    -fx-background-color: #1e8449;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 0);
+}
+
+/* Nhãn số lượng giữa 2 nút */
 .qty-label {
     -fx-font-weight: bold;
-    -fx-font-size: 18px;
-    -fx-text-fill: #2c3e50;
-    -fx-min-width: 40px;
+    -fx-font-size: 17px;
+    -fx-text-fill: #3e2c20;
+    -fx-min-width: 50px;
     -fx-alignment: center;
+    -fx-background-color: #fffaf5;
+    -fx-background-radius: 8;
+    -fx-border-color: #ecdcc4;
+    -fx-border-radius: 8;
+    -fx-padding: 4 8;
 }
+
 
 /* ===== SIDEBAR PHẢI ===== */
 .right-sidebar {

@@ -20,7 +20,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import java.net.URL?>
 <BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: #D9D9D9" stylesheets="@../CSS/checkout.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.CheckoutController">
     <!-- Sidebar bên trái -->
     <left>
@@ -43,7 +42,7 @@
                   </HBox>
 
                      <!-- Danh sách hóa đơn -->
-                  <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="310.0" prefWidth="653.0" styleClass="invoice-scroll">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="275.0" prefWidth="653.0" styleClass="invoice-scroll">
                   <content>
                           <VBox alignment="CENTER_LEFT" prefHeight="303.0" prefWidth="651.0" spacing="12" style="-fx-background-color: #EFEFEF; -fx-background-radius: 0 0 20 20">
                               <padding>
@@ -139,17 +138,17 @@
             <children>
                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="detail_box">
                   <children>
-                     <Label prefHeight="13.0" prefWidth="40.0" text="STT" style="-fx-font-weight: bold"/>
-                     <Label text="TÊN MÓN" style="-fx-font-weight: bold"/>
-                     <Label text="SỐ LƯỢNG" style="-fx-font-weight: bold"/>
-                     <Label text="ĐƠN GIÁ" style="-fx-font-weight: bold"/>
-                     <Label prefHeight="18.0" prefWidth="135.0" text="KHUYẾN MÃI" style="-fx-font-weight: bold"/>
-                     <Label text="THÀNH TIỀN" style="-fx-font-weight: bold"/>
+                     <Label prefHeight="13.0" prefWidth="40.0" style="-fx-font-weight: bold" text="STT" />
+                     <Label style="-fx-font-weight: bold" text="TÊN MÓN" />
+                     <Label style="-fx-font-weight: bold" text="SỐ LƯỢNG" />
+                     <Label style="-fx-font-weight: bold" text="ĐƠN GIÁ" />
+                     <Label prefHeight="18.0" prefWidth="135.0" style="-fx-font-weight: bold" text="KHUYẾN MÃI" />
+                     <Label style="-fx-font-weight: bold" text="THÀNH TIỀN" />
                   </children>
                </HBox>
 
                   <!-- Danh sách món ăn -->
-                <ScrollPane fitToWidth="true" prefHeight="387.0" prefWidth="601.0" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToWidth="true" prefHeight="387.0" prefWidth="653.0" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
                     <content>
                         <VBox spacing="10" styleClass="menu-list" VBox.vgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="menu-row">
@@ -169,9 +168,70 @@
                                 <Label styleClass="col-discount" text="5%" />
                                 <Label styleClass="col-total" text="760.000 đ" />
                             </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="65.0" spacing="10" styleClass="menu-row">
+                           <children>
+                              <Label styleClass="col-stt" text="2" />
+                              <Label styleClass="col-name" text="Tôm Hùm Alaska" />
+                              <Label styleClass="col-qty" text="1" />
+                              <Label styleClass="col-price" text="800.000 đ" />
+                              <Label styleClass="col-discount" text="5%" />
+                              <Label styleClass="col-total" text="760.000 đ" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="110.0" spacing="10" styleClass="menu-row">
+                           <children>
+                              <Label styleClass="col-stt" text="2" />
+                              <Label styleClass="col-name" text="Tôm Hùm Alaska" />
+                              <Label styleClass="col-qty" text="1" />
+                              <Label styleClass="col-price" text="800.000 đ" />
+                              <Label styleClass="col-discount" text="5%" />
+                              <Label styleClass="col-total" text="760.000 đ" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="20.0" spacing="10" styleClass="menu-row">
+                           <children>
+                              <Label styleClass="col-stt" text="1" />
+                              <Label styleClass="col-name" text="Cua Cà Mau" />
+                              <Label styleClass="col-qty" text="2" />
+                              <Label styleClass="col-price" text="200.000 đ" />
+                              <Label styleClass="col-discount" text="10%" />
+                              <Label styleClass="col-total" text="400.000 đ" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="200.0" spacing="10" styleClass="menu-row">
+                           <children>
+                              <Label styleClass="col-stt" text="1" />
+                              <Label styleClass="col-name" text="Cua Cà Mau" />
+                              <Label styleClass="col-qty" text="2" />
+                              <Label styleClass="col-price" text="200.000 đ" />
+                              <Label styleClass="col-discount" text="10%" />
+                              <Label styleClass="col-total" text="400.000 đ" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="245.0" spacing="10" styleClass="menu-row">
+                           <children>
+                              <Label styleClass="col-stt" text="1" />
+                              <Label styleClass="col-name" text="Cua Cà Mau" />
+                              <Label styleClass="col-qty" text="2" />
+                              <Label styleClass="col-price" text="200.000 đ" />
+                              <Label styleClass="col-discount" text="10%" />
+                              <Label styleClass="col-total" text="400.000 đ" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="335.0" spacing="10" styleClass="menu-row">
+                           <children>
+                              <Label styleClass="col-stt" text="1" />
+                              <Label styleClass="col-name" text="Cua Cà Mau" />
+                              <Label styleClass="col-qty" text="2" />
+                              <Label styleClass="col-price" text="200.000 đ" />
+                              <Label styleClass="col-discount" text="10%" />
+                              <Label styleClass="col-total" text="400.000 đ" />
+                           </children>
+                        </HBox>
                         </VBox>
                     </content>
                 </ScrollPane>
+               <AnchorPane prefHeight="89.0" prefWidth="653.0" />
             </children>
          </VBox>
         </VBox>
@@ -208,6 +268,20 @@
                 <Label text="Khu vực:" GridPane.rowIndex="6" />
                 <Label text="IN" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <AnchorPane prefHeight="0.0" prefWidth="79.0" GridPane.columnIndex="1" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
 
             </GridPane>
 
@@ -224,7 +298,7 @@
             <Label text="Mã Giảm Giá:" />
             <HBox spacing="5">
                 <TextField promptText="Nhập mã giảm giá" styleClass="filter-tf" HBox.hgrow="ALWAYS" />
-                <Button prefHeight="31.0" prefWidth="28.0" text="📷" />
+                <Button prefHeight="30.0" prefWidth="30.0" styleClass="icon-qr" text="📷" />
             </HBox>
 
             <GridPane hgap="10" vgap="5">
@@ -240,11 +314,24 @@
                 <Label text="Tổng Thanh Toán:" GridPane.rowIndex="4" />
                 <Label styleClass="red-bold-label" text="3.960.000 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <AnchorPane prefHeight="0.0" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
 
             </GridPane>
 
             <Label text="Tiền Khách Đưa:" />
-            <TextField prefHeight="20.0" prefWidth="356.0" promptText="Nhập số tiền khách đưa" styleClass="filter-tf" />
+            <TextField promptText="Nhập số tiền khách đưa" styleClass="filter-tf" />
             <GridPane alignment="CENTER" hgap="10" style="-fx-background-color: transparent;" vgap="10">
                 <padding>
                     <Insets bottom="10" left="10" right="10" top="10" />
@@ -275,6 +362,16 @@
             <GridPane hgap="10">
                 <Label prefHeight="17.0" prefWidth="135.0" style="-fx-font-weight: bold; -fx-font-size: 13" text="Tiền Thừa:" />
                 <Label prefHeight="15.0" prefWidth="106.0" styleClass="green-bold-label" text="40.000 đ" GridPane.columnIndex="4" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
          <VBox prefHeight="200.0" prefWidth="100.0">
             <children>

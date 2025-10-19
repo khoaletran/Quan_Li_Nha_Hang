@@ -1,5 +1,6 @@
 .menu-bg {
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: #D9D9D9;
+
 }
 
 .menu-title {
@@ -11,22 +12,20 @@
 /* Thanh tìm kiếm và filter */
 .menu-search-container {
     -fx-padding: 10 20;
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-alignment: center-left;
+    -fx-background-radius: 20 20 28 28;
 }
 
 .menu-search-box {
     -fx-background-color: white;
     -fx-background-radius: 8;
     -fx-padding: 6 10;
-    -fx-border-color: #ddd;
-    -fx-border-radius: 8;
 }
 
 .search-field {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-prompt-text-fill: #aaa;
+    -fx-background-radius: 20 20 28 28;
+    -fx-background-color: white;
 }
 
 .search-icon {
@@ -73,8 +72,7 @@
 
 .menu-grid {
     -fx-padding: 10;
-    -fx-background-color: #e7e7e7;
-    -fx-background-radius: 20;
+    -fx-background-color: #EFEFEF;
     -fx-alignment: center;
 }
 
@@ -119,5 +117,33 @@
 .menu-image {
     -fx-fit-width: 240;
     -fx-fit-height: 200;
+}
+
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 8;
+    -fx-max-height: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #c1915f;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
 }
 
