@@ -61,7 +61,7 @@
 .title-label {
     -fx-font-size: 20;
     -fx-font-weight: bold;
-    -fx-text-fill: #333;
+    -fx-text-fill: white;
     -fx-alignment: center;
     -fx-padding: 15 0 10 0;
     -fx-background-color: #E6763E;

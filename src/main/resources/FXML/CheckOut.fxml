@@ -185,7 +185,6 @@
             </padding>
          <AnchorPane prefHeight="39.0" prefWidth="403.0">
             <children>
-      
                   <Label prefHeight="39.0" prefWidth="356.0" styleClass="section-title" text="Thông Tin Đặt Bàn" />
             </children>
          </AnchorPane>

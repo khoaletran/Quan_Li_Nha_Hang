@@ -28,7 +28,8 @@
 }
 
 .search-field:focused {
-    -fx-border-color: #3498db;
+    -fx-border-color: #E6763E;
+    -fx-border-radius: 20 20 28 28;
     -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.3), 5, 0, 0, 2);
 }
 
