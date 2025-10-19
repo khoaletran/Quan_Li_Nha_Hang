@@ -1,0 +1,68 @@
+/* Container chính của bộ lọc */
+.filter-container {
+    -fx-spacing: 10;
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Tiêu đề "Bộ lọc" */
+.filter-title{
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+}
+.filter-title > Label{
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 ;
+}
+
+/* Hộp chứa các nhóm điều kiện */
+.filter-box {
+    -fx-spacing: 60;
+    -fx-padding: 10;
+}
+
+/* Mỗi nhóm (VBox) chứa 2 dòng label + input */
+.filter-group {
+    -fx-spacing: 20;
+}
+
+/* Dòng có label và input */
+.filter-row {
+    -fx-alignment: center-left;
+    -fx-spacing: 10;
+}
+
+/* Label thống nhất kích thước nhỏ gọn */
+.filter-label {
+    -fx-pref-width: 80;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+/* Input thống nhất */
+.filter-input {
+    -fx-pref-width: 200;
+}
+
+/* Khu vực nút */
+.filter-actions {
+    -fx-alignment: bottom-right;
+    -fx-spacing: 10;
+}
+
+/* Nút chính và phụ */
+.btn-primary {
+    -fx-background-color: #2c7be5;
+    -fx-text-fill: white;
+    -fx-padding: 6 12;
+    -fx-background-radius: 8;
+}
+
+.btn-secondary {
+    -fx-background-color: #e9ecef;
+    -fx-text-fill: #212529;
+    -fx-padding: 6 12;
+    -fx-background-radius: 8;
+}

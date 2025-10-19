@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="800" prefWidth="1400" stylesheets="@../CSS/checkin.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- LEFT SIDEBAR -->
+    <left>
+        <fx:include source="sidebar_NV.fxml" />
+    </left>
+
+    <!-- CENTER -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20.0" styleClass="center-pane" BorderPane.alignment="CENTER">
+
+            <!-- DANH SÁCH (Đặt trước + Chờ) -->
+            <VBox spacing="20">
+
+                <!-- Danh sách bàn đặt trước -->
+                <VBox alignment="TOP_CENTER" spacing="10" styleClass="section" VBox.vgrow="ALWAYS">
+                    <HBox alignment="CENTER" prefWidth="653.0" styleClass="section-title">
+                        <children>
+                            <Label text="Danh sách bàn đặt trước" />
+                        </children>
+                        <VBox.margin>
+                            <Insets />
+                        </VBox.margin>
+                    </HBox>
+                    <ScrollPane fitToWidth="true" prefHeight="300" styleClass="center-scroll-pane">
+                        <content>
+                            <VBox fx:id="vboxDatTruoc" spacing="20">
+                                <children>
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250001" />
+                                                    <Label styleClass="booking-phone" text="0398 123 456" />
+                                                </children>
+                                            </VBox>
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label text="17:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- VBox chứa thời gian còn lại, class áp dụng cho VBox -->
+                                            <VBox alignment="CENTER" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="13:35" />
+                                                </children>
+                                            </VBox>
+                                        </children>
+                                    </HBox>
+
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250001" />
+                                                    <Label styleClass="booking-phone" text="0398 123 456" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian đặt -->
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label style="-fx-text-fill: #FF3B30;" text="17:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian còn lại -->
+                                            <VBox alignment="CENTER" style="-fx-background-color: #FF3B30;" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="00:00" />
+                                                </children>
+                                            </VBox>
+
+                                        </children>
+                                    </HBox>
+
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250002" />
+                                                    <Label styleClass="booking-phone" text="0978 456 789" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian đặt -->
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label style="-fx-text-fill: #00C8B3;" text="18:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian còn lại -->
+                                            <VBox alignment="CENTER" style="-fx-background-color: #00C8B3;" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="-" />
+                                                </children>
+                                            </VBox>
+
+                                        </children>
+                                    </HBox>
+
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250001" />
+                                                    <Label styleClass="booking-phone" text="0398 123 456" />
+                                                </children>
+                                            </VBox>
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label text="17:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- VBox chứa thời gian còn lại, class áp dụng cho VBox -->
+                                            <VBox alignment="CENTER" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="13:35" />
+                                                </children>
+                                            </VBox>
+                                        </children>
+                                    </HBox>
+
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250001" />
+                                                    <Label styleClass="booking-phone" text="0398 123 456" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian đặt -->
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label style="-fx-text-fill: #FF3B30;" text="17:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian còn lại -->
+                                            <VBox alignment="CENTER" style="-fx-background-color: #FF3B30;" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="00:00" />
+                                                </children>
+                                            </VBox>
+
+                                        </children>
+                                    </HBox>
+
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250002" />
+                                                    <Label styleClass="booking-phone" text="0978 456 789" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian đặt -->
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label style="-fx-text-fill: #00C8B3;" text="18:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian còn lại -->
+                                            <VBox alignment="CENTER" style="-fx-background-color: #00C8B3;" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="-" />
+                                                </children>
+                                            </VBox>
+
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </VBox>
+
+                        </content>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- Danh sách chờ -->
+                <VBox alignment="TOP_CENTER" spacing="10" styleClass="section" VBox.vgrow="ALWAYS">
+                    <HBox alignment="CENTER" styleClass="section-title">
+                        <children>
+                            <Label text="Danh sách chờ" />
+                        </children>
+                    </HBox>
+                    <ScrollPane fitToWidth="true" prefHeight="300" styleClass="center-scroll-pane">
+                        <content>
+                            <VBox fx:id="vboxCho" spacing="20">
+                                <children>
+
+
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250001" />
+                                                    <Label styleClass="booking-phone" text="0398 123 456" />
+                                                </children>
+                                            </VBox>
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label text="17:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- VBox chứa thời gian còn lại, class áp dụng cho VBox -->
+                                            <VBox alignment="CENTER" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="13:35" />
+                                                </children>
+                                            </VBox>
+                                        </children>
+                                    </HBox>
+
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250001" />
+                                                    <Label styleClass="booking-phone" text="0398 123 456" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian đặt -->
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label style="-fx-text-fill: #FF3B30;" text="17:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian còn lại -->
+                                            <VBox alignment="CENTER" style="-fx-background-color: #FF3B30;" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="00:00" />
+                                                </children>
+                                            </VBox>
+
+                                        </children>
+                                    </HBox>
+
+                                    <HBox spacing="10" styleClass="booking-item">
+                                        <children>
+                                            <ImageView fx:id="imgBooking" pickOnBounds="true" preserveRatio="true" styleClass="booking-image">
+                                                <image>
+                                                    <Image url="@../IMG/Rounded rectangle.png" />
+                                                </image>
+                                            </ImageView>
+
+                                            <VBox alignment="CENTER_LEFT" styleClass="booking-info" HBox.hgrow="ALWAYS">
+                                                <children>
+                                                    <Label styleClass="booking-id" text="HD1210820250002" />
+                                                    <Label styleClass="booking-phone" text="0978 456 789" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian đặt -->
+                                            <VBox styleClass="booking-date">
+                                                <children>
+                                                    <Label style="-fx-text-fill: #00C8B3;" text="18:00 - 21/08/2025" />
+                                                </children>
+                                            </VBox>
+
+                                            <!-- Thời gian còn lại -->
+                                            <VBox alignment="CENTER" style="-fx-background-color: #00C8B3;" styleClass="booking-remaining">
+                                                <children>
+                                                    <Label fx:id="lblRemainingTime" text="-" />
+                                                </children>
+                                            </VBox>
+
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+                </VBox>
+            </VBox>
+
+            <!-- BỘ LỌC -->
+            <VBox styleClass="filter-container" stylesheets="@../CSS/filter.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+                <children>
+
+                    <HBox styleClass="filter-title">
+                        <children>
+                            <Label text="Bộ lọc" />
+                        </children>
+                    </HBox>
+
+                    <HBox styleClass="filter-box">
+                        <children>
+                            <!-- Nhóm 1 -->
+                            <VBox styleClass="filter-group">
+                                <children>
+                                    <HBox styleClass="filter-row">
+                                        <Label styleClass="filter-label" text="Mã bàn:" />
+                                        <TextField fx:id="txtMaBan" promptText="Nhập mã bàn" styleClass="filter-input" />
+                                    </HBox>
+                                    <HBox styleClass="filter-row">
+                                        <Label styleClass="filter-label" text="SĐT:" />
+                                        <TextField fx:id="txtSDT" promptText="Nhập số điện thoại" styleClass="filter-input" />
+                                    </HBox>
+                                </children>
+                            </VBox>
+
+                            <!-- Nhóm 2 -->
+                            <VBox styleClass="filter-group">
+                                <children>
+                                    <HBox styleClass="filter-row">
+                                        <Label styleClass="filter-label" text="Thời gian:" />
+                                        <DatePicker fx:id="dpThoiGian" styleClass="filter-input" />
+                                    </HBox>
+                                    <HBox styleClass="filter-row">
+                                        <Label styleClass="filter-label" text="Mã bàn:" />
+                                        <TextField fx:id="txtMaBan1" promptText="Nhập mã bàn" styleClass="filter-input" />
+                                    </HBox>
+                                </children>
+                            </VBox>
+                        </children>
+                    </HBox>
+
+                    <HBox styleClass="filter-actions">
+                        <children>
+                            <Button fx:id="btnXoaTrang" styleClass="btn-secondary" text="Xóa trắng" />
+                            <Button fx:id="btnTim" styleClass="btn-primary" text="Tìm kiếm">
+                        <HBox.margin>
+                           <Insets right="20.0" />
+                        </HBox.margin></Button>
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+
+        </VBox>
+    </center>
+
+    <!-- RIGHT -->
+    <right>
+        <VBox styleClass="right-out">
+            <VBox styleClass="right">
+                <VBox prefHeight="651.0" prefWidth="327.0" spacing="10.0" styleClass="right-sidebar" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+
+                    <!-- Tiêu đề -->
+                    <HBox alignment="CENTER">
+                        <Label styleClass="sidebar-title" text="Thông Tin Đặt Bàn" />
+                        <VBox.margin>
+                            <Insets top="10" />
+                        </VBox.margin>
+                    </HBox>
+
+                    <VBox prefWidth="327.0" style="-fx-background-color: #F3F3F3; -fx-background-radius: 0 0 10 10" VBox.vgrow="ALWAYS">
+                        <children>
+                            <!-- Thông tin khách hàng -->
+                            <VBox prefWidth="307.0" spacing="12" styleClass="customer-info">
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
+                                    <Label styleClass="info-label" text="Mã Hóa Đơn:" />
+                                    <Label styleClass="info-value" text="HD1210820250001" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
+                                    <Label styleClass="info-label" text="Tên Khách Hàng:" />
+                                    <Label styleClass="info-value" text="Trần Quốc Nhã" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
+                                    <Label styleClass="info-label" text="SĐT:" />
+                                    <Label styleClass="info-value" text="0398 765 432" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
+                                    <Label styleClass="info-label" text="Số lượng khách:" />
+                                    <Label styleClass="info-value" text="4 người" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
+                                    <Label styleClass="info-label" text="Sự Kiện:" />
+                                    <Label styleClass="info-value" text="Không có" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
+                                    <Label styleClass="info-label" text="Khu Vực:" />
+                                    <Label styleClass="info-value" text="Không có" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
+                                    <Label styleClass="info-label" text="Mô Tả:" />
+                                    <Label styleClass="info-value" text="Giảm cay của các món ăn" wrapText="true" />
+                                </HBox>
+                            </VBox>
+
+                            <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+                                <VBox.margin>
+                                    <Insets top="50" />
+                                </VBox.margin>
+                                <children>
+                                    <!-- Danh sách hóa đơn -->
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                        <content>
+                                            <GridPane styleClass="order-grid" vgap="10">
+                                                <columnConstraints>
+                                                    <ColumnConstraints percentWidth="36" />
+                                                    <ColumnConstraints percentWidth="7" />
+                                                    <ColumnConstraints percentWidth="30" />
+                                                    <ColumnConstraints percentWidth="27" />
+                                                </columnConstraints>
+                                                <rowConstraints>
+                                                    <RowConstraints />
+                                                    <RowConstraints />
+                                                    <RowConstraints />
+                                                    <RowConstraints />
+                                                </rowConstraints>
+                                                <children>
+                                                    <Label styleClass="order-header-product" text="Sản phẩm" GridPane.columnIndex="0" />
+                                                    <Label styleClass="order-header-quantity" text="SL" GridPane.columnIndex="1" />
+                                                    <Label styleClass="order-header-price" text="Giá" GridPane.columnIndex="2" />
+                                                    <Label styleClass="order-header-total" text="Tổng" GridPane.columnIndex="3" />
+                                                    <Label styleClass="order-col-product" text="Cua Cà Mau" GridPane.rowIndex="1" />
+                                                    <Label styleClass="order-col-quantity" text="3" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                    <Label styleClass="order-col-price" text="200.000đ" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                    <Label styleClass="order-col-total" text="600.000đ" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                    <Label styleClass="order-col-product" text="Tôm Sú Biển" GridPane.rowIndex="2" />
+                                                    <Label styleClass="order-col-quantity" text="2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                    <Label styleClass="order-col-price" text="150.000đ" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                    <Label styleClass="order-col-total" text="300.000đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                    <Label styleClass="order-col-product" text="Ghẹ Xanh" GridPane.rowIndex="3" />
+                                                    <Label styleClass="order-col-quantity" text="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                    <Label styleClass="order-col-price" text="180.000đ" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                                    <Label styleClass="order-col-total" text="180.000đ" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                                </children>
+                                            </GridPane>
+                                        </content>
+                                    </ScrollPane>
+                                </children>
+                            </VBox>
+                        </children>
+                        <padding>
+                            <Insets bottom="10" left="10" right="10" top="10" />
+                        </padding>
+                    </VBox>
+                </VBox>
+
+                <!-- Nút hành động -->
+                <VBox alignment="CENTER" spacing="10" styleClass="action-buttons">
+                    <Button styleClass="action-btn-secondary" text="Check In" />
+                    <VBox.margin>
+                        <Insets top="30" />
+                    </VBox.margin>
+                </VBox>
+                <padding>
+                    <Insets bottom="30" left="10" right="10" top="30" />
+                </padding>
+            </VBox>
+        </VBox>
+    </right>
+</BorderPane>

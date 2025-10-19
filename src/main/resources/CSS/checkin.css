@@ -1,0 +1,264 @@
+.center-pane {
+    -fx-padding: 10;
+    -fx-background-color: #D9D9D9;
+}
+.booking-item {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 5;
+    -fx-background-radius: 16;
+    -fx-alignment: CENTER_LEFT;
+}
+.booking-item:hover {
+    -fx-background-color: #FF6F42;
+}
+
+
+.booking-image {
+    -fx-fit-width: 65px;
+    -fx-fit-height: 57px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2,0,0,1);
+}
+
+.booking-info {
+    -fx-spacing: 5;
+}
+
+.booking-id {
+    -fx-font-weight: bold;
+}
+
+.booking-phone {
+    -fx-text-fill: #555555;
+}
+.booking-date > Label{
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+    -fx-text-fill: green;
+
+}
+.booking-remaining {
+    -fx-background-color: #34C759;
+    -fx-background-radius: 0 16 16 0;
+    -fx-font-size: 18;
+    -fx-min-width: 58;
+}
+.booking-remaining > Label{
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 0 8;
+}
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+.section{
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+}
+
+
+.right-pane {
+    -fx-background-color: #ffe8dc;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+
+.title-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.filter-box {
+    -fx-background-color: #f2f2f2;
+    -fx-background-radius: 10;
+}
+
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.btn-primary {
+    -fx-background-color: #0d6efd;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.btn-secondary {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.btn-checkin {
+    -fx-background-color: #0066ff;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 15;
+}
+
+.info-grid Label {
+    -fx-font-size: 14px;
+}
+/* Sidebar chính */
+.right-out{
+    -fx-background-color: #D9D9D9
+}
+.right{
+    -fx-background-color: #FFD1B5;
+    -fx-background-radius: 20 0 0 20;
+}
+.right-sidebar {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10;
+}
+
+/* Tiêu đề vùng */
+.sidebar-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+.section-title{
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 10 0;
+}
+.section-title> Label   {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #444;
+}
+.info-row {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10;
+    -fx-padding: 5;
+
+}
+
+/* Thông tin khách hàng */
+.customer-info .info-label {
+    -fx-pref-width: 120px;
+    -fx-text-fill: #666;
+    -fx-font-weight: bold;
+}
+
+.customer-info .info-value {
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+}
+
+/* Phần thanh toán */
+.payment-section {
+    -fx-padding: 10 0 10 0;
+}
+
+/* Chi tiết đơn hàng */
+.order-details {
+    -fx-spacing: 12;
+}
+
+
+
+.center-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0 10;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane .content {
+    -fx-padding: 0;
+}
+
+
+
+.order-grid {
+    -fx-border-color: #cccccc;     /* Màu viền */
+    -fx-border-width: 1;           /* Độ dày viền */
+    -fx-border-style: solid;       /* Kiểu viền */
+    -fx-border-radius: 4;          /* Bo góc nhẹ (tùy chọn) */
+    -fx-padding: 10;               /* Khoảng cách bên trong */
+}
+
+.order-header-product,
+.order-header-quantity,
+.order-header-price,
+.order-header-total {
+    -fx-font-weight: bold;
+    -fx-text-fill: #444;
+    -fx-font-size: 12px;
+
+}
+
+.order-col-product,
+.order-col-quantity,
+.order-col-price,
+.order-col-total {
+    -fx-alignment: center-left;
+    -fx-font-size: 13px;
+    -fx-text-fill: #333;
+    -fx-wrap-text: true;
+}
+
+.order-col-product {
+    -fx-alignment: center-left;
+}
+
+.order-col-quantity,
+.order-col-price,
+.order-col-total {
+    -fx-alignment: center;
+}
+
+.action-buttons {
+    -fx-padding: 10 0;
+}
+
+.action-btn-secondary {
+    -fx-background-color: #2d89ef;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+    -fx-padding: 15 40;
+    -fx-background-radius: 20;
+}
+
+
+/*Scroll Pane*/
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 8;
+    -fx-max-height: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #c1915f;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
