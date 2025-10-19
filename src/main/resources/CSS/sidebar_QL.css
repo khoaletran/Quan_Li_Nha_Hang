@@ -16,7 +16,7 @@
 
 /* Phần avatar */
 .avatar_section {
-    -fx-background-color: #FFD2B5;
+    -fx-background-color: #E6763E;
     -fx-pref-width: 320;
     -fx-pref-height: 167;
     -fx-alignment: center;
@@ -25,14 +25,14 @@
 }
 
 .username {
-    -fx-font-size: 16px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #222;
+    -fx-text-fill: white;
 }
 
 .role {
-    -fx-font-size: 13px;
-    -fx-text-fill: #555;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
 }
 
 /* Các nút menu */
@@ -53,25 +53,27 @@
 
 
 .menu-item:hover {
-    -fx-background-color: #FFE6D1;
+    -fx-background-color: #E6763E;
     -fx-scale-x: 1.05; /* phóng to 5% */
     -fx-scale-y: 1.05;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
     -fx-cursor: hand;
     -fx-background-radius: 32;
+    -fx-text-fill: white;
 }
 
 .menu-item:selected, .menu-item.selected {
-    -fx-background-color: #FFD2B5;
+    -fx-background-color: #E6763E;
     -fx-scale-x: 1.0;
     -fx-scale-y: 1.0;
     -fx-effect: none;
     -fx-background-radius: 32;
+    -fx-text-fill: white;
 }
 
 
 .menu-item.selected {
-    -fx-background-color: #FFD2B5;
+    -fx-background-color: #E6763E;
 }
 
 

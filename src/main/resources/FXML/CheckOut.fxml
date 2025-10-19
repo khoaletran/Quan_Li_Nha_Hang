@@ -66,6 +66,34 @@
                                   <Region HBox.hgrow="ALWAYS" />
                                   <Button styleClass="time-btn" text="🕒" />
                               </HBox>
+                              <HBox alignment="CENTER" spacing="15" styleClass="invoice-card">
+                                  <ImageView fitHeight="60" fitWidth="100" preserveRatio="true">
+                                      <image>
+                                          <Image url="@../IMG/ban1.png" />
+                                      </image>
+                                  </ImageView>
+                                  <VBox>
+                                      <Label styleClass="invoice-id" text="HD1210820250002" />
+                                      <AnchorPane prefHeight="10.0" prefWidth="200.0" />
+                                      <Label styleClass="invoice-phone" text="SĐT: 0398765432" />
+                                  </VBox>
+                                  <Region HBox.hgrow="ALWAYS" />
+                                  <Button styleClass="time-btn" text="🕒" />
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="15" styleClass="invoice-card">
+                                  <ImageView fitHeight="60" fitWidth="100" preserveRatio="true">
+                                      <image>
+                                          <Image url="@../IMG/ban1.png" />
+                                      </image>
+                                  </ImageView>
+                                  <VBox>
+                                      <Label styleClass="invoice-id" text="HD1210820250002" />
+                                      <AnchorPane prefHeight="10.0" prefWidth="200.0" />
+                                      <Label styleClass="invoice-phone" text="SĐT: 0398765432" />
+                                  </VBox>
+                                  <Region HBox.hgrow="ALWAYS" />
+                                  <Button styleClass="time-btn" text="🕒" />
+                              </HBox>
                         <HBox alignment="CENTER" layoutX="20.0" layoutY="118.0" spacing="15" styleClass="invoice-card">
                            <children>
                               <ImageView fitHeight="60" fitWidth="100" preserveRatio="true">
