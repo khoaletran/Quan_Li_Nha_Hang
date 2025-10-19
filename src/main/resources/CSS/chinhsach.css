@@ -1,0 +1,371 @@
+.root-pane {
+    -fx-background-color: #D9D9D9;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.main-content {
+    -fx-background-color: transparent;
+}
+
+
+
+/* Card nền */
+.section-card {
+    -fx-background-color: #EFEFEF;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-background-radius: 20;
+}
+
+.time-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+}
+
+.main_card {
+    -fx-padding: 0 8 8 8;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-background-color: white;
+    -fx-background-radius: 20 20 28 28;
+    -fx-alignment: center;
+}
+
+.txt-tt {
+    -fx-text-fill: black;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Nút */
+.btn-primary {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-pref-height: 35;
+    -fx-pref-width: 100;
+    -fx-alignment: center;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #219653;
+}
+
+/* Input */
+.input-field {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 8;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 8;
+    -fx-padding: 4 10;
+}
+
+/* Toggle buttons */
+.toggle-btn {
+    -fx-background-color: #e8e8e8;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-size: 12px;
+    -fx-padding: 4 10;
+}
+
+.toggle-btn:selected {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+}
+
+/* Search bar */
+.search-bar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+}
+
+/* Food card */
+.food-card {
+    -fx-alignment: center;
+    -fx-background-color: #fffaf5;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+    -fx-pref-width: 100;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 2, 0, 0, 1);
+}
+
+.food-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.food-price {
+    -fx-text-fill: #e67e22;
+    -fx-font-size: 12px;
+}
+
+/* Deposit items */
+.deposit-item {
+    -fx-background-color: #fbe9e7;
+    -fx-background-radius: 8;
+    -fx-padding: 4 10;
+    -fx-font-size: 13px;
+}
+
+.deposit-percent {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-alignment: CENTER_RIGHT;
+}
+.scroll-bar {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-bar > .viewport {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 8;
+    -fx-max-height: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #c1915f;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
+
+.text-field {
+    -fx-pref-height: 34px;
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 0 10 0 10;
+    -fx-font-size: 13px;
+    -fx-border-color: #d2a679;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3,0,0,1);
+}
+
+
+.text-field :hover {
+    -fx-background-color: #f2eadf;
+}
+
+.text-field :focused {
+    -fx-background-color: #fff;
+    -fx-border-color: #d2a679;
+    -fx-border-width: 1.2;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(210,166,121,0.3), 4,0,0,1);
+}
+
+.grid_pa {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 10px;
+}
+
+.food-search-box {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 10 15;
+}
+
+.menu-btn, .search-btn {
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 14px;
+    -fx-border-radius: 20;
+}
+
+.food-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #5a4031;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
+    -fx-padding: 10;
+    -fx-alignment: CENTER;
+}
+
+.food-image {
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.add-icon{
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 1 5;
+    -fx-background-radius: 100%;
+}
+
+.promo-id {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B1406;
+}
+
+.promo-date {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B1406;
+}
+
+.add-icon:hover {
+    -fx-background-color: #059a44;
+}
+
+.food-name {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.food-scroll {
+    -fx-background-color: transparent;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+}
+
+.food-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.food-scroll .thumb {
+    -fx-background-color: #bbb;
+    -fx-background-radius: 5;
+}
+
+.food-scroll .thumb:hover {
+    -fx-background-color: #888;
+}
+
+.search-bar {
+    -fx-background-color: #fff;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+    -fx-border-radius: 20;
+}
+
+.search-btn {
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.food-card_ImageView {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.deposit-item-box {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-border-color: #efefef;
+    -fx-border-width: 1.2;
+    -fx-padding: 6 6;
+    -fx-pref-width: 310;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 2, 0, 0, 1);
+}
+
+
+.deposit-item-box:hover {
+    -fx-background-color: #fdf5eb;
+}
+
+
+.deposit-item-box.selected {
+    -fx-background-color: #f9c79e;
+    -fx-border-color: #e7a874;
+}
+
+
+.deposit-info {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3e2c20;
+}
+
+
+.deposit-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c2c2c;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: green;
+    -fx-padding: 3 10;
+    -fx-min-width: 60;
+    -fx-alignment: center;
+}
+
+.radio-button .radio {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+.radio-button {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-font-size: 12px;
+}
+
+.radio-button:selected {
+    -fx-background-color: #E6763E;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.radio-button:hover {
+    -fx-background-color: #f7b98c;
+}
