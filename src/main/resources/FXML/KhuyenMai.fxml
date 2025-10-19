@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" styleClass="borderPane_main" stylesheets="@../CSS/KhuyenMai.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- Sidebar -->
+    <left>
+        <fx:include source="sidebar_NV.fxml" />
+    </left>
+    <!-- Trung tâm -->
+    <center>
+        <VBox spacing="10" styleClass="center-section">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+            <VBox prefHeight="816.0" prefWidth="700.0" styleClass="center_section-background">
+                <children>
+
+                    <!-- Tiêu đề -->
+                    <Label prefHeight="65.0" prefWidth="700.0" styleClass="center-title" text="Danh sách khuyến mãi">
+                        <VBox.margin>
+                            <Insets bottom="5.0" />
+                        </VBox.margin></Label>
+
+                    <!-- Danh sách hóa đơn -->
+                    <ScrollPane fitToWidth="true" prefWidth="668.0" styleClass="scroll-list" VBox.vgrow="ALWAYS">
+                        <content>
+                            <VBox prefHeight="518.0" prefWidth="656.0" spacing="8" styleClass="vbox_center-scroll">
+                                <padding>
+                                    <Insets bottom="5" left="5" right="5" top="5" />
+                                </padding>
+
+                                <!-- Một thẻ đặt bàn -->
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="order-card">
+                                    <StackPane style="-fx-background-radius: 10 0 0 10; -fx-overflow: hidden;">
+                                        <ImageView fitHeight="60" fitWidth="60" preserveRatio="false">
+                                            <image>
+                                                <Image url="@../IMG/avatar.png" />
+                                            </image>
+                                        </ImageView>
+                                    </StackPane>
+                                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                        <Label styleClass="promo-id" text="KM0001" />
+                                        <HBox spacing="15">
+                                            <Label styleClass="promo-date" text="Ngày bắt đầu : 21-08-2025" />
+                                            <Label styleClass="promo-date" text="Ngày kết thúc : 12-10-2025">
+                                    <HBox.margin>
+                                       <Insets left="130.0" />
+                                    </HBox.margin></Label>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                        </HBox>
+                                    </VBox>
+                                    <!-- Indicator góc phải -->
+                                    <StackPane prefWidth="40" styleClass="order-status" />
+                                </HBox>
+
+                                <!-- Mẫu thẻ khác -->
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="order-card">
+                                    <StackPane style="-fx-background-radius: 10 0 0 10; -fx-overflow: hidden;">
+                                        <ImageView fitHeight="60" fitWidth="60" preserveRatio="false">
+                                            <image>
+                                                <Image url="@../IMG/avatar.png" />
+                                            </image>
+                                        </ImageView>
+                                    </StackPane>
+                                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                        <Label styleClass="promo-id" text="KM0002" />
+                                        <HBox spacing="15">
+                                            <Label styleClass="promo-date" text="Ngày bắt đầu : 21-08-2025" />
+                                            <Label styleClass="promo-date" text="Ngày kết thúc : 12-10-2025">
+                                                <HBox.margin>
+                                                    <Insets left="130.0" />
+                                                </HBox.margin></Label>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </HBox>
+                                    </VBox>
+                                    <StackPane prefWidth="40" styleClass="order-status02" />
+                                </HBox>
+                            </VBox>
+                        </content>
+                        <VBox.margin>
+                            <Insets bottom="10.0" />
+                        </VBox.margin>
+                    </ScrollPane>
+
+                    <!-- Bộ lọc và tìm kiếm -->
+                    <VBox spacing="8" styleClass="filter-box">
+                        <Label styleClass="filter-title" text="Bộ lọc" />
+
+                        <GridPane hgap="10" prefWidth="626.0" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="20" />
+                                <ColumnConstraints percentWidth="30" />
+                                <ColumnConstraints percentWidth="20" />
+                                <ColumnConstraints percentWidth="30" />
+                            </columnConstraints>
+                            <!-- Hàng 1 -->
+                            <Label styleClass="label_filter" text="Mã bàn:" GridPane.columnIndex="0" />
+                            <TextField prefHeight="50.0" promptText="Value" GridPane.columnIndex="1" />
+
+                            <Label styleClass="label_filter" text="Thời gian:" GridPane.columnIndex="2" />
+                            <TextField prefHeight="50.0" promptText="dd/mm/yyyy" GridPane.columnIndex="3" />
+
+                            <!-- Hàng 2 -->
+                            <Label styleClass="label_filter" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <TextField prefHeight="50.0" promptText="Value" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                            <Label styleClass="label_filter" text="Khu vực:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                            <ComboBox styleClass="uudai_combobox" prefHeight="50.0" promptText="-- chọn --" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                            <rowConstraints>
+                                <RowConstraints />
+                                <RowConstraints />
+                            </rowConstraints>
+                            <VBox.margin>
+                                <Insets left="10.0" />
+                            </VBox.margin>
+                        </GridPane>
+
+                        <!-- Hàng nút -->
+                        <HBox alignment="CENTER_RIGHT" spacing="10">
+                            <Button styleClass="btn-clear" text="Xóa trắng" />
+                            <Button styleClass="btn-search" text="Tìm kiếm" />
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </HBox>
+                    </VBox>
+
+                </children>
+            </VBox>
+        </VBox>
+    </center>
+
+    <!-- Phần bên phải -->
+    <right>
+        <VBox prefWidth="360" spacing="15" styleClass="right-section">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- Khối trắng chính -->
+            <VBox spacing="15" styleClass="right-content">
+                <!-- Tiêu đề -->
+                <Label prefHeight="27.0" prefWidth="275.0" styleClass="title-right" text="Thông Tin Khuyến Mãi" />
+
+                <!-- Form thông tin -->
+                <GridPane hgap="10" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="40" />
+                        <ColumnConstraints percentWidth="60" />
+                    </columnConstraints>
+
+                    <Label styleClass="label_infoOrder" text="Mã Khuyến Mãi:" GridPane.rowIndex="0" />
+                    <TextField promptText="KM0001" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label styleClass="label_infoOrder" text="Tên Khuyến Mãi:" GridPane.rowIndex="1" />
+                    <TextField promptText="Khuyến Mãi Sinh Nhật" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label styleClass="label_infoOrder" text="Số lượng:" GridPane.rowIndex="2" />
+                    <TextField promptText="1000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label styleClass="label_infoOrder" text="Ngày bắt đầu:" GridPane.rowIndex="3" />
+                    <TextField promptText="21-08-2025" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                    <Label styleClass="label_infoOrder" text="Ngày kết thúc:" GridPane.rowIndex="4" />
+                    <TextField promptText="12-10-2025" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                    <Label styleClass="label_infoOrder" text="Mã thay thế:" GridPane.rowIndex="5" />
+                    <TextField promptText="SINHNHAT" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                    <Label styleClass="label_infoOrder" text="Phần trăm KM:" GridPane.rowIndex="6" />
+                    <TextField promptText="10%" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+                    <Label styleClass="label_infoOrder" text="Ưu đãi:" GridPane.rowIndex="7" />
+                    <ComboBox promptText="Tổng hóa đơn" styleClass="uudai_combobox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+
+              <!--  khung tiìm món-->
+                <VBox spacing="10" styleClass="food-search-box">
+
+                    <!-- Thanh tìm kiếm -->
+                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-bar">
+                        <Button styleClass="menu-btn" text="≡" />
+                        <TextField prefHeight="32.0" prefWidth="142.0" promptText="Tìm món ăn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+                        <Button prefWidth="49.0" styleClass="search-btn" text="🔍" />
+                    </HBox>
+
+                    <!-- Danh sách khuyến mãi -->
+                    <ScrollPane fitToWidth="true" prefHeight="400" styleClass="food-scroll">
+                        <FlowPane fx:id="foodList" alignment="TOP_CENTER" hgap="20" prefWrapLength="400" vgap="20">
+                            <!-- Thẻ món 1 -->
+                            <VBox alignment="CENTER" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Bánh mì" />
+                            </VBox>
+
+                            <!-- Thẻ món 2 -->
+                            <VBox alignment="CENTER" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Trà sữa" />
+                            </VBox>
+
+                            <!-- Thẻ món 3 -->
+                            <VBox alignment="CENTER" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Cà phê" />
+                            </VBox>
+
+                            <!-- Thẻ món 4 -->
+                            <VBox alignment="CENTER" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Bún bò" />
+                            </VBox>
+                        </FlowPane>
+                    </ScrollPane>
+                </VBox>
+            </VBox>
+            <!-- Hàng nút Thêm / Xóa / Sửa (nằm ngoài right-content) -->
+            <HBox alignment="CENTER" spacing="10">
+                <Button style="-fx-background-color: #1CD446FF" styleClass="btn-action" text="Thêm" />
+                <Button style="-fx-background-color: #ff383c" styleClass="btn-action" text="Xóa" />
+                <Button style="-fx-background-color: #0D6EFDFF" styleClass="btn-action" text="Sửa" />
+            <VBox.margin>
+               <Insets top="30.0" />
+            </VBox.margin>
+            </HBox>
+        </VBox>
+    </right>
+</BorderPane>
