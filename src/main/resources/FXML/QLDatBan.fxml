@@ -531,7 +531,7 @@
                         </FlowPane>
                     </ScrollPane>
                 </VBox>
-                <!-- Nút kết ca -->
+                <!-- Nút -->
                 <HBox alignment="CENTER" spacing="20" styleClass="action-buttons">
                     <Button styleClass="confirm-btn" text="Xác Nhận" />
                     <Button styleClass="cancel-btn" text="Hủy Bàn" />
