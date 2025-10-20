@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.*?>-->
+
+<BorderPane prefHeight="800" prefWidth="1400" styleClass="root-pane" stylesheets="@../CSS/QLDatBan.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<!--    fx:controller="ui.controllers.QuanLiDatBanController"-->
+
+    <!-- Sidebar bên trái -->
+    <left>
+        <fx:include source="sidebar_NV.fxml" />
+    </left>
+
+    <!-- Nội dung chính ở giữa -->
+    <center>
+        <HBox spacing="20" styleClass="main-container">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- Danh sách bàn đã đặt -->
+            <VBox prefHeight="760.0" prefWidth="649.0" spacing="20" styleClass="tables-section" HBox.hgrow="ALWAYS">
+                <!-- Tiêu đề -->
+
+                <!-- Danh sách bàn đặt trước -->
+                <VBox spacing="10" styleClass="reservation-section">
+                    <Label styleClass="section-title" text="Danh Sách Bàn Đặt Trước" />
+
+                    <ScrollPane fitToWidth="true" prefHeight="331.0" prefWidth="480.0" styleClass="reservation-scroll">
+                        <VBox prefHeight="166.0" prefWidth="463.0" spacing="8" styleClass="reservation-list">
+                            <!-- Example reservation item with avatar -->
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                                <!-- avatar -->
+                                <StackPane styleClass="reservation-avatar-wrapper">
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                </StackPane>
+      
+                                <!-- text info -->
+                                <VBox spacing="2">
+                                    <Label styleClass="reservation-code" text="HD1210820250001" />
+                                    <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                                </VBox>
+      
+                                <!-- optional spacer to push content / add action button -->
+                                <HBox HBox.hgrow="ALWAYS" />
+                                <!-- (Optional) quick action buttons -->
+                                <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                                <!-- avatar -->
+                                <StackPane styleClass="reservation-avatar-wrapper">
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                </StackPane>
+
+                                <!-- text info -->
+                                <VBox spacing="2">
+                                    <Label styleClass="reservation-code" text="HD1210820250001" />
+                                    <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                                </VBox>
+
+                                <!-- optional spacer to push content / add action button -->
+                                <HBox HBox.hgrow="ALWAYS" />
+                                <!-- (Optional) quick action buttons -->
+                                <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                                <!-- avatar -->
+                                <StackPane styleClass="reservation-avatar-wrapper">
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                </StackPane>
+
+                                <!-- text info -->
+                                <VBox spacing="2">
+                                    <Label styleClass="reservation-code" text="HD1210820250001" />
+                                    <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                                </VBox>
+
+                                <!-- optional spacer to push content / add action button -->
+                                <HBox HBox.hgrow="ALWAYS" />
+                                <!-- (Optional) quick action buttons -->
+                                <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                                <!-- avatar -->
+                                <StackPane styleClass="reservation-avatar-wrapper">
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                </StackPane>
+
+                                <!-- text info -->
+                                <VBox spacing="2">
+                                    <Label styleClass="reservation-code" text="HD1210820250001" />
+                                    <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                                </VBox>
+
+                                <!-- optional spacer to push content / add action button -->
+                                <HBox HBox.hgrow="ALWAYS" />
+                                <!-- (Optional) quick action buttons -->
+                                <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                                <!-- avatar -->
+                                <StackPane styleClass="reservation-avatar-wrapper">
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                </StackPane>
+
+                                <!-- text info -->
+                                <VBox spacing="2">
+                                    <Label styleClass="reservation-code" text="HD1210820250001" />
+                                    <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                                </VBox>
+
+                                <!-- optional spacer to push content / add action button -->
+                                <HBox HBox.hgrow="ALWAYS" />
+                                <!-- (Optional) quick action buttons -->
+                                <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                                <!-- avatar -->
+                                <StackPane styleClass="reservation-avatar-wrapper">
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                </StackPane>
+
+                                <!-- text info -->
+                                <VBox spacing="2">
+                                    <Label styleClass="reservation-code" text="HD1210820250001" />
+                                    <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                                </VBox>
+
+                                <!-- optional spacer to push content / add action button -->
+                                <HBox HBox.hgrow="ALWAYS" />
+                                <!-- (Optional) quick action buttons -->
+                                <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                                <!-- avatar -->
+                                <StackPane styleClass="reservation-avatar-wrapper">
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                </StackPane>
+
+                                <!-- text info -->
+                                <VBox spacing="2">
+                                    <Label styleClass="reservation-code" text="HD1210820250001" />
+                                    <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                                </VBox>
+
+                                <!-- optional spacer to push content / add action button -->
+                                <HBox HBox.hgrow="ALWAYS" />
+                                <!-- (Optional) quick action buttons -->
+                                <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                            </HBox>
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- Danh sách bàn đã nhận -->
+                <VBox spacing="10" styleClass="reservation-section">
+                    <Label styleClass="section-title" text="Danh Sách Bàn Đã Nhận" />
+                </VBox>
+
+                 <ScrollPane fitToWidth="true" prefHeight="334.0" prefWidth="480.0" styleClass="reservation-scroll">
+                     <VBox spacing="8" styleClass="reservation-list">
+                         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                             <!-- avatar -->
+                             <StackPane styleClass="reservation-avatar-wrapper">
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                     <image>
+                                         <Image url="@../IMG/avatar.png" />
+                                     </image>
+                                 </ImageView>
+                             </StackPane>
+
+                             <!-- text info -->
+                             <VBox spacing="2">
+                                 <Label styleClass="reservation-code" text="HD1210820250001" />
+                                 <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                             </VBox>
+
+                             <!-- optional spacer to push content / add action button -->
+                             <HBox HBox.hgrow="ALWAYS" />
+                             <!-- (Optional) quick action buttons -->
+                             <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                         </HBox>
+
+                         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                             <!-- avatar -->
+                             <StackPane styleClass="reservation-avatar-wrapper">
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                     <image>
+                                         <Image url="@../IMG/avatar.png" />
+                                     </image>
+                                 </ImageView>
+                             </StackPane>
+
+                             <!-- text info -->
+                             <VBox spacing="2">
+                                 <Label styleClass="reservation-code" text="HD1210820250001" />
+                                 <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                             </VBox>
+
+                             <!-- optional spacer to push content / add action button -->
+                             <HBox HBox.hgrow="ALWAYS" />
+                             <!-- (Optional) quick action buttons -->
+                             <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                         </HBox>
+
+                         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                             <!-- avatar -->
+                             <StackPane styleClass="reservation-avatar-wrapper">
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                     <image>
+                                         <Image url="@../IMG/avatar.png" />
+                                     </image>
+                                 </ImageView>
+                             </StackPane>
+
+                             <!-- text info -->
+                             <VBox spacing="2">
+                                 <Label styleClass="reservation-code" text="HD1210820250001" />
+                                 <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                             </VBox>
+
+                             <!-- optional spacer to push content / add action button -->
+                             <HBox HBox.hgrow="ALWAYS" />
+                             <!-- (Optional) quick action buttons -->
+                             <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                         </HBox>
+
+                         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                             <!-- avatar -->
+                             <StackPane styleClass="reservation-avatar-wrapper">
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                     <image>
+                                         <Image url="@../IMG/avatar.png" />
+                                     </image>
+                                 </ImageView>
+                             </StackPane>
+
+                             <!-- text info -->
+                             <VBox spacing="2">
+                                 <Label styleClass="reservation-code" text="HD1210820250001" />
+                                 <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                             </VBox>
+
+                             <!-- optional spacer to push content / add action button -->
+                             <HBox HBox.hgrow="ALWAYS" />
+                             <!-- (Optional) quick action buttons -->
+                             <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                         </HBox>
+                         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                             <!-- avatar -->
+                             <StackPane styleClass="reservation-avatar-wrapper">
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                     <image>
+                                         <Image url="@../IMG/avatar.png" />
+                                     </image>
+                                 </ImageView>
+                             </StackPane>
+
+                             <!-- text info -->
+                             <VBox spacing="2">
+                                 <Label styleClass="reservation-code" text="HD1210820250001" />
+                                 <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                             </VBox>
+
+                             <!-- optional spacer to push content / add action button -->
+                             <HBox HBox.hgrow="ALWAYS" />
+                             <!-- (Optional) quick action buttons -->
+                             <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                         </HBox>
+                         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                             <!-- avatar -->
+                             <StackPane styleClass="reservation-avatar-wrapper">
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                     <image>
+                                         <Image url="@../IMG/avatar.png" />
+                                     </image>
+                                 </ImageView>
+                             </StackPane>
+
+                             <!-- text info -->
+                             <VBox spacing="2">
+                                 <Label styleClass="reservation-code" text="HD1210820250001" />
+                                 <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                             </VBox>
+
+                             <!-- optional spacer to push content / add action button -->
+                             <HBox HBox.hgrow="ALWAYS" />
+                             <!-- (Optional) quick action buttons -->
+                             <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                         </HBox>
+                         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="reservation-item">
+                             <!-- avatar -->
+                             <StackPane styleClass="reservation-avatar-wrapper">
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="reservation-avatar">
+                                     <image>
+                                         <Image url="@../IMG/avatar.png" />
+                                     </image>
+                                 </ImageView>
+                             </StackPane>
+
+                             <!-- text info -->
+                             <VBox spacing="2">
+                                 <Label styleClass="reservation-code" text="HD1210820250001" />
+                                 <Label styleClass="reservation-phone" text="SDT: 0398765432" />
+                             </VBox>
+
+                             <!-- optional spacer to push content / add action button -->
+                             <HBox HBox.hgrow="ALWAYS" />
+                             <!-- (Optional) quick action buttons -->
+                             <!-- <Button text="Nhận" styleClass="small-btn" /> -->
+                         </HBox>
+                     </VBox>
+                 </ScrollPane>
+            </VBox>
+
+            <!-- Phần thông tin chi tiết và tìm kiếm món ăn -->
+            <VBox prefWidth="500" spacing="20" styleClass="details-section">
+                <!-- Thông tin đặt bàn (thay đổi: key:value bằng VBox+HBox, Sự kiện = ComboBox) -->
+                <VBox spacing="15" styleClass="booking-info-section">
+                    <Label styleClass="section-title" text="Thông Tin Đặt Bàn" />
+
+                    <VBox spacing="10" styleClass="info-list">
+                        <!-- Mã hóa đơn -->
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label styleClass="key-label" text="Mã Hóa Đơn:" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label styleClass="value-label" text="HD1210820250002" />
+                        </HBox>
+
+                        <!-- Họ tên -->
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label styleClass="key-label" text="Họ Tên:" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label styleClass="value-label" text="Trần Quốc Nhã" />
+                        </HBox>
+
+                        <!-- SĐT -->
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label styleClass="key-label" text="SĐT:" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label styleClass="value-label" text="0391234242" />
+                        </HBox>
+
+                        <!-- Bàn -->
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label styleClass="key-label" text="Bàn:" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label styleClass="value-label" text="IN-4" />
+                        </HBox>
+
+                        <!-- Sự kiện (ComboBox) -->
+                        <HBox>
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label styleClass="key-label" text="Sự Kiện:" />
+                                <ComboBox fx:id="eventCombo" prefHeight="21.0" prefWidth="84.0" promptText="Sự kiện" styleClass="event-combobox">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Sinh Nhật" />
+                                            <String fx:value="Họp Mặt" />
+                                            <String fx:value="Tiệc Cưới" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                            </HBox>
+                            <Region HBox.hgrow="ALWAYS" />
+
+                            <!-- Số lượng khách -->
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label styleClass="key-label" text="Số Lượng Khách:" />
+                                <TextField prefHeight="18.0" prefWidth="79.0" promptText="Số lượng" styleClass="input-field" />
+                            </HBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+
+                <!-- Bảng đơn hàng -->
+                <VBox spacing="10" styleClass="order-section">
+                    <TableView prefHeight="180" styleClass="order-table">
+                        <columns>
+                            <TableColumn prefWidth="30" text="STT" />
+                            <TableColumn prefWidth="90" text="Sản phẩm" />
+                            <TableColumn prefWidth="70" text="Số Lượng" />
+                            <TableColumn prefWidth="70" text="Giá" />
+                            <TableColumn prefWidth="70" text="Tổng" />
+                            <TableColumn prefWidth="30" text="Xóa" />
+                        </columns>
+                    </TableView>
+                </VBox>
+
+                <!-- Tìm kiếm món ăn -->
+                <VBox spacing="10" styleClass="search-section">
+
+                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-bar">
+                        <TextField prefHeight="32.0" prefWidth="142.0" promptText="Tìm món ăn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+                        <Button prefWidth="49.0" styleClass="search-btn" text="🔍" />
+                    </HBox>
+
+                    <!-- Danh sách món ăn -->
+                    <ScrollPane fitToWidth="true" prefHeight="200" styleClass="food-scroll">
+                        <FlowPane fx:id="foodList" alignment="TOP_CENTER" hgap="15" prefWrapLength="450" style="-fx-background-color: white;" vgap="15">
+                            <!-- Thẻ món 1 -->
+                            <VBox alignment="CENTER" prefHeight="80" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="50" fitWidth="50" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Bánh mì" />
+                            </VBox>
+
+                            <!-- Thẻ món 2 -->
+                            <VBox alignment="CENTER" prefHeight="80" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="50" fitWidth="50" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Trà sữa" />
+                            </VBox>
+
+                            <!-- Thẻ món 3 -->
+                            <VBox alignment="CENTER" prefHeight="80" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="50" fitWidth="50" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Cà phê" />
+                            </VBox>
+
+                            <!-- Thẻ món 4 -->
+                            <VBox alignment="CENTER" prefHeight="80" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="50" fitWidth="50" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Bún bò" />
+                            </VBox>
+
+                            <!-- Thêm các món khác -->
+                            <VBox alignment="CENTER" prefHeight="80" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="50" fitWidth="50" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Phở" />
+                            </VBox>
+
+                            <VBox alignment="CENTER" prefHeight="80" prefWidth="80" spacing="5" styleClass="food-card">
+                                <StackPane>
+                                    <ImageView fitHeight="50" fitWidth="50" styleClass="food-image">
+                                        <image>
+                                            <Image url="@../IMG/avatar.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                </StackPane>
+                                <Label styleClass="food-name" text="Gỏi cuốn" />
+                            </VBox>
+                        </FlowPane>
+                    </ScrollPane>
+                </VBox>
+                <!-- Nút kết ca -->
+                <HBox alignment="CENTER" spacing="20" styleClass="action-buttons">
+                    <Button styleClass="confirm-btn" text="Xác Nhận" />
+                    <Button styleClass="cancel-btn" text="Hủy Bàn" />
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

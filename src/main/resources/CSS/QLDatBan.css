@@ -1,0 +1,346 @@
+.root-pane {
+    -fx-background-color: #D9D9D9;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.main-container {
+    -fx-padding: 20;
+}
+
+/* Tiêu đề chính */
+.main-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B1406;
+    -fx-alignment: center;
+}
+
+/* Phần danh sách bàn */
+.tables-section {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-padding: 20;
+}
+
+/* Phần chi tiết */
+.details-section {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-padding: 20;
+}
+
+/* Tiêu đề section */
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B1406;
+    -fx-padding: 0;
+
+}
+
+/* Phần đặt bàn */
+.reservation-section {
+    -fx-padding: 0;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.reservation-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.reservation-list {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+}
+
+/* avatar wrapper to create rounded background + padding */
+.reservation-avatar-wrapper {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-alignment: center;
+}
+
+/* image view (avatar) */
+.reservation-avatar {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 4, 0, 0, 1);
+    /* NOTE: ImageView rounding via clip is better handled in code; this gives a subtle shadow */
+}
+
+/* slightly larger item area and center alignment */
+.reservation-item {
+    -fx-background-color: #fafafa; /* nhẹ hơn để thấy avatar */
+    -fx-background-radius: 8;
+    -fx-padding: 8 10;
+    -fx-spacing: 8;
+    -fx-border-color: #eee;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-alignment: center-left;
+}
+
+/* keep reservation text styles (same as before) */
+.reservation-code {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B1406;
+}
+
+.reservation-phone {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
+}
+
+/* small action button style (optional) */
+.small-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 6;
+    -fx-padding: 4 8;
+    -fx-font-size: 12px;
+}
+
+.reservation-item:hover {
+    -fx-background-color: #f0f0f0;
+    -fx-cursor: hand;
+}
+
+
+
+/* Thông tin đặt bàn */
+.booking-info-section {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.key-label{
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+.key-value{
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+.event-btn {
+    -fx-background-color: #e8e8e8;
+    -fx-text-fill: #333;
+    -fx-font-size: 12px;
+    -fx-background-radius: 15;
+    -fx-padding: 5 10;
+}
+
+.event-btn:hover {
+    -fx-background-color: #d0d0d0;
+}
+
+.event-btn:selected {
+    -fx-background-color: #E6763E;
+    -fx-text-fill: white;
+}
+
+/* Thanh tìm kiếm */
+.search-bar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 14px;
+    -fx-border-radius: 20;
+}
+
+.search-btn {
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+/* Card món ăn */
+.food-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #5a4031;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
+    -fx-padding: 10;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 80;
+    -fx-pref-height: 80;
+}
+
+.food-image {
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+}
+
+.add-icon {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 1 5;
+    -fx-background-radius: 100%;
+    -fx-min-width: 20;
+    -fx-min-height: 20;
+}
+
+.add-icon:hover {
+    -fx-background-color: #059a44;
+}
+
+.food-name {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B1406;
+}
+
+.food-scroll {
+    -fx-background-color: transparent;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+}
+
+.food-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.food-scroll .thumb {
+    -fx-background-color: #bbb;
+    -fx-background-radius: 5;
+}
+
+.food-scroll .thumb:hover {
+    -fx-background-color: #888;
+}
+
+/* Bảng đơn hàng */
+.order-section {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+}
+
+.order-table {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 8;
+
+}
+
+.order-table .column-header {
+    -fx-background-color: #E6763E;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.order-table .table-row-cell {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.order-table .table-row-cell:even {
+    -fx-background-color: #f9f9f9;
+}
+
+.order-table .table-row-cell:odd {
+    -fx-background-color: white;
+}
+
+.order-table .table-row-cell:selected {
+    -fx-background-color: #ffe6d1;
+}
+
+/* Nút */
+.input-field {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 8;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 8;
+    -fx-padding: 4 10;
+}
+
+.confirm-btn {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 25;
+    -fx-pref-height: 70px;
+    -fx-pref-width: 120px;
+    -fx-alignment: center;
+}
+
+.confirm-btn:hover {
+    -fx-background-color: #219653;
+}
+
+.cancel-btn {
+    -fx-background-color: #e53935;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 25;
+    -fx-pref-height: 70px;
+    -fx-pref-width: 120px;
+    -fx-alignment: center;
+}
+
+.cancel-btn:hover {
+    -fx-background-color: #c62828;
+}
+
+
+.action-buttons {
+    -fx-padding: 10 0 0 0;
+}
+
+/* Scrollbar styling */
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 8;
+    -fx-max-height: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #c1915f;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
