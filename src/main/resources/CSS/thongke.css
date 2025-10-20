@@ -4,24 +4,23 @@
 }
 .grid-item{
     -fx-background-color: #F1F1F1;
-    -fx-background-radius: 0 0 8 8 ;
+    -fx-background-radius: 0 0 20 20 ;
     -fx-padding: 6 10;
 }
 .grid-item-2{
     -fx-background-color: #ffffff;
-    -fx-background-radius: 8 ;
+    -fx-background-radius: 20 ;
     -fx-padding: 6 10;
 }
 .filter-group{
     -fx-background-color: white;
-    -fx-background-radius: 8 8 0 0;
+    -fx-background-radius: 20 20 0 0;
     -fx-padding:  5 20;
 }
 .menu-search-box {
     -fx-background-color: white;
     -fx-background-radius: 8;
     -fx-padding: 6 10;
-    -fx-border-color: #bcbcbc;
     -fx-border-width: 1;
     -fx-border-radius: 8;
 }
@@ -32,6 +31,7 @@
 .search-field {
     -fx-background-radius: 20 20 28 28;
     -fx-background-color: white;
+    -fx-border-color: transparent;
 }
 .combo-box {
     -fx-background-color: #ffffff;
@@ -62,6 +62,11 @@
     -fx-background-radius: 8;
     -fx-padding:0;
 }
+
+.dish-row-label {
+    -fx-text-fill: white;
+}
+
 .food-image {
     -fx-fit-width: 70;
     -fx-fit-height: 50;
@@ -81,8 +86,8 @@
 .dish-inc, .dish-dec{
     -fx-pref-width: 50;
 }
-.dish-inc > Label { -fx-text-fill: green; -fx-font-weight: bold;}
-.dish-dec > Label{ -fx-text-fill: dark red;   -fx-font-weight: bold; }
+.dish-inc > Label { -fx-text-fill: white; -fx-font-weight: bold;}
+.dish-dec > Label{ -fx-text-fill: white;   -fx-font-weight: bold; }
 /*Scroll Pane*/
 .center-scroll-pane {
     -fx-background-color: transparent;
@@ -136,8 +141,8 @@
 /*Khung thứ 2*/
 .info-row {
     -fx-padding: 10;
-    -fx-spacing: 10;
-    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 40;
+    -fx-alignment: center;
 }
 
 .info-box {
