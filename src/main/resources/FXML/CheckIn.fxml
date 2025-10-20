@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800" prefWidth="1400" stylesheets="@../CSS/checkin.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="1000" prefWidth="1400" stylesheets="@../CSS/checkin.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- LEFT SIDEBAR -->
     <left>
@@ -27,7 +27,7 @@
         <VBox alignment="TOP_CENTER" spacing="20.0" styleClass="center-pane" BorderPane.alignment="CENTER">
 
             <!-- DANH SÁCH (Đặt trước + Chờ) -->
-            <VBox spacing="20">
+            <VBox spacing="20" VBox.vgrow="ALWAYS">
 
                 <!-- Danh sách bàn đặt trước -->
                 <VBox alignment="TOP_CENTER" spacing="10" styleClass="section" VBox.vgrow="ALWAYS">
@@ -393,9 +393,10 @@
                         <children>
                             <Button fx:id="btnXoaTrang" styleClass="btn-secondary" text="Xóa trắng" />
                             <Button fx:id="btnTim" styleClass="btn-primary" text="Tìm kiếm">
-                        <HBox.margin>
-                           <Insets right="20.0" />
-                        </HBox.margin></Button>
+                                <HBox.margin>
+                                    <Insets right="20.0" />
+                                </HBox.margin>
+                            </Button>
                         </children>
                     </HBox>
                 </children>
