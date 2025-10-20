@@ -167,21 +167,24 @@
                     <Label styleClass="label_infoOrder" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                     <TextField editable="false" styleClass="filter-tf" text="0398765432" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                    <Label styleClass="label_infoOrder" text="Số lượng:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                    <TextField editable="false" styleClass="filter-tf" text="2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label styleClass="label_infoOrder" text="Số lượng:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <TextField editable="false" styleClass="filter-tf" text="2" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-                    <Label styleClass="label_infoOrder" text="Sự kiện:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                    <TextField editable="false" styleClass="filter-tf" text="Không có" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    <Label styleClass="label_infoOrder" text="Sự kiện:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                    <TextField editable="false" styleClass="filter-tf" text="Không có" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-                    <Label styleClass="label_infoOrder" text="Khu vực:" GridPane.rowIndex="5" />
-                    <TextField editable="false" styleClass="filter-tf" text="Trong nhà" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    <Label styleClass="label_infoOrder" text="Khu vực:" GridPane.rowIndex="6" />
+                    <TextField editable="false" styleClass="filter-tf" text="Trong nhà" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-                    <Label styleClass="label_infoOrder" text="Mô tả:" GridPane.rowIndex="6" />
-                    <TextArea prefHeight="76.0" prefRowCount="3" prefWidth="162.0" styleClass="textarea-custom" text="Giảm cay của các món ăn" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                    <Label styleClass="label_infoOrder" text="Mô tả:" GridPane.rowIndex="7" />
+                    <TextArea prefHeight="76.0" prefRowCount="3" prefWidth="162.0" styleClass="textarea-custom" text="Giảm cay của các món ăn" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+               <Label styleClass="label_infoOrder" text="Bàn" GridPane.rowIndex="3" />
+               <TextField editable="false" styleClass="filter-tf" text="IN-4" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                <rowConstraints>
                   <RowConstraints />
                   <RowConstraints />
                   <RowConstraints />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" />
                   <RowConstraints />
                   <RowConstraints />
                   <RowConstraints />

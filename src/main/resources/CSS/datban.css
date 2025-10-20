@@ -219,6 +219,7 @@
     -fx-background-radius: 20 20 28 28;
     -fx-padding: 15;
     -fx-spacing: 20;
+    -fx-alignment: center;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 6, 0, 0, 2);
 }
 
