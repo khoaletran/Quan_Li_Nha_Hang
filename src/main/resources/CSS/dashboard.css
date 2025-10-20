@@ -52,7 +52,7 @@
 
 /* --- Thẻ chứa toàn bộ thông báo --- */
 .notification-card {
-    -fx-background-color: #f1f1f1;
+    -fx-background-color: white;
     -fx-background-radius: 12;
     -fx-border-color: #dcdcdc;
     -fx-border-radius: 12;
@@ -60,6 +60,13 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 2, 2);
     -fx-padding: 16;
 }
+
+.box_not{
+    -fx-background-color: #efefef;
+    -fx-background-radius: 20;
+
+}
+
 .subtitle {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
@@ -99,10 +106,9 @@
 
 /* --- Thẻ chung cho tất cả thống kê --- */
 .stat-card {
-    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f8f9fc);
+    -fx-background-color: white;
     -fx-background-radius: 18;
     -fx-border-radius: 18;
-    -fx-border-color: #dcdcdc;
     -fx-border-width: 1.2;
     -fx-padding: 16;
     -fx-spacing: 12;
@@ -112,7 +118,7 @@
 }
 
 .card_infoRT {
-    -fx-background-color: #f4f6f8;
+    -fx-background-color: #EFEFEF;
     -fx-padding: 20;
     -fx-alignment: center;
     -fx-spacing: 16;
@@ -177,5 +183,44 @@
     -fx-text-fill: #333;
 }
 
+.scroll-bar {
+    -fx-background-color: #efefef;
+    -fx-background-insets: 0;
+    -fx-background-radius: 20;
+    -fx-padding: 10 0 0 0;
+}
 
+.scroll-bar > .viewport {
+    -fx-background-color: #efefef;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 8;
+    -fx-max-height: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #c1915f;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
 

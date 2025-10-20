@@ -68,9 +68,9 @@
                               <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn" text="-" />
+                                    <Button styleClass="qty-btn_minus" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn" text="+" />
+                                    <Button styleClass="qty-btn_plus" text="+" />
                                  </children>
                               </HBox>
                            </children>
@@ -86,9 +86,9 @@
                               <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn" text="-" />
+                                    <Button styleClass="qty-btn_minus" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn" text="+" />
+                                    <Button styleClass="qty-btn_plus" text="+" />
                                  </children>
                               </HBox>
                            </children>
@@ -104,9 +104,9 @@
                               <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn" text="-" />
+                                    <Button styleClass="qty-btn_minus" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn" text="+" />
+                                    <Button styleClass="qty-btn_plus" text="+" />
                                  </children>
                               </HBox>
                            </children>
@@ -122,9 +122,9 @@
                               <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn" text="-" />
+                                    <Button styleClass="qty-btn_minus" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn" text="+" />
+                                    <Button styleClass="qty-btn_plus" text="+" />
                                  </children>
                               </HBox>
                            </children>
@@ -140,9 +140,9 @@
                               <Label styleClass="menu-item-price" text="200.000 đ" />
                               <HBox alignment="CENTER" spacing="10" styleClass="quantity-controls">
                                  <children>
-                                    <Button styleClass="qty-btn" text="-" />
+                                    <Button styleClass="qty-btn_minus" text="-" />
                                     <Label styleClass="qty-label" text="0" />
-                                    <Button styleClass="qty-btn" text="+" />
+                                    <Button styleClass="qty-btn_plus" text="+" />
                                  </children>
                               </HBox>
                            </children>
