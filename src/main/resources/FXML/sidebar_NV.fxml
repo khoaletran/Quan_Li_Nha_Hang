@@ -11,7 +11,7 @@
 <?import javafx.scene.paint.ImagePattern?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane prefWidth="320" styleClass="sidebar" stylesheets="@../CSS/sidebar_QL.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.SidebarController_NV">
+<BorderPane prefWidth="320" styleClass="sidebar" stylesheets="@../CSS/sidebar.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.SidebarController_NV">
     
     <top>
         <VBox prefHeight="167.0" prefWidth="320.0" spacing="10">

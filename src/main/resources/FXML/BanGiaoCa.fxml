@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" stylesheets="@../CSS/BanGiaoCa.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" stylesheets="@../CSS/bangiaoca.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Phần bên trái: sidebar -->
     <left>
