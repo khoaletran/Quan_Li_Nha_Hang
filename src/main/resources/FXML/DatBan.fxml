@@ -1,52 +1,326 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<HBox xmlns:fx="http://javafx.com/fxml" spacing="12" padding="12">
-    <!-- Trái: danh sách bàn -->
-    <VBox spacing="10" HBox.hgrow="ALWAYS">
-        <HBox spacing="8">
-            <Button text="OUT" styleClass="chip chip-green"/>
-            <Button text="IN"  styleClass="chip chip-orange"/>
-            <Button text="VIP" styleClass="chip chip-red"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="Mới" styleClass="btn-primary"/>
-        </HBox>
+<BorderPane prefHeight="800.0" prefWidth="1400.0" style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/datban.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
-        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
-            <content>
-                <FlowPane hgap="10" vgap="10" padding="6">
-                    <!-- 12 ô bàn -->
-                    <VBox styleClass="card" prefWidth="150" alignment="CENTER">
-                        <Pane styleClass="thumb" prefHeight="90"/>
-                        <Label text="A-01"/>
-                        <Label text="2 chỗ" styleClass="chip chip-green"/>
-                    </VBox>
-                    <VBox styleClass="card" prefWidth="150" alignment="CENTER"><Pane styleClass="thumb" prefHeight="90"/><Label text="A-02"/><Label text="4 chỗ" styleClass="chip chip-orange"/></VBox>
-                    <VBox styleClass="card" prefWidth="150" alignment="CENTER"><Pane styleClass="thumb" prefHeight="90"/><Label text="VIP-01"/><Label text="8 chỗ" styleClass="chip chip-red"/></VBox>
-                    <!-- … thêm bớt tương tự -->
-                </FlowPane>
-            </content>
-        </ScrollPane>
-    </VBox>
+    <!-- Sidebar trái -->
+    <left>
+        <fx:include source="sidebar_NV.fxml" />
+    </left>
 
-    <!-- Phải: form thông tin đặt -->
-    <VBox spacing="10" prefWidth="320">
-        <VBox styleClass="side-panel" spacing="8">
-            <Label text="Thông tin đặt bàn" styleClass="card-title"/>
-            <TextField promptText="Tên khách"/>
-            <TextField promptText="SĐT"/>
-            <HBox spacing="8">
-                <TextField promptText="Số người" prefWidth="120"/>
-                <DatePicker promptText="Ngày"/>
-            </HBox>
-            <TextField promptText="Khung giờ (vd: 18:00)"/>
-            <HBox spacing="8">
-                <Button text="Giữ chỗ" styleClass="btn-primary" HBox.hgrow="ALWAYS"/>
-                <Button text="Huỷ" styleClass="btn-danger"/>
-            </HBox>
+    <!-- Nội dung chính -->
+    <center>
+        <VBox spacing="20" styleClass="main-content" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+            <VBox.vgrow>ALWAYS</VBox.vgrow>
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+            <VBox prefHeight="780.0" prefWidth="660.0" styleClass="center-p">
+                <children>
+                    <HBox alignment="CENTER" prefHeight="77.0" prefWidth="660.0" spacing="20" styleClass="time-form">
+                        <children>
+
+                            <!-- Cột chọn ngày -->
+                            <VBox alignment="CENTER_LEFT" spacing="6" styleClass="time-field">
+                                <Label styleClass="field-label" text="Ngày đặt bàn" />
+                                <DatePicker fx:id="datePicker" promptText="Chọn ngày" styleClass="date-picker" />
+                            </VBox>
+
+                            <!-- Cột chọn giờ -->
+                            <VBox alignment="CENTER_LEFT" spacing="6" styleClass="time-field">
+                                <Label styleClass="field-label" text="Giờ đặt" />
+                                <HBox alignment="CENTER" spacing="6">
+                                    <Spinner fx:id="hourSpinner" editable="true" initialValue="12" max="23" min="0" prefHeight="36.0" styleClass="time-spinner" />
+                                    <Label styleClass="time-separator" text=":" />
+                                    <Spinner fx:id="minuteSpinner" editable="true" initialValue="30" max="59" min="0" prefHeight="35.0" prefWidth="100.0" styleClass="time-spinner" />
+                                </HBox>
+                            </VBox>
+
+                            <!-- Cột số lượng -->
+                            <VBox alignment="CENTER_LEFT" spacing="6" styleClass="time-field">
+                                <Label styleClass="field-label" text="Số lượng" />
+                                <TextField fx:id="noteField" promptText="số lượng" styleClass="filter-tf" />
+                            </VBox>
+
+                        </children>
+                    </HBox>
+
+                    <VBox prefHeight="703.0" prefWidth="660.0" style="-fx-padding: 10; -fx-spacing: 20;">
+                  <children>
+                     <HBox prefHeight="100.0" prefWidth="200.0" styleClass="table_group">
+                        <children>
+                           <VBox prefHeight="200.0" prefWidth="100.0" styleClass="table_title">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                      <image>
+                                          <Image url="@../IMG/ban/out.png" />
+                                      </image>
+                                 </ImageView>
+                                 <Label prefHeight="54.0" prefWidth="63.0" text="OUT" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                     <image>
+                                         <Image url="@../IMG/icon/star.png" />
+                                     </image>
+                                 </ImageView>
+                                 <Label text="2-3" />
+                              </children></VBox>
+                           <VBox layoutX="340.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="3-4" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="5-8" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="460.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="8-12" />
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <HBox layoutX="20.0" layoutY="20.0" prefHeight="100.0" prefWidth="200.0" styleClass="table_group">
+                        <children>
+                           <VBox prefHeight="200.0" prefWidth="100.0" styleClass="table_title">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/IN.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label prefHeight="54.0" prefWidth="63.0" text="IN" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="2-3" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="340.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="3-4" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="5-8" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="460.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="8-12" />
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                     <HBox layoutX="20.0" layoutY="369.0" prefHeight="100.0" prefWidth="200.0" styleClass="table_group">
+                        <children>
+                           <VBox prefHeight="200.0" prefWidth="100.0" styleClass="table_title">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/vip.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label prefHeight="54.0" prefWidth="63.0" text="VIP" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="2-3" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="340.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="3-4" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="5-8" />
+                              </children>
+                           </VBox>
+                           <VBox layoutX="460.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                              <children>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/ban/out.png" />
+                                    </image>
+                                 </ImageView>
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../IMG/icon/star.png" />
+                                    </image>
+                                 </ImageView>
+                                 <Label text="8-12" />
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+                </children>
+            </VBox>
         </VBox>
-    </VBox>
-</HBox>
+    </center>
+
+    <!-- Sidebar phải -->
+    <right>
+        <VBox spacing="20" styleClass="right-sidebar" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+            <VBox.vgrow>ALWAYS</VBox.vgrow>
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <Label alignment="CENTER" prefHeight="54.0" prefWidth="351.0" styleClass="section-title" text="Thông Tin Đặt Bàn" textAlignment="CENTER" />
+
+            <VBox prefHeight="196.0" prefWidth="340.0" spacing="12" styleClass="customer-info">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefHeight="18.0" prefWidth="131.0" styleClass="info-label" text="Họ và tên:" />
+                    <TextField prefHeight="19.0" prefWidth="230.0" promptText="Nhập họ tên" styleClass="filter-tf" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label styleClass="info-label" text="SĐT:" />
+                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Nhập số điện thoại" styleClass="filter-tf" />
+                </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="56.0" spacing="10">
+               <children>
+                  <Label styleClass="info-label" text="Bàn:" />
+                  <TextField prefHeight="24.0" prefWidth="228.0" promptText="Bàn" styleClass="filter-tf" />
+               </children>
+            </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefHeight="18.0" prefWidth="120.0" styleClass="info-label" text="Số lượng khách:" />
+                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Số người" styleClass="filter-tf" />
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label styleClass="info-label" text="Ghi chú:" />
+                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Ghi chú đặc biệt" styleClass="filter-tf" />
+                </HBox>
+            </VBox>
+         <AnchorPane prefHeight="452.0" prefWidth="340.0" />
+        </VBox>
+    </right>
+</BorderPane>

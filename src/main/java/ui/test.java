@@ -8,9 +8,9 @@ import javafx.stage.Stage;
 public class test extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/QLDatBan.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/DatBan.fxml"));
         Scene scene = new Scene(loader.load(), AppConstants.WINDOW_WIDTH, AppConstants.WINDOW_HEIGHT);
-        scene.getStylesheets().add(getClass().getResource("/CSS/QLDatBan.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/CSS/datban.css").toExternalForm());
         stage.setTitle(AppConstants.APP_TITLE + " - Trang chủ Quản lí");
         stage.setScene(scene);
         stage.show();
