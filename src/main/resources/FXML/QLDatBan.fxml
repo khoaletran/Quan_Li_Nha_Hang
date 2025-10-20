@@ -22,7 +22,7 @@
 <!--<?import javafx.scene.control.*?>-->
 <!--<?import javafx.scene.layout.*?>-->
 
-<BorderPane prefHeight="800" prefWidth="1400" styleClass="root-pane" stylesheets="@../CSS/QLDatBan.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="800" prefWidth="1400" styleClass="root-pane" stylesheets="@../CSS/qldatban.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 <!--    fx:controller="ui.controllers.QuanLiDatBanController"-->
 
     <!-- Sidebar bên trái -->
