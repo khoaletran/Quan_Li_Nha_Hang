@@ -15,100 +15,54 @@
     -fx-alignment: center;
 }
 
-/* Phần danh sách bàn */
-.tables-section {
-    -fx-background-color: #EFEFEF;
-    -fx-background-radius: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
-    -fx-padding: 20;
-}
 
 /* Phần chi tiết */
 .details-section {
-    -fx-background-color: #EFEFEF;
-    -fx-background-radius: 20;
+    -fx-background-color: white;
+    -fx-background-radius: 20 0 0 20;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
     -fx-padding: 20;
 }
+.center-pane{
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+.top {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
 
-/* Tiêu đề section */
-.section-title {
-    -fx-font-size: 20px;
+.list-name {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2B1406;
-    -fx-padding: 0;
-
 }
 
-/* Phần đặt bàn */
-.reservation-section {
-    -fx-padding: 0;
-    -fx-text-alignment: center;
-    -fx-alignment: center;
-}
-
-.reservation-scroll {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.reservation-list {
+/* Hóa đơn */
+.invoice-card {
     -fx-background-color: white;
-    -fx-background-radius: 10;
+    -fx-background-radius: 12;
     -fx-padding: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 1, 2);
 }
 
-/* avatar wrapper to create rounded background + padding */
-.reservation-avatar-wrapper {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-    -fx-alignment: center;
+.invoice-card:hover {
+    -fx-background-color: #f9f4ef;
 }
 
-/* image view (avatar) */
-.reservation-avatar {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 4, 0, 0, 1);
-    /* NOTE: ImageView rounding via clip is better handled in code; this gives a subtle shadow */
+.invoice-scroll{
+    -fx-border-color: #EFEFEF;
 }
-
-/* slightly larger item area and center alignment */
-.reservation-item {
-    -fx-background-color: #fafafa; /* nhẹ hơn để thấy avatar */
-    -fx-background-radius: 8;
-    -fx-padding: 8 10;
-    -fx-spacing: 8;
-    -fx-border-color: #eee;
-    -fx-border-radius: 8;
-    -fx-border-width: 1;
-    -fx-alignment: center-left;
-}
-
-/* keep reservation text styles (same as before) */
-.reservation-code {
-    -fx-font-size: 14px;
+.invoice-id {
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2B1406;
 }
-
-.reservation-phone {
-    -fx-font-size: 12px;
+.invoice-phone {
     -fx-text-fill: #666;
 }
 
-/* small action button style (optional) */
-.small-btn {
-    -fx-background-color: transparent;
-    -fx-border-color: #ddd;
-    -fx-border-radius: 6;
-    -fx-padding: 4 8;
-    -fx-font-size: 12px;
-}
-
-.reservation-item:hover {
-    -fx-background-color: #f0f0f0;
-    -fx-cursor: hand;
-}
 
 
 
@@ -121,7 +75,18 @@
     -fx-text-alignment: center;
     -fx-alignment: center;
 }
+.hbox-section-title{
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 15 15 0 0;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-pref-height: 40;
+}
+.section-title{
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
 
+}
 .key-label{
     -fx-font-size: 13px;
     -fx-font-weight: bold;
@@ -248,7 +213,7 @@
 }
 
 .order-table .column-header {
-    -fx-background-color: #E6763E;
+    -fx-background-color: white;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 12px;
