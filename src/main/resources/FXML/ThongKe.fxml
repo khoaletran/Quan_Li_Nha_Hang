@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="900.0" prefWidth="1400.0" style="-fx-background-color: #D9D9D9;" stylesheets="@../CSS/thongke.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="sidebar_QL.fxml" />
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <GridPane hgap="10.0" styleClass="grid-center" vgap="10.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="55" />
+                <ColumnConstraints percentWidth="45" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="55" vgrow="ALWAYS" />
+                <RowConstraints percentHeight="45" vgrow="ALWAYS" />
+
+            </rowConstraints>
+            <children>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <HBox alignment="CENTER" prefWidth="572.0" styleClass="filter-group">
+                            <HBox alignment="CENTER" prefHeight="37.0" prefWidth="260.0" spacing="8" styleClass="menu-search-box">
+                                <Label prefHeight="20.0" prefWidth="18.0" styleClass="search-icon" text="🔍" />
+                                <TextField promptText="Tìm món ăn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+                            </HBox>
+                            <ComboBox fx:id="comboThang" prefHeight="35.0" prefWidth="130.0" promptText="Tháng">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Hải sản" />
+                                        <String fx:value="Đồ uống" />
+                                        <String fx:value="Món chính" />
+                                        <String fx:value="Tráng miệng" />
+                                    </FXCollections>
+                                </items>
+                                <HBox.margin>
+                                    <Insets left="40.0" />
+                                </HBox.margin>
+                            </ComboBox>
+                            <ComboBox fx:id="comboNam" prefWidth="120.0" promptText="Năm">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Hải sản" />
+                                        <String fx:value="Đồ uống" />
+                                        <String fx:value="Món chính" />
+                                        <String fx:value="Tráng miệng" />
+                                    </FXCollections>
+                                </items>
+                                <HBox.margin>
+                                    <Insets left="40.0" />
+                                </HBox.margin>
+                            </ComboBox>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </HBox>
+                        <VBox styleClass="grid-item" VBox.vgrow="ALWAYS">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                            <children>
+                                <ScrollPane prefWidth="0.0" styleClass="center-scroll-pane">
+                                    <content>
+                                        <VBox prefHeight="420.0" prefWidth="520.0" spacing="20.0" style="-fx-padding: 10;" styleClass="dish-list">
+
+                                            <!-- 1 -->
+                                            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="dish-row">
+                                                <ImageView styleClass="food-image">
+                                                    <image>
+                                                        <Image url="@../IMG/banhmi.png" />
+                                                    </image>
+                                       <HBox.margin>
+                                          <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                       </HBox.margin>
+                                                </ImageView>
+                                                <VBox alignment="CENTER_LEFT" spacing="2">
+                                                    <Label text="Mì Xào Hải Sản" />
+                                                    <Label styleClass="dish-sub" text="Số lượng bán trong tháng: 1000" />
+                                                </VBox>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                    <VBox>
+                                       <children>
+                                                      <Label styleClass="dish-status-red" text="Cần Nhập Hàng Gấp" />
+                                       </children>
+                                    </VBox>
+                                                <HBox alignment="CENTER" style="-fx-background-color: #4CAF50; -fx-background-radius: 0 8 8 0;" styleClass="dish-inc">
+                                                    <children>
+                                                        <Label styleClass="dish-row-label" text="↑10%" />
+                                                    </children>
+                                                </HBox>
+                                            </HBox>
+
+                                            <!-- 2 -->
+                                            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="dish-row">
+                                                <ImageView styleClass="food-image">
+                                                    <image>
+                                                        <Image url="@../IMG/banhmi.png" />
+                                                    </image>
+                                       <HBox.margin>
+                                          <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                       </HBox.margin>
+                                                </ImageView>
+                                                <VBox alignment="CENTER_LEFT" spacing="2">
+                                                    <Label text="Ốc Hương Trứng Muối" />
+                                                    <Label styleClass="dish-sub" text="Số lượng bán trong tháng: 800" />
+                                                </VBox>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                    <VBox>
+                                       <children>
+                                                      <Label styleClass="dish-status-orange" text="Cần Nhập Thêm Hàng" />
+                                       </children>
+                                    </VBox>
+                                                <HBox alignment="CENTER" style="-fx-background-color: #4CAF50; -fx-background-radius: 0 8 8 0;" styleClass="dish-inc">
+                                                    <children>
+                                                        <Label text="↑30%" />
+                                                    </children>
+                                                </HBox>
+                                            </HBox>
+
+                                            <!-- 3 -->
+                                            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="dish-row">
+                                                <ImageView styleClass="food-image">
+                                                    <image>
+                                                        <Image url="@../IMG/banhmi.png" />
+                                                    </image>
+                                       <HBox.margin>
+                                          <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                       </HBox.margin>
+                                                </ImageView>
+                                                <VBox alignment="CENTER_LEFT" spacing="2">
+                                                    <Label text="Hàu Mù Tạt" />
+                                                    <Label styleClass="dish-sub" text="Số lượng bán trong tháng: 10" />
+                                                </VBox>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                    <VBox>
+                                       <children>
+                                                      <Label styleClass="dish-status-yellow" text="Hàng Ít Được Bán" />
+                                       </children>
+                                    </VBox>
+                                                <HBox alignment="CENTER" style="-fx-background-color: #FF5F57; -fx-background-radius: 0 8 8 0;" styleClass="dish-dec">
+                                                    <children>
+                                                        <Label text="↓40%" />
+                                                    </children>
+                                                </HBox>
+                                            </HBox>
+
+                                            <!-- 4 -->
+                                            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="dish-row">
+                                                <ImageView styleClass="food-image">
+                                                    <image>
+                                                        <Image url="@../IMG/banhmi.png" />
+                                                    </image>
+                                       <HBox.margin>
+                                          <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                       </HBox.margin>
+                                                </ImageView>
+                                                <VBox alignment="CENTER_LEFT" spacing="2">
+                                                    <Label text="Cơm Trộn Hàn Quốc" />
+                                                    <Label styleClass="dish-sub" text="Số lượng bán trong tháng: 5" />
+                                                </VBox>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                    <VBox>
+                                       <children>
+                                                      <Label styleClass="dish-status-brown" text="Cần Có KM hoặc Giảm Giá" />
+                                       </children>
+                                    </VBox>
+                                                <HBox alignment="CENTER" style="-fx-background-color: #FF5F57; -fx-background-radius: 0 8 8 0;" styleClass="dish-dec">
+                                                    <children>
+                                                        <Label text="↓10%" />
+                                                    </children>
+                                                </HBox>
+                                            </HBox>
+
+                                            <!-- 5 -->
+                                            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="dish-row">
+                                                <ImageView styleClass="food-image">
+                                                    <image>
+                                                        <Image url="@../IMG/banhmi.png" />
+                                                    </image>
+                                       <HBox.margin>
+                                          <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                       </HBox.margin>
+                                                </ImageView>
+                                                <VBox alignment="CENTER_LEFT" spacing="2">
+                                                    <Label text="Bánh Mì Thịt Nướng" />
+                                                    <Label styleClass="dish-sub" text="Số lượng bán trong tháng: 1500" />
+                                                </VBox>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                    <VBox>
+                                       <children>
+                                                      <Label styleClass="dish-status-green" text="Bán Rất Chạy" />
+                                       </children>
+                                    </VBox>
+                                                <HBox alignment="CENTER" style="-fx-background-color: #4CAF50; -fx-background-radius: 0 8 8 0;" styleClass="dish-inc">
+                                                    <children>
+                                                        <Label text="↑55%" />
+                                                    </children>
+                                                </HBox>
+                                            </HBox>
+
+                                            <!-- 6 -->
+                                            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="dish-row">
+                                                <ImageView styleClass="food-image">
+                                                    <image>
+                                                        <Image url="@../IMG/banhmi.png" />
+                                                    </image>
+                                       <HBox.margin>
+                                          <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                       </HBox.margin>
+                                                </ImageView>
+                                                <VBox alignment="CENTER_LEFT" spacing="2">
+                                                    <Label text="Bánh Mì Chả Cá" />
+                                                    <Label styleClass="dish-sub" text="Số lượng bán trong tháng: 950" />
+                                                </VBox>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                    <VBox>
+                                       <children>
+                                                      <Label styleClass="dish-status-orange" text="Cần Nhập Thêm Hàng" />
+                                       </children>
+                                    </VBox>
+                                                <HBox alignment="CENTER" style="-fx-background-color: #4CAF50; -fx-background-radius: 0 8 8 0;" styleClass="dish-inc">
+                                                    <children>
+                                                        <Label text="↑20%" />
+                                                    </children>
+                                                </HBox>
+                                            </HBox>
+
+                                        </VBox>
+
+
+                                    </content>
+                                </ScrollPane>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+                <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                    <children>
+                        <HBox alignment="CENTER" styleClass="filter-group">
+                            <children>
+                                <ComboBox fx:id="comboNgay11" prefHeight="35.0" prefWidth="130.0" promptText="Ngày">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Hải sản" />
+                                            <String fx:value="Đồ uống" />
+                                            <String fx:value="Món chính" />
+                                            <String fx:value="Tráng miệng" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                                <ComboBox fx:id="comboThang1" prefHeight="35.0" prefWidth="130.0" promptText="Tháng">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Hải sản" />
+                                            <String fx:value="Đồ uống" />
+                                            <String fx:value="Món chính" />
+                                            <String fx:value="Tráng miệng" />
+                                        </FXCollections>
+                                    </items>
+                                    <HBox.margin>
+                                        <Insets left="40.0" />
+                                    </HBox.margin>
+                                </ComboBox>
+                                <ComboBox fx:id="comboNam1" prefWidth="120.0" promptText="Năm">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Hải sản" />
+                                            <String fx:value="Đồ uống" />
+                                            <String fx:value="Món chính" />
+                                            <String fx:value="Tráng miệng" />
+                                        </FXCollections>
+                                    </items>
+                                    <HBox.margin>
+                                        <Insets left="40.0" />
+                                    </HBox.margin>
+                                </ComboBox>
+                            </children>
+                        </HBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" styleClass="grid-item" VBox.vgrow="ALWAYS">
+                            <children>
+                                <HBox styleClass="info-row" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <VBox alignment="TOP_CENTER" styleClass="info-box">
+                                            <children>
+                                                <Label text="DOANH THU" />
+                                    <AnchorPane prefHeight="132.0" prefWidth="150.0">
+                                       <children>
+                                                      <Label layoutX="14.0" layoutY="54.0" styleClass="money-label" text="15.500.000 VND" />
+                                       </children>
+                                    </AnchorPane>
+                                            </children>
+                                        </VBox>
+                                        <VBox alignment="TOP_CENTER" styleClass="info-box">
+                                            <children>
+                                                <Label text="TỔNG HÓA ĐƠN" />
+                                    <AnchorPane prefHeight="132.0" prefWidth="150.0">
+                                       <children>
+                                          <Label layoutX="66.0" layoutY="54.0" styleClass="money-label" text="36" />
+                                       </children>
+                                    </AnchorPane>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+
+                                <HBox styleClass="info-row" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <VBox alignment="TOP_CENTER" styleClass="info-box">
+                                            <children>
+                                                <Label text="DOANH THU So Với Tháng Trước" textAlignment="CENTER" wrapText="true" />
+                                    <AnchorPane prefHeight="119.0" prefWidth="150.0">
+                                       <children>
+                                                      <Label layoutX="19.0" layoutY="47.0" styleClass="money-label" text="2.500.000 VND" />
+                                       </children>
+                                    </AnchorPane>
+                                            </children>
+                                        </VBox>
+                                        <VBox alignment="TOP_CENTER" styleClass="info-box">
+                                            <children>
+                                                <Label text="KHU VỰC" />
+
+                                            </children>
+                                        </VBox>
+
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" spacing="10" styleClass="grid-item-2" GridPane.rowIndex="1">
+                    <children>
+                        <!-- Tiêu đề riêng -->
+                        <Label styleClass="chart-title" text="Doanh thu theo giờ trong ngày" />
+
+                        <!-- Biểu đồ đường -->
+                        <LineChart createSymbols="true" legendVisible="false" prefHeight="250" prefWidth="400">
+                            <xAxis>
+                                <NumberAxis label="Giờ trong ngày" lowerBound="0" tickUnit="1" upperBound="24" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Doanh thu (triệu đồng)" />
+                            </yAxis>
+                        </LineChart>
+                    </children>
+                </VBox>
+
+                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10" styleClass="grid-item-2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+
+                    <children>
+                        <!-- Tiêu đề riêng -->
+                        <Label styleClass="chart-title" text="Số lượng đơn hàng theo ngày trong tuần" />
+
+                        <!-- Biểu đồ cột -->
+                        <BarChart barGap="3" categoryGap="10" legendVisible="false" prefHeight="250" prefWidth="400">
+                            <xAxis>
+                                <CategoryAxis label="Thứ" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Số lượng" />
+                            </yAxis>
+                        </BarChart>
+                    </children>
+                </VBox>
+
+            </children>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+        </GridPane>
+    </center>
+</BorderPane>

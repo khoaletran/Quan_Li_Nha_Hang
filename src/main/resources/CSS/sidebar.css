@@ -54,8 +54,6 @@
 
 .menu-item:hover {
     -fx-background-color: #E6763E;
-    -fx-scale-x: 1.05; /* phóng to 5% */
-    -fx-scale-y: 1.05;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
     -fx-cursor: hand;
     -fx-background-radius: 32;

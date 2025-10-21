@@ -19,8 +19,8 @@
 
 /* Hộp chứa các nhóm điều kiện */
 .filter-box {
-    -fx-spacing: 60;
-    -fx-padding: 10;
+    -fx-spacing: 20;
+    -fx-padding: 0 20;
 }
 
 /* Mỗi nhóm (VBox) chứa 2 dòng label + input */

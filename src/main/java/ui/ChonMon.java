@@ -10,7 +10,7 @@ public class ChonMon extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ChonMon.fxml"));
         Scene scene = new Scene(loader.load(), AppConstants.WINDOW_WIDTH, AppConstants.WINDOW_HEIGHT); // Tăng kích thước để không bị tràn
-        scene.getStylesheets().add(getClass().getResource("/CSS/ChonMon.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/CSS/chonmon.css").toExternalForm());
         stage.setTitle(AppConstants.APP_TITLE + " - Chọn Món");
         stage.setScene(scene);
         stage.show();

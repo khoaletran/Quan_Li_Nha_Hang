@@ -1,0 +1,153 @@
+.menu-bg {
+    -fx-background-color: #D9D9D9;
+
+}
+
+.menu-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+/* Thanh tìm kiếm và filter */
+.menu-search-container {
+    -fx-padding: 10 20;
+    -fx-background-color: white;
+    -fx-alignment: center-left;
+    -fx-background-radius: 20 20 28 28;
+}
+
+.menu-search-box {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-padding: 6 10;
+}
+
+.search-field {
+    -fx-background-radius: 20 20 28 28;
+    -fx-background-color: white;
+}
+
+.search-icon {
+    -fx-font-size: 14px;
+}
+
+.combo-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #fcbf90;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.combo-box:hover {
+    -fx-border-color: #f9a36e;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #ffe3cc;
+    -fx-background-radius: 8;
+}
+
+
+.menu-add-btn {
+    -fx-background-color: #ff8c66;
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-padding: 6 14;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+.menu-add-btn:hover {
+    -fx-background-color: #ff7a4d;
+}
+
+/* Danh sách món ăn */
+.menu-scroll {
+    -fx-background-color: transparent;
+}
+
+.menu-grid {
+    -fx-padding: 10;
+    -fx-background-color: #EFEFEF;
+    -fx-alignment: center;
+}
+
+.menu-item {
+    -fx-background-color: white;
+    -fx-padding: 16 20 16 20;
+    -fx-background-radius: 12;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 6, 0, 0, 3);
+    -fx-cursor: hand;
+    -fx-pref-width: 200; /* dài hơn một chút */
+    -fx-spacing: 15;
+}
+
+.menu-item:hover {
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
+}
+
+.item-info {
+    -fx-alignment: center;
+    -fx-background-color: #efefef;
+    -fx-spacing: 20;
+    -fx-padding: 10;
+    -fx-pref-width: 100%;
+    -fx-background-radius: 20;
+}
+
+
+.item-group {
+    -fx-alignment: center;
+}
+
+.item-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.item-detail {
+    -fx-font-size: 11px;
+    -fx-text-fill: #E6763E;
+}
+
+
+.menu-image {
+    -fx-fit-width: 240;
+    -fx-fit-height: 200;
+}
+
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 8;
+    -fx-max-height: 60px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #c1915f;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
+
