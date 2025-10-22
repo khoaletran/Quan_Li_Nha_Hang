@@ -11,6 +11,7 @@ module com.example.quan_li_nha_hang {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.desktop;
+    requires java.sql;
 
 
     opens ui to javafx.fxml, javafx.graphics;
