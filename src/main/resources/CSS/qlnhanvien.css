@@ -11,12 +11,23 @@
 .employee-details-section{
     -fx-alignment: center;
     -fx-text-alignment: center;
+    -fx-background-color: white;
+    -fx-background-radius: 32 0 32 0;
+    -fx-padding: 20 0 0 0;
 }
 .main-title {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2B1406;
-    -fx-padding: 30 0 10 0;
+    -fx-text-fill: white;
+    -fx-padding: 10;
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 20;
+    -fx-alignment: center;
+}
+
+.center-p{
+    -fx-background-color: #efefef;
+    -fx-background-radius: 20;
 }
 
 /* ===== TÌM KIẾM ===== */
@@ -26,9 +37,7 @@
 
 .search-field {
     -fx-background-radius: 20;
-    -fx-padding: 20 20 28 20;
-    -fx-border-color: #E6763E;
-    -fx-border-radius: 20;
+    -fx-padding: 20 20 28 28;
     -fx-background-color: white;
 }
 
@@ -59,8 +68,16 @@
 }
 
 /* Card món nhỏ gọn để vừa 3 cột x 2 hàng */
+.menu-flowpane {
+    -fx-alignment: center;
+    -fx-hgap: 30;
+    -fx-vgap: 30;
+    -fx-padding: 20;
+    -fx-pref-wrap-length: 500; /* đủ cho 2 card */
+}
+
 .menu-card {
-    -fx-pref-width: 250px;
+    -fx-pref-width: 220px;
     -fx-pref-height: 220px;
     -fx-background-color: white;
     -fx-background-radius: 12;
@@ -71,6 +88,13 @@
     -fx-border-color: #ecf0f1;
     -fx-border-width: 1px;
 }
+
+.menu-card ImageView {
+    -fx-fit-width: 140px;
+    -fx-fit-height: 120px;
+}
+
+
 
 .menu-card ImageView {
     -fx-fit-width: 150px;
@@ -235,6 +259,7 @@
     -fx-padding: 20;
     -fx-alignment: center;
     -fx-text-alignment: center;
+    -fx-spacing: 40;
 }
 .action-buttons {
     -fx-padding: 10 0 0 0;
@@ -266,31 +291,30 @@
 .delete-btn:hover {
     -fx-background-color: #e52c2c;
 }
-/* Scrollbar styling */
-.employee-scroll .scroll-bar:vertical {
+
+.scroll-bar:vertical {
     -fx-pref-width: 12px;
     -fx-background-color: transparent;
 }
 
-.employee-scroll .scroll-bar:vertical .track {
+.scroll-bar:vertical .track {
     -fx-background-color: transparent;
     -fx-background-radius: 16;
     -fx-padding: 30;
 }
 
-.employee-scroll .scroll-bar:vertical .thumb {
+.scroll-bar:vertical .thumb {
     -fx-background-color: #E6763E;
     -fx-background-radius: 8;
     -fx-max-height: 60px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
 }
 
-.employee-scroll .scroll-bar:vertical .thumb:hover {
+.scroll-bar:vertical .thumb:hover {
     -fx-background-color: #c1915f;
 }
-
-.employee-scroll .scroll-bar .increment-button,
-.employee-scroll .scroll-bar .decrement-button {
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
     -fx-opacity: 0;
     -fx-pref-height: 0;
     -fx-pref-width: 0;

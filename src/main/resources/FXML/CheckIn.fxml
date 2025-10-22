@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="1000" prefWidth="1400" stylesheets="@../CSS/checkin.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="800" prefWidth="1400" stylesheets="@../CSS/checkin.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
 
     <!-- CENTER -->
@@ -404,18 +404,18 @@
     <!-- RIGHT -->
     <right>
         <VBox styleClass="right-out">
-            <VBox styleClass="right">
+            <VBox prefHeight="1014.0" prefWidth="347.0" styleClass="right">
                 <VBox prefHeight="651.0" prefWidth="327.0" spacing="10.0" styleClass="right-sidebar" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
 
                     <!-- Tiêu đề -->
-                    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="327.0" style="-fx-background-color: #E6763E; -fx-background-radius: 20;">
+                    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="327.0" style="-fx-background-color: #E6763E; -fx-background-radius: 20; -fx-padding: 10;">
                         <Label styleClass="sidebar-title" text="Thông Tin Đặt Bàn" />
                         <VBox.margin>
                             <Insets top="10" />
                         </VBox.margin>
                     </HBox>
 
-                    <VBox prefWidth="327.0" style="-fx-background-color: #F3F3F3; -fx-background-radius: 0 0 10 10" VBox.vgrow="ALWAYS">
+                    <VBox prefWidth="327.0" style="-fx-background-color: White; -fx-background-radius: 0 0 10 10;" VBox.vgrow="ALWAYS">
                         <children>
                             <!-- Thông tin khách hàng -->
                             <VBox prefWidth="307.0" spacing="12" styleClass="customer-info">

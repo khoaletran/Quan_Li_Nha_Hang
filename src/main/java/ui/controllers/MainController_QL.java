@@ -9,38 +9,28 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
-public class MainController_NV {
+public class MainController_QL {
 
-    @FXML
-    private StackPane mainContent;
-
-    @FXML
-    private SidebarController_NV sidebar_NVController;
+    @FXML private StackPane mainContent;
+    @FXML private SidebarController_QL sidebar_QLController;
 
     @FXML
     public void initialize() {
-        // Gắn controller sidebar
-        if (sidebar_NVController != null) {
-            sidebar_NVController.setMainController(this);
+        if (sidebar_QLController != null) {
+            sidebar_QLController.setMainController(this);
         }
-        loadDefaultView();
-    }
-
-    private void loadDefaultView() {
+        // Hiển thị Dashboard mặc định
         setCenterContent("/FXML/DashBoard.fxml");
     }
 
     public void setCenterContent(String fxmlPath) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(fxmlPath));
-
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
             fadeIn.setFromValue(0);
             fadeIn.setToValue(1);
-
             mainContent.getChildren().setAll(node);
             fadeIn.play();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:controller="ui.controllers.MainController_QL"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="1400" prefHeight="800"
+            style="-fx-background-color: #D9D9D9;">
+
+    <left>
+        <fx:include source="sidebar_QL.fxml" fx:id="sidebar_QL" />
+    </left>
+
+
+    <center>
+        <StackPane fx:id="mainContent"/>
+    </center>
+
+</BorderPane>

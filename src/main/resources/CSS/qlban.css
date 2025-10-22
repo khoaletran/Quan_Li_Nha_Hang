@@ -71,21 +71,26 @@
 }
 
 .menu-grid {
-    -fx-padding: 10;
+    -fx-padding: 20;
     -fx-background-color: #EFEFEF;
     -fx-alignment: center;
+    -fx-hgap: 30;
+    -fx-vgap: 30;
 }
 
 .menu-item {
     -fx-background-color: white;
-    -fx-padding: 16 20 16 20;
+    -fx-padding: 12 14 12 14;
     -fx-background-radius: 12;
     -fx-alignment: center;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 6, 0, 0, 3);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
     -fx-cursor: hand;
-    -fx-pref-width: 200; /* dài hơn một chút */
-    -fx-spacing: 15;
+    -fx-pref-width: 220;   /* mỗi card rộng 220px */
+    -fx-pref-height: 220;  /* cao 220px */
+    -fx-spacing: 10;
 }
+
+
 
 .menu-item:hover {
     -fx-scale-x: 1.03;
@@ -117,11 +122,12 @@
     -fx-text-fill: #E6763E;
 }
 
-
 .menu-image {
-    -fx-fit-width: 240;
-    -fx-fit-height: 200;
+    -fx-fit-width: 180;
+    -fx-fit-height: 120;
+    -fx-preserve-ratio: true;
 }
+
 
 .scroll-bar:vertical {
     -fx-pref-width: 12px;

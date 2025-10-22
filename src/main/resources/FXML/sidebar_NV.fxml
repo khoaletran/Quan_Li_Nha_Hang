@@ -41,7 +41,7 @@
 
     <!-- ================= PHẦN MENU ================= -->
     <center>
-        <VBox fx:id="menuContainer" alignment="TOP_CENTER" spacing="8">
+        <VBox fx:id="menuContainer" alignment="TOP_CENTER" spacing="8" style="-fx-spacing: 10; -fx-padding: 10;">
 
             <!-- DASHBOARD -->
             <Button fx:id="btnDashboard" onAction="#handleMenuAction" styleClass="menu-item" text="  🏠  DASHBOARD" />
