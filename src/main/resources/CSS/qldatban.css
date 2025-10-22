@@ -77,14 +77,16 @@
 }
 .hbox-section-title{
     -fx-background-color: #E6763E;
-    -fx-background-radius: 15 15 0 0;
+    -fx-background-radius: 15;
     -fx-alignment: center;
     -fx-text-alignment: center;
     -fx-pref-height: 40;
+    -fx-padding: 10;
 }
 .section-title{
     -fx-font-size: 24px;
     -fx-font-weight: bold;
+    -fx-text-fill: white;
 
 }
 .key-label{
@@ -113,13 +115,15 @@
 }
 
 /* Thanh tìm kiếm */
+
 .search-bar {
     -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
     -fx-border-color: #ddd;
     -fx-border-radius: 8;
-    -fx-background-radius: 8;
     -fx-padding: 4 8;
 }
+
 
 .search-field {
     -fx-background-color: transparent;
@@ -308,4 +312,17 @@
     -fx-opacity: 0;
     -fx-pref-height: 0;
     -fx-pref-width: 0;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
 }

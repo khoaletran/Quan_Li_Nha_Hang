@@ -134,6 +134,10 @@
     -fx-background-color: #FFE6D1;
 }
 
+.sub-btn.selected {
+    -fx-background-color: #FFE6D1;
+}
+
 .scroll-bar:vertical {
     -fx-pref-width: 12px;
     -fx-background-color: transparent;

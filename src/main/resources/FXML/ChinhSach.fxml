@@ -22,10 +22,6 @@
 
 <BorderPane prefHeight="800" prefWidth="1400" styleClass="root-pane" stylesheets="@../CSS/chinhsach.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.chinhSachController">
 
-    <!-- Sidebar -->
-    <left>
-        <fx:include source="sidebar_NV.fxml" />
-    </left>
 
     <!-- Main content -->
     <center>

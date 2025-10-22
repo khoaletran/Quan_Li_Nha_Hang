@@ -21,11 +21,6 @@
 <?import javafx.scene.layout.Region?>
 <BorderPane prefHeight="800" prefWidth="1400" styleClass="root-pane" stylesheets="@../CSS/qlnhanvien.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
-    <!-- Sidebar bên trái -->
-    <left>
-        <fx:include source="sidebar_QL.fxml" />
-    </left>
-
     <!-- Nội dung chính ở giữa -->
     <center>
         <HBox spacing="20" styleClass="main-content" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
