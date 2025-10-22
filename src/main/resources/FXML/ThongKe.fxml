@@ -310,7 +310,7 @@
                                                 <Label text="DOANH THU" />
                                     <AnchorPane prefHeight="132.0" prefWidth="150.0">
                                        <children>
-                                                      <Label layoutX="14.0" layoutY="54.0" styleClass="money-label" text="15.500.000 VND" />
+                                                      <Label layoutX="28.0" layoutY="54.0" styleClass="money-label" text="15.500.000 VND" />
                                        </children>
                                     </AnchorPane>
                                             </children>
@@ -320,7 +320,7 @@
                                                 <Label text="TỔNG HÓA ĐƠN" />
                                     <AnchorPane prefHeight="132.0" prefWidth="150.0">
                                        <children>
-                                          <Label layoutX="66.0" layoutY="54.0" styleClass="money-label" text="36" />
+                                          <Label layoutX="80.0" layoutY="53.0" styleClass="money-label" text="36" />
                                        </children>
                                     </AnchorPane>
                                             </children>
@@ -332,10 +332,10 @@
                                     <children>
                                         <VBox alignment="TOP_CENTER" styleClass="info-box">
                                             <children>
-                                                <Label text="DOANH THU So Với Tháng Trước" textAlignment="CENTER" wrapText="true" />
+                                                <Label prefHeight="53.0" prefWidth="180.0" style="-fx-wrap-text: true;" text="DOANH THU So Với Tháng Trước" textAlignment="CENTER" wrapText="true" />
                                     <AnchorPane prefHeight="119.0" prefWidth="150.0">
                                        <children>
-                                                      <Label layoutX="19.0" layoutY="47.0" styleClass="money-label" text="2.500.000 VND" />
+                                                      <Label layoutX="34.0" layoutY="47.0" styleClass="money-label" text="2.500.000 VND" />
                                        </children>
                                     </AnchorPane>
                                             </children>

@@ -149,8 +149,8 @@
     -fx-background-color: white;
     -fx-background-radius: 20;
     -fx-padding: 5 ;
-    -fx-pref-width: 160;
-    -fx-pref-height: 160;
+    -fx-pref-width: 190;
+    -fx-pref-height: 190;
     -fx-spacing: 6;
 }
 .info-box > Label{
@@ -167,6 +167,7 @@
 .money-label {
     -fx-font-weight: bold;
     -fx-font-size: 16px;
+    -fx-alignment: center;
     -fx-text-fill: #28a745; /* ví dụ: xanh lá cho tăng doanh thu */
 }
 .chart-title {
