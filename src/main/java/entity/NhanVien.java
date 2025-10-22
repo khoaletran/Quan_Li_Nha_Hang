@@ -18,7 +18,7 @@ public class NhanVien {
     private boolean trangThai;
     private String matKhau;
 
-    public NhanVien(String maNV, String matKhau, boolean trangThai, LocalDate ngayVaoLam, boolean quanLi, boolean gioiTinh, String sdt, String tenNV) {
+    public NhanVien(String maNV, String tenNV, String sdt, boolean gioiTinh, boolean quanLi, LocalDate ngayVaoLam, boolean trangThai, String matKhau) {
         this.maNV = maNV;
         this.matKhau = matKhau;
         this.trangThai = trangThai;

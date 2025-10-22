@@ -1,17 +1,20 @@
 package ui.controllers;
 
+import entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import javax.swing.*;
 import java.io.IOException;
 
 public class SidebarController_QL {
@@ -26,9 +29,16 @@ public class SidebarController_QL {
     @FXML private Button btnThongKe;
     @FXML private Button btnHoTro;
     @FXML private Button btnDangXuat;
+    @FXML private Label lblTenNV;
+    @FXML private Label lblChucVu;
 
     private MainController_QL mainController;
     private Button currentSelected = null;
+
+    public void setThongTinNhanVien(NhanVien nv) {
+        lblTenNV.setText(nv.getTenNV());
+        lblChucVu.setText(nv.isQuanLi() ? "Quản Lí" : "Nhân Viên");
+    }
 
     // Nhận tham chiếu từ MainController
     public void setMainController(MainController_QL controller) {

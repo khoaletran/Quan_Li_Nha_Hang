@@ -24,15 +24,15 @@
                             <fill>
                                 <ImagePattern>
                                     <image>
-                                        <Image url="@../IMG/avatar.png" />
+                                        <Image url="@../IMG/icon/man.png" />
                                     </image>
                                 </ImagePattern>
                             </fill>
                         </Circle>
                     </StackPane>
                     <VBox alignment="CENTER_LEFT" spacing="5">
-                        <Label styleClass="username" text="Đỗ Minh Quân" />
-                        <Label styleClass="role" text="Quản Lí" />
+                        <Label fx:id="lblTenNV" styleClass="username" text="Tên nhân viên" />
+                        <Label fx:id="lblChucVu" styleClass="role" text="Chức vụ" />
                     </VBox>
                 </children>
             </HBox>

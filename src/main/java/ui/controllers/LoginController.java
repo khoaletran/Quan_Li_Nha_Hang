@@ -1,5 +1,7 @@
 package ui.controllers;
 
+import dao.DAO_NhanVien;
+import entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,8 +13,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class LoginController {
+
 
     @FXML private VBox loginPane;
     @FXML private VBox forgotPane;
@@ -21,6 +25,10 @@ public class LoginController {
     @FXML private Button minimizeBtn;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+
+    private boolean DN = false;
+
+    ArrayList<NhanVien> listNV = DAO_NhanVien.getAllNhanVien();
 
     // Hiệu ứng fade mượt
     private void switchPane(VBox hide, VBox show) {
@@ -77,37 +85,50 @@ public class LoginController {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
-        if (username.equals("NV0001") && password.equals("1")) {
-            try {
-                // Đóng màn hình đăng nhập
-                Stage currentStage = (Stage) usernameField.getScene().getWindow();
-                currentStage.close();
+        System.out.println("DN");
 
-                // Mở giao diện chính (class MainNV)
-                ui.MainQL mainQL = new ui.MainQL();
-                Stage stage = new Stage();
-                mainQL.start(stage);
+        for (NhanVien nv : listNV) {
+            System.out.println(nv.toString());
+            if (nv.getMaNV().equals(username) && nv.getMatKhau().equals(password)) {
+                if(nv.isQuanLi()) {
+                    try {
+                        // Đóng màn hình đăng nhập
+                        Stage currentStage = (Stage) usernameField.getScene().getWindow();
+                        currentStage.close();
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                        // Mở giao diện chính (class MainNV)
+                        ui.MainQL mainQL = new ui.MainQL();
+                        Stage stage = new Stage();
+                        mainQL.setNhanVienDangNhap(nv);
+                        mainQL.start(stage);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    DN = true;
+                    break;
+                }
+                else {
+                    try {
+                        Stage currentStage = (Stage) usernameField.getScene().getWindow();
+                        currentStage.close();
+
+                        ui.MainNV main = new ui.MainNV();
+                        Stage stage = new Stage();
+                        main.setNhanVienDangNhap(nv);
+                        main.start(stage);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    DN = true;
+                    break;
+                }
             }
-        }
-        else if (username.equals("NV0002") && password.equals("1")) {
-            try {
-                // Đóng màn hình đăng nhập
-                Stage currentStage = (Stage) usernameField.getScene().getWindow();
-                currentStage.close();
 
-                // Mở giao diện chính (class MainNV)
-                ui.MainNV mainNV = new ui.MainNV();
-                Stage stage = new Stage();
-                mainNV.start(stage);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-        else {
+
+        if (!DN){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Đăng nhập thất bại");
             alert.setHeaderText(null);

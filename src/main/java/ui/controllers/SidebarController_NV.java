@@ -1,8 +1,10 @@
 package ui.controllers;
 
+import entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -21,10 +23,17 @@ public class SidebarController_NV {
     @FXML private Button btnTraCuu;
     @FXML private Button btnHoTro;
     @FXML private Button btnKetCa;
+    @FXML private Label lblTenNV;
+    @FXML private Label lblChucVu;
 
     private MainController_NV mainController;
     private Button currentMainSelected = null;  // menu lớn
     private Button currentSubSelected = null;   // menu con
+
+    public void setThongTinNhanVien(NhanVien nv) {
+        lblTenNV.setText(nv.getTenNV());
+        lblChucVu.setText(nv.isQuanLi() ? "Quản Lí" : "Nhân Viên");
+    }
 
     public void setMainController(MainController_NV controller) {
         this.mainController = controller;

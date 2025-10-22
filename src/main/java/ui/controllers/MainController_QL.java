@@ -14,6 +14,11 @@ public class MainController_QL {
     @FXML private StackPane mainContent;
     @FXML private SidebarController_QL sidebar_QLController;
 
+    public SidebarController_QL getsidebar_QLController() {
+        return sidebar_QLController ;
+    }
+
+
     @FXML
     public void initialize() {
         if (sidebar_QLController != null) {

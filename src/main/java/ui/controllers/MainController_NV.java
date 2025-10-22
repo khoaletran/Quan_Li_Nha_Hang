@@ -11,11 +11,13 @@ import java.io.IOException;
 
 public class MainController_NV {
 
-    @FXML
-    private StackPane mainContent;
+    @FXML private StackPane mainContent;
+    @FXML private SidebarController_NV sidebar_NVController;
 
-    @FXML
-    private SidebarController_NV sidebar_NVController;
+
+    public SidebarController_NV getSidebarController() {
+        return sidebar_NVController;
+    }
 
     @FXML
     public void initialize() {

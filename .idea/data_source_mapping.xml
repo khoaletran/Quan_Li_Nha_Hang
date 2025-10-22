@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/src/data/DataBase.sql" value="ea5a6fff-f5e2-4748-90ad-4d345525a3b4" />
+    <file url="file://$PROJECT_DIR$/src/main/java/dao/DAO_NhanVien.java" value="ea5a6fff-f5e2-4748-90ad-4d345525a3b4" />
+  </component>
+</project>

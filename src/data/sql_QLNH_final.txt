@@ -1,6 +1,5 @@
 -- =========================================
 --  TẠO CƠ SỞ DỮ LIỆU QUÁN CAFE / NHÀ HÀNG
---  Tác giả: Nguyễn Hà Nhật Khanh
 -- =========================================
 
 CREATE DATABASE QL_QuanLiNhaHang_Nhom02;
