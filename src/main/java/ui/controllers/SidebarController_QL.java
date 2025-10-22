@@ -2,9 +2,17 @@ package ui.controllers;
 
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+
+import java.io.IOException;
 
 public class SidebarController_QL {
 
@@ -60,13 +68,15 @@ public class SidebarController_QL {
             mainController.setCenterContent("/FXML/HoTro.fxml");
             setSelected(btnHoTro);
         } else if (source == btnDangXuat) {
-            mainController.setCenterContent("/FXML/DangNhap.fxml");
+            ui.DangXuat.showDialog();
         }
+
+
     }
 
     // Làm sáng nút đang chọn
     private void setSelected(Button btn) {
-        btn.getStyleClass().add("selected");
+        btn.getStyleClass().add("selectead");
         currentSelected = btn;
     }
 

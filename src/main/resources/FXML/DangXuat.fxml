@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="280" prefWidth="420"
+            fx:controller="ui.controllers.DangXuatController"
+            style="-fx-background-color: #fff7f0; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 15, 0, 0, 5);" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+    <VBox alignment="CENTER" spacing="18" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+
+        <!-- Icon -->
+        <ImageView fitHeight="100" fitWidth="100">
+            <image>
+                <Image url="@../IMG/logo_1.png" />
+            </image>
+        </ImageView>
+
+        <!-- Title -->
+        <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #E6763E;" text="Đăng xuất khỏi hệ thống?" />
+
+        <!-- Message -->
+        <Label maxWidth="363.0" prefHeight="23.0" prefWidth="363.0" style="-fx-text-fill: #3b3b3b; -fx-font-size: 14px; -fx-text-alignment: center;" text="Bạn có chắc chắn muốn thoát ứng dụng CrabKing không?" wrapText="true" />
+
+        <!-- Buttons -->
+        <HBox alignment="CENTER" spacing="20">
+            <Button fx:id="btnCancel" style="-fx-background-color: #d6d6d6; -fx-text-fill: #333; -fx-font-size: 15px; -fx-background-radius: 25; -fx-pref-width: 110; -fx-pref-height: 40;" text="Huỷ" />
+            <Button fx:id="btnConfirm" style="-fx-background-color: #E6763E; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15px; -fx-background-radius: 25; -fx-pref-width: 130; -fx-pref-height: 40;" text="Đăng xuất" />
+        </HBox>
+    </VBox>
+</AnchorPane>

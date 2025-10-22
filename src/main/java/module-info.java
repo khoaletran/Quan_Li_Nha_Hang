@@ -10,6 +10,7 @@ module com.example.quan_li_nha_hang {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.desktop;
 
 
     opens ui to javafx.fxml, javafx.graphics;
