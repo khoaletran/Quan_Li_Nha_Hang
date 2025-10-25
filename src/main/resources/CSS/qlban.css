@@ -1,6 +1,5 @@
 .menu-bg {
     -fx-background-color: #D9D9D9;
-
 }
 
 .menu-title {
@@ -127,7 +126,11 @@
     -fx-fit-height: 120;
     -fx-preserve-ratio: true;
 }
-
+.scroll-pane > .viewport {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+}
 
 .scroll-bar:vertical {
     -fx-pref-width: 12px;
