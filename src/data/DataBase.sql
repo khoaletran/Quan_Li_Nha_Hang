@@ -1,0 +1,199 @@
+﻿-- =========================================
+--  TẠO CƠ SỞ DỮ LIỆU QUÁN CAFE / NHÀ HÀNG
+-- =========================================
+
+CREATE DATABASE QL_NhaHangCrabKing_Nhom02;
+GO
+USE QL_NhaHangCrabKing_Nhom02;
+GO
+
+-- Tạo login ở cấp server
+CREATE LOGIN nhanvien_app
+WITH PASSWORD = '123456',
+CHECK_POLICY = OFF;  -- bỏ kiểm tra độ mạnh mật khẩu (cho dễ test)
+GO
+
+-- Gán quyền cho login vào database
+USE QL_NhaHangCrabKing_Nhom02;
+GO
+
+-- Tạo user tương ứng trong database
+CREATE USER nhanvien_app FOR LOGIN nhanvien_app;
+GO
+
+-- Cấp quyền thao tác cơ bản (SELECT, INSERT, UPDATE, DELETE)
+EXEC sp_addrolemember 'db_datareader', 'nhanvien_app';
+EXEC sp_addrolemember 'db_datawriter', 'nhanvien_app';
+GO
+
+-- =========================
+-- BẢNG HẠNG KHÁCH HÀNG
+-- =========================
+CREATE TABLE HangKhachHang (
+    maHang NVARCHAR(6) PRIMARY KEY,
+    diemHang INT,
+    giaGiam INT,
+    moTa NVARCHAR(200)
+);
+
+-- =========================
+-- BẢNG KHÁCH HÀNG
+-- =========================
+CREATE TABLE KhachHang (
+    maKH NVARCHAR(6) PRIMARY KEY,
+    maHang NVARCHAR(6) FOREIGN KEY REFERENCES HangKhachHang(maHang),
+    tenKH NVARCHAR(50),
+    sdt NVARCHAR(10),
+    gioiTinh BIT,
+    diemTichLuy INT
+);
+
+-- =========================
+-- BẢNG NHÂN VIÊN
+-- =========================
+CREATE TABLE NhanVien (
+    maNV NVARCHAR(6) PRIMARY KEY,
+    tenNV NVARCHAR(50),
+    sdt NVARCHAR(50),
+    gioiTinh BIT,
+    quanLi BIT,
+    ngayVaoLam DATE,
+    trangThai BIT,
+    matKhau NVARCHAR(50)
+);
+
+-- =========================
+-- BẢNG LOẠI BÀN
+-- =========================
+CREATE TABLE LoaiBan (
+    maLoaiBan NVARCHAR(6) PRIMARY KEY,
+    tenLoaiBan NVARCHAR(50),
+    soLuong INT
+);
+
+-- =========================
+-- BẢNG KHU VỰC
+-- =========================
+CREATE TABLE KhuVuc (
+    maKhuVuc NVARCHAR(6) PRIMARY KEY,
+    tenKhuVuc NVARCHAR(50)
+);
+
+-- =========================
+-- BẢNG BÀN
+-- =========================
+CREATE TABLE Ban (
+    maBan NVARCHAR(6) PRIMARY KEY,
+    trangThai BIT,
+    maLoaiBan NVARCHAR(6) FOREIGN KEY REFERENCES LoaiBan(maLoaiBan),
+    maKhuVuc NVARCHAR(6) FOREIGN KEY REFERENCES KhuVuc(maKhuVuc)
+);
+
+-- =========================
+-- BẢNG SỰ KIỆN
+-- =========================
+CREATE TABLE SuKien (
+    maSK NVARCHAR(6) PRIMARY KEY,
+    tenSK NVARCHAR(50),
+    moTa NVARCHAR(200),
+    gia FLOAT
+);
+
+-- =========================
+-- BẢNG THỜI GIAN ĐỔI BÀN
+-- =========================
+CREATE TABLE ThoiGianDoiBan (
+    maTGDB NVARCHAR(6) PRIMARY KEY,
+    loaiDatBan BIT,
+    thoiGian INT
+);
+
+-- =========================
+-- BẢNG CỌC
+-- =========================
+CREATE TABLE Coc (
+    maCoc NVARCHAR(6) PRIMARY KEY,
+    loaiCoc BIT,
+    phanTramCoc INT,
+    soTienCoc FLOAT
+);
+
+-- =========================
+-- BẢNG LOẠI MÓN
+-- =========================
+CREATE TABLE LoaiMon (
+    maLoaiMon NVARCHAR(6) PRIMARY KEY,
+    tenLoaiMon NVARCHAR(50),
+    moTa NVARCHAR(200)
+);
+
+-- =========================
+-- BẢNG PHẦN TRĂM GIÁ BÁN
+-- =========================
+CREATE TABLE PhanTramGiaBan (
+    maPTGB NVARCHAR(6) PRIMARY KEY,
+    maLoaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
+    phanTramLoi INT,
+    ngayApDung DATE
+);
+
+-- =========================
+-- BẢNG KHUYẾN MÃI
+-- =========================
+CREATE TABLE KhuyenMai (
+    maKM NVARCHAR(6) PRIMARY KEY,
+    soLuong INT,
+    phanTramGiamGia INT,
+    ngayPhatHanh DATE,
+    ngayKetThuc DATE
+);
+
+-- =========================
+-- BẢNG MÓN
+-- =========================
+CREATE TABLE Mon (
+    maMon NVARCHAR(6) PRIMARY KEY,
+    tenMon NVARCHAR(50),
+    moTa NVARCHAR(50),
+    hinhAnh NVARCHAR(50),
+    giaGoc FLOAT,
+    giaBan FLOAT,
+    loaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
+    maPTGB NVARCHAR(6) FOREIGN KEY REFERENCES PhanTramGiaBan(maPTGB),
+    maKM NVARCHAR(6) FOREIGN KEY REFERENCES KhuyenMai(maKM)
+);
+
+-- =========================
+-- BẢNG HÓA ĐƠN
+-- =========================
+CREATE TABLE HoaDon (
+    maHD NVARCHAR(13) PRIMARY KEY,
+    maKH NVARCHAR(6) FOREIGN KEY REFERENCES KhachHang(maKH),
+    maNV NVARCHAR(6) FOREIGN KEY REFERENCES NhanVien(maNV),
+    maBan NVARCHAR(6) FOREIGN KEY REFERENCES Ban(maBan),
+    maCoc NVARCHAR(6) FOREIGN KEY REFERENCES Coc(maCoc),
+    maTGDB NVARCHAR(6) FOREIGN KEY REFERENCES ThoiGianDoiBan(maTGDB),
+    maKM NVARCHAR(6) FOREIGN KEY REFERENCES KhuyenMai(maKM),
+    maSK NVARCHAR(6) FOREIGN KEY REFERENCES SuKien(maSK),
+    tgCheckin DATE,
+    tgCheckout DATE,
+    kieuThanhToan BIT,
+    kieuDatBan BIT,
+    thue FLOAT,
+    coc FLOAT,
+    tongTienTruoc FLOAT,
+    tongTienSau FLOAT,
+    tongTienKM FLOAT
+);
+
+-- =========================
+-- BẢNG CHI TIẾT HÓA ĐƠN
+-- =========================
+CREATE TABLE ChiTietHoaDon (
+    maHD NVARCHAR(13) FOREIGN KEY REFERENCES HoaDon(maHD),
+    maMon NVARCHAR(6) FOREIGN KEY REFERENCES Mon(maMon),
+    soLuong INT,
+    thanhTien FLOAT,
+    PRIMARY KEY (maHD, maMon)
+);
+GO
