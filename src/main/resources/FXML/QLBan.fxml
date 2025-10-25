@@ -15,7 +15,10 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800" prefWidth="1400.0" style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/qlban.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="800" prefWidth="1400.0" style="-fx-background-color: D9D9D9;"
+            stylesheets="@../CSS/qlban.css" xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ui.controllers.QLBanController">
 
 
     <!-- Main content -->
@@ -66,7 +69,7 @@
                             <FlowPane fx:id="flowPaneBan" alignment="CENTER" hgap="30" prefWidth="1038.0" styleClass="menu-grid" vgap="30">
 
 
-                                <!-- ========== MÓN 1 ========== -->
+<!--                                 ========== MÓN 1 ==========-->
                                 <VBox styleClass="menu-item">
                                     <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
                                         <image>
@@ -79,365 +82,24 @@
                                  <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
                                     <children>
                                        <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                       <Label styleClass="item-detail" text="IN" />
+                                       <Label fx:id="lblKhuVuc" styleClass="item-detail" text="IN" />
                                     </children>
                                  </VBox>
                                  <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
                                     <children>
                                        <Label styleClass="item-title" text="Mã Bàn" />
-                                       <Label styleClass="item-detail" text="BI0001" />
+                                       <Label fx:id="lblMaBan" styleClass="item-detail" text="BI0001" />
                                     </children>
                                  </VBox>
                                  <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
                                     <children>
                                        <Label styleClass="item-title" text="Số Lượng" />
-                                       <Label styleClass="item-detail" text="1-2" />
+                                       <Label fx:id="lblSoLuong" styleClass="item-detail" text="1-2" />
                                     </children>
                                  </VBox>
                               </children>
                                     </HBox>
                                 </VBox>
-                        <VBox layoutX="569.0" layoutY="30.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="704.0" layoutY="30.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="839.0" layoutY="30.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="974.0" layoutY="30.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="569.0" layoutY="280.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="704.0" layoutY="280.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="839.0" layoutY="280.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="974.0" layoutY="280.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="563.0" layoutY="530.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="698.0" layoutY="530.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox layoutX="833.0" layoutY="530.0" styleClass="menu-item">
-                           <children>
-                              <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
-                                 <image>
-                                    <Image url="@../IMG/ban/IN.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox prefHeight="60.0" prefWidth="240.0" styleClass="item-info">
-                                 <children>
-                                    <VBox prefHeight="40.0" prefWidth="73.0" styleClass="item-group">
-                                       <children>
-                                          <Label prefHeight="21.0" prefWidth="64.0" styleClass="item-title" text="Khu Vực" />
-                                          <Label styleClass="item-detail" text="IN" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="107.0" layoutY="20.0" prefHeight="40.0" prefWidth="66.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Mã Bàn" />
-                                          <Label styleClass="item-detail" text="BI0001" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="135.0" layoutY="20.0" prefHeight="40.0" prefWidth="82.0" styleClass="item-group">
-                                       <children>
-                                          <Label styleClass="item-title" text="Số Lượng" />
-                                          <Label styleClass="item-detail" text="1-2" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
 
                             </FlowPane>
                         </content>
