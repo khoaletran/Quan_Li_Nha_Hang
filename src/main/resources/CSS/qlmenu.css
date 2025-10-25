@@ -102,16 +102,19 @@
 .item-name {
     -fx-font-weight: bold;
     -fx-text-fill: #333;
-    -fx-font-size: 16px; /* chữ to hơn */
+    -fx-font-size: 13px; /* chữ to hơn */
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
 }
 
 .item-price {
     -fx-text-fill: #ff8c66;
     -fx-font-weight: bold;
     -fx-background-color: #fff3eb;
+    -fx-wrap-text: true;
     -fx-background-radius: 6;
     -fx-padding: 3 8;
-    -fx-font-size: 14px; /* to hơn giá trị mặc định */
+    -fx-font-size: 10px; /* to hơn giá trị mặc định */
 }
 
 .menu-image {

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class LoaiMonDAO {
 
-    public List<LoaiMon> getAll() {
+    public static List<LoaiMon> getAll() {
         List<LoaiMon> ds = new ArrayList<>();
         Connection con = connectDB.getConnection();
         String sql = "SELECT * FROM LoaiMon";

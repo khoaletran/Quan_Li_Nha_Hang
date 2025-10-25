@@ -3,32 +3,52 @@ package dao;
 import connectDB.connectDB;
 import entity.Mon;
 import entity.LoaiMon;
+import entity.PhanTramGiaBan;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MonDAO {
 
-    public List<Mon> getAll() {
+    public static List<Mon> getAll() {
         List<Mon> ds = new ArrayList<>();
         Connection con = connectDB.getConnection();
         if (con == null) return ds;
 
-        String sql = "SELECT maMon, tenMon, moTa, hinhAnh, giaGoc, giaBan, loaiMon FROM Mon";
+        String sql = "SELECT maMon, tenMon, moTa, hinhAnh, giaGoc, giaBan, loaiMon, maPTGB FROM Mon";
         try (Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
+
+            // Load danh sách loại món & phần trăm giá bán 1 lần
+            List<LoaiMon> dsLoai = LoaiMonDAO.getAll();
+            List<PhanTramGiaBan> dsPTGB = PhanTramGiaBanDAO.getAll();
+
             while (rs.next()) {
+                String maLoaiMon = rs.getString("loaiMon");
+                String maPTGB = rs.getString("maPTGB");
+
+                // Lấy từ list ra
+                LoaiMon loai = dsLoai.stream()
+                        .filter(l -> l.getMaLoaiMon().equals(maLoaiMon))
+                        .findFirst().orElse(null);
+
+                PhanTramGiaBan pt = dsPTGB.stream()
+                        .filter(p -> p.getMaPTGB().equals(maPTGB))
+                        .findFirst().orElse(null);
+
                 Mon mon = new Mon(
                         rs.getString("maMon"),
                         rs.getString("tenMon"),
                         rs.getString("moTa"),
                         rs.getString("hinhAnh"),
-                        new LoaiMon(rs.getString("loaiMon"), "", ""),
-                        null,
+                        loai,
+                        pt,
                         rs.getDouble("giaGoc")
                 );
                 ds.add(mon);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,7 +89,7 @@ public class MonDAO {
         }
     }
 
-    public boolean delete(String maMon) {
+    public boolean  delete(String maMon) {
         String sql = "DELETE FROM Mon WHERE maMon=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, maMon);

@@ -84,10 +84,7 @@ public class LoginController {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
-        System.out.println("DN");
-
         for (NhanVien nv : listNV) {
-            System.out.println(nv.toString());
             if (nv.getMaNV().equals(username) && nv.getMatKhau().equals(password)) {
                 if(nv.isQuanLi()) {
                     try {

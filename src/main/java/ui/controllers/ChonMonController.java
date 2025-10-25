@@ -16,8 +16,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.List;
 
-public class QLMenuController {
-
+public class ChonMonController {
     @FXML
     private FlowPane flowMonAn;
     @FXML private ComboBox<LoaiMon> comboDanhMuc;
@@ -82,8 +81,8 @@ public class QLMenuController {
             imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
         }
 
-        imageView.setFitWidth(180);
-        imageView.setFitHeight(180);
+        imageView.setFitWidth(240);
+        imageView.setFitHeight(200);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
