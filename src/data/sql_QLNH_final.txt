@@ -2,9 +2,9 @@
 --  TẠO CƠ SỞ DỮ LIỆU QUÁN CAFE / NHÀ HÀNG
 -- =========================================
 
-CREATE DATABASE QL_QuanLiNhaHang_Nhom02;
+CREATE DATABASE QL_NhaHangCrabKing_Nhom02;
 GO
-USE QL_QuanLiNhaHang_Nhom02;
+USE QL_NhaHangCrabKing_Nhom02;
 GO
 
 -- =========================
@@ -81,7 +81,7 @@ CREATE TABLE SuKien (
 );
 
 -- =========================
--- BẢNG THỜI GIAN ĐỔI BÀN
+-- BẢNG THỜI GIAN ĐỢI BÀN
 -- =========================
 CREATE TABLE ThoiGianDoiBan (
     maTGDB NVARCHAR(6) PRIMARY KEY,
@@ -177,4 +177,23 @@ CREATE TABLE ChiTietHoaDon (
     thanhTien FLOAT,
     PRIMARY KEY (maHD, maMon)
 );
+GO
+
+-- =========================
+-- TẠO LOGIN VÀ USER ỨNG DỤNG
+-- =========================
+CREATE LOGIN nhanvien_app WITH PASSWORD = '123456';
+USE [QL_NhaHangCrabKing_Nhom02];
+CREATE USER nhanvien_app FOR LOGIN nhanvien_app;
+
+-- =========================
+-- THÊM DỮ LIỆU MẪU
+-- =========================
+INSERT INTO NhanVien (maNV, tenNV, sdt, gioiTinh, quanLi, ngayVaoLam, trangThai, matKhau)
+VALUES ('NV0001', N'Nguyễn Hà Nhật Khanh', '0901234567', 1, 1, '2024-01-15', 1, '1');
+
+-- =========================
+-- CẤP QUYỀN SELECT
+-- =========================
+GRANT SELECT ON dbo.NhanVien TO nhanvien_app;
 GO
