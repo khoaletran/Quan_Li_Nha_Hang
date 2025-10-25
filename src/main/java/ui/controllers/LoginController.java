@@ -27,7 +27,7 @@ public class LoginController {
 
     private boolean DN = false;
 
-    ArrayList<NhanVien> listNV = NhanVienDAO.getAll();
+
 
     // Hiệu ứng fade mượt
     private void switchPane(VBox hide, VBox show) {
@@ -83,7 +83,7 @@ public class LoginController {
     private void login() {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
-
+        ArrayList<NhanVien> listNV = NhanVienDAO.getAll();
         for (NhanVien nv : listNV) {
             if (nv.getMaNV().equals(username) && nv.getMatKhau().equals(password)) {
                 if(nv.isQuanLi()) {

@@ -29,6 +29,10 @@ public class NhanVien {
         this.tenNV = tenNV;
     }
 
+    public NhanVien() {
+    }
+
+
     public String getMaNV() {
         return maNV;
     }
