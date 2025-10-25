@@ -26,7 +26,6 @@ public class QLBanController {
     @FXML private ComboBox<String> comboDanhMuc;
     @FXML private ComboBox<String> comboKhuVuc;
 
-    private String imgUrlLoaiBan;
     private final BanDAO banDAO = new BanDAO();
     private final LoaiBanDAO loaiBanDAO = new LoaiBanDAO();
     private final KhuVucDAO khuVucDAO = new KhuVucDAO();
@@ -36,40 +35,43 @@ public class QLBanController {
         loadAllBan();
         loadDanhMuc();
         loadKhuVuc();
+
+        comboDanhMuc.setOnAction(event -> filterBan());
+        comboKhuVuc.setOnAction(event -> filterBan());
     }
 
+    // Lấy đường dẫn ảnh theo loại bàn
     private String imgLoaiBan(String urlLoaiBan) {
-        if (urlLoaiBan.equals("Indoor")) {
-            return "/IMG/ban/IN.png";
-        } else if (urlLoaiBan.equals("Outdoor")) {
-            return "/IMG/ban/out.png";
-        } else if (urlLoaiBan.equals("VIP")) {
-            return "/IMG/ban/vip.png";
+        switch (urlLoaiBan) {
+            case "Indoor": return "/IMG/ban/IN.png";
+            case "Outdoor": return "/IMG/ban/out.png";
+            case "VIP": return "/IMG/ban/vip.png";
+            default: return "/IMG/ban/IN.png";
         }
-        return null;
     }
 
+    // Load toàn bộ bàn
     private void loadAllBan() {
         flowPaneBan.getChildren().clear();
         List<Ban> dsBan = banDAO.getAll();
-
         for (Ban ban : dsBan) {
             VBox card = taoTheBan(ban);
             flowPaneBan.getChildren().add(card);
         }
     }
 
+    // Tạo thẻ hiển thị bàn
     private VBox taoTheBan(Ban ban) {
         VBox card = new VBox();
         card.getStyleClass().add("menu-item");
 
-        // Hình ảnh bàn
-        ImageView img = new ImageView(new Image(getClass().getResourceAsStream(imgLoaiBan(ban.getKhuVuc().getTenKhuVuc()))));
+        ImageView img = new ImageView(
+                new Image(getClass().getResourceAsStream(imgLoaiBan(ban.getLoaiBan().getTenLoaiBan())))
+        );
         img.setFitWidth(180);
         img.setFitHeight(140);
         img.setPreserveRatio(true);
 
-        // Hộp thông tin bàn
         HBox infoBox = new HBox();
         infoBox.getStyleClass().add("item-info");
 
@@ -81,21 +83,19 @@ public class QLBanController {
         lbDetail1.getStyleClass().add("item-detail");
         group1.getChildren().addAll(lbTitle1, lbDetail1);
 
-        LoaiBan loai = ban.getLoaiBan();
         VBox group2 = new VBox();
         group2.getStyleClass().add("item-group");
         Label lbTitle2 = new Label("Loại bàn");
         lbTitle2.getStyleClass().add("item-title");
-        Label lbDetail2 = new Label(loai.getTenLoaiBan() + " (" + loai.getSoLuong() + " người)");
+        Label lbDetail2 = new Label(ban.getLoaiBan().getTenLoaiBan() + " (" + ban.getLoaiBan().getSoLuong() + " người)");
         lbDetail2.getStyleClass().add("item-detail");
         group2.getChildren().addAll(lbTitle2, lbDetail2);
 
-        KhuVuc kv = ban.getKhuVuc();
         VBox group3 = new VBox();
         group3.getStyleClass().add("item-group");
         Label lbTitle3 = new Label("Khu vực");
         lbTitle3.getStyleClass().add("item-title");
-        Label lbDetail3 = new Label(kv.getTenKhuVuc());
+        Label lbDetail3 = new Label(ban.getKhuVuc().getTenKhuVuc());
         lbDetail3.getStyleClass().add("item-detail");
         group3.getChildren().addAll(lbTitle3, lbDetail3);
 
@@ -106,20 +106,64 @@ public class QLBanController {
 
     private void loadDanhMuc() {
         comboDanhMuc.getItems().clear();
-        List<LoaiBan> dsLoaiBan = loaiBanDAO.getAll();
+        comboDanhMuc.getItems().add("Tất cả");
 
+        List<LoaiBan> dsLoaiBan = loaiBanDAO.getAll();
         for (LoaiBan loai : dsLoaiBan) {
-            comboDanhMuc.getItems().add("Loại bàn : "+loai.getTenLoaiBan());
+            comboDanhMuc.getItems().add("Loại bàn : " + loai.getTenLoaiBan());
         }
+
+        comboDanhMuc.setValue("Tất cả");
     }
 
     private void loadKhuVuc() {
         comboKhuVuc.getItems().clear();
-        List<KhuVuc> dsKhuVuc = khuVucDAO.getAll();
+        comboKhuVuc.getItems().add("Tất cả");
 
-        for (KhuVuc khuVuc : dsKhuVuc) {
-            comboKhuVuc.getItems().add("Khu vực : "+khuVuc.getTenKhuVuc());
+        List<KhuVuc> dsKhuVuc = khuVucDAO.getAll();
+        for (KhuVuc kv : dsKhuVuc) {
+            comboKhuVuc.getItems().add("Khu vực : " + kv.getTenKhuVuc());
         }
+
+        comboKhuVuc.setValue("Tất cả");
     }
 
+    private void filterBan() {
+        String selectedLoaiBan = comboDanhMuc.getValue();
+        String selectedKhuVuc = comboKhuVuc.getValue();
+
+        if ((selectedLoaiBan == null || selectedLoaiBan.equals("Tất cả")) &&
+                (selectedKhuVuc == null || selectedKhuVuc.equals("Tất cả"))) {
+            loadAllBan();
+            return;
+        }
+
+        flowPaneBan.getChildren().clear();
+        List<Ban> dsBan = banDAO.getAll();
+
+        for (Ban ban : dsBan) {
+            boolean match = true;
+
+            // Lọc theo loại bàn
+            if (selectedLoaiBan != null && !selectedLoaiBan.equals("Tất cả")) {
+                String tenLoai = selectedLoaiBan.replace("Loại bàn : ", "").trim();
+                if (!ban.getLoaiBan().getTenLoaiBan().equalsIgnoreCase(tenLoai)) {
+                    match = false;
+                }
+            }
+
+            // Lọc theo khu vực
+            if (selectedKhuVuc != null && !selectedKhuVuc.equals("Tất cả")) {
+                String tenKhuVuc = selectedKhuVuc.replace("Khu vực : ", "").trim();
+                if (!ban.getKhuVuc().getTenKhuVuc().equalsIgnoreCase(tenKhuVuc)) {
+                    match = false;
+                }
+            }
+
+            if (match) {
+                VBox card = taoTheBan(ban);
+                flowPaneBan.getChildren().add(card);
+            }
+        }
+    }
 }
