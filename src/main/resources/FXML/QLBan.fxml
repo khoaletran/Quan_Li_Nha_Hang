@@ -34,25 +34,26 @@
                     <HBox alignment="CENTER_LEFT" prefHeight="116.0" prefWidth="1040.0" spacing="12" styleClass="menu-search-container">
 
                         <!-- Ô tìm kiếm -->
-                        <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="709.0" spacing="8" styleClass="menu-search-box">
+                        <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="569.0" spacing="8" styleClass="menu-search-box">
                             <Label prefHeight="20.0" prefWidth="60.0" styleClass="search-icon" text="🔍" />
-                            <TextField prefHeight="27.0" prefWidth="701.0" promptText="Tìm món ăn" styleClass="search-field" />
+                            <TextField prefHeight="27.0" prefWidth="561.0" promptText="Tìm món ăn" styleClass="search-field" />
                         </HBox>
 
                         <!-- ComboBox chọn danh mục -->
-                        <ComboBox fx:id="comboDanhMuc" prefWidth="140" promptText="Hải sản">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Hải sản" />
-                                    <String fx:value="Đồ uống" />
-                                    <String fx:value="Món chính" />
-                                    <String fx:value="Tráng miệng" />
-                                </FXCollections>
-                            </items>
-                            <HBox.margin>
-                                <Insets left="40.0" />
-                            </HBox.margin>
+                        <ComboBox fx:id="comboDanhMuc" prefWidth="140" promptText="Loại bàn">
+<!--                            <items>-->
+<!--                                <FXCollections fx:factory="observableArrayList">-->
+<!--                                    <String fx:value="Hải sản" />-->
+<!--                                    <String fx:value="Đồ uống" />-->
+<!--                                    <String fx:value="Món chính" />-->
+<!--                                    <String fx:value="Tráng miệng" />-->
+<!--                                </FXCollections>-->
+<!--                            </items>-->
+<!--                            <HBox.margin>-->
+<!--                                <Insets left="40.0" />-->
+<!--                            </HBox.margin>-->
                         </ComboBox>
+                        <ComboBox fx:id="comboKhuVuc" prefWidth="140" promptText="Khu vực" />
 
                         <!-- Phần co giãn để đẩy nút “+” ra phải -->
                         <Region fx:id="spacer" HBox.hgrow="ALWAYS" />
@@ -66,10 +67,8 @@
                     <!-- Lưới món ăn -->
                     <ScrollPane fitToWidth="true" prefHeight="880.0" prefWidth="1040.0" styleClass="menu-scroll">
                         <content>
-                            <FlowPane fx:id="flowPaneBan" alignment="CENTER" hgap="30" prefWidth="1038.0" styleClass="menu-grid" vgap="30">
-
-
-<!--                                 ========== MÓN 1 ==========-->
+                            <FlowPane fx:id="flowPaneBan" alignment="CENTER" hgap="20" prefWidth="1050.0" styleClass="menu-grid" vgap="20">
+<!--                                 ========== Bàn 1 ==========-->
                                 <VBox styleClass="menu-item">
                                     <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
                                         <image>

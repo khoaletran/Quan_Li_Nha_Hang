@@ -1,10 +1,13 @@
 package ui.controllers;
 
 import dao.BanDAO;
+import dao.KhuVucDAO;
+import dao.LoaiBanDAO;
 import entity.Ban;
 import entity.KhuVuc;
 import entity.LoaiBan;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,13 +23,19 @@ public class QLBanController {
     @FXML private Label lblKhuVuc;
     @FXML private Label lblMaBan;
     @FXML private Label lblSoLuong;
+    @FXML private ComboBox<String> comboDanhMuc;
+    @FXML private ComboBox<String> comboKhuVuc;
 
     private String imgUrlLoaiBan;
     private final BanDAO banDAO = new BanDAO();
+    private final LoaiBanDAO loaiBanDAO = new LoaiBanDAO();
+    private final KhuVucDAO khuVucDAO = new KhuVucDAO();
 
     @FXML
     public void initialize() {
         loadAllBan();
+        loadDanhMuc();
+        loadKhuVuc();
     }
 
     private String imgLoaiBan(String urlLoaiBan) {
@@ -51,21 +60,20 @@ public class QLBanController {
     }
 
     private VBox taoTheBan(Ban ban) {
-        VBox card = new VBox(5);
+        VBox card = new VBox();
         card.getStyleClass().add("menu-item");
 
         // Hình ảnh bàn
         ImageView img = new ImageView(new Image(getClass().getResourceAsStream(imgLoaiBan(ban.getKhuVuc().getTenKhuVuc()))));
         img.setFitWidth(180);
-        img.setFitHeight(120);
+        img.setFitHeight(140);
         img.setPreserveRatio(true);
 
         // Hộp thông tin bàn
-        HBox infoBox = new HBox(20);
+        HBox infoBox = new HBox();
         infoBox.getStyleClass().add("item-info");
 
-        // ========== Nhóm 1: Mã bàn ==========
-        VBox group1 = new VBox(2);
+        VBox group1 = new VBox();
         group1.getStyleClass().add("item-group");
         Label lbTitle1 = new Label("Mã bàn");
         lbTitle1.getStyleClass().add("item-title");
@@ -73,9 +81,8 @@ public class QLBanController {
         lbDetail1.getStyleClass().add("item-detail");
         group1.getChildren().addAll(lbTitle1, lbDetail1);
 
-        // ========== Nhóm 2: Loại bàn ==========
         LoaiBan loai = ban.getLoaiBan();
-        VBox group2 = new VBox(2);
+        VBox group2 = new VBox();
         group2.getStyleClass().add("item-group");
         Label lbTitle2 = new Label("Loại bàn");
         lbTitle2.getStyleClass().add("item-title");
@@ -83,9 +90,8 @@ public class QLBanController {
         lbDetail2.getStyleClass().add("item-detail");
         group2.getChildren().addAll(lbTitle2, lbDetail2);
 
-        // ========== Nhóm 3: Khu vực ==========
         KhuVuc kv = ban.getKhuVuc();
-        VBox group3 = new VBox(2);
+        VBox group3 = new VBox();
         group3.getStyleClass().add("item-group");
         Label lbTitle3 = new Label("Khu vực");
         lbTitle3.getStyleClass().add("item-title");
@@ -93,15 +99,27 @@ public class QLBanController {
         lbDetail3.getStyleClass().add("item-detail");
         group3.getChildren().addAll(lbTitle3, lbDetail3);
 
-        // Gộp các nhóm vào infoBox
         infoBox.getChildren().addAll(group1, group2, group3);
-
-        // Thêm ảnh + info vào thẻ
         card.getChildren().addAll(img, infoBox);
-        // Sự kiện click
-//        card.setOnMouseClicked(e -> {
-//            System.out.println("Đã chọn bàn: " + ban.getMaBan());
-//        });
         return card;
     }
+
+    private void loadDanhMuc() {
+        comboDanhMuc.getItems().clear();
+        List<LoaiBan> dsLoaiBan = loaiBanDAO.getAll();
+
+        for (LoaiBan loai : dsLoaiBan) {
+            comboDanhMuc.getItems().add("Loại bàn : "+loai.getTenLoaiBan());
+        }
+    }
+
+    private void loadKhuVuc() {
+        comboKhuVuc.getItems().clear();
+        List<KhuVuc> dsKhuVuc = khuVucDAO.getAll();
+
+        for (KhuVuc khuVuc : dsKhuVuc) {
+            comboKhuVuc.getItems().add("Khu vực : "+khuVuc.getTenKhuVuc());
+        }
+    }
+
 }
