@@ -9,76 +9,67 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800" prefWidth="1400.0" style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/qlban.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.QLBanController">
+<BorderPane prefHeight="800" prefWidth="1400.0" style="-fx-background-color: D9D9D9;"
+            stylesheets="@../CSS/qlban.css" xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ui.controllers.QLBanController">
 
 
     <!-- Main content -->
     <center>
-        <VBox spacing="20" styleClass="menu-bg">
+        <VBox prefHeight="1000" prefWidth="729.0" spacing="20" styleClass="menu-bg">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: efefef; -fx-background-radius: 20 20 28 28;">
+            <VBox prefHeight="800" prefWidth="1040.0" style="-fx-background-color: efefef; -fx-background-radius: 20 20 28 28;">
                 <children>
 
                     <!-- Thanh tìm kiếm -->
-                    <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" spacing="12" styleClass="menu-search-container">
+                    <HBox alignment="CENTER_LEFT" prefHeight="116.0" prefWidth="1040.0" spacing="12" styleClass="menu-search-container">
 
                         <!-- Ô tìm kiếm -->
-                        <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="8" styleClass="menu-search-box">
-                            <Label prefHeight="20.0" prefWidth="39.0" styleClass="search-icon" text="🔍" />
-                            <TextField prefHeight="27.0" prefWidth="701.0" promptText="Tìm món ăn" styleClass="search-field" />
-                     <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-spacing: 20; -fx-alignment: CENTER_RIGHT;">
-                        <children>
-         
-                                 <!-- ComboBox chọn danh mục -->
-                                 <ComboBox fx:id="comboDanhMuc" prefWidth="140" promptText="Hải sản">
-                                     <items>
-                                         <FXCollections fx:factory="observableArrayList">
-                                             <String fx:value="Hải sản" />
-                                             <String fx:value="Đồ uống" />
-                                             <String fx:value="Món chính" />
-                                             <String fx:value="Tráng miệng" />
-                                         </FXCollections>
-                                     </items>
-                                     <HBox.margin>
-                                         <Insets left="40.0" />
-                                     </HBox.margin>
-                                 </ComboBox>
-                           <ComboBox fx:id="comboDanhMuc1" prefWidth="140" promptText="Hải sản">
-                              <items>
-                                 <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Hải sản" />
-                                    <String fx:value="Đồ uống" />
-                                    <String fx:value="Món chính" />
-                                    <String fx:value="Tráng miệng" />
-                                 </FXCollections>
-                              </items>
-                           </ComboBox>
-         
-                                 <!-- Nút thêm món -->
-                                 <Label styleClass="menu-add-btn" text="+" />
-                        </children>
-                     </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="569.0" spacing="8" styleClass="menu-search-box">
+                            <Label prefHeight="20.0" prefWidth="60.0" styleClass="search-icon" text="🔍" />
+                            <TextField prefHeight="27.0" prefWidth="561.0" promptText="Tìm món ăn" styleClass="search-field" />
                         </HBox>
+
+                        <!-- ComboBox chọn danh mục -->
+                        <ComboBox fx:id="comboDanhMuc" prefWidth="140" promptText="Loại bàn">
+<!--                            <items>-->
+<!--                                <FXCollections fx:factory="observableArrayList">-->
+<!--                                    <String fx:value="Hải sản" />-->
+<!--                                    <String fx:value="Đồ uống" />-->
+<!--                                    <String fx:value="Món chính" />-->
+<!--                                    <String fx:value="Tráng miệng" />-->
+<!--                                </FXCollections>-->
+<!--                            </items>-->
+<!--                            <HBox.margin>-->
+<!--                                <Insets left="40.0" />-->
+<!--                            </HBox.margin>-->
+                        </ComboBox>
+                        <ComboBox fx:id="comboKhuVuc" prefWidth="140" promptText="Khu vực" />
+
+                        <!-- Phần co giãn để đẩy nút “+” ra phải -->
+                        <Region fx:id="spacer" HBox.hgrow="ALWAYS" />
+
+                        <!-- Nút thêm món -->
+                        <Label styleClass="menu-add-btn" text="+" />
 
                     </HBox>
 
 
                     <!-- Lưới món ăn -->
-                    <ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="727.0" styleClass="menu-scroll">
+                    <ScrollPane fitToWidth="true" prefHeight="880.0" prefWidth="1040.0" styleClass="menu-scroll">
                         <content>
-                            <FlowPane fx:id="flowPaneBan" alignment="CENTER" hgap="30" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="menu-grid" vgap="30">
-
-
-<!--                                 ========== MÓN 1 ==========-->
-                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="menu-item">
+                            <FlowPane fx:id="flowPaneBan" alignment="CENTER" hgap="20" prefWidth="1050.0" styleClass="menu-grid" vgap="20">
+<!--                                 ========== Bàn 1 ==========-->
+                                <VBox styleClass="menu-item">
                                     <ImageView fitHeight="140" fitWidth="200" preserveRatio="true" smooth="true" styleClass="menu-image">
                                         <image>
                                             <Image url="@../IMG/ban/IN.png" />
@@ -112,7 +103,6 @@
                             </FlowPane>
                         </content>
                     </ScrollPane>
-               <AnchorPane prefHeight="108.0" prefWidth="1360.0" />
                 </children>
             </VBox>
 
