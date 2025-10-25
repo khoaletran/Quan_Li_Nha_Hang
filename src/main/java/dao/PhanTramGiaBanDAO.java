@@ -10,21 +10,43 @@ import java.util.List;
 
 public class PhanTramGiaBanDAO {
 
-    public List<PhanTramGiaBan> getAll() {
+    public static List<PhanTramGiaBan> getAll() {
         List<PhanTramGiaBan> ds = new ArrayList<>();
         String sql = "SELECT * FROM PhanTramGiaBan";
+
         try (Statement st = connectDB.getConnection().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
+
+            // Lấy danh sách loại món để ghép
+            List<LoaiMon> dsLoai = LoaiMonDAO.getAll();
+
             while (rs.next()) {
-                ds.add(new PhanTramGiaBan(
+                String maLoaiMon = rs.getString("maLoaiMon");
+
+                // Tìm loại món tương ứng
+                LoaiMon loai = dsLoai.stream()
+                        .filter(l -> l.getMaLoaiMon().equals(maLoaiMon))
+                        .findFirst()
+                        .orElse(null);
+
+                // Tạo đối tượng PhanTramGiaBan
+                PhanTramGiaBan pt = new PhanTramGiaBan(
+                        rs.getString("maPTGB"),
+                        loai,
                         rs.getInt("phanTramLoi"),
-                        new LoaiMon(rs.getString("maLoaiMon"), "", ""),
                         rs.getDate("ngayApDung").toLocalDate()
-                ));
+                );
+
+                ds.add(pt);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return ds;
     }
+
 
     public boolean insert(PhanTramGiaBan pt) {
         String sql = "INSERT INTO PhanTramGiaBan VALUES (?, ?, ?, ?)";

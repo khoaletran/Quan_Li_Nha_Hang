@@ -3,15 +3,21 @@ package entity;
 import java.time.LocalDate;
 
 public class PhanTramGiaBan {
+    private String maPTGB;
     private LoaiMon loaiMon;
     private int phanTramLoi;
     private LocalDate ngayApDung;
 
-    public PhanTramGiaBan(int phanTramLoi, LoaiMon loaiMon, LocalDate ngayApDung) {
+    public PhanTramGiaBan(String maPTGB, LoaiMon loaiMon, int phanTramLoi, LocalDate ngayApDung) {
+        this.maPTGB = maPTGB;
         this.phanTramLoi = phanTramLoi;
         this.loaiMon = loaiMon;
         this.ngayApDung = ngayApDung;
     }
+
+    public void setMaPTGB(String maPTGB) {this.maPTGB = maPTGB;}
+
+    public String getMaPTGB() {return maPTGB;}
 
     public LoaiMon getLoaiMon() {
         return loaiMon;
