@@ -21,18 +21,24 @@ public class QLBanController {
     @FXML private Label lblMaBan;
     @FXML private Label lblSoLuong;
 
-    private String imgBanIn = "/IMG/ban/IN.png";
-    private String imgBanOut = "/IMG/ban/out.png";
-    private String imgBanVip = "/IMG/ban/vip.png";
+    private String imgUrlLoaiBan;
     private final BanDAO banDAO = new BanDAO();
 
     @FXML
     public void initialize() {
-        System.out.println("QLBanController initialized!");
         loadAllBan();
     }
 
-
+    private String imgLoaiBan(String urlLoaiBan) {
+        if (urlLoaiBan.equals("Indoor")) {
+            return "/IMG/ban/IN.png";
+        } else if (urlLoaiBan.equals("Outdoor")) {
+            return "/IMG/ban/out.png";
+        } else if (urlLoaiBan.equals("VIP")) {
+            return "/IMG/ban/vip.png";
+        }
+        return null;
+    }
 
     private void loadAllBan() {
         flowPaneBan.getChildren().clear();
@@ -49,7 +55,7 @@ public class QLBanController {
         card.getStyleClass().add("menu-item");
 
         // Hình ảnh bàn
-        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/IMG/ban/IN.png")));
+        ImageView img = new ImageView(new Image(getClass().getResourceAsStream(imgLoaiBan(ban.getKhuVuc().getTenKhuVuc()))));
         img.setFitWidth(180);
         img.setFitHeight(120);
         img.setPreserveRatio(true);
