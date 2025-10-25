@@ -17,15 +17,18 @@ public class BanDAO {
     public List<Ban> getAll() {
         List<Ban> ds = new ArrayList<>();
         String sql = """
-                SELECT b.maBan, b.trangThai, 
-                       lb.maLoaiBan, lb.tenLoaiBan, lb.soLuong,
-                       kv.maKhuVuc, kv.tenKhuVuc
-                FROM Ban b
-                JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
-                JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
-                """;
-        try (Statement st = connectDB.getConnection().createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+            SELECT b.maBan, b.trangThai, 
+                   lb.maLoaiBan, lb.tenLoaiBan, lb.soLuong,
+                   kv.maKhuVuc, kv.tenKhuVuc
+            FROM Ban b
+            JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
+            JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
+            """;
+        try {
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
 
             while (rs.next()) {
                 LoaiBan loaiBan = new LoaiBan(
