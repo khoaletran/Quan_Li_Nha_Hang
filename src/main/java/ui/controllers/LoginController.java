@@ -1,6 +1,6 @@
 package ui.controllers;
 
-import dao.DAO_NhanVien;
+import dao.NhanVienDAO;
 import entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
@@ -12,7 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class LoginController {
@@ -28,7 +27,7 @@ public class LoginController {
 
     private boolean DN = false;
 
-    ArrayList<NhanVien> listNV = DAO_NhanVien.getAllNhanVien();
+    ArrayList<NhanVien> listNV = NhanVienDAO.getAll();
 
     // Hiệu ứng fade mượt
     private void switchPane(VBox hide, VBox show) {

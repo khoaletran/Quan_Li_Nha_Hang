@@ -5,9 +5,9 @@ import entity.NhanVien;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class DAO_NhanVien {
+public class NhanVienDAO {
 
-    public static ArrayList<NhanVien> getAllNhanVien() {
+    public static ArrayList<NhanVien> getAll() {
         ArrayList<NhanVien> list = new ArrayList<>();
 
         try {
