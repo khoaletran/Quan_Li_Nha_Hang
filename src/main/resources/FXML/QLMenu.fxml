@@ -5,10 +5,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="800" prefWidth="1400.0" style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/qlmenu.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.QLMenuController">
@@ -16,18 +16,18 @@
 
     <!-- Main content -->
     <center>
-        <VBox prefHeight="1000" prefWidth="729.0" spacing="20" styleClass="menu-bg">
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20" styleClass="menu-bg">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-         <VBox prefHeight="800" prefWidth="1040.0" style="-fx-background-color: efefef; -fx-background-radius: 20 20 28 28;">
+         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: efefef; -fx-background-radius: 20 20 28 28;">
             <children>
       
                   <!-- Thanh tìm kiếm -->
                   <HBox alignment="CENTER_LEFT" prefHeight="116.0" prefWidth="1040.0" spacing="12" styleClass="menu-search-container">
       
                       <!-- Ô tìm kiếm -->
-                      <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="709.0" spacing="8" styleClass="menu-search-box">
+                      <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="1020.0" spacing="8" styleClass="menu-search-box">
                           <Label prefHeight="20.0" prefWidth="60.0" styleClass="search-icon" text="🔍" />
                           <TextField prefHeight="27.0" prefWidth="701.0" promptText="Tìm món ăn" styleClass="search-field" />
                       </HBox>
@@ -41,9 +41,6 @@
                      </HBox.margin>
                       </ComboBox>
       
-                      <!-- Phần co giãn để đẩy nút “+” ra phải -->
-                      <Region fx:id="spacer" HBox.hgrow="ALWAYS" />
-      
                       <!-- Nút thêm món -->
                       <Label styleClass="menu-add-btn" text="+" />
       
@@ -51,12 +48,13 @@
 
 
                   <!-- Lưới món ăn -->
-                  <ScrollPane fitToWidth="true" prefHeight="880.0" prefWidth="1040.0" styleClass="menu-scroll">
+                  <ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="719.0" prefWidth="1360.0" styleClass="menu-scroll">
                       <content>
-                          <FlowPane fx:id="flowMonAn" hgap="50" prefHeight="881.0" prefWidth="1026.0" styleClass="menu-grid" vgap="30">
+                          <FlowPane fx:id="flowMonAn" hgap="50" prefHeight="668.0" prefWidth="1358.0" styleClass="menu-grid" vgap="30">
                           </FlowPane>
                       </content>
                   </ScrollPane>
+               <AnchorPane prefHeight="72.0" prefWidth="1360.0" />
             </children>
          </VBox>
 

@@ -21,6 +21,7 @@
     -fx-background-color: white;
     -fx-background-radius: 8;
     -fx-padding: 6 10;
+    -fx-alignment: center;
 }
 
 .search-field {
@@ -120,6 +121,12 @@
 .menu-image {
     -fx-fit-width: 240;
     -fx-fit-height: 200;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
 }
 
 .scroll-bar:vertical {
