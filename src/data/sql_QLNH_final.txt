@@ -7,6 +7,25 @@ GO
 USE QL_NhaHangCrabKing_Nhom02;
 GO
 
+-- Tạo login ở cấp server
+CREATE LOGIN nhanvien_app
+WITH PASSWORD = '123456',
+CHECK_POLICY = OFF;  -- bỏ kiểm tra độ mạnh mật khẩu (cho dễ test)
+GO
+
+-- Gán quyền cho login vào database
+USE QL_NhaHangCrabKing_Nhom02;
+GO
+
+-- Tạo user tương ứng trong database
+CREATE USER nhanvien_app FOR LOGIN nhanvien_app;
+GO
+
+-- Cấp quyền thao tác cơ bản (SELECT, INSERT, UPDATE, DELETE)
+EXEC sp_addrolemember 'db_datareader', 'nhanvien_app';
+EXEC sp_addrolemember 'db_datawriter', 'nhanvien_app';
+GO
+
 -- =========================
 -- BẢNG HẠNG KHÁCH HÀNG
 -- =========================
@@ -81,7 +100,7 @@ CREATE TABLE SuKien (
 );
 
 -- =========================
--- BẢNG THỜI GIAN ĐỢI BÀN
+-- BẢNG THỜI GIAN ĐỔI BÀN
 -- =========================
 CREATE TABLE ThoiGianDoiBan (
     maTGDB NVARCHAR(6) PRIMARY KEY,
@@ -177,23 +196,4 @@ CREATE TABLE ChiTietHoaDon (
     thanhTien FLOAT,
     PRIMARY KEY (maHD, maMon)
 );
-GO
-
--- =========================
--- TẠO LOGIN VÀ USER ỨNG DỤNG
--- =========================
-CREATE LOGIN nhanvien_app WITH PASSWORD = '123456';
-USE [QL_NhaHangCrabKing_Nhom02];
-CREATE USER nhanvien_app FOR LOGIN nhanvien_app;
-
--- =========================
--- THÊM DỮ LIỆU MẪU
--- =========================
-INSERT INTO NhanVien (maNV, tenNV, sdt, gioiTinh, quanLi, ngayVaoLam, trangThai, matKhau)
-VALUES ('NV0001', N'Nguyễn Hà Nhật Khanh', '0901234567', 1, 1, '2024-01-15', 1, '1');
-
--- =========================
--- CẤP QUYỀN SELECT
--- =========================
-GRANT SELECT ON dbo.NhanVien TO nhanvien_app;
 GO
