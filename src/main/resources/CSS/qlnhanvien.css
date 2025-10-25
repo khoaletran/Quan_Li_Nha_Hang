@@ -264,6 +264,28 @@
 .action-buttons {
     -fx-padding: 10 0 0 0;
 }
+.add-btn {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 24px;
+    -fx-background-radius: 20;
+    -fx-pref-height: 60;
+    -fx-pref-width: 60;
+    -fx-min-height: 60;
+    -fx-min-width: 60;
+    -fx-max-height: 60;
+    -fx-max-width: 60;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.add-btn:hover {
+    -fx-background-color: #2ecc71;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
 
 .confirm-btn {
     -fx-background-color: #27ae60;
