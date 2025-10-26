@@ -79,7 +79,7 @@
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="SĐT:" />
-                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Nhập số điện thoại" styleClass="filter-tf" />
+                    <TextField fx:id="sdtKhach" prefHeight="24.0" prefWidth="228.0" promptText="Nhập số điện thoại" styleClass="filter-tf" />
                 </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="55.0" spacing="10">
                <children>

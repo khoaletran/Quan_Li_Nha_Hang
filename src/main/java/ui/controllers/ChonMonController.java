@@ -1,8 +1,11 @@
 package ui.controllers;
 
+import dao.HoaDonDAO;
 import dao.LoaiMonDAO;
+import dao.KhachHangDAO;
 import dao.MonDAO;
 import entity.Ban;
+import entity.KhachHang;
 import entity.LoaiMon;
 import entity.Mon;
 import javafx.fxml.FXML;
@@ -26,7 +29,7 @@ public class ChonMonController {
     @FXML private FlowPane flowMonAn;
     @FXML private ComboBox<LoaiMon> comboDanhMuc;
     @FXML private VBox vboxChiTietDonHang, vboxTienMat;
-    @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua;
+    @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua,sdtKhach;
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
@@ -385,6 +388,23 @@ public class ChonMonController {
         double tong = parseCurrency(lbl_total_PT.getText().trim());
         double tienKD = parseCurrency(txtTienKhachDua.getText().trim());
         lblTienThua.setText(formatCurrency(tienKD - tong));
+    }
+
+    private void luuHoaDon(){
+        KhachHangDAO khachHangDAO = new KhachHangDAO();
+        HoaDonDAO hoaDonDAO = new HoaDonDAO();
+        List<KhachHang> dsKhachHang = khachHangDAO.getAll();
+        String maHD = "HD52510250006";
+        String maKH = "KH0000";
+
+        //check maKH trong hệ thống
+        for (KhachHang kh : dsKhachHang) {
+            if (kh.getSdt().equals(sdtKhach.getText())) {
+                maKH = kh.getMaKhachHang();
+                break;
+            }
+        }
+        //hết
     }
 
 
