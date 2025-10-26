@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,8 @@ public class MainController_NV {
     @FXML private StackPane mainContent;
     @FXML private SidebarController_NV sidebar_NVController;
 
+    private NhanVien nhanVien;
+
     public SidebarController_NV getSidebarController() {
         return sidebar_NVController;
     }
@@ -24,6 +27,10 @@ public class MainController_NV {
             sidebar_NVController.setMainController(this);
         }
         loadDefaultView();
+    }
+
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
     }
 
     private void loadDefaultView() {

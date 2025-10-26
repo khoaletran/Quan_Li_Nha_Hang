@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,8 @@ public class MainController_QL {
 
     @FXML private StackPane mainContent;
     @FXML private SidebarController_QL sidebar_QLController;
+
+    private NhanVien nhanVien;
 
     public SidebarController_QL getsidebar_QLController() {
         return sidebar_QLController ;
@@ -28,6 +31,9 @@ public class MainController_QL {
         setCenterContent("/FXML/DashBoard.fxml");
     }
 
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
     public void setCenterContent(String fxmlPath) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(fxmlPath));

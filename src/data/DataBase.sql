@@ -142,10 +142,13 @@ CREATE TABLE PhanTramGiaBan (
 -- =========================
 CREATE TABLE KhuyenMai (
     maKM NVARCHAR(6) PRIMARY KEY,
+    tenKM NVARCHAR(50),
     soLuong INT,
-    phanTramGiamGia INT,
     ngayPhatHanh DATE,
-    ngayKetThuc DATE
+    ngayKetThuc DATE,
+    maThayThe NVARCHAR(10),
+    phanTramGiamGia INT,
+    uuDai bit
 );
 
 -- =========================
@@ -159,7 +162,6 @@ CREATE TABLE Mon (
     giaGoc FLOAT,
     giaBan FLOAT,
     loaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
-    maPTGB NVARCHAR(6) FOREIGN KEY REFERENCES PhanTramGiaBan(maPTGB),
     maKM NVARCHAR(6) FOREIGN KEY REFERENCES KhuyenMai(maKM)
 );
 

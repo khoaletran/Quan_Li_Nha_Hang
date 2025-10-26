@@ -24,6 +24,7 @@ public class MainNV extends Application {
         BorderPane root = loader.load();
 
         MainController_NV mainController = loader.getController();
+        mainController.setNhanVien(nvDangNhap);
 
         SidebarController_NV sidebarController = mainController.getSidebarController();
         sidebarController.setThongTinNhanVien(nvDangNhap);

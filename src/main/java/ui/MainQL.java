@@ -32,6 +32,8 @@ public class MainQL extends Application {
 
         MainController_QL mainController = loader.getController();
 
+        mainController.setNhanVien(nvDangNhap);
+
         SidebarController_QL sidebarController = mainController.getsidebar_QLController();
         sidebarController.setThongTinNhanVien(nvDangNhap);
 
