@@ -31,7 +31,6 @@ public class MainController_NV {
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
-        System.out.println(this.nhanVien.toString());
     }
 
     public NhanVien getNhanVien() {return nhanVien;}
@@ -72,4 +71,6 @@ public class MainController_NV {
             e.printStackTrace();
         }
     }
+
+
 }

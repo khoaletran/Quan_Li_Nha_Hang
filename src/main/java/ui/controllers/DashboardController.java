@@ -27,7 +27,6 @@ public class DashboardController {
     public void setMainController(ui.controllers.MainController_NV controller) {
         this.mainController = controller;
         nv = mainController.getNhanVien();
-        System.out.println(nv.toString());
     }
 
     @FXML
@@ -49,5 +48,7 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+
 
 }
