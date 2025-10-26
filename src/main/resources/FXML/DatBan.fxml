@@ -70,7 +70,7 @@
                                  <Label prefHeight="54.0" prefWidth="63.0" text="OUT" />
                               </children>
                            </VBox>
-                           <VBox layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableIN_01" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -85,7 +85,7 @@
                                  </ImageView>
                                  <Label text="2-3" />
                               </children></VBox>
-                           <VBox layoutX="340.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableIN_02" layoutX="340.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -101,7 +101,7 @@
                                  <Label text="3-4" />
                               </children>
                            </VBox>
-                           <VBox layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableIN_03" layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -117,7 +117,7 @@
                                  <Label text="5-8" />
                               </children>
                            </VBox>
-                           <VBox layoutX="460.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableIN_04" layoutX="460.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -148,7 +148,7 @@
                                  <Label prefHeight="54.0" prefWidth="63.0" text="IN" />
                               </children>
                            </VBox>
-                           <VBox layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableOut_01" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -164,7 +164,7 @@
                                  <Label text="2-3" />
                               </children>
                            </VBox>
-                           <VBox layoutX="340.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableOut_02" layoutX="340.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -180,7 +180,7 @@
                                  <Label text="3-4" />
                               </children>
                            </VBox>
-                           <VBox layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableOut_03" layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -196,7 +196,7 @@
                                  <Label text="5-8" />
                               </children>
                            </VBox>
-                           <VBox layoutX="460.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableOut_04" layoutX="460.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -227,7 +227,7 @@
                               </children>
                            </VBox>
                            <AnchorPane layoutX="400.0" layoutY="20.0" prefHeight="184.0" prefWidth="100.0" />
-                           <VBox layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableVIP_01" layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -243,7 +243,7 @@
                                  <Label text="8-12" />
                               </children>
                            </VBox>
-                           <VBox layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
+                           <VBox fx:id="tableVIP_02" layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items">
                               <children>
                                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                     <image>

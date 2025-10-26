@@ -30,15 +30,22 @@ public class MainController_NV {
         setCenterContent("/FXML/DashBoard.fxml");
     }
 
+    public StackPane getMainContent() {
+        return mainContent;
+    }
 
     public void setCenterContent(String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ChonMon.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent node = loader.load();
 
             Object controller = loader.getController();
             if (controller instanceof ChonMonController chonMonCtrl) {
                 chonMonCtrl.setMainController(this);
+            }
+
+            if (controller instanceof DatBanController datBanCtrl) {
+                datBanCtrl.setMainController(this);
             }
 
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);

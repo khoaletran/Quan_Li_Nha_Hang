@@ -27,7 +27,7 @@
             </padding>
 
             <!-- Nền trắng bo tròn -->
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #efefef; -fx-background-radius: 20 20 28 28;" VBox.vgrow="ALWAYS">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" style="-fx-background-color: #efefef; -fx-background-radius: 20 20 28 28;" VBox.vgrow="ALWAYS">
                 <children>
 
                     <!-- Thanh tìm kiếm -->
@@ -51,6 +51,9 @@
                         <content>
                             <FlowPane fx:id="flowMonAn" alignment="CENTER" hgap="40" prefWrapLength="1200" styleClass="menu-grid" vgap="30" />
                         </content>
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
                     </ScrollPane>
 
                 </children>
@@ -81,7 +84,7 @@
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="55.0" spacing="10">
                <children>
                   <Label styleClass="info-label" text="Bàn:" />
-                  <TextField prefHeight="24.0" prefWidth="228.0" promptText="Bàn" styleClass="filter-tf" />
+                  <TextField fx:id="tf_ban" prefHeight="24.0" prefWidth="228.0" promptText="Bàn" styleClass="filter-tf" />
                </children>
             </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
@@ -164,6 +167,15 @@
                                <Button fx:id="btnGoiY5" styleClass="quick-btn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                <Button fx:id="btnGoiY6" styleClass="quick-btn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                            </children>
+                     <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
                        </GridPane>
                   <HBox style="-fx-alignment: center;">
                      <children>

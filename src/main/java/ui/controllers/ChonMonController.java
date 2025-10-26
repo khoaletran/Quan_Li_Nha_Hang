@@ -2,6 +2,7 @@ package ui.controllers;
 
 import dao.LoaiMonDAO;
 import dao.MonDAO;
+import entity.Ban;
 import entity.LoaiMon;
 import entity.Mon;
 import javafx.fxml.FXML;
@@ -30,6 +31,7 @@ public class ChonMonController {
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
     @FXML private TextField txtTienKhachDua;
+    @FXML private TextField tf_ban;
 
 
     private ui.controllers.MainController_NV mainController;
@@ -39,6 +41,10 @@ public class ChonMonController {
 
     private final MonDAO monDAO = new MonDAO();
     private final LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
+
+    private Ban banHienTai = null;
+
+
 
     @FXML
     public void initialize() {
@@ -52,6 +58,14 @@ public class ChonMonController {
     public void setMainController(ui.controllers.MainController_NV controller) {
         this.mainController = controller;
     }
+
+    public void setThongTinBan(Ban ban) {
+        this.banHienTai = ban;
+        tf_ban.setText(ban.getMaBan());
+        tf_ban.setEditable(false);
+        System.out.println("Đang chọn bàn: " + ban);
+    }
+
 
     @FXML
     private void quayVeDatBan() {

@@ -10,11 +10,13 @@ public class Ban {
     private String maBan;
     private LoaiBan loaiBan;
     private KhuVuc khuVuc;
+    private boolean trangThai;
 
-    public Ban(String maBan, KhuVuc khuVuc, LoaiBan loaiBan) {
-        this.maBan = maBan;
-        this.khuVuc = khuVuc;
-        this.loaiBan = loaiBan;
+    public Ban(String maBan, KhuVuc khuVuc, LoaiBan loaiBan, boolean trangThai) {
+        setMaBan(maBan);
+        setLoaiBan(loaiBan);
+        setKhuVuc(khuVuc);
+        setTrangThai(trangThai);
     }
 
     public String getMaBan() {
@@ -40,6 +42,10 @@ public class Ban {
     public void setLoaiBan(LoaiBan loaiBan) {
         this.loaiBan = loaiBan;
     }
+
+    public boolean isTrangThai() {return trangThai;}
+
+    public void setTrangThai(boolean trangThai) {this.trangThai = trangThai;}
 
     @Override
     public String toString() {

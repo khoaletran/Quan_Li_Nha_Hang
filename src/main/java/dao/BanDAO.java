@@ -14,44 +14,48 @@ public class BanDAO {
     // ==============================
     // LẤY TOÀN BỘ DANH SÁCH BÀN
     // ==============================
-    public List<Ban> getAll() {
+    public static List<Ban> getAll() {
         List<Ban> ds = new ArrayList<>();
         String sql = """
-            SELECT b.maBan, b.trangThai, 
-                   lb.maLoaiBan, lb.tenLoaiBan, lb.soLuong,
-                   kv.maKhuVuc, kv.tenKhuVuc
-            FROM Ban b
-            JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
-            JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
-            """;
-        try {
-            connectDB.getInstance().connect();
-            Connection con = connectDB.getConnection();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+        SELECT b.maBan, b.trangThai, b.maLoaiBan, b.maKhuVuc
+        FROM Ban b
+    """;
+
+        try (Connection con = connectDB.getConnection();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            // Lấy danh sách loại bàn và khu vực sẵn
+            List<LoaiBan> dsLoaiBan = LoaiBanDAO.getAll();
+            List<KhuVuc> dsKhuVuc = KhuVucDAO.getAll();
 
             while (rs.next()) {
-                LoaiBan loaiBan = new LoaiBan(
-                        rs.getString("maLoaiBan"),
-                        rs.getInt("soLuong"),
-                        rs.getString("tenLoaiBan")
-                );
-                KhuVuc khuVuc = new KhuVuc(
-                        rs.getString("maKhuVuc"),
-                        rs.getString("tenKhuVuc")
-                );
-                Ban ban = new Ban(
-                        rs.getString("maBan"),
-                        khuVuc,
-                        loaiBan
-                );
+                String maBan = rs.getString("maBan");
+                String maLoaiBan = rs.getString("maLoaiBan");
+                String maKhuVuc = rs.getString("maKhuVuc");
+                boolean trangThai = rs.getBoolean("trangThai");
+
+                // Tìm LoaiBan và KhuVuc tương ứng
+                LoaiBan loaiBan = dsLoaiBan.stream()
+                        .filter(lb -> lb.getMaLoaiBan().equals(maLoaiBan))
+                        .findFirst()
+                        .orElse(null);
+
+                KhuVuc khuVuc = dsKhuVuc.stream()
+                        .filter(kv -> kv.getMaKhuVuc().equals(maKhuVuc))
+                        .findFirst()
+                        .orElse(null);
+
+                Ban ban = new Ban(maBan, khuVuc, loaiBan, trangThai);
                 ds.add(ban);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return ds;
     }
+
 
     // ==============================
     // THÊM BÀN MỚI
@@ -100,4 +104,45 @@ public class BanDAO {
             return false;
         }
     }
+
+    public static Ban getBanTrong(String kv, String lb) {
+        Ban banTrong = null;
+        String sql = """
+        SELECT TOP 1 *
+        FROM Ban
+        WHERE maKhuVuc = ? 
+          AND maLoaiBan = ? 
+          AND trangThai = 0
+    """;
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, kv);
+            ps.setString(2, lb);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String maBan = rs.getString("maBan");
+                    boolean trangThai = rs.getBoolean("trangThai");
+                    String maLoaiBan = rs.getString("maLoaiBan");
+                    String maKhuVuc = rs.getString("maKhuVuc");
+
+                    LoaiBan loaiBan = LoaiBanDAO.getById(maLoaiBan);
+                    KhuVuc khuVuc = KhuVucDAO.getById(maKhuVuc);
+
+                    banTrong = new Ban(maBan, khuVuc, loaiBan, trangThai);
+                    System.out.println("Bàn trống: " + maBan);
+                } else {
+                    System.out.println("Không có bàn trống trong KV=" + kv + " LB=" + lb);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return banTrong;
+    }
+
+
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class KhuVucDAO {
 
-    public List<KhuVuc> getAll() {
+    public static List<KhuVuc> getAll() {
         List<KhuVuc> ds = new ArrayList<>();
         String sql = "SELECT * FROM KhuVuc";
         try (Statement st = connectDB.getConnection().createStatement();
@@ -48,4 +48,27 @@ public class KhuVucDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
+
+    public static KhuVuc getById(String maKhuVuc) {
+        KhuVuc kv = null;
+        String sql = "SELECT maKhuVuc, tenKhuVuc FROM KhuVuc WHERE maKhuVuc = ?";
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maKhuVuc);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    kv = new KhuVuc(
+                            rs.getString("maKhuVuc"),
+                            rs.getString("tenKhuVuc")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return kv;
+    }
+
 }

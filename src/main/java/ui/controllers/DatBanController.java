@@ -1,15 +1,23 @@
 package ui.controllers;
 
+import dao.BanDAO;
 import dao.HoaDonDAO;
+import entity.Ban;
 import entity.HoaDon;
+import entity.KhuVuc;
+import entity.LoaiBan;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,6 +46,15 @@ public class DatBanController {
     @FXML private ImageView starVIP_01;
     @FXML private ImageView starVIP_02;
 
+    @FXML private VBox tableOut_01, tableOut_02, tableOut_03, tableOut_04;
+
+    @FXML private VBox tableIN_01, tableIN_02, tableIN_03, tableIN_04;
+
+    @FXML private VBox tableVIP_01, tableVIP_02;
+
+
+    private ui.controllers.MainController_NV mainController;
+
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
 
     @FXML
@@ -45,11 +62,16 @@ public class DatBanController {
         datePicker.setValue(LocalDate.now()); // mặc định là hôm nay
         hourSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
         minuteSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+        ganSuKienChoBan();
 
         noteField.textProperty().addListener((obs, oldV, newV) -> locTheoRealTime());
         datePicker.valueProperty().addListener((obs, oldV, newV) -> locTheoRealTime());
         hourSpinner.valueProperty().addListener((obs, oldV, newV) -> locTheoRealTime());
         minuteSpinner.valueProperty().addListener((obs, oldV, newV) -> locTheoRealTime());
+    }
+
+    public void setMainController(ui.controllers.MainController_NV controller) {
+        this.mainController = controller;
     }
 
     private void locTheoRealTime() {
@@ -101,6 +123,51 @@ public class DatBanController {
 
         hienThiNgoiSao(star, duocChon);
     }
+
+    private void ganSuKienChoBan() {
+
+        // OUT
+        tableOut_01.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0001", "LB0001")));
+        tableOut_02.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0001", "LB0002")));
+        tableOut_03.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0001", "LB0003")));
+        tableOut_04.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0001", "LB0004")));
+
+        // IN
+        tableIN_01.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0002", "LB0001")));
+        tableIN_02.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0002", "LB0002")));
+        tableIN_03.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0002", "LB0003")));
+        tableIN_04.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0002", "LB0004")));
+
+        // VIP
+        tableVIP_01.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0003", "LB0004")));
+        tableVIP_02.setOnMouseClicked(e -> chonBan(BanDAO.getBanTrong("KV0003", "LB0005")));
+    }
+
+
+
+    private void chonBan(Ban ban) {
+        if (ban == null) {
+            System.out.println(" Không tìm thấy bàn trống phù hợp!");
+            return;
+        }
+
+        if (mainController != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ChonMon.fxml"));
+                Parent node = loader.load();
+                
+                ChonMonController chonMonCtrl = loader.getController();
+                chonMonCtrl.setMainController(mainController);
+                chonMonCtrl.setThongTinBan(ban);
+
+                mainController.getMainContent().getChildren().setAll(node);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 
 
