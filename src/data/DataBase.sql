@@ -115,7 +115,9 @@ CREATE TABLE Coc (
     maCoc NVARCHAR(6) PRIMARY KEY,
     loaiCoc BIT,
     phanTramCoc INT,
-    soTienCoc FLOAT
+    soTienCoc FLOAT,
+    maLoaiBan NVARCHAR(6),
+    maKhuVuc NVARCHAR(6)
 );
 
 -- =========================
@@ -162,6 +164,7 @@ CREATE TABLE Mon (
     giaGoc FLOAT,
     giaBan FLOAT,
     loaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
+    maPTGB NVARCHAR(6) FOREIGN KEY REFERENCES PhanTramGiaBan(maPTGB),
     maKM NVARCHAR(6) FOREIGN KEY REFERENCES KhuyenMai(maKM)
 );
 
