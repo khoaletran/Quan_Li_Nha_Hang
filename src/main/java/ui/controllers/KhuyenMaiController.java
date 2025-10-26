@@ -1,6 +1,7 @@
 package ui.controllers;
 
 import dao.KhuyenMaiDAO;
+import dao.NhanVienDAO;
 import entity.KhuyenMai;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -19,28 +20,20 @@ import java.util.Optional;
 
 public class KhuyenMaiController {
 
-    // =========================
     // FXML COMPONENTS - DANH SÁCH
-    // =========================
     @FXML private ScrollPane scrollList;
     @FXML private VBox vboxCenterScroll;
     @FXML private FlowPane foodList;
 
-    // =========================
     // FXML COMPONENTS - FORM THÔNG TIN
-    // =========================
     @FXML private TextField txtMaKM, txtTenKM, txtSoLuong, txtMaThayThe, txtPhanTram, txtTimKiem;
-    @FXML private DatePicker dpNgayBatDau, dpNgayKetThuc, dpNgayLoc;
+    @FXML private DatePicker dpNgayBatDau, dpNgayKetThuc;
     @FXML private ComboBox<String> cbUudai, cbTrangThai, cbUuDaiTimKiem;
 
-    // =========================
     // FXML COMPONENTS - NÚT CHỨC NĂNG
-    // =========================
     @FXML private Button btnThem, btnSua, btnXoa, btnTimKiem, btnXoaTrang;
 
-    // =========================
     // BIẾN TOÀN CỤC
-    // =========================
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private KhuyenMai selectedKM = null;
     private final KhuyenMaiDAO kmDAO = new KhuyenMaiDAO();
@@ -51,30 +44,28 @@ public class KhuyenMaiController {
 
         // Khởi tạo combobox
         khoiTaoComboBox();
-
         // Gán sự kiện cho các nút
         ganSuKienChoNut();
-
         // Load dữ liệu ban đầu
         taiDanhSachKhuyenMai();
+
+        txtMaKM.setEditable(false);
+        txtMaKM.setFocusTraversable(false); // không thể chọn luôn
+        txtMaKM.setText(tuSinhMaKM(KhuyenMaiDAO.maKMCuoi()));
     }
 
-    // =========================
     // KHỞI TẠO
-    // =========================
     private void khoiTaoComboBox() {
         // Combo ưu đãi trong form
         if (cbUudai != null) {
             cbUudai.getItems().addAll("Hóa đơn", "Món ăn");
         }
-
         // Combo ưu đãi trong tìm kiếm
         if (cbUuDaiTimKiem != null) {
             cbUuDaiTimKiem.getItems().clear();
             cbUuDaiTimKiem.getItems().addAll("Tất cả", "Hóa đơn", "Món ăn");
             cbUuDaiTimKiem.setValue("Tất cả");
         }
-
         // Combo trạng thái tìm kiếm
         if (cbTrangThai != null) {
             cbTrangThai.getItems().addAll("Tất cả", "Đang hoạt động", "Hết hạn", "Chưa bắt đầu");
@@ -89,16 +80,14 @@ public class KhuyenMaiController {
         if (btnXoaTrang != null) btnXoaTrang.setOnAction(e -> xoaTrangTimKiem());
     }
 
-    // =========================
     // XỬ LÝ DANH SÁCH KHUYẾN MÃI
-    // =========================
     private void taiDanhSachKhuyenMai() {
         try {
             List<KhuyenMai> danhSach = kmDAO.getAll();
             hienThiDanhSachKhuyenMai(danhSach);
             System.out.println("Đã tải " + danhSach.size() + " khuyến mãi");
         } catch (Exception e) {
-            System.err.println("Lỗi khi tải danh sách khuyến mãi: " + e.getMessage());
+            System.err.println("Lỗi tải danh sách khuyến mãi: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -117,9 +106,7 @@ public class KhuyenMaiController {
         }
     }
 
-    // =========================
     // TẠO THẺ KHUYẾN MÃI
-    // =========================
     private HBox taoTheKhuyenMai(KhuyenMai km) {
         HBox the = new HBox(10);
         the.getStyleClass().add("order-card");
@@ -166,9 +153,7 @@ public class KhuyenMaiController {
         return the;
     }
 
-    // =========================
     // XÁC ĐỊNH TRẠNG THÁI KHUYẾN MÃI THEO THỜI GIAN
-    // =========================
     private String xacDinhTrangThaiKhuyenMai(KhuyenMai km) {
         LocalDate ngayHienTai = LocalDate.now();
         LocalDate ngayBatDau = km.getNgayPhatHanh();
@@ -197,9 +182,7 @@ public class KhuyenMaiController {
         return ngay == null ? "" : dtf.format(ngay);
     }
 
-    // =========================
     // XỬ LÝ CHỌN KHUYẾN MÃI
-    // =========================
     private void xuLyChonKhuyenMai(KhuyenMai km, HBox the) {
         selectedKM = km;
         hienThiThongTinKhuyenMai(km);
@@ -219,10 +202,12 @@ public class KhuyenMaiController {
 
         // Set giá trị cho combobox ưu đãi
         if (cbUudai != null) {
-            // Lấy giá trị ưu đãi từ database (giả sử có trường uuDai trong entity)
-            // Nếu chưa có, bạn cần thêm trường này vào entity KhuyenMai
-            // Ở đây tôi sẽ để mặc định là "Hóa đơn"
-            cbUudai.setValue("Hóa đơn");
+            if(km.isUuDai()){
+                cbUudai.setValue("Hoá Đơn");
+            }
+            else {
+                cbUudai.setValue("Món Ăn");
+            }
         }
     }
 
@@ -238,9 +223,7 @@ public class KhuyenMaiController {
         }
     }
 
-    // =========================
     // XỬ LÝ THÊM KHUYẾN MÃI
-    // =========================
     private void xuLyThem() {
         try {
             KhuyenMai km = layThongTinTuForm();
@@ -255,6 +238,7 @@ public class KhuyenMaiController {
                 xoaTrangForm();
             } else {
                 hienThongBao(Alert.AlertType.ERROR, "Thất bại", "Thêm khuyến mãi thất bại.");
+                txtMaKM.setText(tuSinhMaKM(KhuyenMaiDAO.maKMCuoi()));
             }
         } catch (Exception ex) {
             hienThongBao(Alert.AlertType.ERROR, "Lỗi", ex.getMessage());
@@ -262,9 +246,7 @@ public class KhuyenMaiController {
         }
     }
 
-    // =========================
     // XỬ LÝ SỬA KHUYẾN MÃI
-    // =========================
     private void xuLySua() {
         if (selectedKM == null) {
             hienThongBao(Alert.AlertType.WARNING, "Chưa chọn", "Vui lòng chọn khuyến mãi cần sửa.");
@@ -281,6 +263,7 @@ public class KhuyenMaiController {
             if (thanhCong) {
                 hienThongBao(Alert.AlertType.INFORMATION, "Thành công", "Đã cập nhật khuyến mãi.");
                 taiDanhSachKhuyenMai();
+                xoaTrangForm();
             } else {
                 hienThongBao(Alert.AlertType.ERROR, "Thất bại", "Cập nhật thất bại.");
             }
@@ -290,9 +273,7 @@ public class KhuyenMaiController {
         }
     }
 
-    // =========================
     // XỬ LÝ XÓA KHUYẾN MÃI
-    // =========================
     private void xuLyXoa() {
         if (selectedKM == null) {
             hienThongBao(Alert.AlertType.WARNING, "Chưa chọn", "Vui lòng chọn khuyến mãi cần xóa.");
@@ -317,14 +298,11 @@ public class KhuyenMaiController {
         }
     }
 
-    // =========================
     // XỬ LÝ TÌM KIẾM NÂNG CAO
-    // =========================
     private void xuLyTimKiem() {
         String maTimKiem = txtTimKiem.getText().trim();
         String trangThai = cbTrangThai.getValue();
         String uuDai = cbUuDaiTimKiem.getValue();
-        LocalDate ngayLoc = dpNgayLoc.getValue();
 
         // Nếu không có điều kiện tìm kiếm, load tất cả
         if (maTimKiem.isEmpty() &&
@@ -387,8 +365,8 @@ public class KhuyenMaiController {
         // true = Hóa đơn, false = Món ăn
         boolean isHoaDon = km.isUuDai();
         if (uuDai.equals("Hóa đơn")) return isHoaDon;
-        if (uuDai.equals("Món ăn")) return !isHoaDon;
-        return true;
+        else  return !isHoaDon;
+
     }
 
 
@@ -406,12 +384,9 @@ public class KhuyenMaiController {
         }
     }
 
-    // =========================
     // XÓA TRẮNG BỘ LỌC
-    // =========================
     private void xoaTrangTimKiem() {
         txtTimKiem.clear();
-        dpNgayLoc.setValue(null);
         if (cbTrangThai != null) {
             cbTrangThai.setValue("Tất cả");
         }
@@ -419,9 +394,9 @@ public class KhuyenMaiController {
             cbUuDaiTimKiem.setValue("Tất cả");
         }
         taiDanhSachKhuyenMai();
+        xoaTrangForm();
     }
 
-    // =========================
     // LẤY THÔNG TIN TỪ FORM
     // =========================
     private KhuyenMai layThongTinTuForm() {
@@ -451,8 +426,7 @@ public class KhuyenMaiController {
 
             int soLuong = Integer.parseInt(soLuongStr);
             int phanTram = Integer.parseInt(phanTramStr);
-            // TODO: Cần thêm trường loaiUuDai vào entity KhuyenMai
-            // Hiện tại vẫn sử dụng entity cũ
+
             return new KhuyenMai(ma, ten, soLuong, ngayBatDau, ngayKetThuc, maThayThe, phanTram, isHoaDon);
 
         } catch (NumberFormatException e) {
@@ -464,11 +438,10 @@ public class KhuyenMaiController {
         }
     }
 
-    // =========================
     // XÓA TRẮNG FORM
-    // =========================
     private void xoaTrangForm() {
-        txtMaKM.clear();
+        // Sinh mã tự động mới
+        txtMaKM.setText(tuSinhMaKM(KhuyenMaiDAO.maKMCuoi()));
         txtTenKM.clear();
         txtSoLuong.clear();
         dpNgayBatDau.setValue(null);
@@ -482,7 +455,7 @@ public class KhuyenMaiController {
 
         selectedKM = null;
 
-        // Xóa highlight từ tất cả các thẻ
+        // Xóa highlight
         if (vboxCenterScroll != null) {
             vboxCenterScroll.getChildren().forEach(node ->
                     node.getStyleClass().remove("selected-card")
@@ -490,9 +463,15 @@ public class KhuyenMaiController {
         }
     }
 
+
+    // HÀM TỰ SINH MÃ
     // =========================
+    private String tuSinhMaKM(String maKM) {
+        int so = Integer.parseInt(maKM.substring(2));
+        return String.format("KM%04d", so + 1);
+    }
+
     // HIỂN THỊ THÔNG BÁO
-    // =========================
     private void hienThongBao(Alert.AlertType loai, String tieuDe, String noiDung) {
         Alert thongBao = new Alert(loai);
         thongBao.setTitle(tieuDe);

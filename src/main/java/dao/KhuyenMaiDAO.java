@@ -180,4 +180,27 @@ public class KhuyenMaiDAO {
         }
         return km;
     }
+    public static String maKMCuoi() {
+        String sql = "SELECT TOP 1 maKM FROM KhuyenMai ORDER BY maKM DESC";
+        String maKMCuoi = null;
+
+        try {
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                maKMCuoi = rs.getString("maKM");
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch (Exception e) {
+            System.err.println("Lỗi khi lấy mã khuyen mai cuối: " + e.getMessage());
+        }
+
+        return maKMCuoi;
+    }
 }

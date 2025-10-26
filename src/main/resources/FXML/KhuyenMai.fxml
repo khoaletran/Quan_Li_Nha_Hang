@@ -58,26 +58,27 @@
                     </children>
                 </HBox>
 
-                <GridPane hgap="10" prefHeight="98.0" prefWidth="614.0" style="-fx-padding: 10;" vgap="10">
+                <GridPane hgap="10" prefHeight="98.0" prefWidth="614.0" style="-fx-padding: 10;" styleClass="grib-filter" vgap="10">
                     <columnConstraints>
-                        <ColumnConstraints percentWidth="20.0" />
-                        <ColumnConstraints percentWidth="30.0" />
-                        <ColumnConstraints percentWidth="20.0" />
-                        <ColumnConstraints percentWidth="30.0" />
+                        <ColumnConstraints percentWidth="31.0" />
+                        <ColumnConstraints percentWidth="67.0" />
+                        <ColumnConstraints percentWidth="0.0" />
+                        <ColumnConstraints percentWidth="2.0" />
                     </columnConstraints>
                     <!-- Hàng 1 -->
                     <Label styleClass="label_filter" text="Mã KM:" GridPane.columnIndex="0" />
-                    <TextField fx:id="txtTimKiem" prefHeight="21.0" prefWidth="360.0" promptText="Nhập mã KM" styleClass="filter-tf" GridPane.columnIndex="1" />
+                    <TextField fx:id="txtTimKiem" prefHeight="22.0" prefWidth="720.0" promptText="Nhập mã KM" styleClass="filter-tf" GridPane.columnIndex="1" />
 
                     <!-- Hàng 2 -->
                     <Label styleClass="label_filter" text="Trạng thái:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                    <ComboBox fx:id="cbTrangThai" prefHeight="30.0" prefWidth="372.0" promptText="-- chọn --" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="cbTrangThai" prefHeight="29.0" prefWidth="720.0" promptText="-- chọn --" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                    <Label styleClass="label_filter" text="Ưu đãi:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                    <ComboBox fx:id="cbUuDaiTimKiem" prefHeight="29.0" prefWidth="272.0" promptText="-- chọn --" styleClass="uudai_combobox filter-tf" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <Label styleClass="label_filter" text="Ưu đãi:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <ComboBox fx:id="cbUuDaiTimKiem" prefHeight="19.0" prefWidth="720.0" promptText="-- chọn --" styleClass="uudai_combobox filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                     <rowConstraints>
                         <RowConstraints />
                         <RowConstraints />
+                  <RowConstraints />
                     </rowConstraints>
                     <VBox.margin>
                         <Insets left="10.0" />
@@ -85,7 +86,7 @@
                 </GridPane>
 
                 <!-- Hàng nút -->
-                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10;">
+                <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
                     <Button fx:id="btnXoaTrang" styleClass="btn-clear" text="Xóa trắng" />
                     <Button fx:id="btnTimKiem" styleClass="btn-search" text="Tìm kiếm" />
                     <VBox.margin>
@@ -141,7 +142,7 @@
                     <TextField fx:id="txtPhanTram" promptText="10%" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
                     <Label styleClass="label_infoOrder" text="Ưu đãi:" GridPane.rowIndex="7" />
-                    <ComboBox fx:id="cbUudai" prefHeight="30.0" prefWidth="213.0" promptText="Tổng hóa đơn" styleClass="uudai_combobox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                    <ComboBox fx:id="cbUudai" prefHeight="30.0" prefWidth="213.0" promptText="Ưu đãi" styleClass="uudai_combobox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                     <rowConstraints>
                         <RowConstraints />
                         <RowConstraints />
