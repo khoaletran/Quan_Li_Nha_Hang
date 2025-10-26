@@ -89,7 +89,7 @@
             </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Số lượng khách:" />
-                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Số người" styleClass="filter-tf" />
+                    <TextField fx:id="txtSLKhach" prefHeight="24.0" prefWidth="228.0" promptText="Số người" styleClass="filter-tf" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Ghi chú:" />

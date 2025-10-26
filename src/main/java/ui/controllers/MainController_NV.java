@@ -51,10 +51,12 @@ public class MainController_NV {
             Object controller = loader.getController();
             if (controller instanceof ChonMonController chonMonCtrl) {
                 chonMonCtrl.setMainController(this);
+                chonMonCtrl.setNhanVienHien(nhanVien);
             }
 
             if (controller instanceof DatBanController datBanCtrl) {
                 datBanCtrl.setMainController(this);
+                datBanCtrl.setNhanVien(nhanVien);
             }
 
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
