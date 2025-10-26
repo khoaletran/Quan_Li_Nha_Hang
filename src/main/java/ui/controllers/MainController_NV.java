@@ -4,9 +4,9 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
-
 import java.io.IOException;
 
 public class MainController_NV {
@@ -14,14 +14,12 @@ public class MainController_NV {
     @FXML private StackPane mainContent;
     @FXML private SidebarController_NV sidebar_NVController;
 
-
     public SidebarController_NV getSidebarController() {
         return sidebar_NVController;
     }
 
     @FXML
     public void initialize() {
-        // Gắn controller sidebar
         if (sidebar_NVController != null) {
             sidebar_NVController.setMainController(this);
         }
@@ -32,9 +30,16 @@ public class MainController_NV {
         setCenterContent("/FXML/DashBoard.fxml");
     }
 
+
     public void setCenterContent(String fxmlPath) {
         try {
-            Node node = FXMLLoader.load(getClass().getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ChonMon.fxml"));
+            Parent node = loader.load();
+
+            Object controller = loader.getController();
+            if (controller instanceof ChonMonController chonMonCtrl) {
+                chonMonCtrl.setMainController(this);
+            }
 
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
             fadeIn.setFromValue(0);
