@@ -132,6 +132,17 @@ public class LoginController {
             alert.showAndWait();
         }
     }
+    public void showResetPane() {
+        loginPane.setVisible(false);
+        loginPane.setManaged(false);
+
+        forgotPane.setVisible(false);
+        forgotPane.setManaged(false);
+
+        resetPane.setVisible(true);
+        resetPane.setManaged(true);
+    }
+
 
 
 }

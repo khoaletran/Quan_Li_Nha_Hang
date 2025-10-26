@@ -142,10 +142,13 @@ CREATE TABLE PhanTramGiaBan (
 -- =========================
 CREATE TABLE KhuyenMai (
     maKM NVARCHAR(6) PRIMARY KEY,
+	tenKM NVARCHAR(50),
     soLuong INT,
-    phanTramGiamGia INT,
     ngayPhatHanh DATE,
-    ngayKetThuc DATE
+    ngayKetThuc DATE,
+	maThayThe NVARCHAR(10),
+	phanTramGiamGia INT,
+	uuDai bit
 );
 
 -- =========================

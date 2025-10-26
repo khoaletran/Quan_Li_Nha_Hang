@@ -2,6 +2,7 @@ package dao;
 
 import connectDB.connectDB;
 import entity.LoaiBan;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,48 @@ public class LoaiBanDAO {
                         rs.getString("tenLoaiBan")
                 ));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ds;
+    }
+
+    public LoaiBan getById(String maLoaiBan) {
+        String sql = "SELECT * FROM LoaiBan WHERE maLoaiBan=?";
+        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+            ps.setString(1, maLoaiBan);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new LoaiBan(
+                            rs.getString("maLoaiBan"),
+                            rs.getInt("soLuong"),
+                            rs.getString("tenLoaiBan")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public LoaiBan getByName(String tenLoaiBan) {
+        String sql = "SELECT * FROM LoaiBan WHERE tenLoaiBan=?";
+        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+            ps.setString(1, tenLoaiBan);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new LoaiBan(
+                            rs.getString("maLoaiBan"),
+                            rs.getInt("soLuong"),
+                            rs.getString("tenLoaiBan")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public boolean insert(LoaiBan lb) {
@@ -31,7 +72,10 @@ public class LoaiBanDAO {
             ps.setString(2, lb.getTenLoaiBan());
             ps.setInt(3, lb.getSoLuong());
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean update(LoaiBan lb) {
@@ -41,7 +85,10 @@ public class LoaiBanDAO {
             ps.setInt(2, lb.getSoLuong());
             ps.setString(3, lb.getMaLoaiBan());
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean delete(String maLoaiBan) {
@@ -49,7 +96,10 @@ public class LoaiBanDAO {
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, maLoaiBan);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); return false; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static LoaiBan getById(String maLoaiBan) {

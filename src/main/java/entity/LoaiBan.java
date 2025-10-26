@@ -16,6 +16,9 @@ public class LoaiBan {
         this.soLuong = soLuong;
         this.tenLoaiBan = tenLoaiBan;
     }
+    public LoaiBan(String tenLoaiBan){
+        this.tenLoaiBan = tenLoaiBan;
+    }
 
     public String getMaLoaiBan() {
         return maLoaiBan;
