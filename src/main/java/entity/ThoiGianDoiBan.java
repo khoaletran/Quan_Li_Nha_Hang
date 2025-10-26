@@ -28,7 +28,9 @@ public class ThoiGianDoiBan {
     public void setThoiGian(int thoiGian) {
         this.thoiGian = thoiGian;
     }
+    public ThoiGianDoiBan(){
 
+    }
     public ThoiGianDoiBan(String maTGDB, boolean loaiDatBan, int thoiGian) {
         this.maTGDB = maTGDB;
         this.loaiDatBan = loaiDatBan;
