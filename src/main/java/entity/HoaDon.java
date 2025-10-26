@@ -17,15 +17,16 @@ public class HoaDon {
    private LocalDateTime tgCheckOut;
    private KhuyenMai khuyenMai;
    private SuKien suKien;
+   private int trangthai;
    private boolean kieuThanhToan;
    private boolean kieuDatBan;
+   private double tongTienTruoc;
+   private double tongTienKhuyenMai;
    private double thue=0;
    private double coc=0;
-   private double tongTienTruoc=0;
    private double tongTienSau=0;
-   private double tongTienKhuyenMai=0;
 
-    public HoaDon(String maHD, double tongTienKhuyenMai, double tongTienSau, double tongTienTruoc, double coc, double thue, boolean kieuDatBan, boolean kieuThanhToan, KhuyenMai khuyenMai, SuKien suKien, LocalDateTime tgCheckOut, LocalDateTime tgCheckIn, Ban ban, NhanVien nhanVien, KhachHang khachHang) {
+   public HoaDon(String maHD, double tongTienKhuyenMai, double tongTienSau, double tongTienTruoc, double coc, double thue, boolean kieuDatBan, boolean kieuThanhToan, KhuyenMai khuyenMai, SuKien suKien, int trangthai, LocalDateTime tgCheckOut, LocalDateTime tgCheckIn, Ban ban, NhanVien nhanVien, KhachHang khachHang) {
         this.maHD = maHD;
         this.tongTienKhuyenMai = tongTienKhuyenMai;
         this.tongTienSau = tongTienSau;
@@ -36,12 +37,15 @@ public class HoaDon {
         this.kieuThanhToan = kieuThanhToan;
         this.khuyenMai = khuyenMai;
         this.suKien = suKien;
+        setTrangthai(trangthai);
         this.tgCheckOut = tgCheckOut;
         this.tgCheckIn = tgCheckIn;
         this.ban = ban;
         this.nhanVien = nhanVien;
         this.khachHang = khachHang;
     }
+
+    public HoaDon() {}
 
     public String getMaHD() {
         return maHD;
@@ -162,6 +166,10 @@ public class HoaDon {
     public void setTgCheckIn(LocalDateTime tgCheckIn) {
         this.tgCheckIn = tgCheckIn;
     }
+
+    public void setTrangthai(int trangthai) {this.trangthai = trangthai;}
+
+    public int getTrangthai() {return trangthai;}
 
     @Override
     public String toString() {

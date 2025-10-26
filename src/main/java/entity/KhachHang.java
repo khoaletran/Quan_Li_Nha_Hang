@@ -12,13 +12,15 @@ public class KhachHang {
     private String sdt;
     private boolean gioiTinh;
     private int diemTichLuy =0;
+    HangKhachHang hangKhachHang;
 
-    public KhachHang(String maKhachHang, int diemTichLuy, boolean gioiTinh, String sdt, String tenKhachHang) {
-        this.maKhachHang = maKhachHang;
-        this.diemTichLuy = diemTichLuy;
-        this.gioiTinh = gioiTinh;
-        this.sdt = sdt;
-        this.tenKhachHang = tenKhachHang;
+    public KhachHang(String maKhachHang, int diemTichLuy, boolean gioiTinh, String sdt, String tenKhachHang, HangKhachHang hangKhachHang) {
+        setMaKhachHang(maKhachHang);
+        setTenKhachHang(tenKhachHang);
+        setDiemTichLuy(diemTichLuy);
+        setGioiTinh(gioiTinh);
+        setSdt(sdt);
+        setHangKhachHang(hangKhachHang);
     }
 
     public String getMaKhachHang() {
@@ -60,6 +62,10 @@ public class KhachHang {
     public void setGioiTinh(boolean gioiTinh) {
         this.gioiTinh = gioiTinh;
     }
+
+    public HangKhachHang getHangKhachHang() {return hangKhachHang; }
+
+    public void setHangKhachHang(HangKhachHang hangKhachHang) {this.hangKhachHang = hangKhachHang; }
 
     @Override
     public String toString() {

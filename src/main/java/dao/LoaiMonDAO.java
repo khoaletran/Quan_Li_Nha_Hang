@@ -69,4 +69,46 @@ public class LoaiMonDAO {
             return false;
         }
     }
+
+    public LoaiMon findByID(String maLoaiMon) {
+        String sql = "SELECT * FROM LoaiMon WHERE maLoaiMon = ?";
+        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+            ps.setString(1, maLoaiMon);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new LoaiMon(
+                            rs.getString("maLoaiMon"),
+                            rs.getString("tenLoaiMon"),
+                            rs.getString("moTa")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi tìm loại món theo mã: " + e.getMessage());
+        }
+        return null; // Không tìm thấy
+    }
+
+    public static LoaiMon getByID(String maLoaiMon) {
+        Connection con = connectDB.getConnection();
+
+        String sql = "SELECT * FROM LoaiMon WHERE maLoaiMon = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, maLoaiMon);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new LoaiMon(
+                            rs.getString("maLoaiMon"),
+                            rs.getString("tenLoaiMon"),
+                            rs.getString("moTa")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi truy vấn getByID LoaiMon: " + e.getMessage());
+        }
+
+        return null;
+    }
+
 }

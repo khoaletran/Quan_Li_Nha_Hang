@@ -99,4 +99,32 @@ public class MonDAO {
             return false;
         }
     }
+
+    public static Mon findByID(String maMon) {
+        String sql = "SELECT * FROM Mon WHERE maMon = ?";
+        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+            ps.setString(1, maMon);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    LoaiMon loaiMon = new LoaiMonDAO().findByID(rs.getString("loaiMon"));
+                    PhanTramGiaBan pt = new PhanTramGiaBanDAO().findByID(rs.getString("maPTGB"));
+
+                    return new Mon(
+                            rs.getString("maMon"),
+                            rs.getString("tenMon"),
+                            rs.getString("moTa"),
+                            rs.getString("hinhAnh"),
+                            loaiMon,
+                            pt,
+                            rs.getDouble("giaGoc")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

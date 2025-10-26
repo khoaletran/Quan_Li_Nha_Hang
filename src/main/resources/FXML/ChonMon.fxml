@@ -84,16 +84,22 @@
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="55.0" spacing="10">
                <children>
                   <Label styleClass="info-label" text="Bàn:" />
-                  <TextField fx:id="tf_ban" prefHeight="24.0" prefWidth="228.0" promptText="Bàn" styleClass="filter-tf" />
+                  <TextField  fx:id="tf_ban" prefHeight="24.0" prefWidth="228.0" promptText="Bàn" styleClass="filter-tf" />
                </children>
             </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Số lượng khách:" />
-                    <TextField fx:id="txtSLKhach" prefHeight="24.0" prefWidth="228.0" promptText="Số người" styleClass="filter-tf" />
+                    <TextField fx:id="tfSLKhach" prefHeight="24.0" prefWidth="228.0" promptText="Số người" styleClass="filter-tf" />
                 </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="134.0" spacing="10">
+               <children>
+                  <Label styleClass="info-label" text="Thời gian" />
+                  <TextField fx:id="tftg" prefHeight="24.0" prefWidth="228.0" promptText="Thời gian" styleClass="filter-tf" />
+               </children>
+            </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Ghi chú:" />
-                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Ghi chú đặc biệt" styleClass="filter-tf" />
+                    <TextField fx:id="tfghichu" prefHeight="24.0" prefWidth="228.0" promptText="Ghi chú đặc biệt" styleClass="filter-tf" />
                 </HBox>
             </VBox>
               <VBox prefHeight="542.0" prefWidth="340.0" spacing="8.0" styleClass="order-details">
@@ -188,7 +194,7 @@
 
                         <!-- Nút hành động -->
                   <VBox spacing="10" styleClass="action-buttons">
-                      <Button styleClass="action-btn" text="Đặt Bàn" />
+                      <Button fx:id="btndatban" styleClass="action-btn" text="Đặt Bàn" />
                   </VBox>
               </VBox>
         </VBox>

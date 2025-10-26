@@ -76,4 +76,26 @@ public class PhanTramGiaBanDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
+
+    public static PhanTramGiaBan findByID(String maPTGB) {
+        String sql = "SELECT * FROM PhanTramGiaBan WHERE maPTGB = ?";
+        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+            ps.setString(1, maPTGB);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    LoaiMon loaiMon = new LoaiMonDAO().findByID(rs.getString("maLoaiMon"));
+                    return new PhanTramGiaBan(
+                            rs.getString("maPTGB"),
+                            loaiMon,
+                            rs.getInt("phanTramLoi"),
+                            rs.getDate("ngayApDung").toLocalDate()
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

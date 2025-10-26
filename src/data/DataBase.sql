@@ -176,8 +176,6 @@ CREATE TABLE HoaDon (
     maKH NVARCHAR(6) FOREIGN KEY REFERENCES KhachHang(maKH),
     maNV NVARCHAR(6) FOREIGN KEY REFERENCES NhanVien(maNV),
     maBan NVARCHAR(6) FOREIGN KEY REFERENCES Ban(maBan),
-    maCoc NVARCHAR(6) FOREIGN KEY REFERENCES Coc(maCoc),
-    maTGDB NVARCHAR(6) FOREIGN KEY REFERENCES ThoiGianDoiBan(maTGDB),
     maKM NVARCHAR(6) FOREIGN KEY REFERENCES KhuyenMai(maKM),
     maSK NVARCHAR(6) FOREIGN KEY REFERENCES SuKien(maSK),
     tgCheckin SMALLDATETIME,
@@ -186,6 +184,7 @@ CREATE TABLE HoaDon (
     kieuDatBan BIT,
     thue FLOAT,
     coc FLOAT,
+    trangThai INT,
     tongTienTruoc FLOAT,
     tongTienSau FLOAT,
     tongTienKM FLOAT

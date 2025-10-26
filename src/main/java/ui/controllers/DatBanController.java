@@ -25,7 +25,7 @@ public class DatBanController {
     @FXML private DatePicker datePicker;
     @FXML private Spinner<Integer> hourSpinner;
     @FXML private Spinner<Integer> minuteSpinner;
-    @FXML private TextField noteField; // số lượng khách nhập
+    @FXML private TextField noteField;
 
     // ImageView bàn OUT
     @FXML private ImageView starOut_01;
@@ -55,6 +55,7 @@ public class DatBanController {
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
 
     private NhanVien nv;
+
 
     @FXML
     public void initialize() {
@@ -148,7 +149,7 @@ public class DatBanController {
 
     private void chonBan(Ban ban) {
         if (ban == null) {
-            System.out.println(" Không tìm thấy bàn trống phù hợp!");
+            System.out.println("Không tìm thấy bàn trống phù hợp!");
             return;
         }
 
@@ -156,11 +157,24 @@ public class DatBanController {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ChonMon.fxml"));
                 Parent node = loader.load();
-                
+
                 ChonMonController chonMonCtrl = loader.getController();
                 chonMonCtrl.setMainController(mainController);
                 chonMonCtrl.setThongTinBan(ban);
                 chonMonCtrl.setNhanVien(nv);
+
+                // ====== 🕒 Truyền thời gian đặt bàn ======
+                LocalDate date = datePicker.getValue();
+                int hour = hourSpinner.getValue();
+                int minute = minuteSpinner.getValue();
+                LocalDateTime thoiGian = LocalDateTime.of(date, LocalTime.of(hour, minute));
+                chonMonCtrl.setThoiGianDat(thoiGian);
+
+                // ====== 👥 Truyền số lượng khách ======
+                int soLuong = 0;
+                try { soLuong = Integer.parseInt(noteField.getText()); }
+                catch (NumberFormatException e) { soLuong = 0; }
+                chonMonCtrl.setSoLuongKhach(soLuong);
 
                 mainController.getMainContent().getChildren().setAll(node);
 
@@ -169,6 +183,7 @@ public class DatBanController {
             }
         }
     }
+
 
 
 
