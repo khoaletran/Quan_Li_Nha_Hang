@@ -77,51 +77,52 @@ public class DatBanController {
     }
 
     private void locTheoRealTime() {
-        capNhatHienThi(starOut_01, 3);
-        capNhatHienThi(starOut_02, 4);
-        capNhatHienThi(starOut_03, 8);
-        capNhatHienThi(starOut_04, 12);
-        capNhatHienThi(starIN_01, 3);
-        capNhatHienThi(starIN_02, 4);
-        capNhatHienThi(starIN_03, 8);
-        capNhatHienThi(starIN_04, 12);
-        capNhatHienThi(starVIP_01, 12);
-        capNhatHienThi(starVIP_02, 100);
+        capNhatHienThi(starOut_01, 2, 3);
+        capNhatHienThi(starOut_02, 3, 4);
+        capNhatHienThi(starOut_03, 5, 8);
+        capNhatHienThi(starOut_04, 8, 12);
+        capNhatHienThi(starIN_01, 2, 3);
+        capNhatHienThi(starIN_02, 3, 4);
+        capNhatHienThi(starIN_03, 5, 8);
+        capNhatHienThi(starIN_04, 8, 12);
+        capNhatHienThi(starVIP_01, 8, 12);
+        capNhatHienThi(starVIP_02, 12, 100);
     }
 
     private void hienThiNgoiSao(ImageView star, boolean b) {
-        String imgPath = b ? "/IMG/icon/star.png" : "/IMG/icon/gift.png";
+        String imgPath = b ? "/IMG/icon/star.png" : "/IMG/icon/starwhite.png";
         star.setImage(new Image(getClass().getResourceAsStream(imgPath)));
     }
 
-    private void capNhatHienThi(ImageView star, int sucChua) {
-        // Lấy thời gian từ datePicker + Spinner
-        LocalDate date = datePicker.getValue();
-        int hour = hourSpinner.getValue();
-        int minute = minuteSpinner.getValue();
-        LocalDateTime selectedDateTime;
-        boolean duocChonTheoThoiGian = true;
-
-        if (date != null) {
-            selectedDateTime = LocalDateTime.of(date, LocalTime.of(hour, minute));
-            List<HoaDon> dsHD = hoaDonDAO.getAll();
-            duocChonTheoThoiGian = dsHD.stream().noneMatch(hd -> {
-                LocalDateTime tg = hd.getTgCheckIn();
-                return tg != null && selectedDateTime != null && tg.equals(selectedDateTime);
-            });
-        } else {
-            duocChonTheoThoiGian = true; // chưa chọn ngày thì mặc định true
-        }
+    private void capNhatHienThi(ImageView star, int minKhach, int maxKhach) {
+        // Mặc định chưa chọn → star trắng
+        boolean duocChon = false;
 
         // Lấy số lượng nhập
         int soLuong = 0;
         try { soLuong = Integer.parseInt(noteField.getText()); }
         catch (NumberFormatException e) { soLuong = 0; }
 
-        boolean duocChonTheoSoLuong = soLuong <= 0 || soLuong <= sucChua;
+        // Lấy thời gian từ datePicker + Spinner
+        LocalDate date = datePicker.getValue();
+        int hour = hourSpinner.getValue();
+        int minute = minuteSpinner.getValue();
 
-        // Nếu cả hai điều kiện đều đúng → bật star
-        boolean duocChon = duocChonTheoThoiGian && duocChonTheoSoLuong;
+        boolean duocChonTheoThoiGian = true;
+        if (date != null && hourSpinner.getValue() != null && minuteSpinner.getValue() != null) {
+            LocalDateTime selectedDateTime = LocalDateTime.of(date, LocalTime.of(hour, minute));
+            List<HoaDon> dsHD = hoaDonDAO.getAll();
+            duocChonTheoThoiGian = dsHD.stream().noneMatch(hd -> {
+                LocalDateTime tg = hd.getTgCheckIn();
+                return tg != null && tg.equals(selectedDateTime);
+            });
+        }
+
+        // Chỉ xét bật star nếu người dùng nhập số lượng
+        if (soLuong > 0) {
+            boolean duocChonTheoSoLuong = soLuong >= minKhach && soLuong <= maxKhach;
+            duocChon = duocChonTheoThoiGian && duocChonTheoSoLuong;
+        }
 
         hienThiNgoiSao(star, duocChon);
     }
