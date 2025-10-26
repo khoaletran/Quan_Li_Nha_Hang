@@ -1,36 +1,70 @@
 package entity;
 
-public class Coc extends ChinhSach{
-    private boolean loaiDatBan;
-    private int thoiGian;
+public class Coc {
+    private String maCoc;
+    private boolean loaiCoc;
+    private int phanTramCoc;
+    private double soTienCoc;
+    private KhuVuc khuVuc;
+    private LoaiBan loaiBan;
 
-    public Coc(String maChinhSach, boolean loaiDatBan, int thoiGian) {
-        super(maChinhSach);
-        this.loaiDatBan = loaiDatBan;
-        this.thoiGian = thoiGian;
+    public String getMaCoc() {
+        return maCoc;
     }
 
-    public boolean isLoaiDatBan() {
-        return loaiDatBan;
+    public void setMaCoc(String maCoc) {
+        this.maCoc = maCoc;
     }
 
-    public void setLoaiDatBan(boolean loaiDatBan) {
-        this.loaiDatBan = loaiDatBan;
+    public boolean isLoaiCoc() {
+        return loaiCoc;
     }
 
-    public int getThoiGian() {
-        return thoiGian;
+    public void setLoaiCoc(boolean loaiCoc) {
+        this.loaiCoc = loaiCoc;
     }
 
-    public void setThoiGian(int thoiGian) {
-        this.thoiGian = thoiGian;
+    public int getPhanTramCoc() {
+        return phanTramCoc;
     }
 
-    @Override
-    public String toString() {
-        return "Coc{" +
-                "loaiDatBan=" + loaiDatBan +
-                ", thoiGian=" + thoiGian +
-                '}';
+    public void setPhanTramCoc(int phanTramCoc) {
+        this.phanTramCoc = phanTramCoc;
+    }
+
+    public double getSoTienCoc() {
+        return soTienCoc;
+    }
+
+    public void setSoTienCoc(double soTienCoc) {
+        this.soTienCoc = soTienCoc;
+    }
+
+    public KhuVuc getKhuVuc() {
+        return khuVuc;
+    }
+
+    public void setKhuVuc(KhuVuc khuVuc) {
+        this.khuVuc = khuVuc;
+    }
+
+    public LoaiBan getLoaiBan() {
+        return loaiBan;
+    }
+
+    public void setLoaiBan(LoaiBan loaiBan) {
+        this.loaiBan = loaiBan;
+    }
+
+    public Coc() {
+    }
+
+    public Coc(String maCoc, boolean loaiCoc, int phanTramCoc, double soTienCoc, KhuVuc khuVuc, LoaiBan loaiBan) {
+        this.maCoc = maCoc;
+        this.loaiCoc = loaiCoc;
+        this.phanTramCoc = phanTramCoc;
+        this.soTienCoc = soTienCoc;
+        this.khuVuc = khuVuc;
+        this.loaiBan = loaiBan;
     }
 }
