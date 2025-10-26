@@ -31,6 +31,7 @@ public class MainController_NV {
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
+        System.out.println(this.nhanVien.toString());
     }
 
     public NhanVien getNhanVien() {return nhanVien;}
@@ -55,6 +56,9 @@ public class MainController_NV {
 
             if (controller instanceof DatBanController datBanCtrl) {
                 datBanCtrl.setMainController(this);
+            }
+            if (controller instanceof DashboardController dashboardCtrl) {
+                dashboardCtrl.setMainController(this);
             }
 
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);

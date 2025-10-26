@@ -182,4 +182,22 @@ public class NhanVienDAO {
         return maNVCuoi;
     }
 
+    // ===================== CẬP NHẬT MẬT KHẨU =====================
+    public static boolean updateMatKhau(String maNV, String matKhauMoi) {
+        String sql = "UPDATE NhanVien SET matKhau = ? WHERE maNV = ?";
+        try {
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, matKhauMoi);
+            ps.setString(2, maNV);
+            int rows = ps.executeUpdate();
+            ps.close();
+            return rows > 0;
+        } catch (Exception e) {
+            System.err.println("Lỗi khi cập nhật mật khẩu: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import entity.NhanVien;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +16,20 @@ public class DashboardController {
     @FXML
     private BorderPane rootPane; // BorderPane gốc của dashboard
 
+    private ui.controllers.MainController_NV mainController;
+
+    private NhanVien nv;
+
+    public void initialize() {
+    }
+
+
+    public void setMainController(ui.controllers.MainController_NV controller) {
+        this.mainController = controller;
+        nv = mainController.getNhanVien();
+        System.out.println(nv.toString());
+    }
+
     @FXML
     private void showChangePassword() {
         try {
@@ -22,6 +37,7 @@ public class DashboardController {
             Parent loginRoot = loader.load();
 
             ui.controllers.LoginController loginController = loader.getController();
+            loginController.setNhanVien(mainController.getNhanVien());
             loginController.showResetPane();
 
             Stage stage = new Stage();
