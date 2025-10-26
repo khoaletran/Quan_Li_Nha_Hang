@@ -2,10 +2,7 @@ package ui.controllers;
 
 import dao.BanDAO;
 import dao.HoaDonDAO;
-import entity.Ban;
-import entity.HoaDon;
-import entity.KhuVuc;
-import entity.LoaiBan;
+import entity.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -57,6 +54,8 @@ public class DatBanController {
 
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
 
+    private NhanVien nv;
+
     @FXML
     public void initialize() {
         datePicker.setValue(LocalDate.now()); // mặc định là hôm nay
@@ -69,6 +68,8 @@ public class DatBanController {
         hourSpinner.valueProperty().addListener((obs, oldV, newV) -> locTheoRealTime());
         minuteSpinner.valueProperty().addListener((obs, oldV, newV) -> locTheoRealTime());
     }
+
+    void setNhanVien(NhanVien nv) {this.nv = nv;}
 
     public void setMainController(ui.controllers.MainController_NV controller) {
         this.mainController = controller;
@@ -159,6 +160,7 @@ public class DatBanController {
                 ChonMonController chonMonCtrl = loader.getController();
                 chonMonCtrl.setMainController(mainController);
                 chonMonCtrl.setThongTinBan(ban);
+                chonMonCtrl.setNhanVienHien(nv);
 
                 mainController.getMainContent().getChildren().setAll(node);
 
