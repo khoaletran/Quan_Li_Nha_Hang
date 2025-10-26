@@ -49,15 +49,17 @@ public class MainController_NV {
             Parent node = loader.load();
 
             Object controller = loader.getController();
+
             if (controller instanceof ChonMonController chonMonCtrl) {
                 chonMonCtrl.setMainController(this);
-                chonMonCtrl.setNhanVienHien(nhanVien);
+                chonMonCtrl.setNhanVien(nhanVien);
             }
 
             if (controller instanceof DatBanController datBanCtrl) {
                 datBanCtrl.setMainController(this);
                 datBanCtrl.setNhanVien(nhanVien);
             }
+
             if (controller instanceof DashboardController dashboardCtrl) {
                 dashboardCtrl.setMainController(this);
             }

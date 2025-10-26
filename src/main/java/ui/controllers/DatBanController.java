@@ -160,7 +160,7 @@ public class DatBanController {
                 ChonMonController chonMonCtrl = loader.getController();
                 chonMonCtrl.setMainController(mainController);
                 chonMonCtrl.setThongTinBan(ban);
-                chonMonCtrl.setNhanVienHien(nv);
+                chonMonCtrl.setNhanVien(nv);
 
                 mainController.getMainContent().getChildren().setAll(node);
 

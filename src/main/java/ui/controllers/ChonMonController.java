@@ -30,11 +30,11 @@ public class ChonMonController {
     @FXML private FlowPane flowMonAn;
     @FXML private ComboBox<LoaiMon> comboDanhMuc;
     @FXML private VBox vboxChiTietDonHang, vboxTienMat;
-    @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua,sdtKhach;
+    @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua;
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
-    @FXML private TextField txtTienKhachDua;
+    @FXML private TextField txtTienKhachDua, sdtKhach;
     @FXML private TextField tf_ban;
 
 
@@ -47,7 +47,7 @@ public class ChonMonController {
     private final LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
 
     private Ban banHienTai = null;
-    private NhanVien nhanVienHien = mainController.getNhanVien();
+    private NhanVien nhanVienHien;
 
 
 
@@ -62,6 +62,11 @@ public class ChonMonController {
 
     public void setMainController(ui.controllers.MainController_NV controller) {
         this.mainController = controller;
+        setNhanVien(mainController.getNhanVien());
+    }
+
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVienHien = nhanVien;
     }
 
 
