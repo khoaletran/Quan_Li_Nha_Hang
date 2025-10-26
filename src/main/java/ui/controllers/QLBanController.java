@@ -40,14 +40,14 @@ public class QLBanController {
         comboKhuVuc.setOnAction(event -> filterBan());
     }
 
-    // Lấy đường dẫn ảnh theo loại bàn
     private String imgLoaiBan(String urlLoaiBan) {
-        switch (urlLoaiBan) {
-            case "Indoor": return "/IMG/ban/IN.png";
-            case "Outdoor": return "/IMG/ban/out.png";
-            case "VIP": return "/IMG/ban/vip.png";
-            default: return "/IMG/ban/IN.png";
-        }
+        if(urlLoaiBan.equals("Indoor")){
+            return "/IMG/ban/IN.png";
+        } else if (urlLoaiBan.equals("Outdoor")) {
+            return "/IMG/ban/out.png";
+        }else if (urlLoaiBan.equals("VIP")) {
+            return "/IMG/ban/vip.png";
+        }else return "/IMG/ban/IN.png";
     }
 
     // Load toàn bộ bàn
@@ -66,7 +66,7 @@ public class QLBanController {
         card.getStyleClass().add("menu-item");
 
         ImageView img = new ImageView(
-                new Image(getClass().getResourceAsStream(imgLoaiBan(ban.getLoaiBan().getTenLoaiBan())))
+                new Image(getClass().getResourceAsStream(imgLoaiBan(ban.getKhuVuc().getTenKhuVuc())))
         );
         img.setFitWidth(180);
         img.setFitHeight(140);
