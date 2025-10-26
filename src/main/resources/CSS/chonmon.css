@@ -410,6 +410,14 @@
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: #e74c3c;
+    -fx-text-alignment: center-right;
+    -fx-alignment: center-right;
+}
+
+.green-bold-label {
+    -fx-alignment: center-right;
+    -fx-text-fill: green;
+    -fx-font-size: 12px;
 }
 
 .final-amount {

@@ -126,9 +126,8 @@
                           </children>
                        </HBox>
                        <HBox spacing="10">
-                            <Label styleClass="total-label" text="Tổng Tiền Phải Trả:" />
-                            <Region HBox.hgrow="ALWAYS" />
-                            <Label fx:id="lbl_total_PT" styleClass="total-amount" text="0đ" />
+                            <Label prefHeight="18.0" prefWidth="143.0" style="-fx-font-size: 14; -fx-font-weight: bold;" text="Tổng Tiền Phải Trả:" />
+                            <Label fx:id="lbl_total_PT" prefHeight="19.0" prefWidth="178.0" styleClass="total-amount" text="0đ" />
                        </HBox>
                       <HBox spacing="10">
                           <Label styleClass="deposit-label" text="Cọc:" />
@@ -166,10 +165,12 @@
                                <Button fx:id="btnGoiY6" styleClass="quick-btn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                            </children>
                        </GridPane>
-                       <GridPane hgap="10">
-                           <Label prefHeight="17.0" prefWidth="135.0" style="-fx-font-weight: bold; -fx-font-size: 13" text="Tiền Thừa:" />
-                           <Label fx:id="lblTienThua" prefHeight="15.0" prefWidth="106.0" styleClass="green-bold-label" text="0 đ" GridPane.columnIndex="4" />
-                       </GridPane>
+                  <HBox style="-fx-alignment: center;">
+                     <children>
+                              <Label prefHeight="17.0" prefWidth="135.0" style="-fx-font-weight: bold; -fx-font-size: 13" text="Tiền Thừa:" />
+                              <Label fx:id="lblTienThua" prefHeight="15.0" prefWidth="193.0" styleClass="green-bold-label" text="0 đ" />
+                     </children>
+                  </HBox>
                    </children>
                 </VBox>
 

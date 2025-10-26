@@ -312,7 +312,7 @@ public class ChonMonController {
 
 
     private void taoGoiYTienKhach() {
-        double tongTien = parseCurrency(lbl_total.getText());;
+        double tongTien = parseCurrency(lbl_total_PT.getText());;
         if (tongTien <= 0) return;
 
         double base = Math.round(tongTien / 1000.0) * 1000;
@@ -370,7 +370,7 @@ public class ChonMonController {
     private void tinhTienThua(){
         double tong = parseCurrency(lbl_total_PT.getText().trim());
         double tienKD = parseCurrency(txtTienKhachDua.getText().trim());
-        lblTienThua.setText(formatCurrency(tong - tienKD));
+        lblTienThua.setText(formatCurrency(tienKD - tong));
     }
 
 
