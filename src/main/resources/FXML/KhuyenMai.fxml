@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -18,12 +19,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="root"
-            prefHeight="800.0" prefWidth="1400.0"
-            styleClass="borderPane_main"
-            stylesheets="@../CSS/khuyenmai.css"
-            xmlns="http://javafx.com/javafx/24.0.1"
-            xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" styleClass="borderPane_main" stylesheets="@../CSS/khuyenmai.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.KhuyenMaiController">
 
     <!-- Trung tâm -->
     <center>
@@ -33,65 +29,17 @@
             </padding>
             <VBox prefHeight="612.0" prefWidth="624.0" style="-fx-background-color: #efefef; -fx-background-radius: 20 28 20 28;">
                 <children>
-               <HBox prefHeight="55.0" prefWidth="624.0" styleClass="tt_box">
-                  <children>
-                          <Label prefHeight="53.0" prefWidth="624.0" styleClass="center-title" text="Danh sách khuyến mãi" />
-                  </children>
-               </HBox>
-               <AnchorPane prefHeight="28.0" prefWidth="624.0" />
+                    <HBox prefHeight="55.0" prefWidth="624.0" styleClass="tt_box">
+                        <children>
+                            <Label prefHeight="37.0" prefWidth="1043.0" styleClass="center-title" text="Danh sách khuyến mãi" />
+                        </children>
+                    </HBox>
+                    <AnchorPane prefHeight="28.0" prefWidth="624.0" />
 
-                    <ScrollPane fitToWidth="true" prefHeight="547.0" prefWidth="612.0" styleClass="scroll-list" VBox.vgrow="ALWAYS">
+                    <ScrollPane fx:id="scrollList" fitToWidth="true" prefHeight="547.0" prefWidth="612.0" styleClass="scroll-list" VBox.vgrow="ALWAYS">
                         <content>
-                            <VBox prefHeight="510.0" prefWidth="614.0" spacing="8" styleClass="vbox_center-scroll">
-                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="order-card">
-                                    <StackPane style="-fx-background-radius: 10 0 0 10; -fx-overflow: hidden;">
-                                        <ImageView fitHeight="60" fitWidth="60" preserveRatio="false">
-                                            <image>
-                                                <Image url="@../IMG/avatar.png" />
-                                            </image>
-                                        </ImageView>
-                                    </StackPane>
-                                    <VBox spacing="2" HBox.hgrow="ALWAYS">
-                                        <Label styleClass="promo-id" text="KM0001" />
-                                        <HBox spacing="15">
-                                            <Label prefHeight="17.0" prefWidth="155.0" styleClass="promo-date" text="Ngày bắt đầu : 21-08-2025" />
-                                            <Label prefHeight="17.0" prefWidth="164.0" styleClass="promo-date" text="Ngày kết thúc : 12-10-2025">
-                                    <HBox.margin>
-                                       <Insets left="130.0" />
-                                    </HBox.margin></Label>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                        </HBox>
-                                    </VBox>
-                                    <!-- Indicator góc phải -->
-                                    <StackPane prefWidth="40" styleClass="order-status" />
-                                </HBox>
-
-                                <!-- Mẫu thẻ khác -->
-                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="order-card">
-                                    <StackPane style="-fx-background-radius: 10 0 0 10; -fx-overflow: hidden;">
-                                        <ImageView fitHeight="60" fitWidth="60" preserveRatio="false">
-                                            <image>
-                                                <Image url="@../IMG/avatar.png" />
-                                            </image>
-                                        </ImageView>
-                                    </StackPane>
-                                    <VBox spacing="2" HBox.hgrow="ALWAYS">
-                                        <Label styleClass="promo-id" text="KM0002" />
-                                        <HBox spacing="15">
-                                            <Label styleClass="promo-date" text="Ngày bắt đầu : 21-08-2025" />
-                                            <Label styleClass="promo-date" text="Ngày kết thúc : 12-10-2025">
-                                                <HBox.margin>
-                                                    <Insets left="130.0" />
-                                                </HBox.margin></Label>
-                                            <VBox.margin>
-                                                <Insets top="10.0" />
-                                            </VBox.margin>
-                                        </HBox>
-                                    </VBox>
-                                    <StackPane prefWidth="40" styleClass="order-status02" />
-                                </HBox>
+                            <VBox fx:id="vboxCenterScroll" prefHeight="510.0" prefWidth="614.0" spacing="8" styleClass="vbox_center-scroll">
+                                <!-- Các thẻ sẽ được thêm động từ controller -->
                             </VBox>
                         </content>
                         <VBox.margin>
@@ -102,52 +50,49 @@
                 </children>
             </VBox>
 
-              <!-- Bộ lọc và tìm kiếm -->
-              <VBox prefHeight="162.0" prefWidth="624.0" spacing="8" styleClass="filter-box">
+            <!-- Bộ lọc và tìm kiếm -->
+            <VBox prefHeight="162.0" prefWidth="624.0" spacing="8" styleClass="filter-box">
                 <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 20 20 28 28;">
-                   <children>
-                            <Label prefHeight="39.0" prefWidth="624.0" styleClass="filter-title" text="Bộ lọc" />
-                   </children>
+                    <children>
+                        <Label prefHeight="0.0" prefWidth="1014.0" styleClass="filter-title" text="Bộ lọc" />
+                    </children>
                 </HBox>
 
-                  <GridPane hgap="10" prefHeight="98.0" prefWidth="614.0" style="-fx-padding: 10;" vgap="10">
-                      <columnConstraints>
-                          <ColumnConstraints percentWidth="20.0" />
-                          <ColumnConstraints percentWidth="30.0" />
-                          <ColumnConstraints percentWidth="20.0" />
-                          <ColumnConstraints percentWidth="30.0" />
-                      </columnConstraints>
-                      <!-- Hàng 1 -->
-                      <Label styleClass="label_filter" text="Mã bàn:" GridPane.columnIndex="0" />
-                      <TextField prefHeight="21.0" prefWidth="360.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" />
+                <GridPane hgap="10" prefHeight="98.0" prefWidth="614.0" style="-fx-padding: 10;" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="20.0" />
+                        <ColumnConstraints percentWidth="30.0" />
+                        <ColumnConstraints percentWidth="20.0" />
+                        <ColumnConstraints percentWidth="30.0" />
+                    </columnConstraints>
+                    <!-- Hàng 1 -->
+                    <Label styleClass="label_filter" text="Mã KM:" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtTimKiem" prefHeight="21.0" prefWidth="360.0" promptText="Nhập mã KM" styleClass="filter-tf" GridPane.columnIndex="1" />
 
-                      <Label styleClass="label_filter" text="Thời gian:" GridPane.columnIndex="2" />
-                      <TextField prefHeight="21.0" prefWidth="220.0" promptText="dd/mm/yyyy" styleClass="filter-tf" GridPane.columnIndex="3" />
+                    <!-- Hàng 2 -->
+                    <Label styleClass="label_filter" text="Trạng thái:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="cbTrangThai" prefHeight="30.0" prefWidth="372.0" promptText="-- chọn --" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                      <!-- Hàng 2 -->
-                      <Label styleClass="label_filter" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                      <TextField prefHeight="30.0" prefWidth="372.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label styleClass="label_filter" text="Ưu đãi:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="cbUuDaiTimKiem" prefHeight="29.0" prefWidth="272.0" promptText="-- chọn --" styleClass="uudai_combobox filter-tf" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </GridPane>
 
-                      <Label styleClass="label_filter" text="Khu vực:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                      <ComboBox prefHeight="30.0" prefWidth="312.0" promptText="-- chọn --" styleClass="uudai_combobox filter-tf" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                      <rowConstraints>
-                          <RowConstraints />
-                          <RowConstraints />
-                      </rowConstraints>
-                      <VBox.margin>
-                          <Insets left="10.0" />
-                      </VBox.margin>
-                  </GridPane>
-
-                  <!-- Hàng nút -->
-                  <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10;">
-                      <Button styleClass="btn-clear" text="Xóa trắng" />
-                      <Button styleClass="btn-search" text="Tìm kiếm" />
-                      <VBox.margin>
-                          <Insets top="10.0" />
-                      </VBox.margin>
-                  </HBox>
-              </VBox>
+                <!-- Hàng nút -->
+                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10;">
+                    <Button fx:id="btnXoaTrang" styleClass="btn-clear" text="Xóa trắng" />
+                    <Button fx:id="btnTimKiem" styleClass="btn-search" text="Tìm kiếm" />
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </HBox>
+            </VBox>
         </VBox>
     </center>
 
@@ -175,41 +120,41 @@
                     </columnConstraints>
 
                     <Label styleClass="label_infoOrder" text="Mã Khuyến Mãi:" GridPane.rowIndex="0" />
-                    <TextField promptText="KM0001" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <TextField fx:id="txtMaKM" promptText="KM0001" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                     <Label styleClass="label_infoOrder" text="Tên Khuyến Mãi:" GridPane.rowIndex="1" />
-                    <TextField promptText="Khuyến Mãi Sinh Nhật" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <TextField fx:id="txtTenKM" promptText="Khuyến Mãi Sinh Nhật" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                     <Label styleClass="label_infoOrder" text="Số lượng:" GridPane.rowIndex="2" />
-                    <TextField promptText="1000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <TextField fx:id="txtSoLuong" promptText="1000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                     <Label styleClass="label_infoOrder" text="Ngày bắt đầu:" GridPane.rowIndex="3" />
-                    <TextField promptText="21-08-2025" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <DatePicker fx:id="dpNgayBatDau" prefHeight="23.0" prefWidth="210.0" promptText="dd-MM-yyyy" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                     <Label styleClass="label_infoOrder" text="Ngày kết thúc:" GridPane.rowIndex="4" />
-                    <TextField promptText="12-10-2025" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    <DatePicker fx:id="dpNgayKetThuc" prefHeight="22.0" prefWidth="215.0" promptText="dd-MM-yyyy" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
                     <Label styleClass="label_infoOrder" text="Mã thay thế:" GridPane.rowIndex="5" />
-                    <TextField promptText="SINHNHAT" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    <TextField fx:id="txtMaThayThe" promptText="SINHNHAT" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
                     <Label styleClass="label_infoOrder" text="Phần trăm KM:" GridPane.rowIndex="6" />
-                    <TextField promptText="10%" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                    <TextField fx:id="txtPhanTram" promptText="10%" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
                     <Label styleClass="label_infoOrder" text="Ưu đãi:" GridPane.rowIndex="7" />
-                    <ComboBox prefHeight="30.0" prefWidth="213.0" promptText="Tổng hóa đơn" styleClass="uudai_combobox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-               <rowConstraints>
-                  <RowConstraints />
-                  <RowConstraints />
-                  <RowConstraints />
-                  <RowConstraints />
-                  <RowConstraints />
-                  <RowConstraints />
-                  <RowConstraints />
-                  <RowConstraints />
-               </rowConstraints>
+                    <ComboBox fx:id="cbUudai" prefHeight="30.0" prefWidth="213.0" promptText="Tổng hóa đơn" styleClass="uudai_combobox" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
                 </GridPane>
 
-              <!--  khung tiìm món-->
+                <!--  khung tiìm món-->
                 <VBox spacing="10" styleClass="food-search-box">
 
                     <!-- Thanh tìm kiếm -->
@@ -273,93 +218,93 @@
                                 </StackPane>
                                 <Label styleClass="food-name" text="Bún bò" />
                             </VBox>
-                     <VBox alignment="CENTER" layoutX="15.0" layoutY="10.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
-                        <children>
-                           <StackPane>
-                              <children>
-                                 <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
-                                    <image>
-                                       <Image url="@../IMG/avatar.png" />
-                                    </image>
-                                 </ImageView>
-                                 <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
-                              </children>
-                           </StackPane>
-                           <Label styleClass="food-name" text="Bánh mì" />
-                        </children>
-                     </VBox>
-                     <VBox alignment="CENTER" layoutX="165.0" layoutY="110.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
-                        <children>
-                           <StackPane>
-                              <children>
-                                 <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
-                                    <image>
-                                       <Image url="@../IMG/avatar.png" />
-                                    </image>
-                                 </ImageView>
-                                 <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
-                              </children>
-                           </StackPane>
-                           <Label styleClass="food-name" text="Bánh mì" />
-                        </children>
-                     </VBox>
-                     <VBox alignment="CENTER" layoutX="215.0" layoutY="110.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
-                        <children>
-                           <StackPane>
-                              <children>
-                                 <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
-                                    <image>
-                                       <Image url="@../IMG/avatar.png" />
-                                    </image>
-                                 </ImageView>
-                                 <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
-                              </children>
-                           </StackPane>
-                           <Label styleClass="food-name" text="Bánh mì" />
-                        </children>
-                     </VBox>
-                     <VBox alignment="CENTER" layoutX="115.0" layoutY="210.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
-                        <children>
-                           <StackPane>
-                              <children>
-                                 <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
-                                    <image>
-                                       <Image url="@../IMG/avatar.png" />
-                                    </image>
-                                 </ImageView>
-                                 <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
-                              </children>
-                           </StackPane>
-                           <Label styleClass="food-name" text="Bánh mì" />
-                        </children>
-                     </VBox>
-                     <VBox alignment="CENTER" layoutX="165.0" layoutY="210.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
-                        <children>
-                           <StackPane>
-                              <children>
-                                 <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
-                                    <image>
-                                       <Image url="@../IMG/avatar.png" />
-                                    </image>
-                                 </ImageView>
-                                 <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
-                              </children>
-                           </StackPane>
-                           <Label styleClass="food-name" text="Bánh mì" />
-                        </children>
-                     </VBox>
+                            <VBox alignment="CENTER" layoutX="15.0" layoutY="10.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <children>
+                                    <StackPane>
+                                        <children>
+                                            <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                                <image>
+                                                    <Image url="@../IMG/avatar.png" />
+                                                </image>
+                                            </ImageView>
+                                            <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                        </children>
+                                    </StackPane>
+                                    <Label styleClass="food-name" text="Bánh mì" />
+                                </children>
+                            </VBox>
+                            <VBox alignment="CENTER" layoutX="165.0" layoutY="110.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <children>
+                                    <StackPane>
+                                        <children>
+                                            <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                                <image>
+                                                    <Image url="@../IMG/avatar.png" />
+                                                </image>
+                                            </ImageView>
+                                            <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                        </children>
+                                    </StackPane>
+                                    <Label styleClass="food-name" text="Bánh mì" />
+                                </children>
+                            </VBox>
+                            <VBox alignment="CENTER" layoutX="215.0" layoutY="110.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <children>
+                                    <StackPane>
+                                        <children>
+                                            <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                                <image>
+                                                    <Image url="@../IMG/avatar.png" />
+                                                </image>
+                                            </ImageView>
+                                            <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                        </children>
+                                    </StackPane>
+                                    <Label styleClass="food-name" text="Bánh mì" />
+                                </children>
+                            </VBox>
+                            <VBox alignment="CENTER" layoutX="115.0" layoutY="210.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <children>
+                                    <StackPane>
+                                        <children>
+                                            <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                                <image>
+                                                    <Image url="@../IMG/avatar.png" />
+                                                </image>
+                                            </ImageView>
+                                            <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                        </children>
+                                    </StackPane>
+                                    <Label styleClass="food-name" text="Bánh mì" />
+                                </children>
+                            </VBox>
+                            <VBox alignment="CENTER" layoutX="165.0" layoutY="210.0" prefHeight="35" prefWidth="80" spacing="5" styleClass="food-card">
+                                <children>
+                                    <StackPane>
+                                        <children>
+                                            <ImageView fitHeight="40" fitWidth="40" styleClass="food-image">
+                                                <image>
+                                                    <Image url="@../IMG/avatar.png" />
+                                                </image>
+                                            </ImageView>
+                                            <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
+                                        </children>
+                                    </StackPane>
+                                    <Label styleClass="food-name" text="Bánh mì" />
+                                </children>
+                            </VBox>
                         </FlowPane>
                     </ScrollPane>
                 </VBox>
             </VBox>
             <!-- Hàng nút Thêm / Xóa / Sửa (nằm ngoài right-content) -->
             <HBox alignment="CENTER" spacing="10">
-                <Button style="-fx-background-color: #1CD446FF" styleClass="btn-action" text="Thêm" />
-                <Button style="-fx-background-color: #ff383c" styleClass="btn-action" text="Xóa" />
-                <Button style="-fx-background-color: #0D6EFDFF" styleClass="btn-action" text="Sửa" />
-            <VBox.margin>
-               <Insets top="30.0" />
-            </VBox.margin>
+                <Button fx:id="btnThem" style="-fx-background-color: #1CD446FF" styleClass="btn-action" text="Thêm" />
+                <Button fx:id="btnXoa" style="-fx-background-color: #ff383c" styleClass="btn-action" text="Xóa" />
+                <Button fx:id="btnSua" style="-fx-background-color: #0D6EFDFF" styleClass="btn-action" text="Sửa" />
+                <VBox.margin>
+                    <Insets top="30.0" />
+                </VBox.margin>
             </HBox>
         </VBox>
     </right>

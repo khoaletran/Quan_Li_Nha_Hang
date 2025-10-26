@@ -348,26 +348,12 @@
                     <Button styleClass="quick-btn" text="1.500.000 đ" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                     <Button styleClass="quick-btn" text="....." GridPane.columnIndex="2" GridPane.rowIndex="1" />
                 </children>
-            <rowConstraints>
-               <RowConstraints />
-               <RowConstraints />
-            </rowConstraints>
             </GridPane>
 
 
             <GridPane hgap="10">
                 <Label prefHeight="17.0" prefWidth="135.0" style="-fx-font-weight: bold; -fx-font-size: 13" text="Tiền Thừa:" />
                 <Label prefHeight="15.0" prefWidth="106.0" styleClass="green-bold-label" text="40.000 đ" GridPane.columnIndex="4" />
-            <columnConstraints>
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-               <RowConstraints />
-            </rowConstraints>
             </GridPane>
          <VBox prefHeight="200.0" prefWidth="100.0">
             <children>
