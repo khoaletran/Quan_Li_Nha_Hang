@@ -102,27 +102,5 @@ public class LoaiBanDAO {
         }
     }
 
-    public static LoaiBan getById(String maLoaiBan) {
-        LoaiBan loaiBan = null;
-        String sql = "SELECT maLoaiBan, tenLoaiBan, soLuong FROM LoaiBan WHERE maLoaiBan = ?";
-
-        try (Connection con = connectDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, maLoaiBan);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    loaiBan = new LoaiBan(
-                            rs.getString("maLoaiBan"),
-                            rs.getInt("soLuong"),
-                            rs.getString("tenLoaiBan")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return loaiBan;
-    }
 
 }
