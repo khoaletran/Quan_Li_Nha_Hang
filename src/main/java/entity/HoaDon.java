@@ -6,14 +6,15 @@
 
 package entity;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class HoaDon {
    private String maHD;
    private KhachHang khachHang;
    private NhanVien nhanVien;
    private Ban ban;
-   private LocalDate tgCheckIn;
-   private LocalDate tgCheckOut;
+   private LocalDateTime tgCheckIn;
+   private LocalDateTime tgCheckOut;
    private KhuyenMai khuyenMai;
    private SuKien suKien;
    private boolean kieuThanhToan;
@@ -24,7 +25,7 @@ public class HoaDon {
    private double tongTienSau=0;
    private double tongTienKhuyenMai=0;
 
-    public HoaDon(String maHD, double tongTienKhuyenMai, double tongTienSau, double tongTienTruoc, double coc, double thue, boolean kieuDatBan, boolean kieuThanhToan, KhuyenMai khuyenMai, SuKien suKien, LocalDate tgCheckOut, LocalDate tgCheckIn, Ban ban, NhanVien nhanVien, KhachHang khachHang) {
+    public HoaDon(String maHD, double tongTienKhuyenMai, double tongTienSau, double tongTienTruoc, double coc, double thue, boolean kieuDatBan, boolean kieuThanhToan, KhuyenMai khuyenMai, SuKien suKien, LocalDateTime tgCheckOut, LocalDateTime tgCheckIn, Ban ban, NhanVien nhanVien, KhachHang khachHang) {
         this.maHD = maHD;
         this.tongTienKhuyenMai = tongTienKhuyenMai;
         this.tongTienSau = tongTienSau;
@@ -122,11 +123,11 @@ public class HoaDon {
         this.khuyenMai = khuyenMai;
     }
 
-    public LocalDate getTgCheckOut() {
+    public LocalDateTime getTgCheckOut() {
         return tgCheckOut;
     }
 
-    public void setTgCheckOut(LocalDate tgCheckOut) {
+    public void setTgCheckOut(LocalDateTime tgCheckOut) {
         this.tgCheckOut = tgCheckOut;
     }
 
@@ -154,11 +155,11 @@ public class HoaDon {
         this.ban = ban;
     }
 
-    public LocalDate getTgCheckIn() {
+    public LocalDateTime getTgCheckIn() {
         return tgCheckIn;
     }
 
-    public void setTgCheckIn(LocalDate tgCheckIn) {
+    public void setTgCheckIn(LocalDateTime tgCheckIn) {
         this.tgCheckIn = tgCheckIn;
     }
 

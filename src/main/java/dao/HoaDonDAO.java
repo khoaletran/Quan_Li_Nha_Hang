@@ -3,7 +3,6 @@ package dao;
 import connectDB.connectDB;
 import entity.HoaDon;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +24,15 @@ public class HoaDonDAO {
                         rs.getBoolean("kieuDatBan"),
                         rs.getBoolean("kieuThanhToan"),
                         null, null,
-                        rs.getDate("tgCheckout") != null ? rs.getDate("tgCheckout").toLocalDate() : null,
-                        rs.getDate("tgCheckin") != null ? rs.getDate("tgCheckin").toLocalDate() : null,
+                        rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null,
+                        rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null,
                         null, null, null
                 );
                 ds.add(hd);
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ds;
     }
 
@@ -39,8 +40,8 @@ public class HoaDonDAO {
         String sql = "INSERT INTO HoaDon(maHD, tgCheckin, tgCheckout, kieuThanhToan, kieuDatBan, thue, coc, tongTienTruoc, tongTienSau, tongTienKM) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, hd.getMaHD());
-            ps.setDate(2, hd.getTgCheckIn() == null ? null : Date.valueOf(hd.getTgCheckIn()));
-            ps.setDate(3, hd.getTgCheckOut() == null ? null : Date.valueOf(hd.getTgCheckOut()));
+            ps.setTimestamp(2, hd.getTgCheckIn() == null ? null : Timestamp.valueOf(hd.getTgCheckIn()));
+            ps.setTimestamp(3, hd.getTgCheckOut() == null ? null : Timestamp.valueOf(hd.getTgCheckOut()));
             ps.setBoolean(4, hd.isKieuThanhToan());
             ps.setBoolean(5, hd.isKieuDatBan());
             ps.setDouble(6, hd.getThue());
@@ -55,8 +56,8 @@ public class HoaDonDAO {
     public boolean update(HoaDon hd) {
         String sql = "UPDATE HoaDon SET tgCheckin=?, tgCheckout=?, kieuThanhToan=?, kieuDatBan=?, thue=?, coc=?, tongTienTruoc=?, tongTienSau=?, tongTienKM=? WHERE maHD=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
-            ps.setDate(1, hd.getTgCheckIn() == null ? null : Date.valueOf(hd.getTgCheckIn()));
-            ps.setDate(2, hd.getTgCheckOut() == null ? null : Date.valueOf(hd.getTgCheckOut()));
+            ps.setTimestamp(1, hd.getTgCheckIn() == null ? null : Timestamp.valueOf(hd.getTgCheckIn()));
+            ps.setTimestamp(2, hd.getTgCheckOut() == null ? null : Timestamp.valueOf(hd.getTgCheckOut()));
             ps.setBoolean(3, hd.isKieuThanhToan());
             ps.setBoolean(4, hd.isKieuDatBan());
             ps.setDouble(5, hd.getThue());
@@ -68,6 +69,7 @@ public class HoaDonDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
+
 
     public boolean delete(String maHD) {
         String sql = "DELETE FROM HoaDon WHERE maHD=?";
