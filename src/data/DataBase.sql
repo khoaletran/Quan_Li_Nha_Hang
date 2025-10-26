@@ -116,8 +116,8 @@ CREATE TABLE Coc (
     loaiCoc BIT,
     phanTramCoc INT,
     soTienCoc FLOAT,
-    maLoaiBan NVARCHAR(6),
-    maKhuVuc NVARCHAR(6)
+    maLoaiBan NVARCHAR(6) FOREIGN KEY REFERENCES LoaiBan(maLoaiBan),
+    maKhuVuc NVARCHAR(6) FOREIGN KEY REFERENCES KhuVuc(maKhuVuc)
 );
 
 -- =========================
