@@ -10,21 +10,28 @@ public class LoaiMonDAO {
 
     public static List<LoaiMon> getAll() {
         List<LoaiMon> ds = new ArrayList<>();
-        Connection con = connectDB.getConnection();
-        String sql = "SELECT * FROM LoaiMon";
-        try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                ds.add(new LoaiMon(
-                        rs.getString("maLoaiMon"),
-                        rs.getString("tenLoaiMon"),
-                        rs.getString("moTa")
-                ));
+        try {
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
+
+            String sql = "SELECT * FROM LoaiMon";
+            try (Statement st = con.createStatement();
+                 ResultSet rs = st.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    ds.add(new LoaiMon(
+                            rs.getString("maLoaiMon"),
+                            rs.getString("tenLoaiMon"),
+                            rs.getString("moTa")
+                    ));
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Lỗi khi truy vấn LoaiMon: " + e.getMessage());
         }
         return ds;
     }
+
 
     public boolean insert(LoaiMon loaiMon) {
         String sql = "INSERT INTO LoaiMon VALUES (?, ?, ?)";
