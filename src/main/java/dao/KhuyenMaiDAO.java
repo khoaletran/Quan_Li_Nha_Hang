@@ -2,6 +2,7 @@ package dao;
 
 import connectDB.connectDB;
 import entity.KhuyenMai;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,54 +10,174 @@ import java.util.List;
 
 public class KhuyenMaiDAO {
 
-    public List<KhuyenMai> getAll() {
-        List<KhuyenMai> ds = new ArrayList<>();
+    public static List<KhuyenMai> getAll() {
+        ArrayList<KhuyenMai> list = new ArrayList<>();
         String sql = "SELECT * FROM KhuyenMai";
-        try (Statement st = connectDB.getConnection().createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+
+        // Không gọi connect() nhiều lần nếu connectDB đã manage connection;
+        // tuy nhiên để an toàn vẫn gọi
+        try {
+            connectDB.getInstance().connect();
+        } catch (Exception e) {
+            System.err.println("connect() thất bại:");
+            e.printStackTrace();
+        }
+
+        try (Connection con = connectDB.getConnection();
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            int count = 0;
             while (rs.next()) {
-                ds.add(new KhuyenMai(
-                        rs.getString("maKM"),
-                        rs.getInt("soLuong"),
-                        rs.getInt("phanTramGiamGia"),
-                        null,
-                        rs.getDate("ngayPhatHanh").toLocalDate(),
-                        rs.getDate("ngayKetThuc").toLocalDate()
-                ));
+                String maKM = rs.getString("maKM");
+                String tenKM = rs.getString("tenKM");
+                int soLuong = rs.getInt("soLuong");
+
+                Date dbNgayPhatHanh = rs.getDate("ngayPhatHanh");
+                LocalDate ngayPhatHanh = (dbNgayPhatHanh == null) ? null : dbNgayPhatHanh.toLocalDate();
+
+                Date dbNgayKetThuc = rs.getDate("ngayKetThuc");
+                LocalDate ngayKetThuc = (dbNgayKetThuc == null) ? null : dbNgayKetThuc.toLocalDate();
+
+                String maThayThe = rs.getString("maThayThe");
+                int phanTram = rs.getInt("phanTramGiamGia");
+                Boolean uuDai = rs.getBoolean("uuDai");
+
+                KhuyenMai km = new KhuyenMai(maKM, tenKM, soLuong, ngayPhatHanh, ngayKetThuc, maThayThe, phanTram, uuDai);
+                list.add(km);
+                count++;
             }
-        } catch (SQLException e) { e.printStackTrace(); }
-        return ds;
+            System.out.println("KhuyenMaiDAO.getAll -> read rows: " + count);
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi truy xuất KhuyenMai: ");
+            e.printStackTrace(); // in stacktrace đầy đủ
+        } catch (Exception e) {
+            System.err.println("Unexpected error in KhuyenMaiDAO.getAll:");
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
-    public boolean insert(KhuyenMai km) {
-        String sql = "INSERT INTO KhuyenMai VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+    // --- phần insert/update/delete: bạn cũng nên add try-with-resources và in stacktrace ---
+    public static boolean insert(KhuyenMai km) {
+        String sql = "INSERT INTO KhuyenMai(maKM, tenKM, soLuong, ngayPhatHanh, ngayKetThuc, maThayThe, phanTramGiamGia, uuDai) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            connectDB.getInstance().connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setString(1, km.getMaKM());
+            ps.setString(2, km.getTenKM());
+            ps.setInt(3, km.getSoLuong());
+            if (km.getNgayPhatHanh() != null) ps.setDate(4, Date.valueOf(km.getNgayPhatHanh()));
+            else ps.setNull(4, Types.DATE);
+            if (km.getNgayKetThuc() != null) ps.setDate(5, Date.valueOf(km.getNgayKetThuc()));
+            else ps.setNull(5, Types.DATE);
+            ps.setString(6, km.getMaThayThe());
+            ps.setInt(7, km.getPhanTRamGiamGia());
+            ps.setBoolean(8, true); // hoặc lấy từ entity nếu có
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi thêm KhuyenMai:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean update(KhuyenMai km) {
+        String sql = "UPDATE KhuyenMai SET tenKM=?, soLuong=?, ngayPhatHanh=?, ngayKetThuc=?, maThayThe=?, phanTramGiamGia=?, uuDai=? WHERE maKM=?";
+        try {
+            connectDB.getInstance().connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, km.getTenKM());
             ps.setInt(2, km.getSoLuong());
-            ps.setInt(3, km.getPhanTRamGiamGia());
-            ps.setDate(4, Date.valueOf(km.getNgayPhatHanh()));
-            ps.setDate(5, Date.valueOf(km.getNgayKetThuc()));
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); return false; }
+            if (km.getNgayPhatHanh() != null) ps.setDate(3, Date.valueOf(km.getNgayPhatHanh()));
+            else ps.setNull(3, Types.DATE);
+            if (km.getNgayKetThuc() != null) ps.setDate(4, Date.valueOf(km.getNgayKetThuc()));
+            else ps.setNull(4, Types.DATE);
+            ps.setString(5, km.getMaThayThe());
+            ps.setInt(6, km.getPhanTRamGiamGia());
+            ps.setBoolean(7, km.isUuDai());
+            ps.setString(8, km.getMaKM());
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi cập nhật KhuyenMai:");
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public boolean update(KhuyenMai km) {
-        String sql = "UPDATE KhuyenMai SET soLuong=?, phanTramGiamGia=?, ngayPhatHanh=?, ngayKetThuc=? WHERE maKM=?";
-        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, km.getSoLuong());
-            ps.setInt(2, km.getPhanTRamGiamGia());
-            ps.setDate(3, Date.valueOf(km.getNgayPhatHanh()));
-            ps.setDate(4, Date.valueOf(km.getNgayKetThuc()));
-            ps.setString(5, km.getMaKM());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); return false; }
-    }
-
-    public boolean delete(String maKM) {
+    public static boolean delete(String maKM) {
         String sql = "DELETE FROM KhuyenMai WHERE maKM=?";
-        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+        try {
+            connectDB.getInstance().connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, maKM);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); return false; }
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi xóa KhuyenMai:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static KhuyenMai findById(String maKM) {
+        String sql = "SELECT * FROM KhuyenMai WHERE maKM=?";
+        KhuyenMai km = null;
+
+        try {
+            connectDB.getInstance().connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, maKM);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Date dbNgayPhatHanh = rs.getDate("ngayPhatHanh");
+                    LocalDate ngayPhatHanh = (dbNgayPhatHanh == null) ? null : dbNgayPhatHanh.toLocalDate();
+
+                    Date dbNgayKetThuc = rs.getDate("ngayKetThuc");
+                    LocalDate ngayKetThuc = (dbNgayKetThuc == null) ? null : dbNgayKetThuc.toLocalDate();
+
+                    km = new KhuyenMai(
+                            rs.getString("maKM"),
+                            rs.getString("tenKM"),
+                            rs.getInt("soLuong"),
+                            ngayPhatHanh,
+                            ngayKetThuc,
+                            rs.getString("maThayThe"),
+                            rs.getInt("phanTramGiamGia"),
+                            rs.getBoolean("uuDai")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi tìm KhuyenMai theo mã:");
+            e.printStackTrace();
+        }
+        return km;
     }
 }

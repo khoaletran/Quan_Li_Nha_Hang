@@ -63,12 +63,13 @@ INSERT INTO PhanTramGiaBan VALUES
 ('PG0005', 'LM0005', 50, '2025-03-01');
 
 -- =============== KHUYẾN MÃI ===============
-INSERT INTO KhuyenMai VALUES
-('KM0001', 100, 5, '2025-10-01', '2025-11-01'),
-('KM0002', 50, 10, '2025-09-01', '2025-10-15'),
-('KM0003', 30, 15, '2025-08-01', '2025-09-01'),
-('KM0004', 20, 20, '2025-11-01', '2025-12-01'),
-('KM0005', 10, 25, '2025-12-01', '2025-12-31');
+INSERT INTO KhuyenMai (maKM, tenKM, soLuong, ngayPhatHanh, ngayKetThuc, maThayThe, phanTramGiamGia, uuDai)
+VALUES
+    ('KM001', N'Giảm giá khai trương', 100, '2025-01-01', '2025-01-31', NULL, 20, 1),
+    ('KM002', N'Tháng sinh nhật khách hàng', 50, '2025-02-01', '2025-02-28', 'KM001', 15, 1),
+    ('KM003', N'Giảm giá ngày lễ tình nhân', 80, '2025-02-10', '2025-02-20', NULL, 10, 0),
+    ('KM004', N'Khuyến mãi cuối tuần', 200, '2025-03-01', '2025-03-31', NULL, 5, 0),
+    ('KM005', N'Giảm giá hè sôi động', 150, '2025-06-01', '2025-06-30', 'KM004', 25, 1);
 
 -- =============== MÓN ===============
 INSERT INTO Mon VALUES

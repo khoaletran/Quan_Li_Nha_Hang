@@ -14,6 +14,9 @@ public class KhuVuc {
         this.maKhuVuc = maKhuVuc;
         this.tenKhuVuc = tenKhuVuc;
     }
+    public KhuVuc(String tenKhuVuc){
+        this.tenKhuVuc = tenKhuVuc;
+    }
 
     public String getMaKhuVuc() {
         return maKhuVuc;

@@ -67,4 +67,16 @@ public class Coc {
         this.khuVuc = khuVuc;
         this.loaiBan = loaiBan;
     }
+
+    @Override
+    public String toString() {
+        return "Coc{" +
+                "maCoc='" + maCoc + '\'' +
+                ", loaiCoc=" + loaiCoc +
+                ", phanTramCoc=" + phanTramCoc +
+                ", soTienCoc=" + soTienCoc +
+                ", khuVuc=" + khuVuc +
+                ", loaiBan=" + loaiBan +
+                '}';
+    }
 }
