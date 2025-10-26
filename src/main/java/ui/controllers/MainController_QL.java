@@ -34,6 +34,10 @@ public class MainController_QL {
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
     }
+    public NhanVien getNhanVien() {
+        return nhanVien;
+    }
+
     public void setCenterContent(String fxmlPath) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(fxmlPath));

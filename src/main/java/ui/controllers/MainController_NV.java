@@ -33,6 +33,8 @@ public class MainController_NV {
         this.nhanVien = nhanVien;
     }
 
+    public NhanVien getNhanVien() {return nhanVien;}
+
     private void loadDefaultView() {
         setCenterContent("/FXML/DashBoard.fxml");
     }

@@ -5,6 +5,7 @@ import dao.MonDAO;
 import entity.Ban;
 import entity.LoaiMon;
 import entity.Mon;
+import entity.NhanVien;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -43,6 +44,7 @@ public class ChonMonController {
     private final LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
 
     private Ban banHienTai = null;
+    private NhanVien nhanVienHien = mainController.getNhanVien();
 
 
 
@@ -58,6 +60,7 @@ public class ChonMonController {
     public void setMainController(ui.controllers.MainController_NV controller) {
         this.mainController = controller;
     }
+
 
     public void setThongTinBan(Ban ban) {
         this.banHienTai = ban;
