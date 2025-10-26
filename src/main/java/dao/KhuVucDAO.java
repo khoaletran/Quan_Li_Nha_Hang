@@ -26,7 +26,7 @@ public class KhuVucDAO {
         return ds;
     }
 
-    public KhuVuc getById(String maKhuVuc) {
+    public static KhuVuc getById(String maKhuVuc) {
         String sql = "SELECT * FROM KhuVuc WHERE maKhuVuc=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, maKhuVuc);
@@ -43,7 +43,7 @@ public class KhuVucDAO {
         }
         return null;
     }
-    public KhuVuc getByName(String tenKhuVuc) {
+    public static KhuVuc getByName(String tenKhuVuc) {
         String sql = "SELECT * FROM KhuVuc WHERE tenKhuVuc=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, tenKhuVuc);
@@ -97,26 +97,5 @@ public class KhuVucDAO {
         }
     }
 
-    public static KhuVuc getById(String maKhuVuc) {
-        KhuVuc kv = null;
-        String sql = "SELECT maKhuVuc, tenKhuVuc FROM KhuVuc WHERE maKhuVuc = ?";
-
-        try (Connection con = connectDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, maKhuVuc);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    kv = new KhuVuc(
-                            rs.getString("maKhuVuc"),
-                            rs.getString("tenKhuVuc")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return kv;
-    }
 
 }

@@ -27,7 +27,7 @@ public class LoaiBanDAO {
         return ds;
     }
 
-    public LoaiBan getById(String maLoaiBan) {
+    public static LoaiBan getById(String maLoaiBan) {
         String sql = "SELECT * FROM LoaiBan WHERE maLoaiBan=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, maLoaiBan);
@@ -46,7 +46,7 @@ public class LoaiBanDAO {
         return null;
     }
 
-    public LoaiBan getByName(String tenLoaiBan) {
+    public static LoaiBan getByName(String tenLoaiBan) {
         String sql = "SELECT * FROM LoaiBan WHERE tenLoaiBan=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, tenLoaiBan);
