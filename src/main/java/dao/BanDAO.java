@@ -20,34 +20,38 @@ public class BanDAO {
         SELECT b.maBan, b.trangThai, b.maLoaiBan, b.maKhuVuc
         FROM Ban b
     """;
-
-        try (Connection con = connectDB.getConnection();
-             Statement st = con.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
-
-            // Lấy danh sách loại bàn và khu vực sẵn
+        Connection con = null;
+        try {
+            con = connectDB.getConnection();
+            if (con == null || con.isClosed()) {
+                connectDB.getInstance().connect();
+                con = connectDB.getConnection();
+            }
             List<LoaiBan> dsLoaiBan = LoaiBanDAO.getAll();
             List<KhuVuc> dsKhuVuc = KhuVucDAO.getAll();
 
-            while (rs.next()) {
-                String maBan = rs.getString("maBan");
-                String maLoaiBan = rs.getString("maLoaiBan");
-                String maKhuVuc = rs.getString("maKhuVuc");
-                boolean trangThai = rs.getBoolean("trangThai");
+            try (Statement st = con.createStatement();
+                 ResultSet rs = st.executeQuery(sql)) {
 
-                // Tìm LoaiBan và KhuVuc tương ứng
-                LoaiBan loaiBan = dsLoaiBan.stream()
-                        .filter(lb -> lb.getMaLoaiBan().equals(maLoaiBan))
-                        .findFirst()
-                        .orElse(null);
+                while (rs.next()) {
+                    String maBan = rs.getString("maBan");
+                    String maLoaiBan = rs.getString("maLoaiBan");
+                    String maKhuVuc = rs.getString("maKhuVuc");
+                    boolean trangThai = rs.getBoolean("trangThai");
 
-                KhuVuc khuVuc = dsKhuVuc.stream()
-                        .filter(kv -> kv.getMaKhuVuc().equals(maKhuVuc))
-                        .findFirst()
-                        .orElse(null);
+                    // Tìm đối tượng liên kết
+                    LoaiBan loaiBan = dsLoaiBan.stream()
+                            .filter(lb -> lb.getMaLoaiBan().equals(maLoaiBan))
+                            .findFirst()
+                            .orElse(null);
 
-                Ban ban = new Ban(maBan, khuVuc, loaiBan, trangThai);
-                ds.add(ban);
+                    KhuVuc khuVuc = dsKhuVuc.stream()
+                            .filter(kv -> kv.getMaKhuVuc().equals(maKhuVuc))
+                            .findFirst()
+                            .orElse(null);
+
+                    ds.add(new Ban(maBan, khuVuc, loaiBan, trangThai));
+                }
             }
 
         } catch (SQLException e) {
@@ -55,6 +59,7 @@ public class BanDAO {
         }
         return ds;
     }
+
 
 
     // ==============================
