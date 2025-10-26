@@ -24,10 +24,11 @@ public class LoginController {
     @FXML private Button minimizeBtn;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+    @FXML private PasswordField newPassField;
+    @FXML private PasswordField confirmPassField;
 
     private boolean DN = false;
-
-
+    private NhanVien nhanvien;
 
     // Hiệu ứng fade mượt
     private void switchPane(VBox hide, VBox show) {
@@ -76,8 +77,11 @@ public class LoginController {
     @FXML
     private void showReset() { switchPane(forgotPane, resetPane); }
 
-    @FXML
-    private void resetDone() { switchPane(resetPane, loginPane); }
+    public void setNhanVien(NhanVien nv){
+        this.nhanvien = nv;
+        if (nv != null) System.out.println("setNhanVien: " + nv.getMaNV());
+    }
+
 
     @FXML
     private void login() {
@@ -141,6 +145,55 @@ public class LoginController {
 
         resetPane.setVisible(true);
         resetPane.setManaged(true);
+    }
+
+    @FXML
+    private void resetDone() {
+        String newPassword = newPassField.getText().trim();
+        String confirmPassword = confirmPassField.getText().trim();
+
+        // Kiểm tra mật khẩu không được trống
+        if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+            showAlert("Lỗi", "Vui lòng nhập đầy đủ mật khẩu!");
+            return;
+        }
+        // Kiểm tra mật khẩu khớp nhau
+        if (!newPassword.equals(confirmPassword)) {
+            showAlert("Lỗi", "Mật khẩu xác nhận không khớp!");
+            return;
+        }
+
+
+
+        if (nhanvien.getMaNV() == null) {
+            showAlert("Lỗi", "Không tìm thấy thông tin nhân viên!");
+            return;
+        }
+
+        // Cập nhật mật khẩu mới xuống database
+        boolean updateSuccess = NhanVienDAO.updateMatKhau(nhanvien.getMaNV(), newPassword);
+
+        if (updateSuccess) {
+            showAlert("Thành công", "Đổi mật khẩu thành công!");
+
+            // Xóa dữ liệu trong các field
+            newPassField.clear();
+            confirmPassField.clear();
+
+            // Quay lại màn hình đăng nhập
+            switchPane(resetPane, loginPane);
+        } else {
+            showAlert("Lỗi", "Đổi mật khẩu thất bại!");
+        }
+    }
+
+    // Phương thức hiển thị thông báo
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 
