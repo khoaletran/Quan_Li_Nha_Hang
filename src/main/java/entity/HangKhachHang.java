@@ -13,10 +13,10 @@ public class HangKhachHang {
     private String moTa;
 
     public HangKhachHang(String maHang, String moTa, int giamGia, int diemHang) {
-        this.maHang = maHang;
-        this.moTa = moTa;
-        this.giamGia = giamGia;
-        this.diemHang = diemHang;
+        setMaHang(maHang);
+        setMoTa(moTa);
+        setDiemHang(diemHang);
+        setGiamGia(giamGia);
     }
 
     public String getMaHang() {

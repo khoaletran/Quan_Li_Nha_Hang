@@ -12,14 +12,19 @@ public class LoaiBanDAO {
     public static List<LoaiBan> getAll() {
         List<LoaiBan> ds = new ArrayList<>();
         String sql = "SELECT * FROM LoaiBan";
-        try (Statement st = connectDB.getConnection().createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                ds.add(new LoaiBan(
-                        rs.getString("maLoaiBan"),
-                        rs.getInt("soLuong"),
-                        rs.getString("tenLoaiBan")
-                ));
+        try {
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
+
+            try (Statement st = con.createStatement();
+                 ResultSet rs = st.executeQuery(sql)) {
+                while (rs.next()) {
+                    ds.add(new LoaiBan(
+                            rs.getString("maLoaiBan"),
+                            rs.getInt("soLuong"),
+                            rs.getString("tenLoaiBan")
+                    ));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

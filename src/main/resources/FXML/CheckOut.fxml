@@ -40,7 +40,7 @@
                      <!-- Danh sách hóa đơn -->
                   <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="275.0" prefWidth="653.0" styleClass="invoice-scroll">
                   <content>
-                          <VBox alignment="CENTER_LEFT" prefHeight="303.0" prefWidth="651.0" spacing="12" style="-fx-background-color: #EFEFEF; -fx-background-radius: 0 0 20 20">
+                          <VBox fx:id="vboxHoaDon" alignment="CENTER_LEFT" prefHeight="303.0" prefWidth="651.0" spacing="12" style="-fx-background-color: #EFEFEF; -fx-background-radius: 0 0 20 20">
                               <padding>
                                   <Insets bottom="10" left="10" right="10" top="10" />
                               </padding>
@@ -54,14 +54,14 @@
                                       </image>
                                   </ImageView>
                                   <VBox>
-                                      <Label styleClass="invoice-id" text="HD1210820250002" />
+                                      <Label fx:id="lbldsHD" styleClass="invoice-id" text="HD1210820250002" />
                               <AnchorPane prefHeight="10.0" prefWidth="200.0" />
-                                      <Label styleClass="invoice-phone" text="SĐT: 0398765432" />
+                                      <Label fx:id="lbldsSdt" styleClass="invoice-phone" text="SĐT: 0398765432" />
                                   </VBox>
                                   <Region HBox.hgrow="ALWAYS" />
                                   <Button styleClass="time-btn" text="🕒" />
                               </HBox>
-                              <HBox alignment="CENTER" spacing="15" styleClass="invoice-card">
+                              <HBox fx:id="hboxHoaDon" alignment="CENTER" spacing="15" styleClass="invoice-card">
                                   <ImageView fitHeight="60" fitWidth="100" preserveRatio="true">
                                       <image>
                                           <Image url="@../IMG/ban1.png" />
@@ -75,56 +75,9 @@
                                   <Region HBox.hgrow="ALWAYS" />
                                   <Button styleClass="time-btn" text="🕒" />
                               </HBox>
-                              <HBox alignment="CENTER" spacing="15" styleClass="invoice-card">
-                                  <ImageView fitHeight="60" fitWidth="100" preserveRatio="true">
-                                      <image>
-                                          <Image url="@../IMG/ban1.png" />
-                                      </image>
-                                  </ImageView>
-                                  <VBox>
-                                      <Label styleClass="invoice-id" text="HD1210820250002" />
-                                      <AnchorPane prefHeight="10.0" prefWidth="200.0" />
-                                      <Label styleClass="invoice-phone" text="SĐT: 0398765432" />
-                                  </VBox>
-                                  <Region HBox.hgrow="ALWAYS" />
-                                  <Button styleClass="time-btn" text="🕒" />
-                              </HBox>
-                        <HBox alignment="CENTER" layoutX="20.0" layoutY="118.0" spacing="15" styleClass="invoice-card">
-                           <children>
-                              <ImageView fitHeight="60" fitWidth="100" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../IMG/ban1.png" />
-                                 </image>
-                              </ImageView>
-                              <VBox>
-                                 <children>
-                                    <Label styleClass="invoice-id" text="HD1210820250002" />
-                                    <AnchorPane prefHeight="10.0" prefWidth="200.0" />
-                                    <Label styleClass="invoice-phone" text="SĐT: 0398765432" />
-                                 </children>
-                              </VBox>
-                              <Region HBox.hgrow="ALWAYS" />
-                              <Button styleClass="time-btn" text="🕒" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="20.0" layoutY="164.0" spacing="15" styleClass="invoice-card">
-                           <children>
-                              <ImageView fitHeight="60" fitWidth="100" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../IMG/ban1.png" />
-                                 </image>
-                              </ImageView>
-                              <VBox>
-                                 <children>
-                                    <Label styleClass="invoice-id" text="HD1210820250002" />
-                                    <AnchorPane prefHeight="10.0" prefWidth="200.0" />
-                                    <Label styleClass="invoice-phone" text="SĐT: 0398765432" />
-                                 </children>
-                              </VBox>
-                              <Region HBox.hgrow="ALWAYS" />
-                              <Button styleClass="time-btn" text="🕒" />
-                           </children>
-                        </HBox>
+
+
+
                           </VBox>
                   </content>
                   </ScrollPane>
@@ -247,22 +200,22 @@
 
             <GridPane hgap="10" vgap="6">
                 <Label text="Mã Hóa Đơn:" />
-                <Label styleClass="strong-label" text="HD1210820250002" GridPane.columnIndex="2" />
+                <Label fx:id="lblmaHD" styleClass="strong-label" text="HD1210820250002" GridPane.columnIndex="2" />
 
                 <Label text="Tên Khách Hàng:" GridPane.rowIndex="1" />
-                <Label text="Trần Quốc Nhã" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label fx:id="lbltenKH" text="Trần Quốc Nhã" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 
                 <Label text="SĐT:" GridPane.rowIndex="3" />
-                <Label text="0391234242" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                <Label fx:id="lblsdtKH" text="0391234242" GridPane.columnIndex="2" GridPane.rowIndex="3" />
 
                 <Label text="Số lượng:" GridPane.rowIndex="4" />
-                <Label text="4" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                <Label fx:id="lblSoLuong" text="4" GridPane.columnIndex="2" GridPane.rowIndex="4" />
 
                 <Label text="Sự kiện:" GridPane.rowIndex="5" />
-                <Label text="Không có" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                <Label fx:id="lblsuKien" text="Không có" GridPane.columnIndex="2" GridPane.rowIndex="5" />
 
                 <Label text="Khu vực:" GridPane.rowIndex="6" />
-                <Label text="IN" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                <Label fx:id="lblKhuVuc" text="IN" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <AnchorPane prefHeight="0.0" prefWidth="79.0" GridPane.columnIndex="1" />
             <columnConstraints>
                <ColumnConstraints />
@@ -284,31 +237,31 @@
             <Separator />
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Label styleClass="bold-label" text="Thanh Toán:" />
-                <RadioButton selected="true" text="Chuyển Khoản">
+                <RadioButton fx:id="rdoChuyenKhoan" selected="true" text="Chuyển Khoản">
                <toggleGroup>
                   <ToggleGroup fx:id="paymentGroup" />
                </toggleGroup></RadioButton>
-                <RadioButton text="Tiền Mặt" toggleGroup="$paymentGroup" />
+                <RadioButton fx:id="rdoTienMat" text="Tiền Mặt" toggleGroup="$paymentGroup" />
             </HBox>
 
             <Label text="Mã Giảm Giá:" />
             <HBox spacing="5">
-                <TextField promptText="Nhập mã giảm giá" styleClass="filter-tf" HBox.hgrow="ALWAYS" />
+                <TextField fx:id="txtMaGG" promptText="Nhập mã giảm giá" styleClass="filter-tf" HBox.hgrow="ALWAYS" />
                 <Button prefHeight="30.0" prefWidth="30.0" styleClass="icon-qr" text="📷" />
             </HBox>
 
             <GridPane hgap="10" vgap="5">
                 <Label text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <Label styleClass="bold-label" text="4.000.000 đ" GridPane.columnIndex="3" />
+                <Label fx:id="lblTongTien" styleClass="bold-label" text="4.000.000 đ" GridPane.columnIndex="3" />
 
                 <Label text="Giảm Giá:" GridPane.rowIndex="2" />
-                <Label styleClass="red-label" text="-400.000 đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                <Label fx:id="lblGiamGia" styleClass="red-label" text="-400.000 đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                 <Label text="Thuế:" GridPane.rowIndex="3" />
-                <Label text="10%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                <Label fx:id="lblThue" text="10%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
                 <Label text="Tổng Thanh Toán:" GridPane.rowIndex="4" />
-                <Label styleClass="red-bold-label" text="3.960.000 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                <Label fx:id="lblTongTT" styleClass="red-bold-label" text="3.960.000 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <AnchorPane prefHeight="0.0" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <columnConstraints>
                <ColumnConstraints />
@@ -327,7 +280,7 @@
             </GridPane>
 
             <Label text="Tiền Khách Đưa:" />
-            <TextField promptText="Nhập số tiền khách đưa" styleClass="filter-tf" />
+            <TextField fx:id="txtTienKhachDua" promptText="Nhập số tiền khách đưa" styleClass="filter-tf" />
             <GridPane alignment="CENTER" hgap="10" style="-fx-background-color: transparent;" vgap="10">
                 <padding>
                     <Insets bottom="10" left="10" right="10" top="10" />

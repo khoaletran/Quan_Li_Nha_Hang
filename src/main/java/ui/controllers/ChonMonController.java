@@ -1,14 +1,7 @@
 package ui.controllers;
 
-import dao.HoaDonDAO;
-import dao.LoaiMonDAO;
-import dao.KhachHangDAO;
-import dao.MonDAO;
-import entity.Ban;
-import entity.KhachHang;
-import entity.LoaiMon;
-import entity.Mon;
-import entity.NhanVien;
+import dao.*;
+import entity.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -20,10 +13,10 @@ import javafx.scene.layout.VBox;
 
 import java.text.DecimalFormat; // ADDED
 import java.text.DecimalFormatSymbols; // ADDED
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale; // ADDED
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class ChonMonController {
 
@@ -33,9 +26,9 @@ public class ChonMonController {
     @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua;
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
-    @FXML private Button back, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
+    @FXML private Button back, btndatban, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
     @FXML private TextField txtTienKhachDua, sdtKhach;
-    @FXML private TextField tf_ban;
+    @FXML private TextField tf_ban, tftg, tfSLKhach;
 
 
     private ui.controllers.MainController_NV mainController;
@@ -48,6 +41,8 @@ public class ChonMonController {
 
     private Ban banHienTai = null;
     private NhanVien nhanVienHien;
+    private LocalDateTime thoiGianDat;
+    private int soLuongKhach;
 
 
 
@@ -58,6 +53,7 @@ public class ChonMonController {
         xuLyHienThiTienMat();
         rdoChuyenKhoan.setSelected(true);
         back.setOnAction(e -> quayVeDatBan());
+        btndatban.setOnAction(e -> datBan());
     }
 
     public void setMainController(ui.controllers.MainController_NV controller) {
@@ -69,6 +65,17 @@ public class ChonMonController {
         this.nhanVienHien = nhanVien;
     }
 
+    public void setThoiGianDat(LocalDateTime thoiGianDat) {
+        this.thoiGianDat = thoiGianDat;
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm | dd/MM/yyyy ");
+        tftg.setText(thoiGianDat.format(fmt));
+
+    }
+
+    public void setSoLuongKhach(int soLuongKhach) {
+        this.soLuongKhach = soLuongKhach;
+        tfSLKhach.setText(String.valueOf(soLuongKhach));
+    }
 
     public void setThongTinBan(Ban ban) {
         this.banHienTai = ban;
@@ -398,22 +405,206 @@ public class ChonMonController {
         lblTienThua.setText(formatCurrency(tienKD - tong));
     }
 
-    private void luuHoaDon(){
-        KhachHangDAO khachHangDAO = new KhachHangDAO();
-        HoaDonDAO hoaDonDAO = new HoaDonDAO();
-        List<KhachHang> dsKhachHang = khachHangDAO.getAll();
-        String maHD = "HD52510250006";
-        String maKH = "KH0000";
+    private String tuSinhMaHD() {
+        int hour = java.time.LocalTime.now().getHour();
+        String ca = (hour < 12) ? "0" : "1";
 
-        //check maKH trong hệ thống
-        for (KhachHang kh : dsKhachHang) {
-            if (kh.getSdt().equals(sdtKhach.getText())) {
-                maKH = kh.getMaKhachHang();
-                break;
-            }
+        String datePart = thoiGianDat.format(DateTimeFormatter.ofPattern("ddMMyy"));
+
+        HoaDonDAO hoaDonDAO = new HoaDonDAO();
+        String maHDCuoi = hoaDonDAO.getMaHDCuoiTheoNgay(ca, datePart);
+
+        int so = 0;
+        if (maHDCuoi != null) {
+                String phanSo = maHDCuoi.substring(maHDCuoi.length() - 4);
+                so = Integer.parseInt(phanSo);
+                so ++;
         }
-        //hết
+
+        return String.format("HD%s%s%04d", ca, datePart, so);
     }
 
+
+
+    private HangKhachHang xetHang(int diemTichLuy) {
+        List<HangKhachHang> list = new HangKhachDAO().getAll();
+        HangKhachHang hang = list.stream()
+                .filter(h -> diemTichLuy >= h.getDiemHang())
+                .max(Comparator.comparingInt(HangKhachHang::getDiemHang))
+                .orElse(list.get(0));
+        return hang;
+    }
+
+    private void datBan() {
+        LocalDateTime now = LocalDateTime.now();
+
+        if (banHienTai == null || soLuongMap.isEmpty()) {
+            System.out.println("Chưa chọn bàn hoặc món!");
+            return;
+        }
+
+        boolean kieuDatBan = now.isBefore(thoiGianDat);
+        int trangThai = kieuDatBan ? 0 : 1;
+
+        HoaDon hd = taoHoaDon(kieuDatBan, trangThai);
+        if (hd == null) {
+            System.out.println("Không tạo được hóa đơn!");
+            return;
+        }
+
+        HoaDonDAO hdDAO = new HoaDonDAO();
+        boolean themHD = hdDAO.insert(hd);
+        if (!themHD) {
+            System.out.println("Lỗi khi thêm hóa đơn!");
+            return;
+        }
+
+        boolean themCT = themChiTietHoaDon(hd);
+        if (!themCT) {
+            System.out.println("⚠Lỗi khi thêm chi tiết hóa đơn!");
+        } else {
+            System.out.println("Đặt bàn thành công: " + hd.getMaHD());
+        }
+    }
+
+
+    private void congDiemTichLuy(KhachHang khachHang, int diem) {
+        if (khachHang == null) return;
+        khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() + diem);
+        KhachHangDAO.update(khachHang);
+    }
+
+    private int tinhDiem() {
+        double tongTien = parseCurrency(lbl_total_PT.getText().trim());
+        return (int) (tongTien * 0.1 / 1000);
+    }
+
+    private Coc layCoc(Ban ban) {
+        if (ban == null) return null;
+
+        String maKV = ban.getKhuVuc().getMaKhuVuc();
+        String maLB = ban.getLoaiBan().getMaLoaiBan();
+
+        List<Coc> listCoc = new CocDAO().getAll();
+
+        for (Coc coc : listCoc) {
+            if (coc.getKhuVuc() != null && coc.getLoaiBan() != null) {
+                if (coc.getKhuVuc().getMaKhuVuc().equals(maKV)
+                        && coc.getLoaiBan().getMaLoaiBan().equals(maLB)) {
+                    return coc;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private boolean themChiTietHoaDon(HoaDon hoaDon) {
+        if (hoaDon == null) {
+            System.out.println("Không có hóa đơn để thêm chi tiết!");
+            return false;
+        }
+
+        String maHD = hoaDon.getMaHD();
+        ChiTietHDDAO dao = new ChiTietHDDAO();
+        List<Mon> dsMon = monDAO.getAll();
+
+        boolean tatCaOK = true;
+
+        for (Map.Entry<String, Integer> entry : soLuongMap.entrySet()) {
+            String maMon = entry.getKey();
+            int soLuong = entry.getValue();
+
+            Mon mon = dsMon.stream()
+                    .filter(m -> m.getMaMon().equals(maMon))
+                    .findFirst()
+                    .orElse(null);
+
+            if (mon != null && soLuong > 0) {
+                double thanhTien = mon.giaBan() * soLuong;
+                ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
+
+                if (!dao.insert(hoaDon.getMaHD(),ct)) {
+                    tatCaOK = false;
+                    System.err.println("Lỗi thêm chi tiết món: " + maMon);
+                }
+            }
+        }
+
+        return tatCaOK;
+    }
+
+
+    private HoaDon taoHoaDon(boolean kieudatban, int trangthai) {
+        if (banHienTai == null || nhanVienHien == null) {
+            System.out.println("Thiếu thông tin bàn hoặc nhân viên!");
+            return null;
+        }
+
+        // ===== 1. Tạo mã hóa đơn =====
+        String maHD = tuSinhMaHD();
+
+        // ===== 2. Lấy thông tin khách hàng =====
+        KhachHang khachHang = null;
+        String sdt = sdtKhach.getText().trim();
+
+        if (!sdt.isEmpty()) {
+            khachHang = new KhachHangDAO().findBySDT(sdt);
+            if (khachHang != null) {
+                congDiemTichLuy(khachHang, tinhDiem());
+            } else {
+                System.out.println("Không tìm thấy khách hàng có SDT: " + sdt);
+            }
+        }
+
+        if (khachHang == null) {
+            khachHang = new KhachHang("KH0000", 0, true, sdt, "Khách lẻ", xetHang(0));
+        }
+        // ===== 3. Tính toán giá trị dẫn xuất =====
+        double tongTienTruoc = parseCurrency(lbl_total_PT.getText().trim());
+        double thue = tongTienTruoc * 0.1;
+        double tongSauThue = tongTienTruoc + thue;
+
+        KhuyenMai km = null; // tạm null
+        double tongKM = 0;
+        SuKien suKien = null;
+        double tongSuKM = 0;
+        if(suKien!=null){
+            tongSuKM = suKien.getGia();
+        }
+        double tongtienSau = tongSauThue - tongKM + tongSuKM ;
+
+        double tienCoc = 0;
+        Coc coc = layCoc(banHienTai);
+        if (coc.isLoaiCoc()) {
+            tienCoc = tongtienSau * coc.getPhanTramCoc();
+        } else{
+            tienCoc = coc.getSoTienCoc();
+        }
+
+        boolean kieuThanhToan = rdoChuyenKhoan.isSelected();
+
+        // ===== 4. Khởi tạo đối tượng hóa đơn =====//
+        HoaDon hd = new HoaDon();
+        hd.setMaHD(maHD);
+        hd.setKhachHang(khachHang);
+        hd.setNhanVien(nhanVienHien);
+        hd.setBan(banHienTai);
+        hd.setTgCheckIn(LocalDateTime.now());
+        hd.setTgCheckOut(null);
+        hd.setKhuyenMai(km);
+        hd.setTrangthai(trangthai);
+        hd.setSuKien(suKien);
+        hd.setKieuThanhToan(kieuThanhToan);
+        hd.setKieuDatBan(kieudatban);
+        hd.setThue(thue);
+        hd.setCoc(tienCoc);
+        hd.setTongTienTruoc(tongTienTruoc);
+        hd.setTongTienKhuyenMai(tongKM);
+        hd.setTongTienSau(tongtienSau);
+
+        System.out.println("Tạo hóa đơn thành công: " + hd.getMaHD());
+        return hd;
+    }
 
 }
