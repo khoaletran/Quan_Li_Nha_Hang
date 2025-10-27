@@ -5,105 +5,330 @@ import dao.MonDAO;
 import entity.LoaiMon;
 import entity.Mon;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.util.List;
 
 public class QLMenuController {
 
     @FXML
     private FlowPane flowMonAn;
-    @FXML private ComboBox<LoaiMon> comboDanhMuc;
+    @FXML
+    private ComboBox<String> cboLoaiMonFilter;
+    @FXML
+    private ComboBox<String> cboLoaiMon;
+
+    @FXML
+    private Label lblMaMon;
+    @FXML
+    private TextField txtTenMon, txtMoTa, txtGiaGoc, txtSoLuong;
+    @FXML
+    private ImageView imgMon;
+    @FXML
+    private Button btnXacNhan;
+    @FXML
+    private TextField searchField;
 
     private final MonDAO monDAO = new MonDAO();
-    private final LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
+    private File selectedFile;
 
     @FXML
     public void initialize() {
-        loadDanhSachMon();
         loadComboDanhMuc();
+        loadDanhSachMon(); // hiển thị tất cả
+        cboLoaiMonFilter.setOnAction(e -> locMonTheoDanhMuc());
+        // TextField tìm kiếm realtime
+        searchField.textProperty().addListener((obs, oldText, newText) -> filterMon());
+    }
+    // Hàm lọc món kết hợp tên + loại
+    private void filterMon() {
+        String keyword = searchField.getText().toLowerCase().trim();
+        String selectedLoai = cboLoaiMonFilter.getSelectionModel().getSelectedItem();
+
+        flowMonAn.getChildren().clear();
+
+        for (Mon mon : MonDAO.getAll()) {
+            boolean matchName = mon.getTenMon().toLowerCase().contains(keyword);
+            boolean matchLoai = selectedLoai == null
+                    || selectedLoai.equals("Tất cả")
+                    || (mon.getLoaiMon() != null && selectedLoai.equals(mon.getLoaiMon().getTenLoaiMon()));
+
+            if (matchName && matchLoai) {
+                flowMonAn.getChildren().add(taoCardMon(mon, null));
+            }
+        }
     }
 
     private void loadComboDanhMuc() {
-        comboDanhMuc.getItems().clear();
-        comboDanhMuc.getItems().addAll(loaiMonDAO.getAll());
+        cboLoaiMonFilter.getItems().clear();
+        cboLoaiMon.getItems().clear();
 
-        comboDanhMuc.setCellFactory(param -> new javafx.scene.control.ListCell<>() {
-            @Override
-            protected void updateItem(LoaiMon item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getTenLoaiMon());
-                }
-            }
-        });
+        cboLoaiMonFilter.getItems().add("Tất cả"); // filter xem tất cả
+        for (LoaiMon lm : LoaiMonDAO.getAll()) {
+            cboLoaiMonFilter.getItems().add(lm.getTenLoaiMon());
+            cboLoaiMon.getItems().add(lm.getTenLoaiMon());
+        }
 
-        comboDanhMuc.setButtonCell(new javafx.scene.control.ListCell<>() {
-            @Override
-            protected void updateItem(LoaiMon item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText("Chọn loại món");
-                } else {
-                    setText(item.getTenLoaiMon());
-                }
-            }
-        });
+        cboLoaiMonFilter.getSelectionModel().selectFirst();
     }
 
     private void loadDanhSachMon() {
         flowMonAn.getChildren().clear();
         List<Mon> danhSach = monDAO.getAll();
-
         for (Mon mon : danhSach) {
-            VBox card = taoCardMon(mon);
-            flowMonAn.getChildren().add(card);
+            flowMonAn.getChildren().add(taoCardMon(mon, null));
         }
     }
 
-    private VBox taoCardMon(Mon mon) {
+    private void locMonTheoDanhMuc() {
+        String selectedLoai = cboLoaiMonFilter.getSelectionModel().getSelectedItem();
+        flowMonAn.getChildren().clear();
+
+        if (selectedLoai == null || selectedLoai.equals("Tất cả")) {
+            loadDanhSachMon();
+            return;
+        }
+
+        for (Mon mon : MonDAO.getAll()) {
+            if (mon.getLoaiMon() != null &&
+                    selectedLoai.equals(mon.getLoaiMon().getTenLoaiMon())) {
+                flowMonAn.getChildren().add(taoCardMon(mon, null));
+            }
+        }
+    }
+
+    private VBox taoCardMon(Mon mon, File file) {
+        // ===== 1. Card chính =====
         VBox card = new VBox();
         card.getStyleClass().add("menu-item");
+        card.setPrefSize(250, 250);  // cố định chiều ngang và cao
+        card.setMaxSize(250, 250);
+        card.setMinSize(250, 250);
 
-        // Ảnh món
+        // ===== 2. Khung hình cố định =====
+        StackPane imagePane = new StackPane();
+        imagePane.setPrefSize(180, 180); // khung hình cố định
+
         ImageView imageView = new ImageView();
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setCache(true);
+        imageView.setFitWidth(180);
+        imageView.setFitHeight(180);
+
+        // Clip để hình không tràn khung
+        javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(180, 180);
+        imageView.setClip(clip);
+
+        // ===== 3. Load hình =====
         try {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food" + mon.getHinhAnh())));
+            if (file != null && file.exists()) {
+                // dùng file trực tiếp khi mới thêm
+                imageView.setImage(new Image(file.toURI().toString()));
+            } else {
+                imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/" + mon.getHinhAnh())));
+            }
         } catch (Exception e) {
             imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
         }
 
-        imageView.setFitWidth(180);
-        imageView.setFitHeight(180);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
-        imageView.setCache(true);
+        imagePane.getChildren().add(imageView);
 
-        imageView.getStyleClass().add("menu-image");
-
-        // Tên và giá
+        // ===== 4. Info Box =====
         Label lblTen = new Label(mon.getTenMon());
         lblTen.getStyleClass().add("item-name");
+        lblTen.setWrapText(true);
 
-        Label lblGia = new Label(String.format("%.0f đ", mon.getGiaBan()));
+        Label lblGia = new Label(String.format("%.0f đ", mon.getGiaGoc()));
         lblGia.getStyleClass().add("item-price");
+        lblGia.setWrapText(true);
+        lblGia.setPrefWidth(90);
 
         Region space = new Region();
-        HBox.setHgrow(space, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(space, Priority.ALWAYS);
 
         HBox infoBox = new HBox(lblTen, space, lblGia);
         infoBox.getStyleClass().add("item-info");
 
-        card.getChildren().addAll(imageView, infoBox);
+        // ===== 5. Thêm vào card =====
+        card.getChildren().addAll(imagePane, infoBox);
+
+        // ===== 6. Sự kiện click =====
+        card.setOnMouseClicked(e -> loadChiTietMon(mon));
+
         return card;
+    }
+
+
+
+    private void loadChiTietMon(Mon mon) {
+        lblMaMon.setText(mon.getMaMon());
+        txtTenMon.setText(mon.getTenMon());
+        txtMoTa.setText(mon.getMoTa());
+        txtGiaGoc.setText(String.valueOf(mon.getGiaGoc()));
+        txtSoLuong.setText(String.valueOf(mon.getSoLuong()));
+
+        if (mon.getLoaiMon() != null) {
+            cboLoaiMon.getSelectionModel().select(mon.getLoaiMon().getTenLoaiMon());
+        } else {
+            cboLoaiMon.getSelectionModel().clearSelection();
+        }
+
+        try {
+            Image image = new Image(getClass().getResourceAsStream("/IMG/food/" + mon.getHinhAnh()));
+            imgMon.setImage(image);
+        } catch (Exception e) {
+            imgMon.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
+        }
+
+        // Khi load chi tiết món thì button sẽ đổi text
+        btnXacNhan.setText("Xác nhận");
+    }
+
+    @FXML
+    private void chonAnh() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn hình ảnh món");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Hình ảnh", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        File file = fileChooser.showOpenDialog(imgMon.getScene().getWindow());
+        if (file != null) {
+            selectedFile = file;
+            imgMon.setImage(new Image(file.toURI().toString()));
+            System.out.println("Đường dẫn ảnh: " + file.getAbsolutePath());
+            try {
+                File dest = new File("src/main/resources/IMG/food/" + file.getName());
+                java.nio.file.Files.copy(file.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void addMon() {
+        // Khi thêm mới, reset tất cả fields
+        resetFields();
+        // Đổi text button thành "Thêm mới"
+        btnXacNhan.setText("Thêm mới");
+    }
+
+    private void resetFields() {
+        lblMaMon.setText("");
+        txtTenMon.setText("");
+        txtMoTa.setText("");
+        txtGiaGoc.setText("");
+        txtSoLuong.setText("");
+        cboLoaiMon.getSelectionModel().clearSelection();
+
+        try {
+            imgMon.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
+        } catch (Exception e) {
+            imgMon.setImage(null);
+        }
+
+        selectedFile = null;
+    }
+
+    @FXML
+    private void xacNhan() {
+        String maMon = lblMaMon.getText().trim();
+        String tenMon = txtTenMon.getText().trim();
+        String moTa = txtMoTa.getText().trim();
+        String giaStr = txtGiaGoc.getText().trim();
+        String soLuongStr = txtSoLuong.getText().trim();
+
+        String maLoai = "";
+        if (cboLoaiMon.getSelectionModel().getSelectedItem() != null) {
+            maLoai = LoaiMonDAO.getMaLoaiMonByTen(cboLoaiMon.getSelectionModel().getSelectedItem());
+        }
+        LoaiMon loaiMon = new LoaiMon(maLoai);
+
+        double giaGoc;
+        int soLuong;
+        try {
+            giaGoc = Double.parseDouble(giaStr);
+            soLuong = Integer.parseInt(soLuongStr);
+        } catch (NumberFormatException e) {
+            System.out.println("Giá hoặc số lượng không hợp lệ!");
+            return;
+        }
+
+        // Xử lý ảnh
+        String tenAnh = "restaurant.png"; // default
+        if (selectedFile != null) {
+            tenAnh = selectedFile.getName();
+            // copy file vào resources
+            try {
+                File dest = new File("src/main/resources/IMG/food/" + tenAnh);
+                java.nio.file.Files.copy(selectedFile.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (!maMon.isEmpty()) {
+            Mon old = MonDAO.findByID(maMon);
+            if (old != null && old.getHinhAnh() != null)
+                tenAnh = old.getHinhAnh();
+        }
+
+        Mon mon = new Mon();
+        mon.setMaMon(maMon.isEmpty() ? generateID(MonDAO.getLatestMaMon(), "MN") : maMon);
+        mon.setTenMon(tenMon);
+        mon.setMoTa(moTa);
+        mon.setGiaGoc(giaGoc);
+        mon.setSoLuong(soLuong);
+        mon.setLoaiMon(loaiMon);
+        mon.setHinhAnh(tenAnh);
+
+        boolean success;
+        if (btnXacNhan.getText().equals("Thêm mới")) {
+            success = MonDAO.insert(mon);
+            if (success) {
+                System.out.println("Thêm món mới thành công!");
+                // hiển thị ngay món mới trong FlowPane
+                flowMonAn.getChildren().add(taoCardMon(mon, selectedFile)); // dùng selectedFile để load ảnh
+            } else {
+                System.out.println("Thêm món thất bại!");
+            }
+        } else {
+            success = MonDAO.update(mon);
+            if (success) {
+                System.out.println("Cập nhật món thành công!");
+                loadDanhSachMon(); // load lại danh sách để cập nhật
+            } else {
+                System.out.println("Cập nhật thất bại!");
+            }
+        }
+
+        resetFields();
+        btnXacNhan.setText("Thêm mới");
+        selectedFile = null;
+    }
+
+
+
+    private String generateID(String latestId, String prefix) {
+        if (latestId == null || latestId.isEmpty()) {
+            return prefix + "0001";
+        }
+        try {
+            int num = Integer.parseInt(latestId.substring(prefix.length())); // Lấy phần số
+            num += 1;
+            return prefix + String.format("%04d", num); // 4 chữ số, ví dụ "0006"
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            // fallback nếu dữ liệu trong DB bị sai
+            return prefix + "0001";
+        }
     }
 }
