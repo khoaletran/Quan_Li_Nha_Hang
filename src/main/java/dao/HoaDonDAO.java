@@ -14,39 +14,178 @@ import java.util.List;
 
 public class HoaDonDAO {
 
-    // ================== LẤY TOÀN BỘ ==================
-    public List<HoaDon> getAll() {
+    public static List<HoaDon> getAll() {
         List<HoaDon> ds = new ArrayList<>();
-        String sql = "SELECT * FROM HoaDon";
-        try (Statement st = connectDB.getConnection().createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+        String sql = """
+        SELECT 
+            hd.maHD AS hd_maHD, hd.maKH AS hd_maKH, hd.maNV AS hd_maNV, hd.maBan AS hd_maBan,
+            hd.maKM AS hd_maKM, hd.maSK AS hd_maSK,
+            hd.tgCheckin AS hd_tgCheckin, hd.tgCheckout AS hd_tgCheckout,
+            hd.kieuThanhToan AS hd_kieuThanhToan, hd.kieuDatBan AS hd_kieuDatBan,
+            hd.thue AS hd_thue, hd.coc AS hd_coc, hd.trangThai AS hd_trangThai,
+            hd.tongTienTruoc AS hd_tongTienTruoc, hd.tongTienSau AS hd_tongTienSau, hd.tongTienKM AS hd_tongTienKM,
 
-            while (rs.next()) {
-                HoaDon hd = new HoaDon(
-                        rs.getString("maHD"),
-                        rs.getDouble("tongTienKM"),
-                        rs.getDouble("tongTienSau"),
-                        rs.getDouble("tongTienTruoc"),
-                        rs.getDouble("coc"),
-                        rs.getDouble("thue"),
-                        rs.getBoolean("kieuDatBan"),
-                        rs.getBoolean("kieuThanhToan"),
-                        null, null, // KH & NV
-                        rs.getInt("trangThai"),
-                        rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null,
-                        rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null,
-                        null, null, null // khuyến mãi, sự kiện, bàn
-                );
-                ds.add(hd);
+            kh.maKH AS kh_maKH, kh.tenKH AS kh_tenKH, kh.sdt AS kh_sdt, kh.gioiTinh AS kh_gioiTinh, kh.diemTichLuy AS kh_diemTichLuy,
+
+            nv.maNV AS nv_maNV, nv.tenNV AS nv_tenNV,
+
+            b.maBan AS b_maBan, b.trangThai AS b_trangThai,
+
+            km.maKM AS km_maKM, km.tenKM AS km_tenKM, km.soLuong AS km_soLuong,
+            km.ngayPhatHanh AS km_ngayPhatHanh, km.ngayKetThuc AS km_ngayKetThuc,
+            km.maThayThe AS km_maThayThe, km.phanTramGiamGia AS km_phanTramGiamGia, km.uuDai AS km_uuDai,
+
+            sk.maSK AS sk_maSK, sk.tenSK AS sk_tenSK, sk.mota AS sk_mota, sk.gia AS sk_gia
+        FROM HoaDon hd
+        LEFT JOIN KhachHang kh ON hd.maKH = kh.maKH
+        LEFT JOIN NhanVien nv ON hd.maNV = nv.maNV
+        LEFT JOIN Ban b ON hd.maBan = b.maBan
+        LEFT JOIN KhuyenMai km ON hd.maKM = km.maKM
+        LEFT JOIN SuKien sk ON hd.maSK = sk.maSK
+    """;
+
+        Connection conn = null;
+        try {
+            // Lấy connection và kiểm tra trạng thái
+            conn = connectDB.getConnection(); // hoặc connectDB.getInstance().getConnection() tùy implement của bạn
+            System.out.println("DEBUG: initial conn = " + conn);
+            if (conn == null || conn.isClosed()) {
+                System.out.println("DEBUG: connection null/closed -> thử gọi connect() để tạo kết nối mới");
+                // Thử gọi lại phương thức connect nếu bạn có (có thể khác tên)
+                try {
+                    connectDB.getInstance().connect(); // nếu class của bạn cung cấp
+                } catch (Exception exConnect) {
+                    System.err.println("DEBUG: connect() throw: " + exConnect.getMessage());
+                }
+                conn = connectDB.getConnection();
+                System.out.println("DEBUG: conn after reconnect = " + conn);
             }
+
+            if (conn == null) {
+                throw new SQLException("Không thể tạo connection (conn == null). Kiểm tra connectDB.");
+            }
+            if (conn.isClosed()) {
+                throw new SQLException("Connection vẫn đóng sau khi cố reconnect.");
+            }
+
+            // Dùng try-with-resources cho Statement/ResultSet, không đóng conn nếu bạn dùng kết nối chia sẻ
+            try (Statement st = conn.createStatement();
+                 ResultSet rs = st.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    // --- (mapping giống như bạn đã có) ---
+                    // ----- KHÁCH HÀNG -----
+                    KhachHang kh = null;
+                    String kh_ma = rs.getString("kh_maKH");
+                    if (kh_ma != null) {
+                        Integer diemTichLuy = rs.getObject("kh_diemTichLuy") != null ? rs.getInt("kh_diemTichLuy") : null;
+                        Boolean gioiTinh = rs.getObject("kh_gioiTinh") != null ? rs.getBoolean("kh_gioiTinh") : null;
+                        kh = new KhachHang(
+                                kh_ma,
+                                diemTichLuy != null ? diemTichLuy : 0,
+                                gioiTinh != null ? gioiTinh : false,
+                                rs.getString("kh_sdt"),
+                                rs.getString("kh_tenKH"),
+                                null
+                        );
+                    }
+
+                    // ----- NHAN VIEN -----
+                    NhanVien nv = null;
+                    String nv_ma = rs.getString("nv_maNV");
+                    if (nv_ma != null) {
+                        nv = new NhanVien();
+                        nv.setMaNV(nv_ma);
+                        nv.setTenNV(rs.getString("nv_tenNV"));
+                    }
+
+                    // ----- BAN -----
+                    Ban ban = null;
+                    String b_ma = rs.getString("b_maBan");
+                    if (b_ma != null) {
+                        Boolean trangThaiBan = rs.getObject("b_trangThai") != null ? rs.getBoolean("b_trangThai") : false;
+                        ban = new Ban(b_ma, null, null, trangThaiBan);
+                    }
+
+                    // ----- KHUYEN MAI -----
+                    KhuyenMai km = null;
+                    String km_ma = rs.getString("km_maKM");
+                    if (km_ma != null) {
+                        Integer soLuongKM = rs.getObject("km_soLuong") != null ? rs.getInt("km_soLuong") : 0;
+                        java.sql.Date ngPh = rs.getDate("km_ngayPhatHanh");
+                        java.sql.Date ngKt = rs.getDate("km_ngayKetThuc");
+                        Integer phanTram = rs.getObject("km_phanTramGiamGia") != null ? rs.getInt("km_phanTramGiamGia") : 0;
+                        Boolean uuDai = rs.getObject("km_uuDai") != null ? rs.getBoolean("km_uuDai") : false;
+
+                        km = new KhuyenMai(
+                                km_ma,
+                                rs.getString("km_tenKM"),
+                                soLuongKM,
+                                ngPh != null ? ngPh.toLocalDate() : null,
+                                ngKt != null ? ngKt.toLocalDate() : null,
+                                rs.getString("km_maThayThe"),
+                                phanTram,
+                                uuDai
+                        );
+                    }
+
+                    // ----- SU KIEN -----
+                    SuKien sk = null;
+                    String sk_ma = rs.getString("sk_maSK");
+                    if (sk_ma != null) {
+                        Double gia = rs.getObject("sk_gia") != null ? rs.getDouble("sk_gia") : 0.0;
+                        sk = new SuKien(sk_ma, rs.getString("sk_tenSK"), rs.getString("sk_mota"), gia);
+                    }
+
+                    // ----- HOA DON -----
+                    String hd_maHD = rs.getString("hd_maHD");
+                    Double tongTienTruoc = rs.getObject("hd_tongTienTruoc") != null ? rs.getDouble("hd_tongTienTruoc") : 0.0;
+                    Double tongTienKM = rs.getObject("hd_tongTienKM") != null ? rs.getDouble("hd_tongTienKM") : 0.0;
+                    Double tongTienSau = rs.getObject("hd_tongTienSau") != null ? rs.getDouble("hd_tongTienSau") : 0.0;
+                    Double cocVal = rs.getObject("hd_coc") != null ? rs.getDouble("hd_coc") : 0.0;
+                    Double thueVal = rs.getObject("hd_thue") != null ? rs.getDouble("hd_thue") : 0.0;
+                    Boolean kieuDatBan = rs.getObject("hd_kieuDatBan") != null ? rs.getBoolean("hd_kieuDatBan") : false;
+                    Boolean kieuThanhToan = rs.getObject("hd_kieuThanhToan") != null ? rs.getBoolean("hd_kieuThanhToan") : false;
+                    int trangThai = rs.getObject("hd_trangThai") != null ? rs.getInt("hd_trangThai") : 0;
+
+                    java.sql.Timestamp tsCheckin = rs.getTimestamp("hd_tgCheckin");
+                    java.sql.Timestamp tsCheckout = rs.getTimestamp("hd_tgCheckout");
+
+                    HoaDon hd = new HoaDon(
+                            hd_maHD,
+                            tongTienKM,
+                            tongTienSau,
+                            tongTienTruoc,
+                            cocVal,
+                            thueVal,
+                            kieuDatBan,
+                            kieuThanhToan,
+                            km,
+                            sk,
+                            trangThai,
+                            tsCheckout != null ? tsCheckout.toLocalDateTime() : null,
+                            tsCheckin  != null ? tsCheckin.toLocalDateTime()  : null,
+                            ban,
+                            nv,
+                            kh
+                    );
+
+                    ds.add(hd);
+                }
+            }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("❌ Lỗi khi lấy danh sách hóa đơn: " + e.getMessage());
+            e.printStackTrace(); // in stack trace để debug nguyên nhân close
         }
         return ds;
     }
 
+
+
+
     // ================== THÊM HÓA ĐƠN ==================
-    public boolean insert(HoaDon hd) {
+    public static boolean insert(HoaDon hd) {
         String sql = """
             INSERT INTO HoaDon(
                 maHD, maKH, maNV, maBan, maKM, maSK, 
@@ -83,7 +222,7 @@ public class HoaDonDAO {
     }
 
     // ================== CẬP NHẬT ==================
-    public boolean update(HoaDon hd) {
+    public static boolean update(HoaDon hd) {
         String sql = """
             UPDATE HoaDon SET 
                 maKH=?, maNV=?, maBan=?, maKM=?, maSK=?,
@@ -118,7 +257,7 @@ public class HoaDonDAO {
     }
 
     // ================== XÓA ==================
-    public boolean delete(String maHD) {
+    public static boolean delete(String maHD) {
         String sql = "DELETE FROM HoaDon WHERE maHD=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, maHD);
