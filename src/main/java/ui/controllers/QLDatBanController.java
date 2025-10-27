@@ -91,7 +91,7 @@ public class QLDatBanController {
     private boolean ketNoiDatabase() {
         try {
             connectDB.getInstance().connect();
-            System.out.println("✅ Kết nối database thành công");
+            System.out.println("Kết nối database thành công");
             return true;
         } catch (Exception e) {
             System.err.println("Lỗi kết nối database: " + e.getMessage());
@@ -170,10 +170,25 @@ public class QLDatBanController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            chiTietHoaDonData.remove(chiTiet);
-            hienThiThongBao("Đã xóa món khỏi đơn hàng");
+            try {
+                // Gọi DAO để xóa trên DB (giả sử ChiTietHDDAO.delete(maHD, maMon) trả về boolean)
+                boolean deleted = chiTietHDDAO.delete(chiTiet.getHoaDon().getMaHD(), chiTiet.getMon().getMaMon());
+                if (deleted) {
+                    // xóa khỏi UI list
+                    chiTietHoaDonData.remove(chiTiet);
+                    hienThiThongBao("Đã xóa món khỏi đơn hàng (DB và UI).");
+                    System.out.println("✅ Đã xóa chi tiết (maHD=" + chiTiet.getHoaDon().getMaHD() + ", maMon=" + chiTiet.getMon().getMaMon() + ")");
+                } else {
+                    hienThiThongBao("❌ Xóa thất bại trên cơ sở dữ liệu.");
+                    System.err.println("❌ Xóa chi tiết thất bại trong DB.");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                hienThiThongBao("❌ Lỗi khi xóa: " + ex.getMessage());
+            }
         }
     }
+
 
     private void taiDanhSachDatTruoc() {
         try {

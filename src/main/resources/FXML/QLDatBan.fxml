@@ -111,7 +111,7 @@
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <HBox alignment="CENTER_LEFT" spacing="10">
                             <Label styleClass="key-label" text="Sự Kiện:" />
-                            <ComboBox fx:id="eventCombo" prefHeight="32.0" prefWidth="120.0" promptText="Sự kiện" styleClass="event-combobox">
+                            <ComboBox fx:id="eventCombo" prefHeight="32.0" prefWidth="150.0" promptText="Sự kiện" styleClass="event-combobox">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
                                         <String fx:value="Sinh Nhật" />
@@ -124,13 +124,12 @@
                         <Region HBox.hgrow="ALWAYS" />
                         <HBox alignment="CENTER_LEFT" spacing="10">
                             <Label styleClass="key-label" text="Số Lượng:" />
-                            <TextField fx:id="txtSoLuongKhach" prefHeight="32.0" prefWidth="80.0" promptText="Số lượng" styleClass="input-field" />
+                            <TextField fx:id="txtSoLuongKhach" prefHeight="32.0" prefWidth="50.0" promptText="00" styleClass="input-field" />
                         </HBox>
                     </HBox>
                 </VBox>
             </VBox>
 
-            <!-- Bảng đơn hàng -->
             <!-- Bảng đơn hàng -->
             <VBox spacing="10" styleClass="order-section">
                 <TableView fx:id="orderTable" prefHeight="201.0" prefWidth="373.0" styleClass="order-table">
