@@ -13,6 +13,10 @@ module com.example.quan_li_nha_hang {
     requires java.desktop;
     requires java.sql;
     requires javafx.graphics;
+    requires com.google.zxing.javase;
+    requires com.google.zxing;
+    requires webcam.capture;
+    requires javafx.swing;
 
 
     opens ui to javafx.fxml, javafx.graphics;

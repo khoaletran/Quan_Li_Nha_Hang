@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import com.google.zxing.*;
 import dao.ChiTietHDDAO;
 import dao.KhuyenMaiDAO;
 import dao.KhuVucDAO;
@@ -8,7 +9,6 @@ import dao.HoaDonDAO;
 import dao.KhachHangDAO;
 import entity.*;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,9 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-
 import javax.swing.*;
-import java.time.LocalDate;
 import java.util.List;
 
 public class CheckoutController {
@@ -30,6 +28,7 @@ public class CheckoutController {
     @FXML private RadioButton rdoChuyenKhoan,rdoTienMat;
     @FXML private TextField txtMaGG,txtTienKhachDua;
     @FXML private VBox vboxHoaDon,vboxMenu;
+    @FXML private Button btnCamera;
 
     @FXML
     public void initialize() {
@@ -38,14 +37,46 @@ public class CheckoutController {
             updateThanhTien();
         });
     }
+    @FXML
+    private void handleCameraButton() {
+        new Thread(() -> {
+            String maQR = QrCodeController.scanQRCodeWithPreview();
 
+            if (maQR != null) {
+                javafx.application.Platform.runLater(() -> {
+                    txtMaGG.setText(maQR);
+                    updateThanhTien();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Quét mã thành công");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Mã giảm giá: " + maQR + " đã được áp dụng!");
+                    alert.showAndWait();
+                });
+            } else {
+                javafx.application.Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Không nhận được mã");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Không quét được mã QR. Vui lòng thử lại!");
+                    alert.showAndWait();
+                });
+            }
+        }).start();
+    }
 
     private void updateThanhTien() {
-        if(lblmaHD.getText().isEmpty()) return; // chưa chọn hóa đơn
+        if(lblmaHD.getText().isEmpty()) return;
 
         double tienTruoc = Double.parseDouble(lblTongTien.getText().replaceAll("[^0-9]", ""));
-        double tienThue = tienTruoc / 10; // 10% thuế
+        double tienThue = tienTruoc / 10;
         double tienGG = 0;
+        double tienCoc = 0;
+
+        HoaDonDAO hoaDonDAO = new HoaDonDAO();
+        HoaDon hd = hoaDonDAO.getByID(lblmaHD.getText());
+        if(hd != null) {
+            tienCoc = hd.getCoc();
+        }
 
         String maGiamG = txtMaGG.getText().trim();
         if(!maGiamG.isEmpty()) {
@@ -56,7 +87,7 @@ public class CheckoutController {
         }
 
         lblGiamGia.setText(String.format("-%,.0f đ", tienGG));
-        lblTongTT.setText(String.format("%,.0f đ", tienTruoc + tienThue - tienGG));
+        lblTongTT.setText(String.format("%,.0f đ", tienTruoc + tienThue - tienGG - tienCoc));
     }
 
 
@@ -169,6 +200,7 @@ public class CheckoutController {
             vboxHoaDon.getChildren().add(hbox);
         }
     }
+
 
 
 }

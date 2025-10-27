@@ -8,6 +8,7 @@ public class Mon {
     private String moTa;
     private String hinhAnh;
     private double giaGoc;
+    private int soLuong;
     private LoaiMon loaiMon;
 
 
@@ -38,13 +39,15 @@ public class Mon {
 
     public Mon() {
     }
-    public Mon(String maMon, String tenMon, String moTa, String hinhAnh, double giaGoc, LoaiMon loaiMon) {
+
+    public Mon(String maMon, String tenMon, String moTa, String hinhAnh, double giaGoc, int soLuong, LoaiMon loaiMon) {
         this.maMon = maMon;
         this.tenMon = tenMon;
         this.moTa = moTa;
         this.hinhAnh = hinhAnh;
-        this.loaiMon = loaiMon;
         this.giaGoc = giaGoc;
+        this.soLuong = soLuong;
+        this.loaiMon = loaiMon;
     }
 
     public String getMaMon() {
@@ -95,6 +98,14 @@ public class Mon {
         this.giaGoc = giaGoc;
     }
 
+    public int getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+
     @Override
     public String toString() {
         return "Mon{" +
@@ -103,7 +114,8 @@ public class Mon {
                 ", moTa='" + moTa + '\'' +
                 ", hinhAnh='" + hinhAnh + '\'' +
                 ", giaGoc=" + giaGoc +
+                ", soLuong=" + soLuong +
                 ", loaiMon=" + loaiMon +
-                '}' + " Giá bán "+getGiaBan();
+                '}';
     }
 }
