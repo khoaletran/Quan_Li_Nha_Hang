@@ -12,7 +12,7 @@ import java.util.List;
 public class ChiTietHDDAO {
 
     // ===== 1. LẤY DANH SÁCH CHI TIẾT THEO MÃ HÓA ĐƠN =====
-    public List<ChiTietHoaDon> getByMaHD(String maHD) {
+    public static List<ChiTietHoaDon> getByMaHD(String maHD) {
         List<ChiTietHoaDon> ds = new ArrayList<>();
         String sql = "SELECT * FROM ChiTietHoaDon WHERE maHD = ?";
 
