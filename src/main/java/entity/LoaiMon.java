@@ -11,6 +11,14 @@ public class LoaiMon {
         this.moTa = moTa;
     }
 
+    public LoaiMon() {
+
+    }
+
+    public LoaiMon(String maLoaiMon) {
+        this.maLoaiMon = maLoaiMon;
+    }
+
     public String getMaLoaiMon() {
         return maLoaiMon;
     }
