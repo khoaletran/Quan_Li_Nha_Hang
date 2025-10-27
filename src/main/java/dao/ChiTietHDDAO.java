@@ -12,43 +12,46 @@ import java.util.List;
 public class ChiTietHDDAO {
 
     // ===== 1. LẤY DANH SÁCH CHI TIẾT THEO MÃ HÓA ĐƠN =====
-    public List<ChiTietHoaDon> getByMaHD(String maHD) {
-        List<ChiTietHoaDon> ds = new ArrayList<>();
+    public static List<ChiTietHoaDon> getByMaHD(String maHD) {
+        List<ChiTietHoaDon> list = new ArrayList<>();
+        List<String[]> tempList = new ArrayList<>(); // lưu dữ liệu tạm
+
         String sql = "SELECT * FROM ChiTietHoaDon WHERE maHD = ?";
 
-        try (Connection conn = connectDB.getInstance().getNewConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try {
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
 
-            ps.setString(1, maHD);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    String maMon = rs.getString("maMon");
-                    int soLuong = rs.getInt("soLuong");
-                    double thanhTien = rs.getDouble("thanhTien");
-
-                    // Lấy thông tin món từ MonDAO
-                    Mon mon = new MonDAO().findByID(maMon);
-
-                    // Lấy thông tin hóa đơn từ HoaDonDAO
-                    HoaDon hoaDon = HoaDonDAO.getByID(maHD);
-
-                    // Tạo đối tượng ChiTietHoaDon theo constructor của bạn
-                    ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
-
-                    // Set lại thành tiền từ database (vì constructor tính tự động)
-                    ct.setThanhTien(thanhTien);
-
-                    ds.add(ct);
+            // Đọc toàn bộ dữ liệu trước
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, maHD);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        tempList.add(new String[]{
+                                rs.getString("maMon"),
+                                String.valueOf(rs.getInt("soLuong"))
+                        });
+                    }
                 }
             }
+
+            // Sau khi đã đọc xong, mới truy vấn DAO khác
+            for (String[] item : tempList) {
+                String maMon = item[0];
+                int soLuong = Integer.parseInt(item[1]);
+
+                Mon mon = MonDAO.findByID(maMon);
+                HoaDon hd = HoaDonDAO.getByID(maHD);
+
+                list.add(new ChiTietHoaDon(hd, mon, soLuong));
+            }
+
         } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy chi tiết hóa đơn: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.err.println("Lỗi khác khi lấy chi tiết hóa đơn: " + e.getMessage());
+            System.err.println("Lỗi khi truy xuất ChiTietHoaDon: " + e.getMessage());
             e.printStackTrace();
         }
-        return ds;
+
+        return list;
     }
 
     // ===== 2. THÊM MỘT CHI TIẾT HÓA ĐƠN =====

@@ -53,7 +53,7 @@ public class ThoiGianDoiBanDAO {
         return tgdb;
     }
 
-    public ThoiGianDoiBan getLatestByLoai(boolean loaiDatBan) {
+    public static ThoiGianDoiBan getLatestByLoai(boolean loaiDatBan) {
         String sql = "SELECT TOP 1 * FROM ThoiGianDoiBan WHERE loaiDatBan=? ORDER BY maTGDB DESC";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setBoolean(1, loaiDatBan);

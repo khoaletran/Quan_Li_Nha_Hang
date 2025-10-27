@@ -154,6 +154,7 @@ CREATE TABLE Mon (
     moTa NVARCHAR(50),
     hinhAnh NVARCHAR(50),
     giaGoc FLOAT,
+    soLuong INT,
     loaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon)
 );
 
@@ -188,7 +189,8 @@ CREATE TABLE HoaDon (
     tongTienTruoc FLOAT,
     tongTienSau FLOAT,
     tongTienKM FLOAT,
-    soLuong INT
+    soLuong INT,
+    moTa NVARCHAR(200)
 );
 
 -- =========================
@@ -198,7 +200,6 @@ CREATE TABLE ChiTietHoaDon (
     maHD NVARCHAR(13) FOREIGN KEY REFERENCES HoaDon(maHD),
     maMon NVARCHAR(6) FOREIGN KEY REFERENCES Mon(maMon),
     soLuong INT,
-    thanhTien FLOAT,
     PRIMARY KEY (maHD, maMon)
 );
 GO
