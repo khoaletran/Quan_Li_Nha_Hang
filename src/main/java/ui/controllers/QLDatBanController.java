@@ -128,7 +128,7 @@ public class QLDatBanController {
             }
             hienThiDanhSachDaNhan();
         } catch (Exception ex) {
-            System.err.println("❌ Lỗi khi tải ds đã nhận: " + ex.getMessage());
+            System.err.println("Lỗi khi tải ds đã nhận: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
