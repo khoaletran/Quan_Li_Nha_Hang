@@ -183,12 +183,7 @@ CREATE TABLE HoaDon (
     tgCheckout SMALLDATETIME,
     kieuThanhToan BIT,
     kieuDatBan BIT,
-    thue FLOAT,
-    coc FLOAT,
     trangThai INT,
-    tongTienTruoc FLOAT,
-    tongTienSau FLOAT,
-    tongTienKM FLOAT,
     soLuong INT,
     moTa NVARCHAR(200)
 );

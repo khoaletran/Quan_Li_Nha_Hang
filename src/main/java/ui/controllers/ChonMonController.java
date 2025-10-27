@@ -26,7 +26,7 @@ public class ChonMonController {
     @FXML private FlowPane flowMonAn;
     @FXML private ComboBox<LoaiMon> comboDanhMuc;
     @FXML private VBox vboxChiTietDonHang, vboxTienMat;
-    @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua;
+    @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua, lblCoc, lblConLai;
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btndatban, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
@@ -61,7 +61,7 @@ public class ChonMonController {
             if (rdoTienMat.isSelected()) {
                 datBan();
             } else {
-                double tongTien = parseCurrency(lbl_total_PT.getText().trim());
+                double tongTien = parseCurrency(lblCoc.getText().trim());
                 String maHD = tuSinhMaHD();
 
                 QRThanhToan.hienThiQRPanel(tongTien, maHD, () -> {
@@ -202,10 +202,12 @@ public class ChonMonController {
                 addMonToOrder(mon);
                 capNhatTongTien();
                 xuLyHienThiTienMat();
+                tinhCoc();
             } else {
                 updateMonSoLuong(mon, soLuong);
                 capNhatTongTien();
                 xuLyHienThiTienMat();
+                tinhCoc();
             }
         });
 
@@ -219,10 +221,12 @@ public class ChonMonController {
                     removeMonFromOrder(mon);
                     capNhatTongTien();
                     xuLyHienThiTienMat();
+                    tinhCoc();
                 } else {
                     updateMonSoLuong(mon, soLuong);
                     capNhatTongTien();
                     xuLyHienThiTienMat();
+                    tinhCoc();
                 }
             }
         });
@@ -369,7 +373,7 @@ public class ChonMonController {
 
 
     private void taoGoiYTienKhach() {
-        double tongTien = parseCurrency(lbl_total_PT.getText());;
+        double tongTien = parseCurrency(lblCoc.getText());;
         if (tongTien <= 0) return;
 
         double base = Math.round(tongTien / 1000.0) * 1000;
@@ -378,9 +382,9 @@ public class ChonMonController {
         if (base < 1_000_000) {
             goiY = new double[]{
                     base,
-                    Math.ceil(base / 10_000) * 10_000,     // ví dụ: 370.000
-                    Math.ceil(base / 50_000) * 50_000,     // 400.000
-                    Math.ceil(base / 100_000) * 100_000,   // 400.000 hoặc 500.000
+                    Math.ceil(base / 10_000) * 10_000,
+                    Math.ceil(base / 50_000) * 50_000,
+                    Math.ceil(base / 100_000) * 100_000,
                     500_000,
                     1_000_000
             };
@@ -430,6 +434,20 @@ public class ChonMonController {
         lblTienThua.setText(formatCurrency(tienKD - tong));
     }
 
+    private void tinhCoc(){
+        Coc coc = CocDAO.getByKhuVucVaLoaiBan(banHienTai.getKhuVuc().getMaKhuVuc(),banHienTai.getLoaiBan().getMaLoaiBan());
+        double tong = parseCurrency(lbl_total_PT.getText().trim());
+        double tienCoc = 0;
+        if (coc.isLoaiCoc()) {
+            tienCoc = tong * coc.getPhanTramCoc() / 100;
+        } else{
+            tienCoc = coc.getSoTienCoc();
+        }
+        lblCoc.setText(formatCurrency(tienCoc));
+        lblConLai.setText(formatCurrency(tong-tienCoc));
+    }
+
+
     private String tuSinhMaHD() {
         int hour = java.time.LocalTime.now().getHour();
         String ca = (hour < 12) ? "0" : "1";
@@ -473,8 +491,10 @@ public class ChonMonController {
             return;
         }
 
-        boolean kieuDatBan = now.isBefore(thoiGianDat);
-        int trangThai = kieuDatBan ? 0 : 1;
+        long phutCachNhau = java.time.Duration.between(now, thoiGianDat).toMinutes();
+        boolean kieuDatBan = (phutCachNhau >= 0 && phutCachNhau <= 15);
+
+        int trangThai = kieuDatBan ? 1 : 0;
 
         // ===== Tạo hóa đơn =====
         HoaDon hd = taoHoaDon(kieuDatBan, trangThai);
@@ -522,6 +542,7 @@ public class ChonMonController {
         lbl_total.setText("0 đ");
         lbl_thue.setText("0 đ");
         lbl_total_PT.setText("0 đ");
+        BanDAO.update(banHienTai,true);
         quayVeDatBan();
     }
 
@@ -536,8 +557,11 @@ public class ChonMonController {
             return;
         }
 
-        boolean kieuDatBan = now.isBefore(thoiGianDat);
-        int trangThai = kieuDatBan ? 0 : 1;
+        long phutCachNhau = java.time.Duration.between(now, thoiGianDat).toMinutes();
+        boolean kieuDatBan = (phutCachNhau >= 0 && phutCachNhau <= 15);
+
+        int trangThai = kieuDatBan ? 1 : 0;
+
 
         // ===== Tạo hóa đơn =====
         HoaDon hd = taoHoaDon(kieuDatBan, trangThai);
@@ -580,9 +604,9 @@ public class ChonMonController {
         lbl_total.setText("0 đ");
         lbl_thue.setText("0 đ");
         lbl_total_PT.setText("0 đ");
+        BanDAO.update(banHienTai,true);
         quayVeDatBan();
     }
-
 
 
     private void congDiemTichLuy(KhachHang khachHang, int diem) {
@@ -594,26 +618,6 @@ public class ChonMonController {
     private int tinhDiem() {
         double tongTien = parseCurrency(lbl_total_PT.getText().trim());
         return (int) (tongTien * 0.1 / 1000);
-    }
-
-    private Coc layCoc(Ban ban) {
-        if (ban == null) return null;
-
-        String maKV = ban.getKhuVuc().getMaKhuVuc();
-        String maLB = ban.getLoaiBan().getMaLoaiBan();
-
-        List<Coc> listCoc = new CocDAO().getAll();
-
-        for (Coc coc : listCoc) {
-            if (coc.getKhuVuc() != null && coc.getLoaiBan() != null) {
-                if (coc.getKhuVuc().getMaKhuVuc().equals(maKV)
-                        && coc.getLoaiBan().getMaLoaiBan().equals(maLB)) {
-                    return coc;
-                }
-            }
-        }
-
-        return null;
     }
 
     private boolean themChiTietHoaDon(HoaDon hoaDon) {
@@ -691,14 +695,6 @@ public class ChonMonController {
         }
         double tongtienSau = tongSauThue - tongKM + tongSuKM ;
 
-        double tienCoc = 0;
-        Coc coc = layCoc(banHienTai);
-        if (coc.isLoaiCoc()) {
-            tienCoc = tongtienSau * coc.getPhanTramCoc();
-        } else{
-            tienCoc = coc.getSoTienCoc();
-        }
-
         boolean kieuThanhToan = rdoChuyenKhoan.isSelected();
 
         // ===== 4. Khởi tạo đối tượng hóa đơn =====//
@@ -714,11 +710,6 @@ public class ChonMonController {
         hd.setSuKien(suKien);
         hd.setKieuThanhToan(kieuThanhToan);
         hd.setKieuDatBan(kieudatban);
-        hd.setThue(thue);
-        hd.setCoc(tienCoc);
-        hd.setTongTienTruoc(tongTienTruoc);
-        hd.setTongTienKhuyenMai(tongKM);
-        hd.setTongTienSau(tongtienSau);
 
         System.out.println("Tạo hóa đơn thành công: " + hd.getMaHD());
         return hd;
