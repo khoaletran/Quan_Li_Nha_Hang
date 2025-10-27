@@ -1,9 +1,13 @@
 package ui.controllers;
 
+import dao.KhuVucDAO;
+import dao.BanDAO;
 import dao.HoaDonDAO;
 import dao.KhachHangDAO;
+import entity.Ban;
 import entity.HoaDon;
 import entity.KhachHang;
+import entity.KhuVuc;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -107,6 +111,8 @@ public class CheckoutController {
             String tenKH = (khachHang != null) ? khachHang.getTenKhachHang() : "Không rõ";
             String sdtKH = (khachHang != null) ? khachHang.getSdt() : "Không có";
 
+
+
             Label lblSDT = new Label("SĐT: " + sdtKH);
             lblSDT.getStyleClass().add("invoice-phone");
 
@@ -124,6 +130,8 @@ public class CheckoutController {
 
             hbox.getChildren().addAll(imageView, vboxInfo, region, btnTime);
 
+
+
             // ======== SỰ KIỆN CLICK ==========
             hbox.setOnMouseClicked(e -> {
                 lblmaHD.setText(hd.getMaHD());
@@ -133,9 +141,19 @@ public class CheckoutController {
                 lblsuKien.setText(hd.getSuKien() != null ? hd.getSuKien().getTenSK() : "Không có");
                 lblThue.setText(String.format("%.0f%%", hd.getThue() * 100));
 
-                // Nếu bạn có thêm getter cho các giá trị bên dưới thì bật lại:
-                // lblSoLuong.setText(String.valueOf(hd.getSoLuongMon()));
-                // lblKhuVuc.setText(hd.getKhuVuc() != null ? hd.getKhuVuc().getTenKhuVuc() : "Không rõ");
+                BanDAO banDAO = new BanDAO();
+                KhuVucDAO khuVucDAO = new KhuVucDAO();
+                KhuVuc khuVuc = null;
+                List<Ban> dsBan = banDAO.getAll();
+                for (Ban bd : dsBan){
+                    if(bd.getMaBan().equals(hd.getBan().getMaBan())){
+                        khuVuc = khuVucDAO.getById(bd.getKhuVuc().getMaKhuVuc());
+                        break;
+                    }
+                }
+                lblSoLuong.setText(String.valueOf(hd.getSoLuong()));
+                lblKhuVuc.setText(khuVuc.getTenKhuVuc());
+
                 // lblTongTien.setText(String.format("%,.0f đ", hd.getTongTien()));
                 // lblGiamGia.setText(String.format("-%,.0f đ", hd.getGiamGia()));
                 // lblTongTT.setText(String.format("%,.0f đ", hd.getTongThanhToan()));
