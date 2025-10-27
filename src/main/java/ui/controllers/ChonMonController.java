@@ -542,6 +542,7 @@ public class ChonMonController {
         lbl_total.setText("0 đ");
         lbl_thue.setText("0 đ");
         lbl_total_PT.setText("0 đ");
+        BanDAO.update(banHienTai,true);
         quayVeDatBan();
     }
 
@@ -603,9 +604,9 @@ public class ChonMonController {
         lbl_total.setText("0 đ");
         lbl_thue.setText("0 đ");
         lbl_total_PT.setText("0 đ");
+        BanDAO.update(banHienTai,true);
         quayVeDatBan();
     }
-
 
 
     private void congDiemTichLuy(KhachHang khachHang, int diem) {

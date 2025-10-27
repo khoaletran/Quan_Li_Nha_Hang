@@ -24,8 +24,6 @@ public class ChiTietHDDAO {
                 while (rs.next()) {
                     String maMon = rs.getString("maMon");
                     int soLuong = rs.getInt("soLuong");
-                    double thanhTien = rs.getDouble("thanhTien");
-
                     // Lấy thông tin món từ MonDAO
                     Mon mon = new MonDAO().findByID(maMon);
 
@@ -34,9 +32,6 @@ public class ChiTietHDDAO {
 
                     // Tạo đối tượng ChiTietHoaDon theo constructor của bạn
                     ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
-
-                    // Set lại thành tiền từ database (vì constructor tính tự động)
-                    ct.setThanhTien(thanhTien);
 
                     ds.add(ct);
                 }
@@ -53,7 +48,7 @@ public class ChiTietHDDAO {
 
     // ===== 2. THÊM MỘT CHI TIẾT HÓA ĐƠN =====
     public boolean insert(ChiTietHoaDon ct) {
-        String sql = "INSERT INTO ChiTietHoaDon (maHD, maMon, soLuong, thanhTien) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO ChiTietHoaDon (maHD, maMon, soLuong ) VALUES (?, ?, ?)";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -61,7 +56,6 @@ public class ChiTietHDDAO {
             ps.setString(1, ct.getHoaDon().getMaHD());
             ps.setString(2, ct.getMon().getMaMon());
             ps.setInt(3, ct.getSoLuong());
-            ps.setDouble(4, ct.getThanhTien());
 
             return ps.executeUpdate() > 0;
 
@@ -93,13 +87,12 @@ public class ChiTietHDDAO {
 
     // ===== 4. CẬP NHẬT CHI TIẾT HÓA ĐƠN =====
     public boolean update(ChiTietHoaDon ct) {
-        String sql = "UPDATE ChiTietHoaDon SET soLuong = ?, thanhTien = ? WHERE maHD = ? AND maMon = ?";
+        String sql = "UPDATE ChiTietHoaDon SET soLuong = ? WHERE maHD = ? AND maMon = ?";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, ct.getSoLuong());
-            ps.setDouble(2, ct.getThanhTien());
             ps.setString(3, ct.getHoaDon().getMaHD());
             ps.setString(4, ct.getMon().getMaMon());
 
