@@ -15,7 +15,7 @@ public class MonDAO {
         List<Mon> ds = new ArrayList<>();
         Connection con = connectDB.getConnection();
         if (con == null) return ds;
-
+//abc
         String sql = "SELECT * FROM Mon";
         try (Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -116,7 +116,6 @@ public class MonDAO {
             return false;
         }
     }
-
     // Tìm món theo mã
     public static Mon findByID(String maMon) {
         Mon mon = null;
