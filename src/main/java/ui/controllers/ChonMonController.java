@@ -642,7 +642,7 @@ public class ChonMonController {
                 double thanhTien = mon.getGiaBan() * soLuong;
                 ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
 
-                if (!dao.insert(hoaDon.getMaHD(),ct)) {
+                if (!dao.insert(ct)) {
                     tatCaOK = false;
                     System.err.println("Lỗi thêm chi tiết món: " + maMon);
                 }

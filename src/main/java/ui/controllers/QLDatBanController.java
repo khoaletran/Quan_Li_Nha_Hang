@@ -3,8 +3,12 @@ package ui.controllers;
 import connectDB.connectDB;
 import dao.HoaDonDAO;
 import dao.KhachHangDAO;
+import dao.ChiTietHDDAO;
+import dao.MonDAO;
 import entity.HoaDon;
 import entity.KhachHang;
+import entity.ChiTietHoaDon;
+import entity.Mon;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -13,6 +17,11 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +39,17 @@ public class QLDatBanController {
     @FXML private Label lblHoTen;
     @FXML private Label lblSDT;
     @FXML private Label lblBan;
-    @FXML private TextField txtSoLuongKhach; // hiển thị soLuong
+    @FXML private TextField txtSoLuongKhach;
     @FXML private ComboBox<String> eventCombo;
+
+    // FXML - bảng đơn hàng
+    @FXML private TableView<ChiTietHoaDon> orderTable;
+    @FXML private TableColumn<ChiTietHoaDon, Integer> colSTT;
+    @FXML private TableColumn<ChiTietHoaDon, String> colSanPham;
+    @FXML private TableColumn<ChiTietHoaDon, Integer> colSoLuong;
+    @FXML private TableColumn<ChiTietHoaDon, Double> colGia;
+    @FXML private TableColumn<ChiTietHoaDon, Double> colTong;
+    @FXML private TableColumn<ChiTietHoaDon, Void> colXoa;
 
     // FXML - tìm kiếm
     @FXML private TextField searchField;
@@ -44,9 +62,13 @@ public class QLDatBanController {
     // BIẾN TOÀN CỤC
     private final HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private final KhachHangDAO khachHangDAO = new KhachHangDAO();
+    private final ChiTietHDDAO chiTietHDDAO = new ChiTietHDDAO();
+    private final MonDAO monDAO = new MonDAO();
+
     private List<HoaDon> dsDatTruoc = new ArrayList<>();
     private List<HoaDon> dsDaNhan = new ArrayList<>();
     private HoaDon hoaDonSelected = null;
+    private ObservableList<ChiTietHoaDon> chiTietHoaDonData = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -59,6 +81,7 @@ public class QLDatBanController {
 
         khoiTaoComboBox();
         ganSuKienChoNut();
+        khoiTaoTableView();
         taiDanhSachDatTruoc();
         taiDanhSachDaNhan();
 
@@ -89,6 +112,67 @@ public class QLDatBanController {
         if (btnXacNhan != null) btnXacNhan.setOnAction(e -> xacNhanDatBan());
         if (btnHuyBan != null) btnHuyBan.setOnAction(e -> huyDatBan());
         if (btnSearch != null && searchField != null) btnSearch.setOnAction(e -> timKiemMonAn(searchField.getText()));
+    }
+
+    private void khoiTaoTableView() {
+        // Thiết lập các column cho TableView
+        colSTT.setCellValueFactory(cellData ->
+                new SimpleIntegerProperty(chiTietHoaDonData.indexOf(cellData.getValue()) + 1).asObject());
+
+        colSanPham.setCellValueFactory(cellData -> {
+            Mon mon = cellData.getValue().getMon();
+            return new SimpleStringProperty(mon != null ? mon.getTenMon() : "Không xác định");
+        });
+
+        colSoLuong.setCellValueFactory(cellData ->
+                new SimpleIntegerProperty(cellData.getValue().getSoLuong()).asObject());
+
+        colGia.setCellValueFactory(cellData -> {
+            Mon mon = cellData.getValue().getMon();
+            return new SimpleDoubleProperty(mon != null ? mon.getGiaBan() : 0).asObject();
+        });
+
+        colTong.setCellValueFactory(cellData ->
+                new SimpleDoubleProperty(cellData.getValue().getThanhTien()).asObject());
+
+        // Column xóa - thêm nút xóa
+        colXoa.setCellFactory(param -> new TableCell<ChiTietHoaDon, Void>() {
+            private final Button btnXoa = new Button("🗑");
+
+            {
+                btnXoa.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-size: 10px;");
+                btnXoa.setOnAction(event -> {
+                    ChiTietHoaDon ct = getTableView().getItems().get(getIndex());
+                    xoaChiTietHoaDon(ct);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btnXoa);
+                }
+            }
+        });
+
+        // Gán dữ liệu cho TableView
+        orderTable.setItems(chiTietHoaDonData);
+    }
+
+    private void xoaChiTietHoaDon(ChiTietHoaDon chiTiet) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận xóa");
+        confirm.setHeaderText("Bạn có chắc muốn xóa món này?");
+        confirm.setContentText("Món: " + (chiTiet.getMon() != null ? chiTiet.getMon().getTenMon() : ""));
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            chiTietHoaDonData.remove(chiTiet);
+            hienThiThongBao("Đã xóa món khỏi đơn hàng");
+        }
     }
 
     private void taiDanhSachDatTruoc() {
@@ -207,7 +291,6 @@ public class QLDatBanController {
         Label lblTen = new Label("Tên: " + tenKH);
         lblTen.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
 
-        // Hiện thêm số lượng nhỏ phía dưới tên (nếu muốn)
         Label lblSoLuong = new Label("Số lượng: " + hd.getSoLuong());
         lblSoLuong.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
 
@@ -291,13 +374,32 @@ public class QLDatBanController {
             eventCombo.setValue(null);
         }
 
-        // Hiển thị số lượng vào textfield
         if (txtSoLuongKhach != null) {
             txtSoLuongKhach.setText(String.valueOf(hd.getSoLuong()));
         }
 
-        // load chi tiết đơn hàng (nếu cần)
-//        loadChiTietDonHang(hd.getMaHD());
+        loadChiTietDonHang(hd.getMaHD());
+    }
+
+    private void loadChiTietDonHang(String maHD) {
+        chiTietHoaDonData.clear();
+
+        if (maHD == null || maHD.trim().isEmpty()) {
+            return;
+        }
+
+        try {
+            List<ChiTietHoaDon> dsChiTiet = chiTietHDDAO.getByMaHD(maHD);
+            if (dsChiTiet != null && !dsChiTiet.isEmpty()) {
+                chiTietHoaDonData.addAll(dsChiTiet);
+                System.out.println("✅ Đã tải " + dsChiTiet.size() + " chi tiết hóa đơn");
+            } else {
+                System.out.println("ℹ️ Không có chi tiết hóa đơn cho mã: " + maHD);
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Lỗi khi tải chi tiết hóa đơn: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -386,6 +488,9 @@ public class QLDatBanController {
         if (eventCombo != null) eventCombo.setValue(null);
         if (txtSoLuongKhach != null) txtSoLuongKhach.clear();
         if (foodList != null) foodList.getChildren().clear();
+
+        chiTietHoaDonData.clear();
+
         clearSelectedStyles(danhSachDatTruoc);
         clearSelectedStyles(danhSachDaNhan);
     }
