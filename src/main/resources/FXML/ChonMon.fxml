@@ -141,12 +141,12 @@
                       <HBox spacing="10">
                           <Label styleClass="deposit-label" text="Cọc:" />
                           <Region HBox.hgrow="ALWAYS" />
-                          <Label styleClass="deposit-amount" text="0đ" />
+                          <Label fx:id="lblCoc" styleClass="deposit-amount" text="0đ" />
                       </HBox>
                       <HBox spacing="10">
                           <Label styleClass="final-label" text="Còn lại:" />
                           <Region HBox.hgrow="ALWAYS" />
-                          <Label styleClass="final-amount" text="0đ" />
+                          <Label fx:id="lblConLai" styleClass="final-amount" text="0đ" />
                       </HBox>
                   </VBox>
 
