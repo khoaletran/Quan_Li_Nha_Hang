@@ -94,7 +94,7 @@ public class QLMenuController {
         Label lblTen = new Label(mon.getTenMon());
         lblTen.getStyleClass().add("item-name");
 
-        Label lblGia = new Label(String.format("%.0f đ", mon.giaBan()));
+        Label lblGia = new Label(String.format("%.0f đ", mon.getGiaBan()));
         lblGia.getStyleClass().add("item-price");
 
         Region space = new Region();

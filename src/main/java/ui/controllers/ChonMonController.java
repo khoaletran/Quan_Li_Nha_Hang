@@ -177,7 +177,7 @@ public class ChonMonController {
         Label lblTen = new Label(mon.getTenMon());
         lblTen.getStyleClass().add("menu-item-name");
 
-        Label lblGia = new Label(formatCurrency(mon.giaBan()));
+        Label lblGia = new Label(formatCurrency(mon.getGiaBan()));
         lblGia.getStyleClass().add("menu-item-price");
 
         Label lblSoLuong = new Label("0");
@@ -261,7 +261,7 @@ public class ChonMonController {
 
             if (lblSL != null && lblTongTien != null) {
                 lblSL.setText(String.valueOf(soLuong));
-                lblTongTien.setText(formatCurrency(mon.giaBan() * soLuong));
+                lblTongTien.setText(formatCurrency(mon.getGiaBan() * soLuong));
             }
         }
     }
@@ -281,11 +281,11 @@ public class ChonMonController {
         lblSoLuong.setPrefWidth(60);
 
         // CHANGED
-        Label lblGia = new Label(formatCurrency(mon.giaBan()));
+        Label lblGia = new Label(formatCurrency(mon.getGiaBan()));
         lblGia.getStyleClass().addAll("order-col", "price");
         lblGia.setPrefWidth(70);
 
-        Label lblTongTien = new Label(formatCurrency(mon.giaBan() * soLuong));
+        Label lblTongTien = new Label(formatCurrency(mon.getGiaBan() * soLuong));
         lblTongTien.getStyleClass().addAll("order-col", "total", "lblTongTienCT");
         lblTongTien.setPrefWidth(80);
 
@@ -314,7 +314,7 @@ public class ChonMonController {
                     .orElse(null);
 
             if (mon != null) {
-                tongTien += mon.giaBan() * soLuong;
+                tongTien += mon.getGiaBan() * soLuong;
             }
         }
 
@@ -639,7 +639,7 @@ public class ChonMonController {
                     .orElse(null);
 
             if (mon != null && soLuong > 0) {
-                double thanhTien = mon.giaBan() * soLuong;
+                double thanhTien = mon.getGiaBan() * soLuong;
                 ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
 
                 if (!dao.insert(hoaDon.getMaHD(),ct)) {
