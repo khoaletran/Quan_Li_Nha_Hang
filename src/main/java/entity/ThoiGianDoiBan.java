@@ -2,7 +2,7 @@ package entity;
 
 public class ThoiGianDoiBan {
     private String maTGDB;
-    private boolean loaiDatBan;
+    private boolean loaiDatBan; //true=Online (Đặt bàn trước);false=Offline (thêm vào waitlist nếu khách đến cửa hàng mà hết bàn)
     private int thoiGian;
 
     public String getMaTGDB() {

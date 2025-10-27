@@ -97,10 +97,10 @@
                </HBox>
 
                   <!-- Danh sách món ăn -->
-                <ScrollPane fitToWidth="true" prefHeight="387.0" prefWidth="653.0" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
+                <ScrollPane fx:id="menuScroll" fitToWidth="true" prefHeight="387.0" prefWidth="653.0" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
                     <content>
-                        <VBox spacing="10" styleClass="menu-list" VBox.vgrow="ALWAYS">
-                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="menu-row">
+                        <VBox fx:id="vboxMenu" spacing="10" styleClass="menu-list" VBox.vgrow="ALWAYS">
+                            <HBox fx:id="hboxMenu" alignment="CENTER_LEFT" spacing="10" styleClass="menu-row">
                                 <Label styleClass="col-stt" text="1" />
                                 <Label styleClass="col-name" text="Cua Cà Mau" />
                                 <Label styleClass="col-qty" text="2" />
@@ -108,75 +108,6 @@
                                 <Label styleClass="col-discount" text="10%" />
                                 <Label styleClass="col-total" text="400.000 đ" />
                             </HBox>
-
-                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="menu-row">
-                                <Label styleClass="col-stt" text="2" />
-                                <Label styleClass="col-name" text="Tôm Hùm Alaska" />
-                                <Label styleClass="col-qty" text="1" />
-                                <Label styleClass="col-price" text="800.000 đ" />
-                                <Label styleClass="col-discount" text="5%" />
-                                <Label styleClass="col-total" text="760.000 đ" />
-                            </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="65.0" spacing="10" styleClass="menu-row">
-                           <children>
-                              <Label styleClass="col-stt" text="2" />
-                              <Label styleClass="col-name" text="Tôm Hùm Alaska" />
-                              <Label styleClass="col-qty" text="1" />
-                              <Label styleClass="col-price" text="800.000 đ" />
-                              <Label styleClass="col-discount" text="5%" />
-                              <Label styleClass="col-total" text="760.000 đ" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="110.0" spacing="10" styleClass="menu-row">
-                           <children>
-                              <Label styleClass="col-stt" text="2" />
-                              <Label styleClass="col-name" text="Tôm Hùm Alaska" />
-                              <Label styleClass="col-qty" text="1" />
-                              <Label styleClass="col-price" text="800.000 đ" />
-                              <Label styleClass="col-discount" text="5%" />
-                              <Label styleClass="col-total" text="760.000 đ" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="20.0" spacing="10" styleClass="menu-row">
-                           <children>
-                              <Label styleClass="col-stt" text="1" />
-                              <Label styleClass="col-name" text="Cua Cà Mau" />
-                              <Label styleClass="col-qty" text="2" />
-                              <Label styleClass="col-price" text="200.000 đ" />
-                              <Label styleClass="col-discount" text="10%" />
-                              <Label styleClass="col-total" text="400.000 đ" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="200.0" spacing="10" styleClass="menu-row">
-                           <children>
-                              <Label styleClass="col-stt" text="1" />
-                              <Label styleClass="col-name" text="Cua Cà Mau" />
-                              <Label styleClass="col-qty" text="2" />
-                              <Label styleClass="col-price" text="200.000 đ" />
-                              <Label styleClass="col-discount" text="10%" />
-                              <Label styleClass="col-total" text="400.000 đ" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="245.0" spacing="10" styleClass="menu-row">
-                           <children>
-                              <Label styleClass="col-stt" text="1" />
-                              <Label styleClass="col-name" text="Cua Cà Mau" />
-                              <Label styleClass="col-qty" text="2" />
-                              <Label styleClass="col-price" text="200.000 đ" />
-                              <Label styleClass="col-discount" text="10%" />
-                              <Label styleClass="col-total" text="400.000 đ" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="335.0" spacing="10" styleClass="menu-row">
-                           <children>
-                              <Label styleClass="col-stt" text="1" />
-                              <Label styleClass="col-name" text="Cua Cà Mau" />
-                              <Label styleClass="col-qty" text="2" />
-                              <Label styleClass="col-price" text="200.000 đ" />
-                              <Label styleClass="col-discount" text="10%" />
-                              <Label styleClass="col-total" text="400.000 đ" />
-                           </children>
-                        </HBox>
                         </VBox>
                     </content>
                 </ScrollPane>

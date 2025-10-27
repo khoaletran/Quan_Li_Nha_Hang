@@ -35,15 +35,32 @@ public class HoaDon {
         this.soLuong = soLuong;
     }
 
-    public HoaDon(String maHD, double tongTienKhuyenMai, double tongTienSau, double tongTienTruoc, double coc, double thue, boolean kieuDatBan, boolean kieuThanhToan, KhuyenMai khuyenMai, SuKien suKien, int trangthai, LocalDateTime tgCheckOut, LocalDateTime tgCheckIn, Ban ban, NhanVien nhanVien, KhachHang khachHang, int soLuong) {
+    public HoaDon(String maHD,
+                  double tongTienKhuyenMai,
+                  double tongTienSau,
+                  double tongTienTruoc,
+                  double coc,
+                  double thue,
+                  boolean kieuThanhToan,
+                  boolean kieuDatBan,
+                  KhuyenMai khuyenMai,
+                  SuKien suKien,
+                  int trangthai,
+                  LocalDateTime tgCheckOut,
+                  LocalDateTime tgCheckIn,
+                  Ban ban,
+                  NhanVien nhanVien,
+                  KhachHang khachHang,
+                  int soLuong) {
+
         this.maHD = maHD;
         this.tongTienKhuyenMai = tongTienKhuyenMai;
         this.tongTienSau = tongTienSau;
         this.tongTienTruoc = tongTienTruoc;
         this.coc = coc;
         this.thue = thue;
-        this.kieuDatBan = kieuDatBan;
         this.kieuThanhToan = kieuThanhToan;
+        this.kieuDatBan = kieuDatBan;
         this.khuyenMai = khuyenMai;
         this.suKien = suKien;
         setTrangthai(trangthai);
