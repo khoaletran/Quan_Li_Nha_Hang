@@ -135,6 +135,7 @@ CREATE TABLE LoaiMon (
 CREATE TABLE PhanTramGiaBan (
     maPTGB NVARCHAR(6) PRIMARY KEY,
     maLoaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
+    maMon NVARCHAR(6) FOREIGN KEY REFERENCES Mon(maMon),
     phanTramLoi INT,
     ngayApDung DATE
 );
@@ -162,10 +163,7 @@ CREATE TABLE Mon (
     moTa NVARCHAR(50),
     hinhAnh NVARCHAR(50),
     giaGoc FLOAT,
-    giaBan FLOAT,
     loaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
-    maPTGB NVARCHAR(6) FOREIGN KEY REFERENCES PhanTramGiaBan(maPTGB),
-    maKM NVARCHAR(6) FOREIGN KEY REFERENCES KhuyenMai(maKM)
 );
 
 -- =========================
@@ -185,6 +183,7 @@ CREATE TABLE HoaDon (
     thue FLOAT,
     coc FLOAT,
     trangThai INT,
+    soLuong INT,
     tongTienTruoc FLOAT,
     tongTienSau FLOAT,
     tongTienKM FLOAT

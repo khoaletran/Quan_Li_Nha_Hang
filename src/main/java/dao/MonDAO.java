@@ -29,7 +29,7 @@ public class MonDAO {
                 mon.setGiaGoc(rs.getDouble("giaGoc"));
 
                 // Lấy LoaiMon từ DAO
-                String maLoaiMon = rs.getString("maLoaiMon");
+                String maLoaiMon = rs.getString("loaiMon");
                 LoaiMon loaiMon = LoaiMonDAO.getByID(maLoaiMon); // đã có DAO
                 mon.setLoaiMon(loaiMon);
 
