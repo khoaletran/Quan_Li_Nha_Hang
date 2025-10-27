@@ -185,10 +185,10 @@ CREATE TABLE HoaDon (
     thue FLOAT,
     coc FLOAT,
     trangThai INT,
-    soLuong INT,
     tongTienTruoc FLOAT,
     tongTienSau FLOAT,
-    tongTienKM FLOAT
+    tongTienKM FLOAT,
+    soLuong INT
 );
 
 -- =========================
