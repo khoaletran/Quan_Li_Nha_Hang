@@ -31,6 +31,62 @@ public class LoaiMonDAO {
         }
         return ds;
     }
+    public static LoaiMon getByID(String maLoaiMon) {
+        LoaiMon loai = null;
+        String sql = "SELECT * FROM LoaiMon WHERE maLoaiMon = ?";
+        Connection con = connectDB.getConnection();
+        if (con == null) {
+            System.out.println("STOP1");
+        }
+        try (
+
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, maLoaiMon);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    loai = new LoaiMon(
+                            rs.getString("maLoaiMon"),
+                            rs.getString("tenLoaiMon"),
+                            rs.getString("moTa")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return loai;
+    }
+    public static String getMaLoaiMonByTen(String tenLoaiMon) {
+        String sql = "SELECT maLoaiMon FROM LoaiMon WHERE tenLoaiMon = ?";
+
+        try {
+            // Mở Connection trước khi query
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
+
+            if (con == null || con.isClosed()) {
+                System.out.println("Connection chưa mở!");
+                return null;
+            }
+
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, tenLoaiMon);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getString("maLoaiMon");
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // không tìm thấy
+    }
+
 
 
     public boolean insert(LoaiMon loaiMon) {
@@ -89,26 +145,6 @@ public class LoaiMonDAO {
         return null; // Không tìm thấy
     }
 
-    public static LoaiMon getByID(String maLoaiMon) {
-        Connection con = connectDB.getConnection();
 
-        String sql = "SELECT * FROM LoaiMon WHERE maLoaiMon = ?";
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, maLoaiMon);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new LoaiMon(
-                            rs.getString("maLoaiMon"),
-                            rs.getString("tenLoaiMon"),
-                            rs.getString("moTa")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi truy vấn getByID LoaiMon: " + e.getMessage());
-        }
-
-        return null;
-    }
 
 }

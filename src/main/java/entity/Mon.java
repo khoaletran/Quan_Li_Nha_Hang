@@ -1,24 +1,49 @@
 package entity;
 
+import dao.PhanTramGiaBanDAO;
+
 public class Mon {
     private String maMon;
     private String tenMon;
     private String moTa;
     private String hinhAnh;
-    private LoaiMon loaiMon;
-    private PhanTramGiaBan phanTramLai;
     private double giaGoc;
-    public double giaBan(){
-        return giaGoc*(1+(double)phanTramLai.getPhanTramLoi()/100);
+    private LoaiMon loaiMon;
+
+
+
+    // 🔹 Lấy phần trăm lời hiện tại (ưu tiên của món, nếu không có thì lấy loại món)
+    public int getPhanTramGiaBanHienTai() {
+        // Ưu tiên lấy chính sách riêng cho món
+        PhanTramGiaBan ptMon = PhanTramGiaBanDAO.getLatestForMon(maMon);
+
+        if (ptMon != null) {
+            return ptMon.getPhanTramLoi();
+        }
+
+        // Nếu không có riêng → dùng chính sách loại món
+        PhanTramGiaBan ptLoai = PhanTramGiaBanDAO.getLatestForLoaiMon(loaiMon.getMaLoaiMon());
+        if (ptLoai != null) {
+            return ptLoai.getPhanTramLoi();
+        }
+
+        // Nếu không có gì luôn
+        return 0;
+    }
+    // 🔹 Tính giá bán thực tế
+    public double getGiaBan() {
+        int phanTram = getPhanTramGiaBanHienTai();
+        return giaGoc * (1 + phanTram / 100.0);
     }
 
-    public Mon(String maMon, String tenMon, String moTa, String hinhAnh, LoaiMon loaiMon, PhanTramGiaBan phanTramLai, double giaGoc) {
+    public Mon() {
+    }
+    public Mon(String maMon, String tenMon, String moTa, String hinhAnh, double giaGoc, LoaiMon loaiMon) {
         this.maMon = maMon;
         this.tenMon = tenMon;
         this.moTa = moTa;
         this.hinhAnh = hinhAnh;
         this.loaiMon = loaiMon;
-        this.phanTramLai = phanTramLai;
         this.giaGoc = giaGoc;
     }
 
@@ -62,14 +87,6 @@ public class Mon {
         this.loaiMon = loaiMon;
     }
 
-    public PhanTramGiaBan getPhanTramLai() {
-        return phanTramLai;
-    }
-
-    public void setPhanTramLai(PhanTramGiaBan phanTramLai) {
-        this.phanTramLai = phanTramLai;
-    }
-
     public double getGiaGoc() {
         return giaGoc;
     }
@@ -85,9 +102,8 @@ public class Mon {
                 ", tenMon='" + tenMon + '\'' +
                 ", moTa='" + moTa + '\'' +
                 ", hinhAnh='" + hinhAnh + '\'' +
-                ", loaiMon=" + loaiMon +
-                ", phanTramLai=" + phanTramLai +
                 ", giaGoc=" + giaGoc +
-                '}';
+                ", loaiMon=" + loaiMon +
+                '}' + " Giá bán "+getGiaBan();
     }
 }

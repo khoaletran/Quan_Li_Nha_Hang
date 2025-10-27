@@ -10,7 +10,7 @@ public class ChiTietHoaDon {
         setHoaDon(hd);
         this.mon = mon;
         this.soLuong = soLuong;
-        this.thanhTien = mon.giaBan() * soLuong;
+        this.thanhTien = mon.getGiaBan()* soLuong;
     }
 
     public void setHoaDon(HoaDon hoaDon) {this.hoaDon = hoaDon;}
