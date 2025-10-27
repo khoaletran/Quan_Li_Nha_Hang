@@ -14,7 +14,6 @@ import javafx.scene.text.Font;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +30,7 @@ public class QLDatBanController {
     @FXML private Label lblHoTen;
     @FXML private Label lblSDT;
     @FXML private Label lblBan;
-    @FXML private TextField txtSoLuongKhach;
+    @FXML private TextField txtSoLuongKhach; // hiển thị soLuong
     @FXML private ComboBox<String> eventCombo;
 
     // FXML - tìm kiếm
@@ -48,13 +47,11 @@ public class QLDatBanController {
     private List<HoaDon> dsDatTruoc = new ArrayList<>();
     private List<HoaDon> dsDaNhan = new ArrayList<>();
     private HoaDon hoaDonSelected = null;
-    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @FXML
     public void initialize() {
         System.out.println("QLDatBanController initialized");
 
-        // KẾT NỐI DATABASE TRƯỚC KHI THAO TÁC
         if (!ketNoiDatabase()) {
             hienThiThongBaoLoi("Không thể kết nối database. Vui lòng kiểm tra kết nối.");
             return;
@@ -68,7 +65,6 @@ public class QLDatBanController {
         resetForm();
     }
 
-    // PHƯƠNG THỨC KẾT NỐI DATABASE
     private boolean ketNoiDatabase() {
         try {
             connectDB.getInstance().connect();
@@ -81,7 +77,6 @@ public class QLDatBanController {
         }
     }
 
-    // Khởi tạo combobox và giá trị mặc định
     private void khoiTaoComboBox() {
         if (eventCombo != null) {
             eventCombo.getItems().clear();
@@ -90,40 +85,32 @@ public class QLDatBanController {
         }
     }
 
-    // Gán sự kiện cho các nút
     private void ganSuKienChoNut() {
         if (btnXacNhan != null) btnXacNhan.setOnAction(e -> xacNhanDatBan());
         if (btnHuyBan != null) btnHuyBan.setOnAction(e -> huyDatBan());
         if (btnSearch != null && searchField != null) btnSearch.setOnAction(e -> timKiemMonAn(searchField.getText()));
     }
 
-    // Tải danh sách từ database - CHI TIẾT DEBUG
     private void taiDanhSachDatTruoc() {
         try {
             List<HoaDon> listHD = HoaDonDAO.getAll();
-//            System.out.println("📊 Tổng số hóa đơn từ DB: " + (all != null ? all.size() : 0));
-
             dsDatTruoc.clear();
             if (listHD != null) {
                 for (HoaDon hd : listHD) {
-                    // DEBUG: In thông tin từng hóa đơn
                     System.out.println("🔍 Hóa đơn: " + hd.getMaHD() +
                             ", Trạng thái: " + hd.getTrangthai() +
                             ", Kiểu đặt bàn: " + hd.isKieuDatBan() +
-                            ", Khách hàng: " + (hd.getKhachHang() != null ? hd.getKhachHang().getTenKhachHang() : "null"));
-
+                            ", Khách hàng: " + (hd.getKhachHang() != null ? hd.getKhachHang().getTenKhachHang() : "null") +
+                            ", soLuong=" + (hd.getSoLuong()) );
                     if (hd.getTrangthai() == 0 && hd.isKieuDatBan()) {
                         dsDatTruoc.add(hd);
-//                        System.out.println("THÊM vào ds đặt trước: " + hd.getMaHD());
                     }
                 }
             }
             hienThiDanhSachDatTruoc();
-//            System.out.println("🎯 Số lượng đặt trước: " + dsDatTruoc.size());
         } catch (Exception ex) {
             System.err.println("Lỗi khi tải ds đặt trước: " + ex.getMessage());
             ex.printStackTrace();
-//            hienThiDuLieuMauDatTruoc();
         }
     }
 
@@ -140,20 +127,15 @@ public class QLDatBanController {
                 }
             }
             hienThiDanhSachDaNhan();
-//            System.out.println("🎯 Số lượng đã nhận: " + dsDaNhan.size());
         } catch (Exception ex) {
             System.err.println("❌ Lỗi khi tải ds đã nhận: " + ex.getMessage());
             ex.printStackTrace();
-//            hienThiDuLieuMauDaNhan();
         }
     }
 
-    // Hiển thị danh sách vào VBox
     private void hienThiDanhSachDatTruoc() {
         if (danhSachDatTruoc == null) return;
-
         danhSachDatTruoc.getChildren().clear();
-
         if (dsDatTruoc.isEmpty()) {
             Label empty = new Label("Không có bàn nào đặt trước");
             empty.getStyleClass().add("empty-state");
@@ -161,7 +143,6 @@ public class QLDatBanController {
             danhSachDatTruoc.getChildren().add(empty);
             return;
         }
-
         for (HoaDon hd : dsDatTruoc) {
             HBox card = taoCardHoaDon(hd);
             danhSachDatTruoc.getChildren().add(card);
@@ -170,9 +151,7 @@ public class QLDatBanController {
 
     private void hienThiDanhSachDaNhan() {
         if (danhSachDaNhan == null) return;
-
         danhSachDaNhan.getChildren().clear();
-
         if (dsDaNhan.isEmpty()) {
             Label empty = new Label("Không có bàn nào đã nhận");
             empty.getStyleClass().add("empty-state");
@@ -180,14 +159,12 @@ public class QLDatBanController {
             danhSachDaNhan.getChildren().add(empty);
             return;
         }
-
         for (HoaDon hd : dsDaNhan) {
             HBox card = taoCardHoaDon(hd);
             danhSachDaNhan.getChildren().add(card);
         }
     }
 
-    // Tạo card cho mỗi hóa đơn
     private HBox taoCardHoaDon(HoaDon hd) {
         HBox card = new HBox(10);
         card.getStyleClass().add("invoice-card");
@@ -196,7 +173,6 @@ public class QLDatBanController {
         card.setPrefHeight(80);
         card.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #dee2e6; -fx-border-radius: 8; -fx-background-radius: 8;");
 
-        // Ảnh/thumbnail
         StackPane thumb = new StackPane();
         thumb.setStyle("-fx-background-radius: 8; -fx-overflow: hidden;");
         ImageView iv = new ImageView();
@@ -207,13 +183,11 @@ public class QLDatBanController {
             Image img = new Image(getClass().getResourceAsStream("/IMG/avatar.png"));
             iv.setImage(img);
         } catch (Exception e) {
-            // Nếu không load được ảnh, tạo background màu
             thumb.setStyle("-fx-background-color: #e9ecef; -fx-background-radius: 8;");
             System.out.println("Không load được ảnh bàn: " + e.getMessage());
         }
         thumb.getChildren().add(iv);
 
-        // Thông tin chính
         VBox info = new VBox(4);
         Label lblMa = new Label(hd.getMaHD());
         lblMa.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #333;");
@@ -233,10 +207,13 @@ public class QLDatBanController {
         Label lblTen = new Label("Tên: " + tenKH);
         lblTen.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
 
-        info.getChildren().addAll(lblMa, lblTen, lblPhone);
+        // Hiện thêm số lượng nhỏ phía dưới tên (nếu muốn)
+        Label lblSoLuong = new Label("Số lượng: " + hd.getSoLuong());
+        lblSoLuong.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+
+        info.getChildren().addAll(lblMa, lblTen, lblPhone, lblSoLuong);
         HBox.setHgrow(info, Priority.ALWAYS);
 
-        // Trạng thái
         Label lblTrangThai = new Label(hd.getTrangthai() == 0 ? "Đặt trước" : "Đã nhận");
         lblTrangThai.setStyle(hd.getTrangthai() == 0 ?
                 "-fx-text-fill: #e74c3c; -fx-font-weight: bold;" :
@@ -244,14 +221,12 @@ public class QLDatBanController {
 
         card.getChildren().addAll(thumb, info, lblTrangThai);
 
-        // Sự kiện click chọn card
         card.setOnMouseClicked(e -> {
             clearSelectedStyles(danhSachDatTruoc);
             clearSelectedStyles(danhSachDaNhan);
 
             card.setStyle("-fx-background-color: #007bff; -fx-border-color: #0056b3; -fx-border-radius: 8; -fx-background-radius: 8;");
 
-            // Đổi màu chữ khi selected
             for (javafx.scene.Node node : card.getChildren()) {
                 if (node instanceof Label) {
                     ((Label) node).setStyle("-fx-text-fill: white;");
@@ -270,7 +245,6 @@ public class QLDatBanController {
         for (javafx.scene.Node node : box.getChildren()) {
             if (node instanceof HBox) {
                 node.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #dee2e6; -fx-border-radius: 8; -fx-background-radius: 8;");
-                // Reset màu chữ
                 for (javafx.scene.Node child : ((HBox) node).getChildren()) {
                     if (child instanceof Label) {
                         if (((Label) child).getText().contains("Đặt trước")) {
@@ -288,7 +262,6 @@ public class QLDatBanController {
         }
     }
 
-    // Hiển thị thông tin chi tiết khi chọn
     private void hienThiThongTinChiTiet(HoaDon hd) {
         if (hd == null) return;
 
@@ -300,7 +273,6 @@ public class QLDatBanController {
         if (kh != null) {
             if (lblHoTen != null) lblHoTen.setText(kh.getTenKhachHang());
             if (lblSDT != null) lblSDT.setText(kh.getSdt());
-//            System.out.println("👤 Khách hàng: " + kh.getTenKhachHang() + " - " + kh.getSdt());
         } else {
             if (lblHoTen != null) lblHoTen.setText("Chưa có thông tin");
             if (lblSDT != null) lblSDT.setText("Chưa có thông tin");
@@ -309,26 +281,25 @@ public class QLDatBanController {
 
         if (hd.getBan() != null && lblBan != null) {
             lblBan.setText(hd.getBan().getMaBan());
-//            System.out.println("🍽 Bàn: " + hd.getBan().getMaBan());
         } else if (lblBan != null) {
             lblBan.setText("Chưa có thông tin");
-//            System.out.println("⚠️ Không có thông tin bàn");
         }
 
         if (eventCombo != null && hd.getSuKien() != null) {
             eventCombo.setValue(hd.getSuKien().getTenSK());
+        } else if (eventCombo != null) {
+            eventCombo.setValue(null);
+        }
+
+        // Hiển thị số lượng vào textfield
+        if (txtSoLuongKhach != null) {
+            txtSoLuongKhach.setText(String.valueOf(hd.getSoLuong()));
         }
 
         // load chi tiết đơn hàng (nếu cần)
-        loadChiTietDonHang(hd.getMaHD());
+//        loadChiTietDonHang(hd.getMaHD());
     }
 
-    private void loadChiTietDonHang(String maHD) {
-        // TODO: implement nếu có DAO chi tiết
-        System.out.println("📦 Load chi tiết đơn hàng: " + maHD);
-    }
-
-    // Xác nhận đặt bàn -> chuyển trạng thái sang đã nhận
     @FXML
     private void xacNhanDatBan() {
         if (hoaDonSelected == null) {
@@ -342,7 +313,6 @@ public class QLDatBanController {
             boolean ok = HoaDonDAO.update(hoaDonSelected);
             if (ok) {
                 hienThiThongBao("✅ Xác nhận đặt bàn thành công");
-                // chuyển giữa danh sách
                 dsDatTruoc.remove(hoaDonSelected);
                 dsDaNhan.add(hoaDonSelected);
                 hienThiDanhSachDatTruoc();
@@ -357,7 +327,6 @@ public class QLDatBanController {
         }
     }
 
-    // Hủy đặt bàn
     @FXML
     private void huyDatBan() {
         if (hoaDonSelected == null) {
@@ -392,7 +361,6 @@ public class QLDatBanController {
         }
     }
 
-    // Tìm kiếm món ăn (hiển thị vào foodList)
     private void timKiemMonAn(String keyword) {
         if (foodList == null) return;
         foodList.getChildren().clear();
@@ -409,7 +377,6 @@ public class QLDatBanController {
         foodList.getChildren().add(info);
     }
 
-    // Reset form chi tiết
     private void resetForm() {
         hoaDonSelected = null;
         if (lblMaHoaDon != null) lblMaHoaDon.setText("");
@@ -419,13 +386,10 @@ public class QLDatBanController {
         if (eventCombo != null) eventCombo.setValue(null);
         if (txtSoLuongKhach != null) txtSoLuongKhach.clear();
         if (foodList != null) foodList.getChildren().clear();
-
-        // xóa highlight
         clearSelectedStyles(danhSachDatTruoc);
         clearSelectedStyles(danhSachDaNhan);
     }
 
-    // Hiển thị thông báo nhanh
     private void hienThiThongBao(String msg) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thông báo");
@@ -442,34 +406,6 @@ public class QLDatBanController {
         alert.showAndWait();
     }
 
-    // Dữ liệu mẫu khi không có DB
-    private void hienThiDuLieuMauDatTruoc() {
-        try {
-            dsDatTruoc.clear();
-            HoaDon hd1 = new HoaDon("HD202510270001", 0, 0, 0, 0, 0, true, false, null, null, 1, null, null, null, null, null);
-            HoaDon hd2 = new HoaDon("HD202510270002", 0, 0, 0, 0, 0, true, false, null, null, 1, null, null, null, null, null);
-            dsDatTruoc.add(hd1);
-            dsDatTruoc.add(hd2);
-            hienThiDanhSachDatTruoc();
-            System.out.println("📋 Đang sử dụng dữ liệu mẫu đặt trước");
-        } catch (Exception e) {
-            System.err.println("❌ Lỗi dữ liệu mẫu đặt trước: " + e.getMessage());
-        }
-    }
-
-    private void hienThiDuLieuMauDaNhan() {
-        try {
-            dsDaNhan.clear();
-            HoaDon hd = new HoaDon("HD202510270003", 0, 0, 0, 0, 0, true, false, null, null, 2, null, null, null, null, null);
-            dsDaNhan.add(hd);
-            hienThiDanhSachDaNhan();
-            System.out.println("📋 Đang sử dụng dữ liệu mẫu đã nhận");
-        } catch (Exception e) {
-            System.err.println("❌ Lỗi dữ liệu mẫu đã nhận: " + e.getMessage());
-        }
-    }
-
-    // Refresh danh sách (public để gọi từ bên ngoài)
     public void refreshData() {
         try {
             if (!ketNoiDatabase()) {
