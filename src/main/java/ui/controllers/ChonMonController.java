@@ -10,6 +10,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import ui.QRThanhToan;
 
 import java.text.DecimalFormat; // ADDED
 import java.text.DecimalFormatSymbols; // ADDED
@@ -17,6 +18,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static ui.QRThanhToan.hienThiQRPanel;
 
 public class ChonMonController {
 
@@ -27,7 +30,7 @@ public class ChonMonController {
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btndatban, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
-    @FXML private TextField txtTienKhachDua, sdtKhach;
+    @FXML private TextField txtTienKhachDua, sdtKhach, tften;
     @FXML private TextField tf_ban, tftg, tfSLKhach;
 
 
@@ -43,7 +46,7 @@ public class ChonMonController {
     private NhanVien nhanVienHien;
     private LocalDateTime thoiGianDat;
     private int soLuongKhach;
-
+    private Runnable onPaymentConfirmed;
 
 
     @FXML
@@ -53,8 +56,30 @@ public class ChonMonController {
         xuLyHienThiTienMat();
         rdoChuyenKhoan.setSelected(true);
         back.setOnAction(e -> quayVeDatBan());
-        btndatban.setOnAction(e -> datBan());
+
+        btndatban.setOnAction(e -> {
+            if (rdoTienMat.isSelected()) {
+                datBan();
+            } else {
+                double tongTien = parseCurrency(lbl_total_PT.getText().trim());
+                String maHD = tuSinhMaHD();
+
+                QRThanhToan.hienThiQRPanel(tongTien, maHD, () -> {
+                    System.out.println("Thanh toán chuyển khoản thành công → Tạo hóa đơn...");
+                    datBanSauKhiXacNhan(maHD);
+                });
+            }
+        });
+
+
+        sdtKhach.setOnKeyReleased(e -> timKhachHang());
     }
+
+
+    public void setOnPaymentConfirmed(Runnable callback) {
+        this.onPaymentConfirmed = callback;
+    }
+
 
     public void setMainController(ui.controllers.MainController_NV controller) {
         this.mainController = controller;
@@ -416,9 +441,9 @@ public class ChonMonController {
 
         int so = 0;
         if (maHDCuoi != null) {
-                String phanSo = maHDCuoi.substring(maHDCuoi.length() - 4);
-                so = Integer.parseInt(phanSo);
-                so ++;
+            String phanSo = maHDCuoi.substring(maHDCuoi.length() - 4);
+            so = Integer.parseInt(phanSo);
+            so ++;
         }
 
         return String.format("HD%s%s%04d", ca, datePart, so);
@@ -438,6 +463,75 @@ public class ChonMonController {
     private void datBan() {
         LocalDateTime now = LocalDateTime.now();
 
+        // ===== Kiểm tra dữ liệu =====
+        if (banHienTai == null || soLuongMap.isEmpty()) {
+            System.out.println("⚠️ Chưa chọn bàn hoặc món!");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Thiếu thông tin");
+            alert.setHeaderText("Chưa chọn bàn hoặc món ăn!");
+            alert.setContentText("Vui lòng kiểm tra lại trước khi đặt bàn.");
+            alert.showAndWait();
+            return;
+        }
+
+        boolean kieuDatBan = now.isBefore(thoiGianDat);
+        int trangThai = kieuDatBan ? 0 : 1;
+
+        // ===== Tạo hóa đơn =====
+        HoaDon hd = taoHoaDon(kieuDatBan, trangThai);
+        if (hd == null) {
+            System.out.println("❌ Không tạo được hóa đơn!");
+            return;
+        }
+
+        // ===== Lưu hóa đơn =====
+        HoaDonDAO hdDAO = new HoaDonDAO();
+        boolean themHD = hdDAO.insert(hd);
+        if (!themHD) {
+            System.out.println("❌ Lỗi khi thêm hóa đơn!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi hệ thống");
+            alert.setHeaderText("Không thể lưu hóa đơn!");
+            alert.setContentText("Vui lòng thử lại hoặc liên hệ quản trị viên.");
+            alert.showAndWait();
+            return;
+        }
+
+        // ===== Thêm chi tiết hóa đơn =====
+        boolean themCT = themChiTietHoaDon(hd);
+        if (!themCT) {
+            System.out.println("⚠️ Lỗi khi thêm chi tiết hóa đơn!");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Cảnh báo");
+            alert.setHeaderText("Một số món có thể chưa được lưu!");
+            alert.setContentText("Vui lòng kiểm tra lại hóa đơn: " + hd.getMaHD());
+            alert.showAndWait();
+        }
+
+        // ===== Thông báo thành công =====
+        System.out.println("✅ Đặt bàn thành công: " + hd.getMaHD());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thành công");
+        alert.setHeaderText("Đặt bàn & tạo hóa đơn thành công!");
+        alert.setContentText("Mã hóa đơn: " + hd.getMaHD() + "\nTổng tiền: " + lbl_total_PT.getText());
+        alert.showAndWait();
+
+        // ===== Làm mới giao diện =====
+        vboxChiTietDonHang.getChildren().clear();
+        chiTietMap.clear();
+        soLuongMap.clear();
+        lbl_total.setText("0 đ");
+        lbl_thue.setText("0 đ");
+        lbl_total_PT.setText("0 đ");
+        quayVeDatBan();
+    }
+
+
+    private void datBanSauKhiXacNhan(String maHD) {
+        System.out.println("Xác nhận thanh toán thành công → Tạo hóa đơn...");
+
+        LocalDateTime now = LocalDateTime.now();
+
         if (banHienTai == null || soLuongMap.isEmpty()) {
             System.out.println("Chưa chọn bàn hoặc món!");
             return;
@@ -446,11 +540,14 @@ public class ChonMonController {
         boolean kieuDatBan = now.isBefore(thoiGianDat);
         int trangThai = kieuDatBan ? 0 : 1;
 
+        // ===== Tạo hóa đơn =====
         HoaDon hd = taoHoaDon(kieuDatBan, trangThai);
         if (hd == null) {
             System.out.println("Không tạo được hóa đơn!");
             return;
         }
+
+        hd.setMaHD(maHD);
 
         HoaDonDAO hdDAO = new HoaDonDAO();
         boolean themHD = hdDAO.insert(hd);
@@ -461,11 +558,32 @@ public class ChonMonController {
 
         boolean themCT = themChiTietHoaDon(hd);
         if (!themCT) {
-            System.out.println("⚠Lỗi khi thêm chi tiết hóa đơn!");
+            System.out.println("Lỗi khi thêm chi tiết hóa đơn!");
         } else {
             System.out.println("Đặt bàn thành công: " + hd.getMaHD());
         }
+
+        String sdt = sdtKhach.getText().trim();
+        KhachHang kh = new KhachHangDAO().findBySDT(sdt);
+        if (kh != null) {
+            congDiemTichLuy(kh, tinhDiem());
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thanh toán thành công");
+        alert.setHeaderText("Đặt bàn & tạo hóa đơn thành công!");
+        alert.setContentText("Mã hóa đơn: " + hd.getMaHD());
+        alert.showAndWait();
+
+        vboxChiTietDonHang.getChildren().clear();
+        chiTietMap.clear();
+        soLuongMap.clear();
+        lbl_total.setText("0 đ");
+        lbl_thue.setText("0 đ");
+        lbl_total_PT.setText("0 đ");
+        quayVeDatBan();
     }
+
 
 
     private void congDiemTichLuy(KhachHang khachHang, int diem) {
@@ -606,5 +724,21 @@ public class ChonMonController {
         System.out.println("Tạo hóa đơn thành công: " + hd.getMaHD());
         return hd;
     }
+
+    private void timKhachHang() {
+        String sdt = sdtKhach.getText().trim();
+        if (sdt.isEmpty()) {
+            tften.clear();
+            return;
+        }
+
+        KhachHang kh = new KhachHangDAO().findBySDT(sdt);
+        if (kh != null) {
+            tften.setText(kh.getTenKhachHang());
+        } else {
+            tften.setText("Khách lẻ");
+        }
+    }
+
 
 }

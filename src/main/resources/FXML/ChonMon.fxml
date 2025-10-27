@@ -75,7 +75,7 @@
             <VBox maxHeight="150.0" prefHeight="150.0" spacing="12" styleClass="customer-info">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Họ và tên:" />
-                    <TextField prefHeight="24.0" prefWidth="228.0" promptText="Nhập họ tên" styleClass="filter-tf" />
+                    <TextField fx:id="tften" prefHeight="24.0" prefWidth="228.0" promptText="Nhập họ tên" styleClass="filter-tf" />
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="SĐT:" />

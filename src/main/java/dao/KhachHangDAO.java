@@ -130,4 +130,36 @@ public class KhachHangDAO {
         }
         return null;
     }
+
+    public KhachHang getById(String maKH) {
+        KhachHang kh = null;
+        String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
+        try (PreparedStatement stmt = connectDB.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, maKH);
+            List<HangKhachHang> dsHang = HangKhachDAO.getAll();
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String maHang = rs.getString("maHang");
+                    HangKhachHang hang = dsHang.stream()
+                            .filter(h -> h.getMaHang().equals(maHang))
+                            .findFirst()
+                            .orElse(null);
+                    kh = new KhachHang(
+                            rs.getString("maKH"),
+                            rs.getInt("diemTichLuy"),
+                            rs.getBoolean("gioiTinh"),
+                            rs.getString("sdt"),
+                            rs.getString("tenKH"),
+                            hang
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return kh;
+    }
+
+
+
 }

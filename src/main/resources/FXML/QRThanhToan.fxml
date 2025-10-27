@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.2"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ui.controllers.QRThanhToanController"
+      alignment="CENTER" spacing="15"
+      style="-fx-background-color: #ffffff; -fx-border-radius: 20; -fx-background-radius: 20; -fx-padding: 25;">
+
+    <Label fx:id="lblTieuDe" text="Quét mã QR để thanh toán"
+           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <ImageView fx:id="imgQR" fitWidth="250" fitHeight="250" preserveRatio="true"/>
+
+    <Button fx:id="btnXacNhan" text="Đã chuyển xong"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;
+                   -fx-padding: 8 25; -fx-background-radius: 10; -fx-cursor: hand;" />
+
+    <Button fx:id="btnHuy" text="Hủy giao dịch"
+            style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-weight: bold;
+                   -fx-padding: 8 25; -fx-background-radius: 10; -fx-cursor: hand;" />
+
+</VBox>
