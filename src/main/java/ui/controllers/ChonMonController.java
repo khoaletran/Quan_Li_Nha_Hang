@@ -443,10 +443,9 @@ public class ChonMonController {
         if (maHDCuoi != null) {
             String phanSo = maHDCuoi.substring(maHDCuoi.length() - 4);
             so = Integer.parseInt(phanSo);
-            so ++;
         }
 
-        return String.format("HD%s%s%04d", ca, datePart, so);
+        return String.format("HD%s%s%04d", ca, datePart, so + 1);
     }
 
 
