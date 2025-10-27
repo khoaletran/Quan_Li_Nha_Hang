@@ -25,8 +25,17 @@ public class HoaDon {
    private double thue=0;
    private double coc=0;
    private double tongTienSau=0;
+   private int soLuong;
 
-   public HoaDon(String maHD, double tongTienKhuyenMai, double tongTienSau, double tongTienTruoc, double coc, double thue, boolean kieuDatBan, boolean kieuThanhToan, KhuyenMai khuyenMai, SuKien suKien, int trangthai, LocalDateTime tgCheckOut, LocalDateTime tgCheckIn, Ban ban, NhanVien nhanVien, KhachHang khachHang) {
+    public int getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public HoaDon(String maHD, double tongTienKhuyenMai, double tongTienSau, double tongTienTruoc, double coc, double thue, boolean kieuDatBan, boolean kieuThanhToan, KhuyenMai khuyenMai, SuKien suKien, int trangthai, LocalDateTime tgCheckOut, LocalDateTime tgCheckIn, Ban ban, NhanVien nhanVien, KhachHang khachHang, int soLuong) {
         this.maHD = maHD;
         this.tongTienKhuyenMai = tongTienKhuyenMai;
         this.tongTienSau = tongTienSau;
@@ -43,6 +52,7 @@ public class HoaDon {
         this.ban = ban;
         this.nhanVien = nhanVien;
         this.khachHang = khachHang;
+        this.soLuong = soLuong;
     }
 
     public HoaDon() {}
