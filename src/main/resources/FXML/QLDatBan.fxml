@@ -131,19 +131,19 @@
             </VBox>
 
             <!-- Bảng đơn hàng -->
+            <!-- Bảng đơn hàng -->
             <VBox spacing="10" styleClass="order-section">
                 <TableView fx:id="orderTable" prefHeight="201.0" prefWidth="373.0" styleClass="order-table">
                     <columns>
-                        <TableColumn prefWidth="30" text="STT" />
-                        <TableColumn prefWidth="90" text="Sản phẩm" />
-                        <TableColumn prefWidth="70" text="Số Lượng" />
-                        <TableColumn prefWidth="70" text="Giá" />
-                        <TableColumn prefWidth="70" text="Tổng" />
-                        <TableColumn prefWidth="30" text="Xóa" />
+                        <TableColumn fx:id="colSTT" prefWidth="30" text="STT" />
+                        <TableColumn fx:id="colSanPham" prefWidth="90" text="Sản phẩm" />
+                        <TableColumn fx:id="colSoLuong" prefWidth="70" text="Số Lượng" />
+                        <TableColumn fx:id="colGia" prefWidth="70" text="Giá" />
+                        <TableColumn fx:id="colTong" prefWidth="70" text="Tổng" />
+                        <TableColumn fx:id="colXoa" prefWidth="30" text="Xóa" />
                     </columns>
                 </TableView>
             </VBox>
-
             <!-- Tìm kiếm món ăn -->
             <VBox spacing="10" styleClass="order-section">
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-bar">
