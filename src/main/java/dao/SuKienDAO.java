@@ -54,4 +54,28 @@ public class SuKienDAO {
             return ps.executeUpdate() > 0;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }
+
+    public static SuKien getByID(String maSK) {
+        String sql = "SELECT * FROM SuKien WHERE maSK = ?";
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maSK);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new SuKien(
+                            rs.getString("maSK"),
+                            rs.getString("tenSK"),
+                            rs.getString("moTa"),
+                            rs.getDouble("gia")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy sự kiện theo mã: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
