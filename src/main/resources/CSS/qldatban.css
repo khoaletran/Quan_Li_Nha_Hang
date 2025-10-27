@@ -277,6 +277,8 @@
     -fx-border-radius: 8;
     -fx-padding: 4 10;
     -fx-font-size: 13px;
+    -fx-alignment:center ;
+    -fx-text-alignment: center;
 }
 
 .input-field:focused {

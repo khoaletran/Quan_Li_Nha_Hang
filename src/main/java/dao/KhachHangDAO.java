@@ -161,33 +161,49 @@ public class KhachHangDAO {
     }
 
     public static KhachHang getByID(String maKH) {
-        String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
-        try (Connection conn = connectDB.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        KhachHang kh = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
+        try {
+            // Kết nối giống NhanVienDAO
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
+
+            String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
+            ps = con.prepareStatement(sql);
             ps.setString(1, maKH);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    String maHang = rs.getString("maHang");
-                    HangKhachHang hang = (maHang != null) ? HangKhachDAO.getByID(maHang) : null;
+            rs = ps.executeQuery();
 
-                    return new KhachHang(
-                            rs.getString("maKH"),
-                            rs.getInt("diemTichLuy"),
-                            rs.getBoolean("gioiTinh"),
-                            rs.getString("sdt"),
-                            rs.getString("tenKH"),
-                            hang
-                    );
-                }
+            if (rs.next()) {
+                String maHang = rs.getString("maHang");
+                HangKhachHang hang = (maHang != null) ? HangKhachDAO.getByID(maHang) : null;
+
+                kh = new KhachHang(
+                        rs.getString("maKH"),
+                        rs.getInt("diemTichLuy"),
+                        rs.getBoolean("gioiTinh"),
+                        rs.getString("sdt"),
+                        rs.getString("tenKH"),
+                        hang
+                );
             }
 
         } catch (SQLException e) {
             System.err.println("Lỗi khi lấy khách hàng theo mã: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+
+        return kh;
     }
+
 
 
 
