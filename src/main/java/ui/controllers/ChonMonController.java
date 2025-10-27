@@ -443,10 +443,9 @@ public class ChonMonController {
         if (maHDCuoi != null) {
             String phanSo = maHDCuoi.substring(maHDCuoi.length() - 4);
             so = Integer.parseInt(phanSo);
-            so ++;
         }
 
-        return String.format("HD%s%s%04d", ca, datePart, so);
+        return String.format("HD%s%s%04d", ca, datePart, so + 1);
     }
 
 
@@ -642,7 +641,7 @@ public class ChonMonController {
                 double thanhTien = mon.getGiaBan() * soLuong;
                 ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
 
-                if (!dao.insert(hoaDon.getMaHD(),ct)) {
+                if (!dao.insert(ct)) {
                     tatCaOK = false;
                     System.err.println("Lỗi thêm chi tiết món: " + maMon);
                 }
