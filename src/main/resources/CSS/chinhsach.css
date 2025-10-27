@@ -55,6 +55,22 @@
 .btn-primary:hover {
     -fx-background-color: #219653;
 }
+.btn-secondary {
+    -fx-background-color: #f0f0f0;   /* nền xám nhạt */
+    -fx-text-fill: #333333;          /* chữ màu xám đậm / đen nhạt */
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-pref-height: 35;
+    -fx-pref-width: 100;
+    -fx-alignment: center;
+}
+
+/* Hover: nền tối hơn 1 chút */
+.btn-secondary:hover {
+    -fx-background-color: #e0e0e0;
+}
+
 
 /* Input */
 .input-field {
@@ -64,6 +80,22 @@
     -fx-border-radius: 8;
     -fx-padding: 4 10;
 }
+.combo-box, .combo-box-base {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 8;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 8;
+}
+
+.combo-box .text-field {
+    -fx-background-color: transparent;
+    -fx-padding: 4 10;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
 
 /* Toggle buttons */
 .toggle-btn {
@@ -114,6 +146,11 @@
     -fx-background-radius: 8;
     -fx-padding: 4 10;
     -fx-font-size: 13px;
+}
+.deposit-item-box-selected {
+    -fx-background-color: #d0f0d0; /* màu nền khi chọn */
+    -fx-font-weight: bold;          /* chữ đậm */
+    -fx-background-radius: 10;
 }
 
 .deposit-percent {
