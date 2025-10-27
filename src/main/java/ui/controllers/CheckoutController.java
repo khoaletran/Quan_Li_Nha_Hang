@@ -139,7 +139,6 @@ public class CheckoutController {
                 lblsdtKH.setText(sdtKH);
 
                 lblsuKien.setText(hd.getSuKien() != null ? hd.getSuKien().getTenSK() : "Không có");
-                lblThue.setText(String.format("%.0f%%", hd.getThue() * 100));
 
                 BanDAO banDAO = new BanDAO();
                 KhuVucDAO khuVucDAO = new KhuVucDAO();
@@ -153,10 +152,12 @@ public class CheckoutController {
                 }
                 lblSoLuong.setText(String.valueOf(hd.getSoLuong()));
                 lblKhuVuc.setText(khuVuc.getTenKhuVuc());
-
-                // lblTongTien.setText(String.format("%,.0f đ", hd.getTongTien()));
+                double tienTruoc = hd.getTongTienTruoc();
+                double tienThue = hd.getTongTienTruoc()/10;
+                lblThue.setText(String.format("%,.0f đ", tienThue));
+                 lblTongTien.setText(String.format("%,.0f đ", tienTruoc));
                 // lblGiamGia.setText(String.format("-%,.0f đ", hd.getGiamGia()));
-                // lblTongTT.setText(String.format("%,.0f đ", hd.getTongThanhToan()));
+                 lblTongTT.setText(String.format("%,.0f đ", tienThue+tienTruoc));
             });
             // =================================
 
