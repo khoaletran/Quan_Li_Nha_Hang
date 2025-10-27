@@ -141,7 +141,7 @@ public class MonDAO {
                     mon.setGiaGoc(rs.getDouble("giaGoc"));
 
                     // Lấy LoaiMon nếu có
-                    String maLoaiMon = rs.getString("maLoaiMon");
+                    String maLoaiMon = rs.getString("loaiMon");
                     if (maLoaiMon != null) {
                         LoaiMon loaiMon = LoaiMonDAO.getByID(maLoaiMon);
                         mon.setLoaiMon(loaiMon);
