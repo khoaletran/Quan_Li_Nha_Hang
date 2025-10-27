@@ -200,4 +200,32 @@ public class NhanVienDAO {
         }
     }
 
+    public static NhanVien getByID(String maNV) {
+        String sql = "SELECT * FROM NhanVien WHERE maNV = ?";
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maNV);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new NhanVien(
+                            rs.getString("maNV"),
+                            rs.getString("tenNV"),
+                            rs.getString("sdt"),
+                            rs.getBoolean("gioiTinh"),
+                            rs.getBoolean("quanLi"),
+                            rs.getDate("ngayVaoLam").toLocalDate(),
+                            rs.getBoolean("trangThai"),
+                            rs.getString("matKhau")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy nhân viên theo mã: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

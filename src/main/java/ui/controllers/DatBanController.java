@@ -22,32 +22,49 @@ import java.util.List;
 
 public class DatBanController {
 
-    @FXML private DatePicker datePicker;
-    @FXML private Spinner<Integer> hourSpinner;
-    @FXML private Spinner<Integer> minuteSpinner;
-    @FXML private TextField noteField;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private Spinner<Integer> hourSpinner;
+    @FXML
+    private Spinner<Integer> minuteSpinner;
+    @FXML
+    private TextField noteField;
 
     // ImageView bàn OUT
-    @FXML private ImageView starOut_01;
-    @FXML private ImageView starOut_02;
-    @FXML private ImageView starOut_03;
-    @FXML private ImageView starOut_04;
+    @FXML
+    private ImageView starOut_01;
+    @FXML
+    private ImageView starOut_02;
+    @FXML
+    private ImageView starOut_03;
+    @FXML
+    private ImageView starOut_04;
 
     // ImageView bàn IN
-    @FXML private ImageView starIN_01;
-    @FXML private ImageView starIN_02;
-    @FXML private ImageView starIN_03;
-    @FXML private ImageView starIN_04;
+    @FXML
+    private ImageView starIN_01;
+    @FXML
+    private ImageView starIN_02;
+    @FXML
+    private ImageView starIN_03;
+    @FXML
+    private ImageView starIN_04;
 
     // ImageView bàn VIP
-    @FXML private ImageView starVIP_01;
-    @FXML private ImageView starVIP_02;
+    @FXML
+    private ImageView starVIP_01;
+    @FXML
+    private ImageView starVIP_02;
 
-    @FXML private VBox tableOut_01, tableOut_02, tableOut_03, tableOut_04;
+    @FXML
+    private VBox tableOut_01, tableOut_02, tableOut_03, tableOut_04;
 
-    @FXML private VBox tableIN_01, tableIN_02, tableIN_03, tableIN_04;
+    @FXML
+    private VBox tableIN_01, tableIN_02, tableIN_03, tableIN_04;
 
-    @FXML private VBox tableVIP_01, tableVIP_02;
+    @FXML
+    private VBox tableVIP_01, tableVIP_02;
 
 
     private ui.controllers.MainController_NV mainController;
@@ -70,7 +87,9 @@ public class DatBanController {
         minuteSpinner.valueProperty().addListener((obs, oldV, newV) -> locTheoRealTime());
     }
 
-    void setNhanVien(NhanVien nv) {this.nv = nv;}
+    void setNhanVien(NhanVien nv) {
+        this.nv = nv;
+    }
 
     public void setMainController(ui.controllers.MainController_NV controller) {
         this.mainController = controller;
@@ -100,8 +119,11 @@ public class DatBanController {
 
         // Lấy số lượng nhập
         int soLuong = 0;
-        try { soLuong = Integer.parseInt(noteField.getText()); }
-        catch (NumberFormatException e) { soLuong = 0; }
+        try {
+            soLuong = Integer.parseInt(noteField.getText());
+        } catch (NumberFormatException e) {
+            soLuong = 0;
+        }
 
         // Lấy thời gian từ datePicker + Spinner
         LocalDate date = datePicker.getValue();
@@ -147,7 +169,6 @@ public class DatBanController {
     }
 
 
-
     private void chonBan(Ban ban) {
         if (ban == null) {
             System.out.println("Không tìm thấy bàn trống phù hợp!");
@@ -164,17 +185,18 @@ public class DatBanController {
                 chonMonCtrl.setThongTinBan(ban);
                 chonMonCtrl.setNhanVien(nv);
 
-                // ====== 🕒 Truyền thời gian đặt bàn ======
                 LocalDate date = datePicker.getValue();
                 int hour = hourSpinner.getValue();
                 int minute = minuteSpinner.getValue();
                 LocalDateTime thoiGian = LocalDateTime.of(date, LocalTime.of(hour, minute));
                 chonMonCtrl.setThoiGianDat(thoiGian);
 
-                // ====== 👥 Truyền số lượng khách ======
                 int soLuong = 0;
-                try { soLuong = Integer.parseInt(noteField.getText()); }
-                catch (NumberFormatException e) { soLuong = 0; }
+                try {
+                    soLuong = Integer.parseInt(noteField.getText());
+                } catch (NumberFormatException e) {
+                    soLuong = 0;
+                }
                 chonMonCtrl.setSoLuongKhach(soLuong);
 
                 mainController.getMainContent().getChildren().setAll(node);
@@ -188,55 +210,4 @@ public class DatBanController {
 
 
 
-
-
-
-
-//    private void kiemTraBanTheoThoiGian(ImageView star) {
-//        LocalDate date = datePicker.getValue();
-//        if (date == null) return; // chưa chọn ngày
-//
-//        int hour = hourSpinner.getValue();
-//        int minute = minuteSpinner.getValue();
-//        LocalDateTime selectedDateTime = LocalDateTime.of(date, LocalTime.of(hour, minute));
-//
-//        List<HoaDon> dsHD = hoaDonDAO.getAll();
-//
-//        // Kiểm tra xem có hóa đơn nào trùng thời gian không
-//        boolean trungGio = dsHD.stream().anyMatch(hd -> {
-//            LocalDateTime tgcheckin = hd.getTgCheckIn();
-//            if (tgcheckin == null) return false;
-//            return tgcheckin.equals(selectedDateTime); // so sánh chính xác giờ, phút
-//        });
-//
-//        hienThiNgoiSao(star, !trungGio);
-//    }
-//
-//    private void kiemTraBanTheoSoLuong(){
-//        int soLuong = 0;
-//        try {
-//            soLuong = Integer.parseInt(noteField.getText());
-//        } catch (NumberFormatException e) {
-//            soLuong = 0;
-//        }
-//        if(soLuong >= 2 && soLuong <= 3){
-//            hienThiNgoiSao(starOut_01,true);
-//            hienThiNgoiSao(starIN_01,true);
-//        }else if(soLuong >= 3 && soLuong <= 4){
-//            hienThiNgoiSao(starOut_02,true);
-//            hienThiNgoiSao(starIN_02,true);
-//        }else if(soLuong >= 3 && soLuong <= 4){
-//            hienThiNgoiSao(starOut_02,true);
-//            hienThiNgoiSao(starIN_02,true);
-//        }else if(soLuong >= 5 && soLuong <= 8){
-//            hienThiNgoiSao(starOut_03,true);
-//            hienThiNgoiSao(starIN_03,true);
-//        }else if(soLuong >= 8 && soLuong <= 12){
-//            hienThiNgoiSao(starOut_04,true);
-//            hienThiNgoiSao(starIN_04,true);
-//            hienThiNgoiSao(starVIP_01,true);
-//        }else if(soLuong >= 12){
-//            hienThiNgoiSao(starVIP_02,true);
-//        }
-//    }
 }

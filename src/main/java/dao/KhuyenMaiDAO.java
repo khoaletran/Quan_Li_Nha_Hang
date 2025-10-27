@@ -203,4 +203,38 @@ public class KhuyenMaiDAO {
 
         return maKMCuoi;
     }
+
+    public static KhuyenMai getByID(String maKM) {
+        String sql = "SELECT * FROM KhuyenMai WHERE maKM = ?";
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maKM);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Date dbNgayPhatHanh = rs.getDate("ngayPhatHanh");
+                    Date dbNgayKetThuc = rs.getDate("ngayKetThuc");
+
+                    LocalDate ngayPhatHanh = (dbNgayPhatHanh != null) ? dbNgayPhatHanh.toLocalDate() : null;
+                    LocalDate ngayKetThuc = (dbNgayKetThuc != null) ? dbNgayKetThuc.toLocalDate() : null;
+
+                    return new KhuyenMai(
+                            rs.getString("maKM"),
+                            rs.getString("tenKM"),
+                            rs.getInt("soLuong"),
+                            ngayPhatHanh,
+                            ngayKetThuc,
+                            rs.getString("maThayThe"),
+                            rs.getInt("phanTramGiamGia"),
+                            rs.getBoolean("uuDai")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy khuyến mãi theo mã: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

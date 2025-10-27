@@ -47,18 +47,6 @@ INSERT INTO LoaiMon VALUES
 ('LM0004', N'Nước uống', N'Nước ngọt, sinh tố, rượu vang'),
 ('LM0005', N'Món đặc biệt', N'Món signature của nhà hàng');
 
--- =============== PHẦN TRĂM GIÁ BÁN ===============
-INSERT INTO PhanTramGiaBan (maPTGB, maLoaiMon, phanTramLoi, ngayApDung, maMon) VALUES
-('PG0006', 'LM0001', 35, '2025-04-01', 'MN0001'),
-('PG0007', 'LM0002', 45, '2025-04-01', 'MN0002'),
-('PG0008', 'LM0003', 30, '2025-04-01', 'MN0003'),
-('PG0009', 'LM0004', 25, '2025-04-01', 'MN0004'),
-('PG0010', 'LM0005', 55, '2025-04-01', 'MN0005'),
-('PG0011', 'LM0001', 30, '2025-04-01', NULL),
-('PG0012', 'LM0002', 40, '2025-04-01', NULL),
-('PG0013', 'LM0003', 25, '2025-04-01', NULL),
-('PG0014', 'LM0004', 20, '2025-04-01', NULL),
-('PG0015', 'LM0005', 50, '2025-04-01', NULL);
 
 -- =============== KHUYẾN MÃI ===============
 INSERT INTO KhuyenMai (maKM, tenKM, soLuong, ngayPhatHanh, ngayKetThuc, maThayThe, phanTramGiamGia, uuDai)
@@ -76,6 +64,19 @@ INSERT INTO Mon (maMon, tenMon, moTa, hinhAnh, giaGoc, loaiMon) VALUES
 ('MN0003', N'Chè hạt sen', N'Món tráng miệng mát lạnh', 'che_hat_sen.jpg', 40000, 'LM0003'),
 ('MN0004', N'Sinh tố xoài', N'Nước uống tươi mát', 'sinh_to_xoai.jpg', 30000, 'LM0004'),
 ('MN0005', N'Lẩu cua đồng', N'Món đặc biệt cho nhóm đông', 'lau_cua_dong.jpg', 250000, 'LM0005');
+
+-- =============== PHẦN TRĂM GIÁ BÁN ===============
+INSERT INTO PhanTramGiaBan (maPTGB, maLoaiMon, phanTramLoi, ngayApDung, maMon) VALUES
+('PG0006', 'LM0001', 35, '2025-04-01', 'MN0001'),
+('PG0007', 'LM0002', 45, '2025-04-01', 'MN0002'),
+('PG0008', 'LM0003', 30, '2025-04-01', 'MN0003'),
+('PG0009', 'LM0004', 25, '2025-04-01', 'MN0004'),
+('PG0010', 'LM0005', 55, '2025-04-01', 'MN0005'),
+('PG0011', 'LM0001', 30, '2025-04-01', NULL),
+('PG0012', 'LM0002', 40, '2025-04-01', NULL),
+('PG0013', 'LM0003', 25, '2025-04-01', NULL),
+('PG0014', 'LM0004', 20, '2025-04-01', NULL),
+('PG0015', 'LM0005', 50, '2025-04-01', NULL);
 
 -- =============== SỰ KIỆN ===============
 INSERT INTO SuKien VALUES

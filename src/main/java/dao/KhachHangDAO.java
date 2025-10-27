@@ -160,6 +160,35 @@ public class KhachHangDAO {
         return kh;
     }
 
+    public static KhachHang getByID(String maKH) {
+        String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maKH);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String maHang = rs.getString("maHang");
+                    HangKhachHang hang = (maHang != null) ? HangKhachDAO.getByID(maHang) : null;
+
+                    return new KhachHang(
+                            rs.getString("maKH"),
+                            rs.getInt("diemTichLuy"),
+                            rs.getBoolean("gioiTinh"),
+                            rs.getString("sdt"),
+                            rs.getString("tenKH"),
+                            hang
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy khách hàng theo mã: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
 }

@@ -480,7 +480,7 @@ public class ChonMonController {
         // ===== Tạo hóa đơn =====
         HoaDon hd = taoHoaDon(kieuDatBan, trangThai);
         if (hd == null) {
-            System.out.println("❌ Không tạo được hóa đơn!");
+            System.out.println("Không tạo được hóa đơn!");
             return;
         }
 
@@ -488,7 +488,7 @@ public class ChonMonController {
         HoaDonDAO hdDAO = new HoaDonDAO();
         boolean themHD = hdDAO.insert(hd);
         if (!themHD) {
-            System.out.println("❌ Lỗi khi thêm hóa đơn!");
+            System.out.println("Lỗi khi thêm hóa đơn!");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Lỗi hệ thống");
             alert.setHeaderText("Không thể lưu hóa đơn!");
@@ -500,7 +500,7 @@ public class ChonMonController {
         // ===== Thêm chi tiết hóa đơn =====
         boolean themCT = themChiTietHoaDon(hd);
         if (!themCT) {
-            System.out.println("⚠️ Lỗi khi thêm chi tiết hóa đơn!");
+            System.out.println("Lỗi khi thêm chi tiết hóa đơn!");
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Cảnh báo");
             alert.setHeaderText("Một số món có thể chưa được lưu!");
@@ -509,7 +509,7 @@ public class ChonMonController {
         }
 
         // ===== Thông báo thành công =====
-        System.out.println("✅ Đặt bàn thành công: " + hd.getMaHD());
+        System.out.println("Đặt bàn thành công: " + hd.getMaHD());
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thành công");
         alert.setHeaderText("Đặt bàn & tạo hóa đơn thành công!");

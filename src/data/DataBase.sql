@@ -129,16 +129,7 @@ CREATE TABLE LoaiMon (
     moTa NVARCHAR(200)
 );
 
--- =========================
--- BẢNG PHẦN TRĂM GIÁ BÁN
--- =========================
-CREATE TABLE PhanTramGiaBan (
-    maPTGB NVARCHAR(6) PRIMARY KEY,
-    maLoaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
-    maMon NVARCHAR(6) FOREIGN KEY REFERENCES Mon(maMon),
-    phanTramLoi INT,
-    ngayApDung DATE
-);
+
 
 -- =========================
 -- BẢNG KHUYẾN MÃI
@@ -163,7 +154,18 @@ CREATE TABLE Mon (
     moTa NVARCHAR(50),
     hinhAnh NVARCHAR(50),
     giaGoc FLOAT,
-    loaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
+    loaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon)
+);
+
+-- =========================
+-- BẢNG PHẦN TRĂM GIÁ BÁN
+-- =========================
+CREATE TABLE PhanTramGiaBan (
+    maPTGB NVARCHAR(6) PRIMARY KEY,
+    maLoaiMon NVARCHAR(6) FOREIGN KEY REFERENCES LoaiMon(maLoaiMon),
+    maMon NVARCHAR(6) FOREIGN KEY REFERENCES Mon(maMon),
+    phanTramLoi INT,
+    ngayApDung DATE
 );
 
 -- =========================
@@ -183,10 +185,10 @@ CREATE TABLE HoaDon (
     thue FLOAT,
     coc FLOAT,
     trangThai INT,
-    soLuong INT,
     tongTienTruoc FLOAT,
     tongTienSau FLOAT,
-    tongTienKM FLOAT
+    tongTienKM FLOAT,
+    soLuong INT
 );
 
 -- =========================

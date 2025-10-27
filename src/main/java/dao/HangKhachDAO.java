@@ -74,10 +74,17 @@ public class HangKhachDAO {
         }
     }
 
-    // ======== TÌM THEO MÃ ========
+    // ======== TÌM THEO MÃ (phiên bản đơn giản) ========
     public HangKhachHang findById(String maHang) {
-        String sql = "SELECT * FROM HangKhachHang WHERE maHang=?";
-        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+        return getByID(maHang);
+    }
+
+    // ======== LẤY THEO MÃ (phiên bản chuẩn OOP static) ========
+    public static HangKhachHang getByID(String maHang) {
+        String sql = "SELECT * FROM HangKhachHang WHERE maHang = ?";
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, maHang);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -90,7 +97,7 @@ public class HangKhachDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Lỗi khi lấy hạng khách hàng theo mã: " + e.getMessage());
         }
         return null;
     }
@@ -119,5 +126,4 @@ public class HangKhachDAO {
         }
         return null;
     }
-
 }

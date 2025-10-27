@@ -149,5 +149,31 @@ public class BanDAO {
         return banTrong;
     }
 
+    public static Ban getByID(String maBan) {
+        String sql = "SELECT * FROM Ban WHERE maBan = ?";
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maBan);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String maLoaiBan = rs.getString("maLoaiBan");
+                    String maKhuVuc = rs.getString("maKhuVuc");
+                    boolean trangThai = rs.getBoolean("trangThai");
+
+                    // Gọi DAO con để lấy đối tượng liên kết
+                    LoaiBan loaiBan = LoaiBanDAO.getById(maLoaiBan);
+                    KhuVuc khuVuc = KhuVucDAO.getById(maKhuVuc);
+
+                    return new Ban(maBan, khuVuc, loaiBan, trangThai);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy bàn theo mã: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
