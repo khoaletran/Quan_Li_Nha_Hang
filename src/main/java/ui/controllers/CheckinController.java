@@ -27,7 +27,7 @@ public class CheckinController {
     @FXML
     private Label lblMaHD, lblTenKH, lblSDT, lblSoLuong, lblSuKien, lblKhuVuc, lblBan;
     @FXML
-    private GridPane gridChiTietHD;
+    private GridPane gridChiTietHD; //grid
     @FXML
     private TextField txtMaHD, txtSDT;
     @FXML
