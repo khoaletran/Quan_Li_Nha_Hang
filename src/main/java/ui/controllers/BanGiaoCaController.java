@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.geometry.Pos;
 import ui.AlertCus;
+import ui.ConfirmCus;
 
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -164,13 +165,18 @@ public class BanGiaoCaController {
                 LocalDateTime.now(),
                 taMoTa.getText().trim()
         );
-
-        boolean success = new PhieuKetCaDAO().insert(phieu);
-        if (success) {
-            AlertCus.show("Bàn giao ca","Đã lưu báo cáo kết ca!");
-        } else {
-            AlertCus.show("Bàn giao ca","Lỗi lưu báo cáo kết ca!");
+        boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận kết ca");
+        if (answer) {
+            boolean success = new PhieuKetCaDAO().insert(phieu);
+            if (success) {
+                AlertCus.show("Bàn giao ca","Đã lưu báo cáo kết ca!");
+            } else {
+                AlertCus.show("Bàn giao ca","Lỗi lưu báo cáo kết ca!");
+            }
         }
+
+
+
     }
 
 
