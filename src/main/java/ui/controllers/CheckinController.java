@@ -2,9 +2,11 @@ package ui.controllers;
 
 import dao.ChiTietHDDAO;
 import dao.HoaDonDAO;
+import dao.KhuVucDAO;
 import dao.ThoiGianDoiBanDAO;
 import entity.ChiTietHoaDon;
 import entity.HoaDon;
+import entity.KhuVuc;
 import entity.ThoiGianDoiBan;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -26,9 +28,11 @@ public class CheckinController {
     @FXML
     private GridPane gridChiTietHD;
     @FXML
-    private TextField txtMaHD, txtMaBan, txtSDT;
+    private TextField txtMaHD, txtSDT;
     @FXML
     private DatePicker dpThoiGian;
+    @FXML
+    private ComboBox<String> cboKhuVuc;
 
     // 🔹 Biến toàn cục lưu danh sách hóa đơn
     private List<HoaDon> dsHoaDon;
@@ -39,11 +43,19 @@ public class CheckinController {
     @FXML
     public void initialize() {
         loadDanhSach();
+        loadComboKhuVuc();
         setupFilterEvents();
     }
-
+    private void loadComboKhuVuc(){
+        cboKhuVuc.getItems().clear();
+        cboKhuVuc.getItems().add("Tất cả");
+        for(KhuVuc khuVuc: KhuVucDAO.getAll()){
+            cboKhuVuc.getItems().add(khuVuc.getTenKhuVuc());
+        }
+        cboKhuVuc.getSelectionModel().selectFirst();
+    }
     private void loadDanhSach() {
-        dsHoaDon = HoaDonDAO.getAll(); // Gán vào biến toàn cục
+        dsHoaDon = HoaDonDAO.getAllNgayHomNay(); // Gán vào biến toàn cục
         vboxDatTruoc.getChildren().clear();
         vboxCho.getChildren().clear();
 
@@ -208,6 +220,13 @@ public class CheckinController {
         lblSoLuong.setText("");
         lblSuKien.setText("");
         lblKhuVuc.setText("");
+        // Chỉ xóa các node từ dòng thứ 2 (row >= 1)
+        gridChiTietHD.getChildren().removeIf(node -> {
+            Integer row = GridPane.getRowIndex(node);
+            return row != null && row >= 1;
+        });
+
+
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
@@ -245,8 +264,9 @@ public class CheckinController {
     }
 
     private void setupFilterEvents() {
+        clearThongTin();
         if (txtMaHD != null) addAutoSearch(txtMaHD);
-        if (txtMaBan != null) addAutoSearch(txtMaBan);
+        if (cboKhuVuc != null) addAutoSearch(cboKhuVuc); // ComboBox
         if (txtSDT != null) addAutoSearch(txtSDT);
         if (dpThoiGian != null) addAutoSearch(dpThoiGian);
     }
@@ -255,17 +275,21 @@ public class CheckinController {
         field.textProperty().addListener((obs, oldVal, newVal) -> filterDanhSach());
     }
 
+    private <T> void addAutoSearch(ComboBox<T> cbo) {
+        cbo.valueProperty().addListener((obs, oldVal, newVal) -> filterDanhSach());
+    }
+
     private void addAutoSearch(DatePicker picker) {
         picker.valueProperty().addListener((obs, oldVal, newVal) -> filterDanhSach());
     }
 
     private void filterDanhSach() {
         String maHD = txtMaHD != null ? txtMaHD.getText().trim().toLowerCase() : "";
-        String maBan = txtMaBan != null ? txtMaBan.getText().trim().toLowerCase() : "";
         String sdt = txtSDT != null ? txtSDT.getText().trim().toLowerCase() : "";
         String ngay = dpThoiGian != null && dpThoiGian.getValue() != null
                 ? dpThoiGian.getValue().toString()
                 : "";
+        Object khuVuc = cboKhuVuc != null ? cboKhuVuc.getValue() : null;
 
         vboxDatTruoc.getChildren().clear();
         vboxCho.getChildren().clear();
@@ -275,12 +299,14 @@ public class CheckinController {
 
             boolean match = true;
             if (!maHD.isEmpty() && !hd.getMaHD().toLowerCase().contains(maHD)) match = false;
-            if (!maBan.isEmpty() && !hd.getBan().getMaBan().toLowerCase().contains(maBan)) match = false;
             if (!sdt.isEmpty() && (hd.getKhachHang() == null ||
                     !hd.getKhachHang().getSdt().toLowerCase().contains(sdt))) match = false;
             if (!ngay.isEmpty() && hd.getTgCheckIn() != null &&
                     !hd.getTgCheckIn().toLocalDate().toString().equals(ngay)) match = false;
-
+            if (hd.getBan() != null && khuVuc != null && !khuVuc.toString().equals("Tất cả")) {
+                String tenKhuVuc = hd.getBan().getKhuVuc() != null ? hd.getBan().getKhuVuc().getTenKhuVuc() : "";
+                if (!khuVuc.toString().equals(tenKhuVuc)) match = false;
+            }
             if (match) {
                 HBox item = createBookingItem(hd);
                 if (hd.isKieuDatBan()) {
@@ -291,4 +317,5 @@ public class CheckinController {
             }
         }
     }
+
 }
