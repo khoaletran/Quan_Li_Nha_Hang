@@ -56,33 +56,30 @@ public class HoaDonDAO {
     }
     public static List<HoaDon> getAllNgayHomNay() {
         List<HoaDon> ds = new ArrayList<>();
-        String sql = "select * from HoaDon\n" +
-                "where tgCheckin >= CAST(GETDATE() as date) and tgCheckin < DATEADD(DAY,1,CAST(GETDATE() as date))";
+        String sql = "SELECT hd.*, " +
+                "kh.maKH, kh.tenKH, kh.sdt, " +
+                "nv.maNV, nv.tenNV, " +
+                "b.maBan, b.maLoaiBan, b.maKhuVuc, " +
+                "km.maKM, km.tenKM, " +
+                "sk.maSK, sk.tenSK " +
+                "FROM HoaDon hd " +
+                "LEFT JOIN KhachHang kh ON hd.maKH = kh.maKH " +
+                "LEFT JOIN NhanVien nv ON hd.maNV = nv.maNV " +
+                "LEFT JOIN Ban b ON hd.maBan = b.maBan " +
+                "LEFT JOIN KhuyenMai km ON hd.maKM = km.maKM " +
+                "LEFT JOIN SuKien sk ON hd.maSK = sk.maSK " +
+                "WHERE hd.tgCheckin >= CAST(GETDATE() AS DATE) " +
+                "AND hd.tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                String maKH = rs.getString("maKH");
-                String maNV = rs.getString("maNV");
-                String maBan = rs.getString("maBan");
-                String maKM = rs.getString("maKM");
-                String maSK = rs.getString("maSK");
-
-                KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
-                NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
-                Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
-                KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
-                SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
-
                 HoaDon hd = new HoaDon();
+
+                // Set HoaDon basic fields
                 hd.setMaHD(rs.getString("maHD"));
-                hd.setKhachHang(kh);
-                hd.setNhanVien(nv);
-                hd.setBan(ban);
-                hd.setKhuyenMai(km);
-                hd.setSuKien(sk);
                 hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
                 hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
                 hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
@@ -90,6 +87,47 @@ public class HoaDonDAO {
                 hd.setTrangthai(rs.getInt("trangThai"));
                 hd.setSoLuong(rs.getInt("soLuong"));
                 hd.setMoTa(rs.getString("moTa"));
+
+                // Map KhachHang
+                String maKH = rs.getString("maKH");
+                if (maKH != null) {
+                    KhachHang kh = new KhachHang();
+                    kh.setMaKhachHang(maKH); // chỉ set mã
+                    hd.setKhachHang(kh);
+                }
+
+// Map NhanVien
+                String maNV = rs.getString("maNV");
+                if (maNV != null) {
+                    NhanVien nv = new NhanVien();
+                    nv.setMaNV(maNV); // chỉ set mã
+                    hd.setNhanVien(nv);
+                }
+
+// Map Ban
+                String maBan = rs.getString("maBan");
+                if (maBan != null) {
+                    Ban ban = new Ban();
+                    ban.setMaBan(maBan); // chỉ set mã
+                    hd.setBan(ban);
+                }
+
+// Map KhuyenMai
+                String maKM = rs.getString("maKM");
+                if (maKM != null) {
+                    KhuyenMai km = new KhuyenMai();
+                    km.setMaKM(maKM); // chỉ set mã
+                    hd.setKhuyenMai(km);
+                }
+
+// Map SuKien
+                String maSK = rs.getString("maSK");
+                if (maSK != null) {
+                    SuKien sk = new SuKien();
+                    sk.setMaSK(maSK); // chỉ set mã
+                    hd.setSuKien(sk);
+                }
+
 
                 ds.add(hd);
             }
@@ -100,6 +138,7 @@ public class HoaDonDAO {
 
         return ds;
     }
+
     // ===================== GET BY ID =====================
     public static HoaDon getByID(String maHD) {
         String sql = "SELECT * FROM HoaDon WHERE maHD = ?";
