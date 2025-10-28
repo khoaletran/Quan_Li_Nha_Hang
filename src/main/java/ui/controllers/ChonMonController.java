@@ -582,9 +582,6 @@ public class ChonMonController {
 
         String sdt = sdtKhach.getText().trim();
         KhachHang kh = new KhachHangDAO().findBySDT(sdt);
-        if (kh != null) {
-            congDiemTichLuy(kh, tinhDiem());
-        }
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thanh toán thành công");
@@ -602,16 +599,8 @@ public class ChonMonController {
     }
 
 
-    private void congDiemTichLuy(KhachHang khachHang, int diem) {
-        if (khachHang == null) return;
-        khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() + diem);
-        KhachHangDAO.update(khachHang);
-    }
 
-    private int tinhDiem() {
-        double tongTien = parseCurrency(lbl_total_PT.getText().trim());
-        return (int) (tongTien * 0.1 / 1000);
-    }
+
 
     private boolean themChiTietHoaDon(HoaDon hoaDon) {
         if (hoaDon == null) {
@@ -664,18 +653,12 @@ public class ChonMonController {
 
         if (!sdt.isEmpty()) {
             khachHang = new KhachHangDAO().findBySDT(sdt);
-            if (khachHang != null) {
-                congDiemTichLuy(khachHang, tinhDiem());
-            } else {
-                System.out.println("Không tìm thấy khách hàng có SDT: " + sdt);
-            }
         }
 
         if (khachHang == null) {
             khachHang = new KhachHang("KH0000", 0, true, sdt, "Khách lẻ", xetHang(0));
         }
         // ===== 3. Tính toán giá trị dẫn xuất =====
-        double tongTienTruoc = parseCurrency(lbl_total_PT.getText().trim());
 
         KhuyenMai km = null;
 
