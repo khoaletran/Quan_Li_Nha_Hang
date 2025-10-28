@@ -659,8 +659,6 @@ public class QLDatBanController {
 
         try {
             if (hoaDonSelected != null) {
-                hoaDonSelected.setTongTienTruoc(tong); // cập nhật trường tổng trước ở đối tượng
-                // nếu bạn có logic khuyến mãi/thuế, tính và setTongTienSau ở đây
                 boolean ok = HoaDonDAO.update(hoaDonSelected);
                 if (!ok) {
                     System.err.println("Cập nhật tổng tiền vào HoaDon thất bại (DB).");
