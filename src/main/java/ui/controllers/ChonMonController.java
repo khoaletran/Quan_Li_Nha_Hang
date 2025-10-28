@@ -28,7 +28,7 @@ public class ChonMonController {
     @FXML private ComboBox<LoaiMon> comboDanhMuc;
     @FXML private ComboBox<SuKien> comboSuKien;
     @FXML private VBox vboxChiTietDonHang, vboxTienMat;
-    @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua, lblCoc, lblConLai;
+    @FXML private Label lbl_total, lblTienThua, lblCoc, lblConLai;
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btndatban, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
@@ -192,8 +192,9 @@ public class ChonMonController {
     private void loadComboSuKien() {
         comboSuKien.getItems().clear();
 
-        SuKien tatCa = null;
-        comboSuKien.getItems().add(tatCa);
+        // Thêm "Không áp dụng"
+        SuKien khongApDung = new SuKien("NONE", "Không áp dụng", "", 0);
+        comboSuKien.getItems().add(khongApDung);
 
         comboSuKien.getItems().addAll(SuKienDAO.getAll());
 
@@ -225,15 +226,18 @@ public class ChonMonController {
 
         comboSuKien.setOnAction(e -> {
             SuKien selected = comboSuKien.getValue();
-            if (selected != null && !"ALL".equals(selected.getMaSK())) {
+            if (selected != null && !"NONE".equals(selected.getMaSK())) {
                 sk = selected;
-                System.out.println("Đã chọn sự kiện: " + sk.getTenSK());
+                System.out.println("Đã chọn sự kiện: " + sk.getTenSK() + " (+ " + sk.getGia() + " đ)");
             } else {
                 sk = null;
-                System.out.println("Không áp dụng sự kiện nào");
+                System.out.println("Không áp dụng sự kiện");
             }
+
+            capNhatTongTien();
         });
     }
+
 
 
 
@@ -412,8 +416,15 @@ public class ChonMonController {
             }
         }
 
+        if (sk != null) {
+            tongTien += sk.getGia();
+        }
+
         lbl_total.setText(formatCurrency(tongTien));
+
+        tinhCoc();
     }
+
 
 
 
@@ -604,7 +615,7 @@ public class ChonMonController {
 
         // ===== Thông báo thành công =====
         System.out.println("Đặt bàn thành công: " + hd.getMaHD());
-        AlertCus.show("Thành công", "Đặt bàn & tạo hóa đơn thành công!\nMã hóa đơn: " + hd.getMaHD() + "\nTổng tiền: " + lbl_total_PT.getText());
+        AlertCus.show("Thành công", "Đặt bàn & tạo hóa đơn thành công!\nMã hóa đơn: " + hd.getMaHD() + "\nTổng tiền: " + lbl_total.getText());
 
 
         // ===== Làm mới giao diện =====
@@ -612,7 +623,6 @@ public class ChonMonController {
         chiTietMap.clear();
         soLuongMap.clear();
         lbl_total.setText("0 đ");
-        lbl_total_PT.setText("0 đ");
         BanDAO.update(banHienTai,true);
         quayVeDatBan();
     }
@@ -668,7 +678,6 @@ public class ChonMonController {
         chiTietMap.clear();
         soLuongMap.clear();
         lbl_total.setText("0 đ");
-        lbl_total_PT.setText("0 đ");
         BanDAO.update(banHienTai,true);
         quayVeDatBan();
     }
@@ -744,6 +753,7 @@ public class ChonMonController {
         hd.setNhanVien(nhanVienHien);
         hd.setBan(banHienTai);
         hd.setTgCheckIn(thoiGianDat);
+        hd.setSoLuong(soLuongKhach);
         hd.setTgCheckOut(null);
         hd.setKhuyenMai(km);
         hd.setTrangthai(trangthai);

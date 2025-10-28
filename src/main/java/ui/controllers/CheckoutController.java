@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import ui.AlertCus;
+import ui.HoaDonIn;
 import ui.QRThanhToan;
 
 import java.util.List;
@@ -296,6 +297,7 @@ public class CheckoutController {
                     "Khách đã thanh toán " + formatCurrency(tienKhach) +
                             "\nTiền thừa: " + formatCurrency(tienThua));
 
+            HoaDonIn.inHoaDonNhanh(hdHienTai);
             loadAllHoaDon(); // làm mới danh sách
             return;
         }
@@ -314,6 +316,7 @@ public class CheckoutController {
                         "Khách đã chuyển khoản đủ " + formatCurrency(tongConLai) +
                                 "\nHóa đơn " + hdHienTai.getMaHD() + " đã hoàn tất.");
 
+                HoaDonIn.previewHoaDon(hdHienTai);
                 loadAllHoaDon();
             });
         });

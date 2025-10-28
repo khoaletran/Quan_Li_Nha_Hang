@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" spacing="2" style="-fx-padding: 5; -fx-font-family: 'Consolas'; -fx-font-size: 11;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.HoaDonInController">
+
+    <!-- Header -->
+    <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="🦀 NHÀ HÀNG CRABKING 🦀" />
+    <Label text="Nguyễn Văn Bảo, Phường Hạnh Thông, TP.HCM" />
+    <Label text="ĐT: (028) 1234 5678" />
+    <Label text="----------------------------------------" />
+
+    <!-- Thông tin hóa đơn -->
+    <GridPane prefWidth="248.0">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50" />
+            <ColumnConstraints percentWidth="50" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+        <children>
+            <Label text="Ngày Bán:" GridPane.rowIndex="1" />
+            <HBox style="-fx-spacing: 10; -fx-alignment: CENTER_LEFT;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <children>
+                    <Label fx:id="lblGio" text="9:10" />
+                    <Label fx:id="lblNgay" text="25/10/2025" />
+                </children>
+            </HBox>
+
+            <Label text="Bàn:" GridPane.rowIndex="2" />
+            <Label fx:id="lblBan" style="-fx-text-alignment: left; -fx-alignment: CENTER_LEFT;" text="B052" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        </children>
+    </GridPane>
+
+    <Label style="-fx-font-weight: bold; -fx-font-size: 12;" text="HÓA ĐƠN BÁN HÀNG" />
+    <Label fx:id="lblMaHD" text="HD12510250001" />
+
+    <!-- Nhân viên & thành viên -->
+    <GridPane prefWidth="248.0">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40" />
+            <ColumnConstraints percentWidth="60" />
+        </columnConstraints>
+        <children>
+            <Label text="Thành Viên:" />
+            <Label text="Trần Quốc Nhã" GridPane.columnIndex="1" />
+            <Label text="Nhân Viên:" GridPane.rowIndex="1" />
+            <Label fx:id="lblThuNgan" text="Nguyễn Hà Nhật Khanh" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        </children>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
+   <HBox style="-fx-spacing: 40; -fx-alignment: center;">
+      <children>
+         <Label style="-fx-font-weight: bold; -fx-alignment: center;" text="Món" />
+         <Label style="-fx-font-weight: bold; -fx-alignment: center;" text="Giá" />
+         <Label style="-fx-font-weight: bold; -fx-alignment: center;" text="SL" />
+         <Label style="-fx-font-weight: bold; -fx-alignment: center;" text="Thành tiền" />
+      </children>
+   </HBox>
+    <Label text="----------------------------------------" />
+
+    <!-- Danh sách chi tiết món -->
+    <VBox fx:id="vboxChiTiet" spacing="1" />
+
+    <Label text="----------------------------------------" />
+
+    <!-- Tổng cộng -->
+    <GridPane hgap="5" style="-fx-alignment: CENTER_RIGHT;" vgap="1">
+        <children>
+            <Label text="Tổng Tiền:" GridPane.rowIndex="0" />
+            <Label fx:id="lblTongTien" text="0 đ" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <Label text="Chiết Khấu:" GridPane.rowIndex="1" />
+            <Label fx:id="lblGiamGia" text="0 đ" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="Thuế (10%):" GridPane.rowIndex="2" />
+            <Label fx:id="lblThue" text="0 đ" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <Label text="Tổng Sau Thuế:" GridPane.rowIndex="3" />
+            <Label fx:id="lblTongTT" text="0 đ" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+            <Label text="Tiền Cọc:" GridPane.rowIndex="4" />
+            <Label fx:id="lblCoc" text="0 đ" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <Label text="Thanh Toán:" GridPane.rowIndex="5" />
+            <Label fx:id="lblConLai" text="0 đ" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        </children>
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
+
+    <Label fx:id="lblThanhToan" text="💵 Thanh toán: Tiền mặt" />
+    <Label text="Wifi: CrabKing_Iuh | Password: xincamon" />
+    <Label text="Cảm ơn quý khách! Hẹn gặp lại 💙" />
+</VBox>
