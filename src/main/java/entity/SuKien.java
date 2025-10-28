@@ -13,6 +13,10 @@ public class SuKien {
         this.gia = gia;
     }
 
+    public SuKien() {
+
+    }
+
     public String getMaSK() {
         return maSK;
     }

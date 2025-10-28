@@ -13,6 +13,10 @@ public class KhuyenMai {
     private int phanTRamGiamGia;
     private boolean uuDai;
 
+    public KhuyenMai() {
+
+    }
+
     public boolean isUuDai() {
         return uuDai;
     }

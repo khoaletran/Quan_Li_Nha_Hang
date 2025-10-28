@@ -151,11 +151,38 @@
                 </HBox>
 
                 <!-- Danh sách món ăn -->
+                <!-- Danh sách món ăn -->
                 <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="393.0" styleClass="food-scroll">
                     <FlowPane fx:id="foodList" alignment="TOP_CENTER" hgap="15" prefWrapLength="450" vgap="15">
-                        <!-- Các card món ăn sẽ được thêm động -->
+                        <!-- Mẫu card món (controller sẽ tạo động dựa trên ds món thực tế) -->
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="90.0" spacing="6" styleClass="food-card">
+                            <StackPane prefHeight="60.0" prefWidth="80.0">
+                                <ImageView fitHeight="60.0" fitWidth="60.0">
+                                    <image>
+                                        <Image url="@../IMG/avatar.png" />
+                                    </image>
+                                </ImageView>
+                                <Button text="+" styleClass="add-icon" StackPane.alignment="TOP_RIGHT" />
+                            </StackPane>
+                            <Label styleClass="food-name" text="Mẫu món" />
+                        </VBox>
+
+                        <!-- Thêm vài mẫu để giao diện không trống -->
+                        <VBox alignment="CENTER" prefHeight="110.0" prefWidth="90.0" spacing="6" styleClass="food-card">
+                            <StackPane prefHeight="60.0" prefWidth="80.0">
+                                <ImageView fitHeight="60.0" fitWidth="60.0">
+                                    <image>
+                                        <Image url="@../IMG/avatar.png" />
+                                    </image>
+                                </ImageView>
+                                <Button text="+" styleClass="add-icon" StackPane.alignment="TOP_RIGHT" />
+                            </StackPane>
+                            <Label styleClass="food-name" text="Bánh mì" />
+                        </VBox>
+
                     </FlowPane>
                 </ScrollPane>
+
             </VBox>
 
             <!-- Nút hành động -->
