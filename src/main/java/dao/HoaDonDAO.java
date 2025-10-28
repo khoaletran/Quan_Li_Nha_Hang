@@ -292,4 +292,39 @@ public class HoaDonDAO {
 
         return result;
     }
+
+//    // HoaDonDAO.java
+//    public static boolean recalcAndUpdateTongTien(String maHD) {
+//        // 1) Tính tổng từ chi tiết
+//        double tongTruoc = 0;
+//        List<ChiTietHoaDon> ds = ChiTietHDDAO.getByMaHD(maHD);
+//        if (ds != null) {
+//            for (ChiTietHoaDon ct : ds) {
+//                tongTruoc += ct.getThanhTien();
+//            }
+//        }
+//
+//        // 2) Tính giá trị phụ (tạm ví dụ: khuyến mãi = 0, thuế 10%)
+//        double tongKM = 0; // nếu bạn có logic khuyến mãi, tính ở đây
+//        double thue = tongTruoc * 0.1;
+//        double tongSau = tongTruoc - tongKM + thue;
+//
+//        String sql = "UPDATE HoaDon SET tongTienTruoc = ?, tongTienKhuyenMai = ?, thue = ?, tongTienSau = ? WHERE maHD = ?";
+//
+//        try (Connection conn = connectDB.getInstance().getNewConnection();
+//             PreparedStatement ps = conn.prepareStatement(sql)) {
+//
+//            ps.setDouble(1, tongTruoc);
+//            ps.setDouble(2, tongKM);
+//            ps.setDouble(3, thue);
+//            ps.setDouble(4, tongSau);
+//            ps.setString(5, maHD);
+//
+//            return ps.executeUpdate() > 0;
+//        } catch (SQLException e) {
+//            System.err.println("Lỗi khi cập nhật tổng tiền: " + e.getMessage());
+//            return false;
+//        }
+//    }
+
 }
