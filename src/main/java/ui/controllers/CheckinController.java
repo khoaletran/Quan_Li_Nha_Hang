@@ -9,6 +9,7 @@ import entity.HoaDon;
 import entity.KhuVuc;
 import entity.ThoiGianDoiBan;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -55,24 +56,43 @@ public class CheckinController {
         cboKhuVuc.getSelectionModel().selectFirst();
     }
     private void loadDanhSach() {
-        dsHoaDon = HoaDonDAO.getAllNgayHomNay(); // Gán vào biến toàn cục
+        // 1️⃣ Load thời gian đợi bàn 1 lần
+        int thoiGianDatTruoc = 0; // cho kieuDatBan = 0
+        int thoiGianCho = 0;      // cho kieuDatBan = 1
+        try {
+            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(false); // đặt trước
+            ThoiGianDoiBan tgCho = ThoiGianDoiBanDAO.getLatestByLoai(true);       // chờ
+            if (tgDatTruoc != null) thoiGianDatTruoc = tgDatTruoc.getThoiGian();
+            if (tgCho != null) thoiGianCho = tgCho.getThoiGian();
+        } catch (Exception e) {
+            System.err.println("Lỗi load thời gian đợi bàn: " + e.getMessage());
+        }
+
+        // 2️⃣ Load danh sách hóa đơn hôm nay
+        dsHoaDon = HoaDonDAO.getAllNgayHomNay(); // đã tối ưu: chỉ set ID và tên, không gọi DAO phụ
+
+        // 3️⃣ Xóa vbox trước khi add item
         vboxDatTruoc.getChildren().clear();
         vboxCho.getChildren().clear();
 
+        // 4️⃣ Tạo UI items
         for (HoaDon hd : dsHoaDon) {
             if (hd.getTrangthai() != 0) continue; // chỉ lấy trạng thái 0
 
-            HBox item = createBookingItem(hd);
+            int thoiGian = (hd.isKieuDatBan() == false) ? thoiGianDatTruoc : thoiGianCho;
 
-            if (hd.isKieuDatBan()) {
+            HBox item = createBookingItem(hd, thoiGian);
+
+            if (hd.isKieuDatBan() == false) { // đặt trước
                 vboxDatTruoc.getChildren().add(item);
-            } else {
+            } else { // chờ
                 vboxCho.getChildren().add(item);
             }
         }
     }
 
-    private HBox createBookingItem(HoaDon hd) {
+
+    private HBox createBookingItem(HoaDon hd, int thoiGianCho) {
         HBox hbox = new HBox(10);
         hbox.getStyleClass().add("booking-item");
 
@@ -107,12 +127,7 @@ public class CheckinController {
         Label lblRemaining = new Label();
         remainingBox.getChildren().add(lblRemaining);
 
-        // 5️⃣ Thời gian đợi bàn từ DB
-        int thoiGianCho = 0; // phút
-        ThoiGianDoiBan tg = ThoiGianDoiBanDAO.getLatestByLoai(hd.isKieuDatBan());
-        if (tg != null) thoiGianCho = tg.getThoiGian();
-
-        // 6️⃣ Đếm ngược
+        // 5️⃣ Đếm ngược
         if (hd.getTgCheckIn() != null) {
             LocalDateTime checkInTime = hd.getTgCheckIn();
             long totalSeconds = thoiGianCho * 60;
@@ -120,7 +135,6 @@ public class CheckinController {
             javafx.animation.Timeline timeline = new javafx.animation.Timeline(
                     new javafx.animation.KeyFrame(javafx.util.Duration.seconds(1), e -> {
                         LocalDateTime now = LocalDateTime.now();
-
                         if (now.isBefore(checkInTime)) {
                             lblRemaining.setText("-- : -- : --");
                             remainingBox.setStyle("-fx-background-color: #00C8B3;");
@@ -147,8 +161,8 @@ public class CheckinController {
 
         hbox.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(info, Priority.ALWAYS);
-        remainingBox.setPrefWidth(80);
-
+        remainingBox.setPrefWidth(100);
+        remainingBox.setAlignment(Pos.CENTER);
         hbox.getChildren().addAll(img, info, dateBox, remainingBox);
 
         hbox.setOnMouseClicked(e -> {
@@ -158,6 +172,7 @@ public class CheckinController {
 
         return hbox;
     }
+
 
     private void highlightSelected(HBox selected) {
         if (lastSelected != null) lastSelected.setStyle("");
@@ -186,7 +201,7 @@ public class CheckinController {
         }
 
         LocalDateTime now = LocalDateTime.now();
-        ThoiGianDoiBan tg = ThoiGianDoiBanDAO.getLatestByLoai(hd.isKieuDatBan());
+        ThoiGianDoiBan tg = ThoiGianDoiBanDAO.getLatestByLoai(!hd.isKieuDatBan());
         int thoiGianCho = (tg != null) ? tg.getThoiGian() : 0;
         LocalDateTime tgChoPhep = tgDat.plusMinutes(thoiGianCho);
 
@@ -294,6 +309,18 @@ public class CheckinController {
         vboxDatTruoc.getChildren().clear();
         vboxCho.getChildren().clear();
 
+        // Lấy thời gian đợi bàn 1 lần
+        int thoiGianDatTruoc = 0; // kieuDatBan = 0
+        int thoiGianCho = 0;      // kieuDatBan = 1
+        try {
+            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(false);
+            ThoiGianDoiBan tgCho = ThoiGianDoiBanDAO.getLatestByLoai(true);
+            if (tgDatTruoc != null) thoiGianDatTruoc = tgDatTruoc.getThoiGian();
+            if (tgCho != null) thoiGianCho = tgCho.getThoiGian();
+        } catch (Exception e) {
+            System.err.println("Lỗi load thời gian đợi bàn: " + e.getMessage());
+        }
+
         for (HoaDon hd : dsHoaDon) {
             if (hd.getTrangthai() != 0) continue;
 
@@ -307,15 +334,20 @@ public class CheckinController {
                 String tenKhuVuc = hd.getBan().getKhuVuc() != null ? hd.getBan().getKhuVuc().getTenKhuVuc() : "";
                 if (!khuVuc.toString().equals(tenKhuVuc)) match = false;
             }
+
             if (match) {
-                HBox item = createBookingItem(hd);
-                if (hd.isKieuDatBan()) {
+                // Chọn thời gian đợi bàn theo loại
+                int thoiGian = (!hd.isKieuDatBan()) ? thoiGianDatTruoc : thoiGianCho;
+                HBox item = createBookingItem(hd, thoiGian);
+
+                if (!hd.isKieuDatBan()) { // đặt trước
                     vboxDatTruoc.getChildren().add(item);
-                } else {
+                } else { // chờ
                     vboxCho.getChildren().add(item);
                 }
             }
         }
     }
+
 
 }
