@@ -147,4 +147,20 @@ public class MonDAO {
 
         return mon;
     }
+    public static String getLatestMaMon() {
+        String sql = "SELECT maMon FROM Mon ORDER BY maMon DESC "; // lấy mã lớn nhất
+        try (Connection con = connectDB.getConnection();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getString("maMon");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // nếu chưa có món nào
+    }
+
 }

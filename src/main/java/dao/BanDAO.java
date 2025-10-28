@@ -82,7 +82,7 @@ public class BanDAO {
     // ==============================
     // CẬP NHẬT BÀN
     // ==============================
-    public boolean update(Ban ban, boolean trangThai) {
+    public static boolean update(Ban ban, boolean trangThai) {
         String sql = "UPDATE Ban SET trangThai=?, maLoaiBan=?, maKhuVuc=? WHERE maBan=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setBoolean(1, trangThai);

@@ -121,7 +121,7 @@
                     </content>
                 </ScrollPane>
 
-                        <VBox spacing="2.0" styleClass="total-section">
+                  <VBox spacing="2.0" styleClass="total-section">
                       <HBox spacing="10">
                           <Label styleClass="total-label" text="Tổng Tiền:" />
                           <Region HBox.hgrow="ALWAYS" />
@@ -141,12 +141,12 @@
                       <HBox spacing="10">
                           <Label styleClass="deposit-label" text="Cọc:" />
                           <Region HBox.hgrow="ALWAYS" />
-                          <Label styleClass="deposit-amount" text="0đ" />
+                          <Label fx:id="lblCoc" styleClass="deposit-amount" text="0đ" />
                       </HBox>
                       <HBox spacing="10">
                           <Label styleClass="final-label" text="Còn lại:" />
                           <Region HBox.hgrow="ALWAYS" />
-                          <Label styleClass="final-amount" text="0đ" />
+                          <Label fx:id="lblConLai" styleClass="final-amount" text="0đ" />
                       </HBox>
                   </VBox>
 
@@ -173,15 +173,6 @@
                                <Button fx:id="btnGoiY5" styleClass="quick-btn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                <Button fx:id="btnGoiY6" styleClass="quick-btn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                            </children>
-                     <columnConstraints>
-                        <ColumnConstraints />
-                        <ColumnConstraints />
-                        <ColumnConstraints />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints />
-                        <RowConstraints />
-                     </rowConstraints>
                        </GridPane>
                   <HBox style="-fx-alignment: center;">
                      <children>

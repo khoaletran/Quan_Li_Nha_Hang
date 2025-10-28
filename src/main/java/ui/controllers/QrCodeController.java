@@ -1,7 +1,6 @@
 package ui.controllers;
 
 import com.github.sarxos.webcam.WebcamPanel;
-import com.github.sarxos.webcam.WebcamResolution;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -10,11 +9,7 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.github.sarxos.webcam.Webcam;
-import javafx.application.Platform;
-import javafx.embed.swing.SwingNode;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -23,22 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
 public class QrCodeController {
-
-//    code tạo qr
-//    static void main() {
-//        try {
-//            QrCodeController.generateQRCodeKM("KM0001", "KM0001", 300);
-//            QrCodeController.generateQRCodeKM("KM0002", "KM0002", 300);
-//            QrCodeController.generateQRCodeKM("KM0003", "KM0003", 300);
-//            QrCodeController.generateQRCodeKM("KM0004", "KM0004", 300);
-//            QrCodeController.generateQRCodeKM("KM0005", "KM0005", 300);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
 
     public static Path generateQRCodeKM(String maKhuyenMai, String fileName, int size) throws Exception {
         String outputDir = "src/main/resources/IMG/qrcode";
@@ -108,6 +89,7 @@ public class QrCodeController {
     }
 
     public static String scanQRCodeWithPreview() {
+        AtomicBoolean running = new AtomicBoolean(true);
         String resultText = null;
         Webcam webcam = Webcam.getDefault();
         webcam.setViewSize(new java.awt.Dimension(640, 480));
@@ -122,8 +104,18 @@ public class QrCodeController {
         window.setVisible(true);
         window.setLocationRelativeTo(null);
 
+        // ✅ Khi người dùng bấm nút tắt (dấu X)
+        window.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                running.set(false); // báo cho thread dừng
+                webcam.close();
+                window.dispose();
+            }
+        });
+
         try {
-            while (true) {
+            while (running.get()) { // ✅ chỉ chạy khi chưa tắt
                 BufferedImage image = webcam.getImage();
                 if (image == null) continue;
 
@@ -134,6 +126,7 @@ public class QrCodeController {
                 try {
                     result = new MultiFormatReader().decode(bitmap);
                 } catch (NotFoundException e) {
+                    // không tìm thấy mã thì bỏ qua
                 }
 
                 if (result != null) {
@@ -146,10 +139,11 @@ public class QrCodeController {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            webcam.close();
+            if (webcam.isOpen()) webcam.close();
             window.dispose();
         }
 
         return resultText;
     }
+
 }
