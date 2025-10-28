@@ -50,6 +50,7 @@ public class CheckinController {
         loadComboKhuVuc();
         setupFilterEvents();
     }
+    //a
     private void loadComboKhuVuc(){
         cboKhuVuc.getItems().clear();
         cboKhuVuc.getItems().add("Tất cả");
