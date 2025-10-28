@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
@@ -27,11 +28,17 @@
          <VBox prefHeight="353.0" prefWidth="653.0" styleClass="top">
             <children>
 
-                  <!-- Ô tìm kiếm -->
-                  <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search_box">
-                      <TextField fx:id="searchField" prefHeight="47.0" prefWidth="540.0" promptText="Tìm kiếm: số điện thoại, bàn, hóa đơn" styleClass="search-field" />
-                      <Button styleClass="search-btn" text="🔍" />
-                  </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="5" styleClass="search_box">
+                    <TextField fx:id="searchField" promptText="Tìm kiếm: số điện thoại, bàn, hóa đơn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+
+                    <!-- Region đẩy nút ra cuối -->
+                    <Region HBox.hgrow="ALWAYS" />
+
+                    <Button fx:id="btnSearch" styleClass="search-btn" text="🔍">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin></Button>
+                </HBox>
 
                      <!-- Danh sách hóa đơn -->
                   <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="275.0" prefWidth="653.0" styleClass="invoice-scroll">
@@ -47,7 +54,7 @@
          </VBox>
          <VBox prefHeight="387.0" prefWidth="653.0" style="-fx-background-color: #EFEFEF; -fx-background-radius: 20 20 28 28">
             <children>
-               <HBox alignment="CENTER_LEFT" spacing="10" styleClass="detail_box">
+               <HBox alignment="CENTER_LEFT" style="-fx-spacing: 60;" styleClass="detail_box">
                   <children>
                      <Label prefHeight="13.0" prefWidth="40.0" style="-fx-font-weight: bold" text="STT" />
                      <Label style="-fx-font-weight: bold" text="TÊN MÓN" />
@@ -61,7 +68,7 @@
                   <!-- Danh sách món ăn -->
                 <ScrollPane fx:id="menuScroll" fitToWidth="true" prefHeight="387.0" prefWidth="653.0" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
                     <content>
-                        <VBox fx:id="vboxMenu" styleClass="menu-list" ></VBox>
+                        <VBox fx:id="vboxMenu" spacing="10" styleClass="menu-list" />
                     </content>
                 </ScrollPane>
                <AnchorPane prefHeight="89.0" prefWidth="653.0" />
@@ -101,6 +108,20 @@
                 <Label text="Khu vực:" GridPane.rowIndex="6" />
                 <Label fx:id="lblKhuVuc" text="IN" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <AnchorPane prefHeight="0.0" prefWidth="79.0" GridPane.columnIndex="1" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
 
             <Separator />
@@ -131,6 +152,21 @@
 
 
                 <AnchorPane prefHeight="0.0" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
 
             <HBox alignment="CENTER_LEFT" spacing="15">
@@ -142,7 +178,7 @@
                 </RadioButton>
                 <RadioButton fx:id="rdoTienMat" text="Tiền Mặt" toggleGroup="$paymentGroup" />
             </HBox>
-            <VBox fx:id="vboxTienMat"  spacing="10.0" style="-fx-padding: 0 0 0 10" visible="false">
+            <VBox fx:id="vboxTienMat" spacing="10.0" style="-fx-padding: 0 0 0 10" visible="false">
                 <children>
                     <Label style="-fx-font-weight: bold;" text="Tiền Khách Đưa:" />
                     <TextField fx:id="txtTienKhachDua" promptText="Nhập số tiền khách đưa" styleClass="filter-tf" />
@@ -156,6 +192,15 @@
                             <Button fx:id="btnGoiY5" styleClass="quick-btn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             <Button fx:id="btnGoiY6" styleClass="quick-btn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         </children>
+                  <columnConstraints>
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
                     </GridPane>
                     <HBox style="-fx-alignment: center;">
                         <children>
@@ -167,12 +212,7 @@
             </VBox>
          <HBox style="-fx-alignment: CENTER;">
             <children>
-                   <Button fx:id="btnThanhToan"
-                            text="💳 Thanh Toán"
-                            styleClass="checkout-btn"
-                            prefHeight="45"
-                            prefWidth="280"
-                            alignment="CENTER"/>
+                   <Button fx:id="btnThanhToan" alignment="CENTER" prefHeight="45" prefWidth="280" styleClass="checkout-btn" text="💳 Thanh Toán" />
             </children>
          </HBox>
 

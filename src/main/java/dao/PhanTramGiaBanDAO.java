@@ -102,7 +102,7 @@ public class PhanTramGiaBanDAO {
                     SELECT TOP 1 * 
                     FROM PhanTramGiaBan 
                     WHERE maMon IS not NULL AND  maMon = ? 
-                    ORDER BY ngayApDung DESC
+                    ORDER BY maPTGB DESC
                 """;
         try {
             // Mở Connection mới trước khi query
@@ -146,7 +146,7 @@ public class PhanTramGiaBanDAO {
                     SELECT TOP 1 * 
                     FROM PhanTramGiaBan 
                     WHERE maLoaiMon = ? AND maMon IS NULL
-                    ORDER BY ngayApDung DESC
+                    ORDER BY maPTGB DESC
                 """;
 
         try {
