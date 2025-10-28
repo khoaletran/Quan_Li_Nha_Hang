@@ -9,11 +9,14 @@ import entity.HoaDon;
 import entity.KhuVuc;
 import entity.ThoiGianDoiBan;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -96,12 +99,30 @@ public class CheckinController {
         HBox hbox = new HBox(10);
         hbox.getStyleClass().add("booking-item");
 
-        // 1️⃣ Hình ảnh bàn
-        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/IMG/Rounded rectangle.png")));
-        img.setPreserveRatio(true);
+        // 🔹 1️⃣ Hình ảnh bàn theo loại
+        String imgPath = "/IMG/ban/IN"; // mặc định
+        if (hd.getBan() != null && hd.getBan().getMaBan() != null) {
+            String tenKhuVuc = hd.getBan().getKhuVuc().getTenKhuVuc();
+            if (tenKhuVuc.equals("Indoor")) imgPath = "/IMG/ban/IN.png";
+            else if (tenKhuVuc.equals("Outdoor")) imgPath = "/IMG/ban/out.png";
+            else if (tenKhuVuc.equals("VIP")) imgPath = "/IMG/ban/vip.png";
+        }
+        ImageView img = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
+        img.setFitWidth(80);
+        img.setFitHeight(70);
+
+        img.setPreserveRatio(false);
+        // 🔹 Bo góc
+        Rectangle clip = new Rectangle(93, 80);
+        clip.setArcWidth(15);   // bán kính bo góc ngang
+        clip.setArcHeight(15);  // bán kính bo góc dọc
+        img.setClip(clip);
+
+// 🔹 Margin xung quanh (10px ví dụ)
+        HBox.setMargin(img, new Insets(10));
         img.getStyleClass().add("booking-image");
 
-        // 2️⃣ Info khách hàng
+        // 🔹 2️⃣ Info khách hàng
         VBox info = new VBox();
         info.setStyle("-fx-alignment: CENTER_LEFT;");
         info.getStyleClass().add("booking-info");
@@ -111,7 +132,7 @@ public class CheckinController {
         lblPhone.getStyleClass().add("booking-phone");
         info.getChildren().addAll(lblId, lblPhone);
 
-        // 3️⃣ Thời gian đặt
+        // 🔹 3️⃣ Thời gian đặt
         VBox dateBox = new VBox();
         dateBox.getStyleClass().add("booking-date");
         String timeStr = (hd.getTgCheckIn() != null)
@@ -120,14 +141,14 @@ public class CheckinController {
         Label lblDate = new Label(timeStr);
         dateBox.getChildren().add(lblDate);
 
-        // 4️⃣ Thời gian còn lại
+        // 🔹 4️⃣ Thời gian còn lại
         VBox remainingBox = new VBox();
         remainingBox.setStyle("-fx-alignment: CENTER;");
         remainingBox.getStyleClass().add("booking-remaining");
         Label lblRemaining = new Label();
         remainingBox.getChildren().add(lblRemaining);
 
-        // 5️⃣ Đếm ngược
+        // 🔹 5️⃣ Đếm ngược
         if (hd.getTgCheckIn() != null) {
             LocalDateTime checkInTime = hd.getTgCheckIn();
             long totalSeconds = thoiGianCho * 60;
@@ -172,6 +193,7 @@ public class CheckinController {
 
         return hbox;
     }
+
 
 
     private void highlightSelected(HBox selected) {

@@ -135,7 +135,7 @@ public class BanGiaoCaController {
         this.nhanVien = nhanVien;
     }
 
-    @FXML
+//    @FXML
 //    private void ketCa() {
 //        if (nhanVien == null || thoiGianVaoCa == null) return;
 //
