@@ -81,6 +81,9 @@ public class HoaDon {
         for (ChiTietHoaDon ct : ds) {
             tongTienTruoc += ct.getThanhTien();
         }
+        if (suKien != null) {
+            tongTienTruoc += getSuKien().getGia();
+        }
         return tongTienTruoc;
     }
 
