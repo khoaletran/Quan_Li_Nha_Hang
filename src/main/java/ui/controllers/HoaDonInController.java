@@ -79,7 +79,7 @@ public class HoaDonInController {
             dongChiTiet.setStyle("-fx-alignment: CENTER_LEFT;");
 
             Label lblMaMon = new Label(ct.getMon().getMaMon());
-            Label lblGia = new Label(df.format(ct.getMon().getGiaBan()));
+            Label lblGia = new Label(df.format(ct.getMon().getGiaBanTaiLucLapHD(hd)));
             Label lblSL = new Label(String.valueOf(ct.getSoLuong()));
             Label lblThanhTien = new Label(df.format(ct.getThanhTien()));
 

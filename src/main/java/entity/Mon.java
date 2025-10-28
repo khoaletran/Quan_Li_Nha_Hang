@@ -2,6 +2,8 @@ package entity;
 
 import dao.PhanTramGiaBanDAO;
 
+import java.time.LocalDate;
+
 public class Mon {
     private String maMon;
     private String tenMon;
@@ -12,30 +14,6 @@ public class Mon {
     private LoaiMon loaiMon;
 
 
-
-    // 🔹 Lấy phần trăm lời hiện tại (ưu tiên của món, nếu không có thì lấy loại món)
-    public int getPhanTramGiaBanHienTai() {
-        // Ưu tiên lấy chính sách riêng cho món
-        PhanTramGiaBan ptMon = PhanTramGiaBanDAO.getLatestForMon(maMon);
-
-        if (ptMon != null) {
-            return ptMon.getPhanTramLoi();
-        }
-
-        // Nếu không có riêng → dùng chính sách loại món
-        PhanTramGiaBan ptLoai = PhanTramGiaBanDAO.getLatestForLoaiMon(loaiMon.getMaLoaiMon());
-        if (ptLoai != null) {
-            return ptLoai.getPhanTramLoi();
-        }
-
-        // Nếu không có gì luôn
-        return 0;
-    }
-    // 🔹 Tính giá bán thực tế
-    public double getGiaBan() {
-        int phanTram = getPhanTramGiaBanHienTai();
-        return giaGoc * (1 + phanTram / 100.0);
-    }
 
     public Mon() {
     }
@@ -49,6 +27,54 @@ public class Mon {
         this.soLuong = soLuong;
         this.loaiMon = loaiMon;
     }
+
+    // 🔹 Lấy phần trăm lời hiện tại (ưu tiên của món, nếu không có thì lấy loại món)
+    public int getPhanTramGiaBanHienTai() {
+        PhanTramGiaBan ptMon = PhanTramGiaBanDAO.getLatestForMon(maMon);
+
+        if (ptMon != null) {
+            return ptMon.getPhanTramLoi();
+        }
+
+        PhanTramGiaBan ptLoai = PhanTramGiaBanDAO.getLatestForLoaiMon(loaiMon.getMaLoaiMon());
+        if (ptLoai != null) {
+            return ptLoai.getPhanTramLoi();
+        }
+
+        return 0;
+    }
+    // 🔹 Tính giá bán thực tế
+    public double getGiaBan() {
+        int phanTram = getPhanTramGiaBanHienTai();
+        return giaGoc * (1 + phanTram / 100.0);
+    }
+
+    public int getPTGBTaiHD(HoaDon hd) {
+        if (hd == null) return 0;
+
+        LocalDate ngayHD = hd.getTgCheckIn().toLocalDate();
+
+        PhanTramGiaBan ptMon = PhanTramGiaBanDAO.getEffectiveForMonAtDate(maMon, ngayHD);
+        if (ptMon != null) {
+            return ptMon.getPhanTramLoi();
+        }
+
+        if (loaiMon != null) {
+            PhanTramGiaBan ptLoai = PhanTramGiaBanDAO.getEffectiveForLoaiMonAtDate(loaiMon.getMaLoaiMon(), ngayHD);
+            if (ptLoai != null) {
+                return ptLoai.getPhanTramLoi();
+            }
+        }
+
+        return 0;
+    }
+
+    public double getGiaBanTaiLucLapHD(HoaDon hd) {
+        int phanTram = getPTGBTaiHD(hd);
+        return giaGoc * (1 + phanTram / 100.0);
+    }
+
+
 
     public String getMaMon() {
         return maMon;

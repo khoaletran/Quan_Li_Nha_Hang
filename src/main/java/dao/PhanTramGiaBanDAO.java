@@ -289,6 +289,62 @@ public class PhanTramGiaBanDAO {
         }
     }
 
+    public static PhanTramGiaBan getEffectiveForMonAtDate(String maMon, LocalDate ngayHD) {
+        String sql = """
+        SELECT TOP 1 * FROM PhanTramGiaBan
+        WHERE maMon = ? AND ngayApDung <= ?
+        ORDER BY ngayApDung DESC
+    """;
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maMon);
+            ps.setDate(2, java.sql.Date.valueOf(ngayHD));
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new PhanTramGiaBan(
+                        rs.getString("maPTGB"),
+                        rs.getInt("phanTramLoi"),
+                        rs.getDate("ngayApDung").toLocalDate(),
+                        LoaiMonDAO.getByID(rs.getString("maLoaiMon")),
+                        MonDAO.findByID(rs.getString("maMon"))
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static PhanTramGiaBan getEffectiveForLoaiMonAtDate(String maLoaiMon, LocalDate ngayHD) {
+        String sql = """
+        SELECT TOP 1 * FROM PhanTramGiaBan
+        WHERE maLoaiMon = ? AND ngayApDung <= ?
+        ORDER BY ngayApDung DESC
+    """;
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maLoaiMon);
+            ps.setDate(2, java.sql.Date.valueOf(ngayHD));
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new PhanTramGiaBan(
+                        rs.getString("maPTGB"),
+                        rs.getInt("phanTramLoi"),
+                        rs.getDate("ngayApDung").toLocalDate(),
+                        LoaiMonDAO.getByID(rs.getString("maLoaiMon")),
+                        MonDAO.findByID(rs.getString("maMon"))
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
 }

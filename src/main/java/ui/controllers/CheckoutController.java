@@ -175,7 +175,7 @@ public class CheckoutController {
                         lblName.getStyleClass().add("col-name");
                         Label lblQty = new Label(String.valueOf(ct.getSoLuong()));
                         lblQty.getStyleClass().add("col-qty");
-                        Label lblPrice = new Label(formatCurrency(ct.getMon().getGiaBan()));
+                        Label lblPrice = new Label(formatCurrency(ct.getMon().getGiaBanTaiLucLapHD(hd)));
                         lblPrice.getStyleClass().add("col-price");
                         Label lblDiscount = new Label("0%");
                         lblDiscount.getStyleClass().add("col-discount");

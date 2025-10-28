@@ -144,7 +144,7 @@ public class QLDatBanController {
 
         colGia.setCellValueFactory(cellData -> {
             Mon mon = cellData.getValue().getMon();
-            return new SimpleDoubleProperty(mon != null ? mon.getGiaBan() : 0).asObject();
+            return new SimpleDoubleProperty(mon != null ? mon.getGiaBanTaiLucLapHD(hoaDonSelected) : 0).asObject();
         });
 
         colTong.setCellValueFactory(cellData ->
@@ -183,7 +183,7 @@ public class QLDatBanController {
         int current = chiTiet.getSoLuong();
         if (current > 1) {
             chiTiet.setSoLuong(current - 1);
-            double gia = chiTiet.getMon() != null ? chiTiet.getMon().getGiaBan() : 0;
+            double gia = chiTiet.getMon() != null ? chiTiet.getMon().getGiaBanTaiLucLapHD(hoaDonSelected) : 0;
             chiTiet.setThanhTien(gia * (current - 1));
             AlertCus.show("Thông Báo", "Đã giảm 1 số lượng (" + chiTiet.getMon().getTenMon() + ").");
         } else {
@@ -610,7 +610,7 @@ public class QLDatBanController {
             // tăng số lượng, cập nhật thanhTien trên object UI
             int sl = found.getSoLuong() + 1;
             found.setSoLuong(sl);
-            double gia = found.getMon() != null ? found.getMon().getGiaBan() : 0;
+            double gia = found.getMon() != null ? found.getMon().getGiaBanTaiLucLapHD(hoaDonSelected) : 0;
             found.setThanhTien(gia * sl);
 
             AlertCus.show("Thông Báo", "Đã tăng số lượng cho món " + m.getTenMon());
@@ -629,7 +629,7 @@ public class QLDatBanController {
         // cập nhật thanhTien cho từng chi tiết (phòng trường hợp giá thay đổi)
         for (ChiTietHoaDon ct : chiTietHoaDonData) {
             if (ct.getMon() != null) {
-                ct.setThanhTien(ct.getMon().getGiaBan() * ct.getSoLuong());
+                ct.setThanhTien(ct.getMon().getGiaBanTaiLucLapHD(hoaDonSelected) * ct.getSoLuong());
             }
         }
 

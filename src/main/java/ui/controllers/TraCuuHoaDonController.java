@@ -151,7 +151,7 @@ public class TraCuuHoaDonController {
         if (colGia != null) {
             colGia.setCellValueFactory(cell -> {
                 Mon m = cell.getValue().getMon();
-                double g = (m != null) ? m.getGiaBan() : 0;
+                double g = (m != null) ? m.getGiaBanTaiLucLapHD(hoaDonSelected) : 0;
                 return new javafx.beans.property.SimpleStringProperty(String.format("%,.0f VNĐ", g));
             });
         }
