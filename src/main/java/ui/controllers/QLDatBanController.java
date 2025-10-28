@@ -578,7 +578,7 @@ public class QLDatBanController {
         lblTen.setWrapText(true);
         lblTen.setStyle("-fx-font-size: 12px; -fx-text-alignment: center;");
 
-        Label lblGia = new Label(nf.format(m.getGiaBan()) + " VNĐ");
+        Label lblGia = new Label(nf.format(m.getGiaBanTaiLucLapHD(hoaDonSelected)) + " VNĐ");
         lblGia.setStyle("-fx-font-size: 11px; -fx-text-fill: #666;");
 
         card.getChildren().addAll(imageWrapper, lblTen, lblGia);
