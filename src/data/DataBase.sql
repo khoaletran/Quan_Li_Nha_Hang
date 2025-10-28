@@ -181,9 +181,9 @@ CREATE TABLE HoaDon (
     maSK NVARCHAR(6) FOREIGN KEY REFERENCES SuKien(maSK),
     tgCheckin SMALLDATETIME,
     tgCheckout SMALLDATETIME,
-    kieuThanhToan BIT,
+    kieuThanhToan BIT, --1 là ck,0 là tiền mặt
     kieuDatBan BIT,
-    trangThai INT,
+    trangThai INT, --0 đã đặt,1 checkin , 2 checkout, 3 hủy bàn
     soLuong INT,
     moTa NVARCHAR(200)
 );
@@ -196,5 +196,18 @@ CREATE TABLE ChiTietHoaDon (
     maMon NVARCHAR(6) FOREIGN KEY REFERENCES Mon(maMon),
     soLuong INT,
     PRIMARY KEY (maHD, maMon)
+);
+GO
+
+CREATE TABLE PhieuKetCa (
+    maPhieu NVARCHAR(6) PRIMARY KEY,
+    maNV NVARCHAR(6) FOREIGN KEY REFERENCES NhanVien(maNV),
+    ca BIT,                     -- 0: ca sáng, 1: ca tối
+    soHoaDon INT,
+    tienMat FLOAT,
+    tienCK FLOAT,
+    tienChenhLech FLOAT,
+    ngayKetCa SMALLDATETIME,
+    moTa NVARCHAR(MAX)
 );
 GO

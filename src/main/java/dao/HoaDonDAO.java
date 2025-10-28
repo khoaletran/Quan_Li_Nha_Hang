@@ -56,30 +56,34 @@ public class HoaDonDAO {
     }
     public static List<HoaDon> getAllNgayHomNay() {
         List<HoaDon> ds = new ArrayList<>();
-        String sql = "SELECT hd.*, " +
-                "kh.maKH, kh.tenKH, kh.sdt, " +
-                "nv.maNV, nv.tenNV, " +
-                "b.maBan, b.maLoaiBan, b.maKhuVuc, " +
-                "km.maKM, km.tenKM, " +
-                "sk.maSK, sk.tenSK " +
-                "FROM HoaDon hd " +
-                "LEFT JOIN KhachHang kh ON hd.maKH = kh.maKH " +
-                "LEFT JOIN NhanVien nv ON hd.maNV = nv.maNV " +
-                "LEFT JOIN Ban b ON hd.maBan = b.maBan " +
-                "LEFT JOIN KhuyenMai km ON hd.maKM = km.maKM " +
-                "LEFT JOIN SuKien sk ON hd.maSK = sk.maSK " +
-                "WHERE hd.tgCheckin >= CAST(GETDATE() AS DATE) " +
-                "AND hd.tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))";
+        String sql = "select * from HoaDon \n" +
+                "where tgCheckin >= CAST(GETDATE() AS DATE) \n" +
+                "AND tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                HoaDon hd = new HoaDon();
+                String maKH = rs.getString("maKH");
+                String maNV = rs.getString("maNV");
+                String maBan = rs.getString("maBan");
+                String maKM = rs.getString("maKM");
+                String maSK = rs.getString("maSK");
 
-                // Set HoaDon basic fields
+                KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
+                NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
+                Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
+                KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
+                SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
+
+                HoaDon hd = new HoaDon();
                 hd.setMaHD(rs.getString("maHD"));
+                hd.setKhachHang(kh);
+                hd.setNhanVien(nv);
+                hd.setBan(ban);
+                hd.setKhuyenMai(km);
+                hd.setSuKien(sk);
                 hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
                 hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
                 hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
@@ -87,47 +91,6 @@ public class HoaDonDAO {
                 hd.setTrangthai(rs.getInt("trangThai"));
                 hd.setSoLuong(rs.getInt("soLuong"));
                 hd.setMoTa(rs.getString("moTa"));
-
-                // Map KhachHang
-                String maKH = rs.getString("maKH");
-                if (maKH != null) {
-                    KhachHang kh = new KhachHang();
-                    kh.setMaKhachHang(maKH); // chỉ set mã
-                    hd.setKhachHang(kh);
-                }
-
-// Map NhanVien
-                String maNV = rs.getString("maNV");
-                if (maNV != null) {
-                    NhanVien nv = new NhanVien();
-                    nv.setMaNV(maNV); // chỉ set mã
-                    hd.setNhanVien(nv);
-                }
-
-// Map Ban
-                String maBan = rs.getString("maBan");
-                if (maBan != null) {
-                    Ban ban = new Ban();
-                    ban.setMaBan(maBan); // chỉ set mã
-                    hd.setBan(ban);
-                }
-
-// Map KhuyenMai
-                String maKM = rs.getString("maKM");
-                if (maKM != null) {
-                    KhuyenMai km = new KhuyenMai();
-                    km.setMaKM(maKM); // chỉ set mã
-                    hd.setKhuyenMai(km);
-                }
-
-// Map SuKien
-                String maSK = rs.getString("maSK");
-                if (maSK != null) {
-                    SuKien sk = new SuKien();
-                    sk.setMaSK(maSK); // chỉ set mã
-                    hd.setSuKien(sk);
-                }
-
 
                 ds.add(hd);
             }
@@ -292,39 +255,49 @@ public class HoaDonDAO {
 
         return result;
     }
+    public static List<HoaDon> getTheoMaNV(String maNV) {
+        List<HoaDon> ds = new ArrayList<>();
+        String sql = "SELECT * FROM HoaDon WHERE maNV = ?";
 
-//    // HoaDonDAO.java
-//    public static boolean recalcAndUpdateTongTien(String maHD) {
-//        // 1) Tính tổng từ chi tiết
-//        double tongTruoc = 0;
-//        List<ChiTietHoaDon> ds = ChiTietHDDAO.getByMaHD(maHD);
-//        if (ds != null) {
-//            for (ChiTietHoaDon ct : ds) {
-//                tongTruoc += ct.getThanhTien();
-//            }
-//        }
-//
-//        // 2) Tính giá trị phụ (tạm ví dụ: khuyến mãi = 0, thuế 10%)
-//        double tongKM = 0; // nếu bạn có logic khuyến mãi, tính ở đây
-//        double thue = tongTruoc * 0.1;
-//        double tongSau = tongTruoc - tongKM + thue;
-//
-//        String sql = "UPDATE HoaDon SET tongTienTruoc = ?, tongTienKhuyenMai = ?, thue = ?, tongTienSau = ? WHERE maHD = ?";
-//
-//        try (Connection conn = connectDB.getInstance().getNewConnection();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setDouble(1, tongTruoc);
-//            ps.setDouble(2, tongKM);
-//            ps.setDouble(3, thue);
-//            ps.setDouble(4, tongSau);
-//            ps.setString(5, maHD);
-//
-//            return ps.executeUpdate() > 0;
-//        } catch (SQLException e) {
-//            System.err.println("Lỗi khi cập nhật tổng tiền: " + e.getMessage());
-//            return false;
-//        }
-//    }
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maNV);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String maKH = rs.getString("maKH");
+                    String maBan = rs.getString("maBan");
+                    String maKM = rs.getString("maKM");
+                    String maSK = rs.getString("maSK");
+
+                    KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
+                    NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
+                    Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
+                    KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
+                    SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
+
+                    HoaDon hd = new HoaDon();
+                    hd.setMaHD(rs.getString("maHD"));
+                    hd.setKhachHang(kh);
+                    hd.setNhanVien(nv);
+                    hd.setBan(ban);
+                    hd.setKhuyenMai(km);
+                    hd.setSuKien(sk);
+                    hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
+                    hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
+                    hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
+                    hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
+                    hd.setTrangthai(rs.getInt("trangThai"));
+                    hd.setSoLuong(rs.getInt("soLuong"));
+                    hd.setMoTa(rs.getString("moTa"));
+
+                    ds.add(hd);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách hóa đơn theo mã nhân viên: " + e.getMessage());
+        }
+        return ds;
+    }
 
 }

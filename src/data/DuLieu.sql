@@ -108,3 +108,12 @@ INSERT INTO Coc VALUES
 ('CO0009', 1, 15,  NULL, 'LB0004', 'KV0003'),
 ('CO0010', 0, NULL, 500000, 'LB0005', 'KV0003');
 GO
+
+INSERT INTO PhieuKetCa (maPhieu, maNV, ca, soHoaDon, tienMat, tienCK, tienChenhLech, ngayKetCa,moTa)
+VALUES
+('PK0001', 'NV0001', 0, 25,  15000000, 5000000,  0,       '2025-10-25 12:00','khách làm vỡ 2 ly'),  -- Ca sáng NV0001
+('PK0002', 'NV0002', 1, 30,  18000000, 7000000,  50000,   '2025-10-25 22:00','Trẻ em làm hư cây cảnh'),  -- Ca tối NV0002
+('PK0003', 'NV0003', 0, 28,  15500000, 4500000, -100000,  '2025-10-26 12:00',null),  -- Ca sáng NV0003
+('PK0004', 'NV0004', 1, 35,  20000000, 8000000,  0,       '2025-10-26 22:00',null),  -- Ca tối NV0004
+('PK0005', 'NV0005', 0, 20,  12000000, 4000000,  20000,   '2025-10-27 12:00',null);  -- Ca sáng NV0005
+GO

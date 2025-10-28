@@ -124,7 +124,7 @@
                         <Region HBox.hgrow="ALWAYS" />
                         <HBox alignment="CENTER_LEFT" spacing="10">
                             <Label styleClass="key-label" text="Số Lượng:" />
-                            <TextField fx:id="txtSoLuongKhach" prefHeight="32.0" prefWidth="50.0" promptText="00" styleClass="input-field" />
+                            <TextField fx:id="txtSoLuongKhach" prefHeight="32.0" prefWidth="70.0" promptText="0" styleClass="input-field" />
                         </HBox>
                     </HBox>
                 </VBox>

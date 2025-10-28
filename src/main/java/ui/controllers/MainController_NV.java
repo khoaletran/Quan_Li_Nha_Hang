@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class MainController_NV {
 
@@ -16,6 +17,10 @@ public class MainController_NV {
     @FXML private SidebarController_NV sidebar_NVController;
 
     private NhanVien nhanVien;
+    private LocalDateTime thoiGianVaoCa;
+
+
+
 
     public SidebarController_NV getSidebarController() {
         return sidebar_NVController;
@@ -43,6 +48,15 @@ public class MainController_NV {
         return mainContent;
     }
 
+    public void setThoiGianVaoCa(LocalDateTime thoiGianVaoCa) {
+        this.thoiGianVaoCa = thoiGianVaoCa;
+    }
+
+    public LocalDateTime getThoiGianVaoCa() {
+        return thoiGianVaoCa;
+    }
+
+
     public void setCenterContent(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -63,6 +77,16 @@ public class MainController_NV {
             if (controller instanceof DashboardController dashboardCtrl) {
                 dashboardCtrl.setMainController(this);
             }
+
+            if (controller instanceof BanGiaoCaController banGiaoCaCtrl) {
+                banGiaoCaCtrl.setThoiGianVaoCa(thoiGianVaoCa);
+            }
+
+            if (controller instanceof BanGiaoCaController banGiaoCaCtrl) {
+                banGiaoCaCtrl.initData(nhanVien);
+                banGiaoCaCtrl.setThoiGianVaoCa(thoiGianVaoCa);
+            }
+
 
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
             fadeIn.setFromValue(0);
