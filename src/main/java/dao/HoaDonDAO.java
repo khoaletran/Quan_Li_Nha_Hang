@@ -208,4 +208,52 @@ public class HoaDonDAO {
 
         return result;
     }
+
+    // ===================== GET THEO MÃ NHÂN VIÊN =====================
+    public static List<HoaDon> getTheoMaNV(String maNV) {
+        List<HoaDon> ds = new ArrayList<>();
+        String sql = "SELECT * FROM HoaDon WHERE maNV = ?";
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maNV);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String maKH = rs.getString("maKH");
+                    String maBan = rs.getString("maBan");
+                    String maKM = rs.getString("maKM");
+                    String maSK = rs.getString("maSK");
+
+                    KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
+                    NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
+                    Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
+                    KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
+                    SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
+
+                    HoaDon hd = new HoaDon();
+                    hd.setMaHD(rs.getString("maHD"));
+                    hd.setKhachHang(kh);
+                    hd.setNhanVien(nv);
+                    hd.setBan(ban);
+                    hd.setKhuyenMai(km);
+                    hd.setSuKien(sk);
+                    hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
+                    hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
+                    hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
+                    hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
+                    hd.setTrangthai(rs.getInt("trangThai"));
+                    hd.setSoLuong(rs.getInt("soLuong"));
+                    hd.setMoTa(rs.getString("moTa"));
+
+                    ds.add(hd);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách hóa đơn theo mã nhân viên: " + e.getMessage());
+        }
+        return ds;
+    }
+
+
 }

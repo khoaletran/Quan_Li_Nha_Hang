@@ -82,6 +82,12 @@ public class MainController_NV {
                 banGiaoCaCtrl.setThoiGianVaoCa(thoiGianVaoCa);
             }
 
+            if (controller instanceof BanGiaoCaController banGiaoCaCtrl) {
+                banGiaoCaCtrl.initData(nhanVien);
+                banGiaoCaCtrl.setThoiGianVaoCa(thoiGianVaoCa);
+            }
+
+
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
             fadeIn.setFromValue(0);
             fadeIn.setToValue(1);
