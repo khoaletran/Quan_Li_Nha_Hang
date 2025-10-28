@@ -1,6 +1,5 @@
 package ui.controllers;
 
-import connectDB.connectDB;
 import dao.*;
 import entity.*;
 import javafx.event.ActionEvent;
@@ -13,13 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.io.InputStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-public class chinhSachController {
+public class ChinhSachController {
     /**
      * Sinh mã mới dạng PREFIX + 4 chữ số
      *

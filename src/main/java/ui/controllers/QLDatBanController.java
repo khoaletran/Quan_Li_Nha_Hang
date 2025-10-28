@@ -208,7 +208,7 @@ public class QLDatBanController {
             dsDatTruoc.clear();
             if (listHD != null) {
                 for (HoaDon hd : listHD) {
-                    if (hd.getTrangthai() == 0 && hd.isKieuDatBan()) {
+                    if (hd.getTrangthai() == 0) {
                         dsDatTruoc.add(hd);
                     }
                 }
@@ -226,7 +226,7 @@ public class QLDatBanController {
             dsDaNhan.clear();
             if (listHD != null) {
                 for (HoaDon hd : listHD) {
-                    if (hd.getTrangthai() == 1 && hd.isKieuDatBan()) {
+                    if (hd.getTrangthai() == 1) {
                         dsDaNhan.add(hd);
                     }
                 }

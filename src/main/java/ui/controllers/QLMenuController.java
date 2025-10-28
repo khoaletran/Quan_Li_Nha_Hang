@@ -15,7 +15,10 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 
 public class QLMenuController {
 
@@ -48,6 +51,7 @@ public class QLMenuController {
         // TextField tìm kiếm realtime
         searchField.textProperty().addListener((obs, oldText, newText) -> filterMon());
     }
+
     // Hàm lọc món kết hợp tên + loại
     private void filterMon() {
         String keyword = searchField.getText().toLowerCase().trim();
@@ -147,7 +151,7 @@ public class QLMenuController {
         lblTen.getStyleClass().add("item-name");
         lblTen.setWrapText(true);
 
-        Label lblGia = new Label(String.format("%.0f đ", mon.getGiaGoc()));
+        Label lblGia = new Label(formatCurrency(mon.getGiaGoc()));
         lblGia.getStyleClass().add("item-price");
         lblGia.setWrapText(true);
         lblGia.setPrefWidth(90);
@@ -166,7 +170,6 @@ public class QLMenuController {
 
         return card;
     }
-
 
 
     private void loadChiTietMon(Mon mon) {
@@ -316,7 +319,6 @@ public class QLMenuController {
     }
 
 
-
     private String generateID(String latestId, String prefix) {
         if (latestId == null || latestId.isEmpty()) {
             return prefix + "0001";
@@ -330,5 +332,21 @@ public class QLMenuController {
             // fallback nếu dữ liệu trong DB bị sai
             return prefix + "0001";
         }
+    }
+
+
+    // ======== ĐỊNH DẠNG TIỀN ==========
+    private double parseCurrency(String text) {
+        if (text == null || text.isBlank()) return 0;
+        String clean = text.replaceAll("[^\\d]", "");
+        if (clean.isEmpty()) return 0;
+        return Double.parseDouble(clean);
+    }
+
+    private String formatCurrency(double amount) {
+        Locale localeVN = new Locale("vi", "VN");
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(localeVN);
+        DecimalFormat df = new DecimalFormat("#,###", symbols);
+        return df.format(amount) + " đ";
     }
 }
