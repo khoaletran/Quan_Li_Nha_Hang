@@ -131,14 +131,19 @@ public class QLMenuController {
         // ===== 3. Load hình =====
         try {
             if (file != null && file.exists()) {
-                // dùng file trực tiếp khi mới thêm
                 imageView.setImage(new Image(file.toURI().toString()));
             } else {
-                imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/" + mon.getHinhAnh())));
+                File localFile = new File("src/main/resources/IMG/food/" + mon.getHinhAnh());
+                if (localFile.exists()) {
+                    imageView.setImage(new Image(localFile.toURI().toString()));
+                } else {
+                    imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
+                }
             }
         } catch (Exception e) {
             imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
         }
+
 
         imagePane.getChildren().add(imageView);
 
@@ -183,11 +188,16 @@ public class QLMenuController {
         }
 
         try {
-            Image image = new Image(getClass().getResourceAsStream("/IMG/food/" + mon.getHinhAnh()));
-            imgMon.setImage(image);
+            File localFile = new File("src/main/resources/IMG/food/" + mon.getHinhAnh());
+            if (localFile.exists()) {
+                imgMon.setImage(new Image(localFile.toURI().toString()));
+            } else {
+                imgMon.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
+            }
         } catch (Exception e) {
             imgMon.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
         }
+
 
         // Khi load chi tiết món thì button sẽ đổi text
         btnXacNhan.setText("Xác nhận");
