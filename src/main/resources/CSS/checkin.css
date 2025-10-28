@@ -39,7 +39,7 @@
 .booking-remaining {
     -fx-background-color: #34C759;
     -fx-background-radius: 0 16 16 0;
-    -fx-font-size: 18;
+    -fx-font-size: 16;
     -fx-min-width: 58;
 }
 .booking-remaining > Label{

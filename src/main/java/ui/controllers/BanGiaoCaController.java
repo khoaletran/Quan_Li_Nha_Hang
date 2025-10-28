@@ -2,9 +2,11 @@ package ui.controllers;
 
 import dao.ChiTietHDDAO;
 import dao.HoaDonDAO;
+import dao.PhieuKetCaDAO;
 import entity.ChiTietHoaDon;
 import entity.HoaDon;
 import entity.NhanVien;
+import entity.PhieuKetCa;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -15,6 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.geometry.Pos;
+import ui.AlertCus;
+import ui.ConfirmCus;
 
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -33,8 +37,10 @@ public class BanGiaoCaController {
     private NhanVien nhanVien;
     private LocalDateTime thoiGianVaoCa;
 
+
     @FXML
     public void initialize() {
+        btnKetCa.setOnAction(e -> ketCa());
 
     }
 
@@ -136,37 +142,42 @@ public class BanGiaoCaController {
     }
 
     @FXML
-//    private void ketCa() {
-//        if (nhanVien == null || thoiGianVaoCa == null) return;
-//
-//        String maPhieu = "PKC" + System.currentTimeMillis();
-//        String maNV = nhanVien.getMaNV();
-//        boolean ca = txtCaLam.getText().equals("Ca sáng") ? false : true;
-//        int soHoaDon = Integer.parseInt(txtsLHD.getText());
-//        double tongTienMat = Double.parseDouble(txtSoTienMat.getText());
-//        double tongTienCK = Double.parseDouble(txtSoTienCK.getText());
-//        double chenhLech =
-//
-//
-//        PhieuKetCa phieu = new PhieuKetCa(
-//                maPhieu,
-//                nhanVien,
-//                ca,
-//                soHoaDon,
-//                tongTienMat,
-//                tongTienCK,
-//                chenhLech,
-//                LocalDateTime.now(),
-//                taMoTa.getText().trim()
-//        );
-//
-//        boolean success = new PhieuKetCaDAO().insert(phieu);
-//        if (success) {
-//            System.out.println("Lưu phiếu kết ca thành công!");
-//        } else {
-//            System.err.println("Lỗi khi lưu phiếu kết ca!");
-//        }
-//    }
+    private void ketCa() {
+        if (nhanVien == null || thoiGianVaoCa == null) return;
+
+        PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
+        String maPhieu = phieuKCDAO.generateNewMaPhieu();
+
+        boolean ca = txtCaLam.getText().equals("Ca sáng") ? false : true;
+        int soHoaDon = Integer.parseInt(txtsLHD.getText());
+        double tongTM = Double.parseDouble(txtSoTienMat.getText());
+        double tongCK = Double.parseDouble(txtSoTienCK.getText());
+        double chenhLech = Double.parseDouble(txtTongTien.getText()) - (tongTM+tongCK);
+
+        PhieuKetCa phieu = new PhieuKetCa(
+                maPhieu,
+                nhanVien,
+                ca,
+                soHoaDon,
+                tongTM,
+                tongCK,
+                chenhLech,
+                LocalDateTime.now(),
+                taMoTa.getText().trim()
+        );
+        boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận kết ca");
+        if (answer) {
+            boolean success = new PhieuKetCaDAO().insert(phieu);
+            if (success) {
+                AlertCus.show("Bàn giao ca","Đã lưu báo cáo kết ca!");
+            } else {
+                AlertCus.show("Bàn giao ca","Lỗi lưu báo cáo kết ca!");
+            }
+        }
+
+
+
+    }
 
 
 }

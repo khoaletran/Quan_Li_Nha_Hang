@@ -108,15 +108,15 @@
                       <Label styleClass="label_form-section" text="Thời gian vào ca" />
                       <TextField fx:id="txtTGVC" editable="false" promptText="..." style="-fx-opacity: 1;" />
                       <Label styleClass="label_form-section" text="Số hóa đơn" />
-                      <TextField fx:id="txtsLHD" promptText="36" />
+                      <TextField fx:id="txtsLHD" promptText="" />
                       <Label styleClass="label_form-section" text="Số tiền mặt" />
-                      <TextField fx:id="txtSoTienMat" promptText="1.230.000" />
+                      <TextField fx:id="txtSoTienMat" promptText="" />
                       <Label styleClass="label_form-section" text="Số tiền chuyển khoản" />
-                      <TextField fx:id="txtSoTienCK" promptText="20.000" />
+                      <TextField fx:id="txtSoTienCK" promptText="" />
                       <Label styleClass="label_form-section" text="Tổng tiền trong ca" />
-                      <TextField fx:id="txtTongTien" promptText="1.250.000" />
-                      <Label styleClass="label_form-section" text="Mô tả" />
-                      <TextArea fx:id="taMoTa" prefRowCount="3" promptText="Khách làm vỡ 2 ly trong ca" />
+                      <TextField fx:id="txtTongTien" promptText="" />
+                      <Label styleClass="label_form-section" text="Ghi chú" />
+                      <TextArea fx:id="taMoTa" prefRowCount="3" promptText="" />
                   </VBox>
             </children>
          </AnchorPane>
