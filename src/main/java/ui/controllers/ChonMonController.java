@@ -10,6 +10,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import ui.AlertCus;
 import ui.QRThanhToan;
 
 import java.text.DecimalFormat; // ADDED
@@ -25,12 +26,13 @@ public class ChonMonController {
 
     @FXML private FlowPane flowMonAn;
     @FXML private ComboBox<LoaiMon> comboDanhMuc;
+    @FXML private ComboBox<SuKien> comboSuKien;
     @FXML private VBox vboxChiTietDonHang, vboxTienMat;
     @FXML private Label lbl_total, lbl_thue, lbl_total_PT, lblTienThua, lblCoc, lblConLai;
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btndatban, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
-    @FXML private TextField txtTienKhachDua, sdtKhach, tften;
+    @FXML private TextField txtTienKhachDua, sdtKhach, tften, tfTimKiem;
     @FXML private TextField tf_ban, tftg, tfSLKhach, tfghichu;
 
 
@@ -47,15 +49,23 @@ public class ChonMonController {
     private LocalDateTime thoiGianDat;
     private int soLuongKhach;
     private Runnable onPaymentConfirmed;
+    private SuKien sk;
 
 
     @FXML
     public void initialize() {
         loadComboDanhMuc();
+        loadComboSuKien();
         loadDanhSachMon();
         xuLyHienThiTienMat();
         rdoChuyenKhoan.setSelected(true);
         back.setOnAction(e -> quayVeDatBan());
+
+        tfTimKiem.textProperty().addListener((obs, oldVal, newVal) -> {
+            locMonTheoTenVaLoai();
+        });
+        comboDanhMuc.setOnAction(e -> locMonTheoTenVaLoai());
+
 
         btndatban.setOnAction(e -> {
             if (rdoTienMat.isSelected()) {
@@ -109,6 +119,27 @@ public class ChonMonController {
         System.out.println("Đang chọn bàn: " + ban);
     }
 
+    private void locMonTheoTenVaLoai() {
+        flowMonAn.getChildren().clear();
+
+        String tuKhoa = tfTimKiem.getText().trim().toLowerCase();
+        LoaiMon loaiDuocChon = comboDanhMuc.getValue();
+
+        List<Mon> danhSach = monDAO.getAll();
+
+        for (Mon mon : danhSach) {
+            boolean hopTen = tuKhoa.isEmpty() || mon.getTenMon().toLowerCase().contains(tuKhoa);
+            boolean hopLoai = (loaiDuocChon == null
+                    || loaiDuocChon.getMaLoaiMon().equals("ALL")
+                    || mon.getLoaiMon().getMaLoaiMon().equals(loaiDuocChon.getMaLoaiMon()));
+
+            if (hopTen && hopLoai) {
+                flowMonAn.getChildren().add(taoCardMon(mon));
+            }
+        }
+    }
+
+
 
     @FXML
     private void quayVeDatBan() {
@@ -120,9 +151,13 @@ public class ChonMonController {
 
     private void loadComboDanhMuc() {
         comboDanhMuc.getItems().clear();
+
+        LoaiMon tatCa = new LoaiMon("ALL", "Tất cả món","Tat ca");
+        comboDanhMuc.getItems().add(tatCa);
+
         comboDanhMuc.getItems().addAll(loaiMonDAO.getAll());
 
-        comboDanhMuc.setCellFactory(param -> new javafx.scene.control.ListCell<>() {
+        comboDanhMuc.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(LoaiMon item, boolean empty) {
                 super.updateItem(item, empty);
@@ -134,7 +169,8 @@ public class ChonMonController {
             }
         });
 
-        comboDanhMuc.setButtonCell(new javafx.scene.control.ListCell<>() {
+        // Hiển thị giá trị được chọn
+        comboDanhMuc.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(LoaiMon item, boolean empty) {
                 super.updateItem(item, empty);
@@ -145,7 +181,61 @@ public class ChonMonController {
                 }
             }
         });
+
+        // Mặc định chọn "Tất cả món"
+        comboDanhMuc.getSelectionModel().selectFirst();
+
+        // Khi chọn loại → lọc lại danh sách
+        comboDanhMuc.setOnAction(e -> locMonTheoTenVaLoai());
     }
+
+    private void loadComboSuKien() {
+        comboSuKien.getItems().clear();
+
+        SuKien tatCa = null;
+        comboSuKien.getItems().add(tatCa);
+
+        comboSuKien.getItems().addAll(SuKienDAO.getAll());
+
+        comboSuKien.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(SuKien item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getTenSK());
+                }
+            }
+        });
+
+        comboSuKien.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(SuKien item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Chọn sự kiện");
+                } else {
+                    setText(item.getTenSK());
+                }
+            }
+        });
+
+        comboSuKien.getSelectionModel().selectFirst();
+
+        comboSuKien.setOnAction(e -> {
+            SuKien selected = comboSuKien.getValue();
+            if (selected != null && !"ALL".equals(selected.getMaSK())) {
+                sk = selected;
+                System.out.println("Đã chọn sự kiện: " + sk.getTenSK());
+            } else {
+                sk = null;
+                System.out.println("Không áp dụng sự kiện nào");
+            }
+        });
+    }
+
+
 
     private void loadDanhSachMon() {
         flowMonAn.getChildren().clear();
@@ -200,14 +290,10 @@ public class ChonMonController {
 
             if (soLuong == 1) {
                 addMonToOrder(mon);
-                capNhatTongTien();
-                xuLyHienThiTienMat();
-                tinhCoc();
+                loadTT();
             } else {
                 updateMonSoLuong(mon, soLuong);
-                capNhatTongTien();
-                xuLyHienThiTienMat();
-                tinhCoc();
+                loadTT();
             }
         });
 
@@ -219,14 +305,11 @@ public class ChonMonController {
 
                 if (soLuong == 0) {
                     removeMonFromOrder(mon);
-                    capNhatTongTien();
-                    xuLyHienThiTienMat();
-                    tinhCoc();
+                    loadTT();
+
                 } else {
                     updateMonSoLuong(mon, soLuong);
-                    capNhatTongTien();
-                    xuLyHienThiTienMat();
-                    tinhCoc();
+                    loadTT();
                 }
             }
         });
@@ -243,6 +326,13 @@ public class ChonMonController {
         chiTietMap.put(maMon, dong);
         soLuongMap.put(maMon, 1);
         vboxChiTietDonHang.getChildren().add(dong);
+    }
+
+    private void loadTT(){
+        capNhatTongTien();
+        tinhCoc();
+        xuLyHienThiTienMat();
+        taoGoiYTienKhach();
     }
 
 
@@ -478,18 +568,14 @@ public class ChonMonController {
         // ===== Kiểm tra dữ liệu =====
         if (banHienTai == null || soLuongMap.isEmpty()) {
             System.out.println("⚠️ Chưa chọn bàn hoặc món!");
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Thiếu thông tin");
-            alert.setHeaderText("Chưa chọn bàn hoặc món ăn!");
-            alert.setContentText("Vui lòng kiểm tra lại trước khi đặt bàn.");
-            alert.showAndWait();
+            AlertCus.show("Thiếu thông tin", "Chưa chọn bàn hoặc món ăn!\nVui lòng kiểm tra lại trước khi đặt bàn.");
             return;
         }
 
         long phutCachNhau = java.time.Duration.between(now, thoiGianDat).toMinutes();
-        boolean kieuDatBan = (phutCachNhau >= 0 && phutCachNhau <= 15);
+        boolean kieuDatBan = !(phutCachNhau >= 0 && phutCachNhau <= 15);
 
-        int trangThai = kieuDatBan ? 1 : 0;
+        int trangThai = kieuDatBan ? 0 : 1;
 
         // ===== Tạo hóa đơn =====
         HoaDon hd = taoHoaDon(kieuDatBan, trangThai);
@@ -503,32 +589,23 @@ public class ChonMonController {
         boolean themHD = hdDAO.insert(hd);
         if (!themHD) {
             System.out.println("Lỗi khi thêm hóa đơn!");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Lỗi hệ thống");
-            alert.setHeaderText("Không thể lưu hóa đơn!");
-            alert.setContentText("Vui lòng thử lại hoặc liên hệ quản trị viên.");
-            alert.showAndWait();
+            AlertCus.show("Lỗi hệ thống", "Không thể lưu hóa đơn!\nVui lòng thử lại hoặc liên hệ quản trị viên.");
             return;
         }
+
 
         // ===== Thêm chi tiết hóa đơn =====
         boolean themCT = themChiTietHoaDon(hd);
         if (!themCT) {
             System.out.println("Lỗi khi thêm chi tiết hóa đơn!");
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Cảnh báo");
-            alert.setHeaderText("Một số món có thể chưa được lưu!");
-            alert.setContentText("Vui lòng kiểm tra lại hóa đơn: " + hd.getMaHD());
-            alert.showAndWait();
+            AlertCus.show("Cảnh báo", "Một số món có thể chưa được lưu!\nVui lòng kiểm tra lại hóa đơn: " + hd.getMaHD());
         }
+
 
         // ===== Thông báo thành công =====
         System.out.println("Đặt bàn thành công: " + hd.getMaHD());
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Thành công");
-        alert.setHeaderText("Đặt bàn & tạo hóa đơn thành công!");
-        alert.setContentText("Mã hóa đơn: " + hd.getMaHD() + "\nTổng tiền: " + lbl_total_PT.getText());
-        alert.showAndWait();
+        AlertCus.show("Thành công", "Đặt bàn & tạo hóa đơn thành công!\nMã hóa đơn: " + hd.getMaHD() + "\nTổng tiền: " + lbl_total_PT.getText());
+
 
         // ===== Làm mới giao diện =====
         vboxChiTietDonHang.getChildren().clear();
@@ -548,19 +625,20 @@ public class ChonMonController {
 
         if (banHienTai == null || soLuongMap.isEmpty()) {
             System.out.println("Chưa chọn bàn hoặc món!");
+            AlertCus.show("Thiếu thông tin", "Chưa chọn bàn hoặc món ăn!\nVui lòng kiểm tra lại trước khi đặt bàn.");
             return;
         }
 
         long phutCachNhau = java.time.Duration.between(now, thoiGianDat).toMinutes();
-        boolean kieuDatBan = (phutCachNhau >= 0 && phutCachNhau <= 15);
+        boolean kieuDatBan = !(phutCachNhau >= 0 && phutCachNhau <= 15);
 
-        int trangThai = kieuDatBan ? 1 : 0;
-
+        int trangThai = kieuDatBan ? 0 : 1;
 
         // ===== Tạo hóa đơn =====
         HoaDon hd = taoHoaDon(kieuDatBan, trangThai);
         if (hd == null) {
             System.out.println("Không tạo được hóa đơn!");
+            AlertCus.show("Lỗi hệ thống", "Không thể tạo hóa đơn mới!\nVui lòng thử lại hoặc liên hệ quản trị viên.");
             return;
         }
 
@@ -570,27 +648,21 @@ public class ChonMonController {
         boolean themHD = hdDAO.insert(hd);
         if (!themHD) {
             System.out.println("Lỗi khi thêm hóa đơn!");
+            AlertCus.show("Lỗi hệ thống", "Không thể lưu hóa đơn!\nVui lòng thử lại hoặc liên hệ quản trị viên.");
             return;
         }
 
         boolean themCT = themChiTietHoaDon(hd);
         if (!themCT) {
             System.out.println("Lỗi khi thêm chi tiết hóa đơn!");
+            AlertCus.show("Cảnh báo", "Một số món có thể chưa được lưu!\nVui lòng kiểm tra lại hóa đơn: " + hd.getMaHD());
         } else {
             System.out.println("Đặt bàn thành công: " + hd.getMaHD());
+            AlertCus.show("Thành công", "Đặt bàn & tạo hóa đơn thành công!\nMã hóa đơn: " + hd.getMaHD());
         }
 
         String sdt = sdtKhach.getText().trim();
         KhachHang kh = new KhachHangDAO().findBySDT(sdt);
-        if (kh != null) {
-            congDiemTichLuy(kh, tinhDiem());
-        }
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Thanh toán thành công");
-        alert.setHeaderText("Đặt bàn & tạo hóa đơn thành công!");
-        alert.setContentText("Mã hóa đơn: " + hd.getMaHD());
-        alert.showAndWait();
 
         vboxChiTietDonHang.getChildren().clear();
         chiTietMap.clear();
@@ -602,16 +674,6 @@ public class ChonMonController {
     }
 
 
-    private void congDiemTichLuy(KhachHang khachHang, int diem) {
-        if (khachHang == null) return;
-        khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() + diem);
-        KhachHangDAO.update(khachHang);
-    }
-
-    private int tinhDiem() {
-        double tongTien = parseCurrency(lbl_total_PT.getText().trim());
-        return (int) (tongTien * 0.1 / 1000);
-    }
 
     private boolean themChiTietHoaDon(HoaDon hoaDon) {
         if (hoaDon == null) {
@@ -664,22 +726,14 @@ public class ChonMonController {
 
         if (!sdt.isEmpty()) {
             khachHang = new KhachHangDAO().findBySDT(sdt);
-            if (khachHang != null) {
-                congDiemTichLuy(khachHang, tinhDiem());
-            } else {
-                System.out.println("Không tìm thấy khách hàng có SDT: " + sdt);
-            }
         }
 
         if (khachHang == null) {
             khachHang = new KhachHang("KH0000", 0, true, sdt, "Khách lẻ", xetHang(0));
         }
         // ===== 3. Tính toán giá trị dẫn xuất =====
-        double tongTienTruoc = parseCurrency(lbl_total_PT.getText().trim());
 
         KhuyenMai km = null;
-
-        SuKien suKien = null;
 
         boolean kieuThanhToan = rdoChuyenKhoan.isSelected();
 
@@ -693,7 +747,7 @@ public class ChonMonController {
         hd.setTgCheckOut(null);
         hd.setKhuyenMai(km);
         hd.setTrangthai(trangthai);
-        hd.setSuKien(suKien);
+        hd.setSuKien(sk);
         hd.setKieuThanhToan(kieuThanhToan);
         hd.setKieuDatBan(kieudatban);
         hd.setMoTa(tfghichu.getText().trim());

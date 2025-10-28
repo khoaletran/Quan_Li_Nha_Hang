@@ -109,7 +109,7 @@ public class HoaDon {
 
         Coc c = new CocDAO().getByKhuVucVaLoaiBan(maKV, maLB);
         if (c != null) {
-            if (c.isLoaiCoc()) coc = getTongTienSau() * c.getPhanTramCoc() / 100;
+            if (c.isLoaiCoc()) coc = getTongTienTruoc() * c.getPhanTramCoc() / 100;
             else coc = c.getSoTienCoc();
         }
         return coc;

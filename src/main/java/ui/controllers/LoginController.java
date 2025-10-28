@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class LoginController {
@@ -116,6 +117,7 @@ public class LoginController {
                         ui.MainNV main = new ui.MainNV();
                         Stage stage = new Stage();
                         main.setNhanVienDangNhap(nv);
+                        main.setThoiGianVaoCa(LocalDateTime.now());
                         main.start(stage);
 
                     } catch (Exception e) {

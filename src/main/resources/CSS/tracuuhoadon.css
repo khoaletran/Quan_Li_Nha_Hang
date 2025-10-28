@@ -240,5 +240,15 @@
     -fx-background-color: #43A047;
 }
 
-
+.combo-box {
+    -fx-pref-height: 34px;
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 0 10 0 10;
+    -fx-font-size: 13px;
+    -fx-border-color: #d2a679;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3,0,0,1);
+    -fx-cursor: hand;
+}
 

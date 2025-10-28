@@ -114,11 +114,11 @@
                 <Label text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                 <Label fx:id="lblTongTien" styleClass="bold-label" text="0 đ" GridPane.columnIndex="3" />
 
-                <Label text="Giảm Giá:" GridPane.rowIndex="2" />
+                <Label text="Chiết Khấu:" GridPane.rowIndex="2" />
                 <Label fx:id="lblGiamGia" styleClass="red-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
-                <Label text="Thuế:" GridPane.rowIndex="3" />
-                <Label fx:id="lblThue" text="10%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                <Label text="Thuế (10%):" GridPane.rowIndex="3" />
+                <Label fx:id="lblThue" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
                 <Label text="Tổng Tiền Sau Thuế" GridPane.rowIndex="4" />
                 <Label fx:id="lblTongTT" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
@@ -167,7 +167,12 @@
             </VBox>
          <HBox style="-fx-alignment: CENTER;">
             <children>
-                   <Button fx:id="" styleClass="confirm-btn" text="Đặt Bàn" />
+                   <Button fx:id="btnThanhToan"
+                            text="💳 Thanh Toán"
+                            styleClass="checkout-btn"
+                            prefHeight="45"
+                            prefWidth="280"
+                            alignment="CENTER"/>
             </children>
          </HBox>
 

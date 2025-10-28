@@ -10,9 +10,16 @@ import static ui.AppConstants.APP_LOGO;
 import ui.controllers.MainController_NV;
 import ui.controllers.SidebarController_NV;
 
+import java.time.LocalDateTime;
+
 public class MainNV extends Application {
 
     private NhanVien nvDangNhap;
+    private LocalDateTime thoiGianVaoCa;
+
+    public void setThoiGianVaoCa(LocalDateTime thoiGianVaoCa) {
+        this.thoiGianVaoCa = thoiGianVaoCa;
+    }
 
     public void setNhanVienDangNhap(NhanVien nv) {
         this.nvDangNhap = nv;
@@ -25,6 +32,7 @@ public class MainNV extends Application {
 
         MainController_NV mainController = loader.getController();
         mainController.setNhanVien(nvDangNhap);
+        mainController.setThoiGianVaoCa(thoiGianVaoCa);
 
         SidebarController_NV sidebarController = mainController.getSidebarController();
         sidebarController.setThongTinNhanVien(nvDangNhap);
