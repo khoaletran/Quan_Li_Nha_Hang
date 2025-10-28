@@ -170,11 +170,17 @@ public class CheckoutController {
                         row.getStyleClass().add("menu-row");
 
                         Label lblSTT = new Label(String.valueOf(stt++));
+                        lblSTT.getStyleClass().add("col-stt");
                         Label lblName = new Label(ct.getMon().getTenMon());
+                        lblName.getStyleClass().add("col-name");
                         Label lblQty = new Label(String.valueOf(ct.getSoLuong()));
+                        lblQty.getStyleClass().add("col-qty");
                         Label lblPrice = new Label(formatCurrency(ct.getMon().getGiaBan()));
+                        lblPrice.getStyleClass().add("col-price");
                         Label lblDiscount = new Label("0%");
+                        lblDiscount.getStyleClass().add("col-discount");
                         Label lblTotal = new Label(formatCurrency(ct.getThanhTien()));
+                        lblTotal.getStyleClass().add("col-total");
 
                         row.getChildren().addAll(lblSTT, lblName, lblQty, lblPrice, lblDiscount, lblTotal);
                         vboxMenu.getChildren().add(row);
@@ -182,7 +188,6 @@ public class CheckoutController {
                 });
 
                 vboxHoaDon.getChildren().add(hbox);
-
             }
         }
     }
