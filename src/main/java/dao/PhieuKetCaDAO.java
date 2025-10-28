@@ -73,4 +73,30 @@ public class PhieuKetCaDAO {
             return false;
         }
     }
+
+    public String getMaxMaPhieu() {
+        String sql = "SELECT TOP 1 maPhieu FROM PhieuKetCa ORDER BY maPhieu DESC";
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getString("maPhieu");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String generateNewMaPhieu() {
+        String maxMa = getMaxMaPhieu();
+        int nextNumber = 1;
+        if (maxMa != null && maxMa.startsWith("PK")) {
+            nextNumber = Integer.parseInt(maxMa.substring(2)) + 1;
+        }
+        return String.format("PK%04d", nextNumber);
+    }
+
+
 }

@@ -22,6 +22,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ui.AlertCus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -453,36 +454,49 @@ public class QLDatBanController {
     }
 
     @FXML
+
     private void xacNhanDatBan() {
         if (hoaDonSelected == null) {
-            hienThiThongBao("Vui lòng chọn hóa đơn cần xác nhận");
+            hienThiThongBao("Vui lòng chọn hóa đơn để xác nhận thay đổi");
             return;
         }
 
         try {
-            System.out.println("🔄 Xác nhận đặt bàn: " + hoaDonSelected.getMaHD());
-            hoaDonSelected.setTrangthai(1);
-            boolean ok = HoaDonDAO.update(hoaDonSelected);
-            if (ok) {
-                hienThiThongBao("✅ Xác nhận đặt bàn thành công");
-                dsDatTruoc.remove(hoaDonSelected);
-                dsDaNhan.add(hoaDonSelected);
-                hienThiDanhSachDatTruoc();
-                hienThiDanhSachDaNhan();
-                resetForm();
-            } else {
-                hienThiThongBao("❌ Xác nhận thất bại");
+            System.out.println("🔄 Xác nhận cập nhật chi tiết hóa đơn: " + hoaDonSelected.getMaHD());
+
+            boolean allOk = true;
+            for (ChiTietHoaDon ct : chiTietHoaDonData) {
+                boolean ok = chiTietHDDAO.update(ct); // thử update trước
+                if (!ok) {
+                    // nếu update thất bại, tức là món chưa có trong DB → insert
+                    ok = chiTietHDDAO.insert(ct);
+                }
+                if (!ok) allOk = false;
             }
+
+            if (allOk) {
+                hienThiThongBao("✅ Cập nhật chi tiết hóa đơn thành công");
+                capNhatBangDonHang(); // refresh TableView
+            } else {
+                hienThiThongBao("❌ Có lỗi khi cập nhật chi tiết hóa đơn");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             hienThiThongBao("❌ Lỗi hệ thống: " + e.getMessage());
         }
     }
 
+
     @FXML
     private void huyDatBan() {
         if (hoaDonSelected == null) {
             hienThiThongBao("Vui lòng chọn hóa đơn cần hủy");
+            return;
+        }
+        //Kiểm tra
+        if (hoaDonSelected.getTrangthai() != 0) {
+            hienThiThongBao("❌ Chỉ có hóa đơn đang đặt trước mới được hủy");
             return;
         }
 
@@ -597,7 +611,7 @@ public class QLDatBanController {
             return;
         }
 
-        // kiểm tra món đã có trong chiTietHoaDonData chưa (so sánh maMon)
+        // kiểm tra món đã có trong chiTietHoaDonData chưa
         ChiTietHoaDon found = null;
         for (ChiTietHoaDon ct : chiTietHoaDonData) {
             if (ct.getMon() != null && m.getMaMon().equals(ct.getMon().getMaMon())) {
@@ -606,41 +620,24 @@ public class QLDatBanController {
             }
         }
 
-        try {
-            if (found != null) {
-                // tăng số lượng và cập nhật DB
-                int sl = found.getSoLuong() + 1;
-                found.setSoLuong(sl);
-                double gia = found.getMon() != null ? found.getMon().getGiaBan() : 0;
-                found.setThanhTien(gia * sl);
+        if (found != null) {
+            // tăng số lượng, cập nhật thanhTien trên object UI
+            int sl = found.getSoLuong() + 1;
+            found.setSoLuong(sl);
+            double gia = found.getMon() != null ? found.getMon().getGiaBan() : 0;
+            found.setThanhTien(gia * sl);
 
-                boolean ok = chiTietHDDAO.update(found);
-                if (!ok) {
-                    // nếu update thất bại: log (không bắt buộc insert lại)
-                    System.err.println("Cập nhật ChiTietHoaDon thất bại trên DB cho maHD=" + found.getHoaDon().getMaHD() + " maMon=" + found.getMon().getMaMon());
-                }
-
-                capNhatBangDonHang();
-                hienThiThongBao("Đã tăng số lượng cho món " + m.getTenMon());
-            } else {
-                // tạo ChiTietHoaDon mới và insert vào DB
-                ChiTietHoaDon ct = new ChiTietHoaDon(hoaDonSelected, m, 1);
-                boolean ok = chiTietHDDAO.insert(ct);
-                if (ok) {
-                    chiTietHoaDonData.add(ct);
-                    capNhatBangDonHang();
-                    hienThiThongBao("Đã thêm món: " + m.getTenMon());
-                    System.out.println("✅ Insert ChiTietHoaDon thành công (maHD=" + ct.getHoaDon().getMaHD() + ", maMon=" + ct.getMon().getMaMon() + ")");
-                } else {
-                    hienThiThongBao("Thêm món thất bại (DB).");
-                    System.err.println("❌ Insert ChiTietHoaDon thất bại cho maHD=" + hoaDonSelected.getMaHD() + " maMon=" + m.getMaMon());
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            hienThiThongBao("Lỗi khi thêm món: " + ex.getMessage());
+            hienThiThongBao("Đã tăng số lượng cho món " + m.getTenMon());
+        } else {
+            // tạo ChiTietHoaDon mới và thêm vào ObservableList (UI)
+            ChiTietHoaDon ct = new ChiTietHoaDon(hoaDonSelected, m, 1);
+            chiTietHoaDonData.add(ct);
+            hienThiThongBao("Đã thêm món: " + m.getTenMon());
         }
+
+        capNhatBangDonHang(); // refresh TableView và tính tổng
     }
+
 
     private void capNhatBangDonHang() {
         // cập nhật thanhTien cho từng chi tiết (phòng trường hợp giá thay đổi)
