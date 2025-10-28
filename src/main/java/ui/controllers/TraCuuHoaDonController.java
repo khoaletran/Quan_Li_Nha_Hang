@@ -96,9 +96,7 @@ public class TraCuuHoaDonController {
         resetForm();
     }
 
-    // =======================
     // KẾT NỐI DB
-    // =======================
     private boolean ketNoiDatabase() {
         try {
             connectDB.getInstance().connect();
@@ -111,9 +109,7 @@ public class TraCuuHoaDonController {
         }
     }
 
-    // =======================
     // KHỞI TẠO CONTROL
-    // =======================
     private void khoiTaoComboBox() {
         if (cboKhuVuc != null) {
             cboKhuVuc.getItems().clear();
@@ -164,9 +160,7 @@ public class TraCuuHoaDonController {
         if (product_table != null) product_table.setItems(chiTietHoaDonData);
     }
 
-    // =======================
     // TẢI & HIỂN THỊ DANH SÁCH HÓA ĐƠN
-    // =======================
     private void taiDanhSachHoaDon() {
         try {
             List<HoaDon> listHD = hoaDonDAO.getAll();
@@ -313,9 +307,7 @@ public class TraCuuHoaDonController {
         }
     }
 
-    // =======================
     // HIỂN THỊ CHI TIẾT HÓA ĐƠN
-    // =======================
     private void hienThiThongTinChiTiet(HoaDon hd) {
         if (hd == null) return;
         if (txtMaHoaDon != null) txtMaHoaDon.setText(hd.getMaHD());
@@ -405,9 +397,7 @@ public class TraCuuHoaDonController {
         }
     }
 
-    // =======================
     // TÌM KIẾM
-    // =======================
     @FXML
     private void timKiemHoaDon() {
         String maBan = txtMaBan != null ? txtMaBan.getText().trim() : "";
@@ -510,9 +500,7 @@ public class TraCuuHoaDonController {
         }
     }
 
-    // =======================
     // XÓA TRẮNG BỘ LỌC / IN / RESET
-    // =======================
     @FXML
     private void xoaTrangBoLoc() {
         if (txtMaBan != null) txtMaBan.clear();
@@ -553,9 +541,7 @@ public class TraCuuHoaDonController {
         clearSelectedStyles();
     }
 
-    // =======================
     // HỘP THOẠI
-    // =======================
     private void hienThiThongBao(String msg) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thông báo");
@@ -572,9 +558,7 @@ public class TraCuuHoaDonController {
         alert.showAndWait();
     }
 
-    // =======================
-    // API ngoại: Refresh
-    // =======================
+    //Refresh
     public void refreshData() {
         try {
             if (!ketNoiDatabase()) {
