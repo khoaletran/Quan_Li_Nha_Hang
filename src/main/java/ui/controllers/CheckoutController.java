@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import ui.QRThanhToan;
 
 import java.util.List;
 import java.text.DecimalFormat;
@@ -23,13 +24,25 @@ public class CheckoutController {
     @FXML private RadioButton rdoChuyenKhoan, rdoTienMat;
     @FXML private TextField txtMaGG, txtTienKhachDua;
     @FXML private VBox vboxHoaDon, vboxMenu, vboxTienMat;
-    @FXML private Button btnCamera, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
-    @FXML private Label lblmaHD, lbltenKH, lblsdtKH, lblSoLuong, lblsuKien, lblKhuVuc, lblTongTien, lblGiamGia, lblThue, lblTongTT, lblTienThua;
+    @FXML private Button btnCamera, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6, btnCheckOut;
+    @FXML private Label lblmaHD, lbltenKH, lblsdtKH, lblSoLuong, lblsuKien, lblKhuVuc, lblTongTien, lblGiamGia, lblThue, lblTongTT, lblTienThua, lblCoc, lblConLai;
 
     @FXML
     public void initialize() {
         loadAllHoaDon();
         xuLyHienThiTienMat();
+//        btnCheckOut.setOnAction(e -> {
+//            if (rdoTienMat.isSelected()) {
+//            } else {
+//                double tongTien = parseCurrency(lbl.getText().trim());
+//                String maHD = tuSinhMaHD();
+//
+//                QRThanhToan.hienThiQRPanel(tongTien, maHD, () -> {
+//                    System.out.println("Thanh toán chuyển khoản thành công → Tạo hóa đơn...");
+//                    datBanSauKhiXacNhan(maHD);
+//                });
+//            }
+//        });
 
         txtMaGG.textProperty().addListener((obs, oldText, newText) -> updateThanhTien());
     }
@@ -67,28 +80,29 @@ public class CheckoutController {
         if (lblmaHD.getText().isEmpty()) return;
 
         double tienTruoc = parseCurrency(lblTongTien.getText());
-        double tienThue = tienTruoc * 0.1;
+        double tienThue = 0;
         double tienGG = 0;
-        double tienCoc = 0;
 
         HoaDon hd = new HoaDonDAO().getByID(lblmaHD.getText());
-        if (hd != null) {
-            tienCoc = hd.getCoc();
-        }
 
         String maGiamG = txtMaGG.getText().trim();
+
         if (!maGiamG.isEmpty()) {
             KhuyenMai km = new KhuyenMaiDAO().getByID(maGiamG);
             if (km != null) {
-                tienGG = tienTruoc * km.getPhanTRamGiamGia() / 100.0;
+                hd.setKhuyenMai(km);
             }
         }
 
-        lblGiamGia.setText(String.format("-%,.0f đ", tienGG));
-        lblTongTT.setText(formatCurrency(tienTruoc + tienThue - tienGG - tienCoc));
+        lblGiamGia.setText(formatCurrency(hd.getTongTienKhuyenMai()));
+        lblTongTT.setText(formatCurrency(tienTruoc + tienThue - tienGG ));
 
         if (rdoTienMat.isSelected()) taoGoiYTienKhach();
+
+        lblCoc.setText(formatCurrency(hd.getCoc()));
+        lblConLai.setText(formatCurrency(hd.getTongTienSau()-hd.getCoc()));
     }
+
 
     // ======== HIỂN THỊ DANH SÁCH HÓA ĐƠN ==========
     public void loadAllHoaDon() {
@@ -243,6 +257,9 @@ public class CheckoutController {
         DecimalFormat df = new DecimalFormat("#,###", symbols);
         return df.format(amount) + " đ";
     }
+
+
+
 
 
 }
