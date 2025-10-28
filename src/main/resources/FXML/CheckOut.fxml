@@ -114,7 +114,7 @@
                 <Label text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                 <Label fx:id="lblTongTien" styleClass="bold-label" text="0 đ" GridPane.columnIndex="3" />
 
-                <Label text="Giảm Giá:" GridPane.rowIndex="2" />
+                <Label text="Chiết Khấu:" GridPane.rowIndex="2" />
                 <Label fx:id="lblGiamGia" styleClass="red-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                 <Label text="Thuế (10%):" GridPane.rowIndex="3" />

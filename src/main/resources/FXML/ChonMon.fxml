@@ -39,7 +39,7 @@
                         <!-- Ô tìm kiếm -->
                         <HBox alignment="CENTER_LEFT" spacing="8" styleClass="menu-search-box" HBox.hgrow="ALWAYS">
                             <Label styleClass="search-icon" text="🔍" />
-                            <TextField promptText="Tìm món ăn..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                            <TextField fx:id="tfTimKiem" promptText="Tìm món ăn..." styleClass="search-field" HBox.hgrow="ALWAYS" />
                         </HBox>
 
                         <!-- ComboBox chọn loại món -->
@@ -84,7 +84,7 @@
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="55.0" spacing="10">
                <children>
                   <Label styleClass="info-label" text="Bàn:" />
-                  <TextField  fx:id="tf_ban" prefHeight="24.0" prefWidth="228.0" promptText="Bàn" styleClass="filter-tf" />
+                  <TextField fx:id="tf_ban" prefHeight="24.0" prefWidth="228.0" promptText="Bàn" styleClass="filter-tf" />
                </children>
             </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
@@ -101,6 +101,12 @@
                     <Label styleClass="info-label" text="Ghi chú:" />
                     <TextField fx:id="tfghichu" prefHeight="24.0" prefWidth="228.0" promptText="Ghi chú đặc biệt" styleClass="filter-tf" />
                 </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="165.0" prefHeight="13.0" prefWidth="340.0" spacing="10">
+               <children>
+                  <Label styleClass="info-label" text="Đặt sự kiện:" />
+                  <ComboBox fx:id="comboSuKien" promptText="Chọn Sự Kiện" minWidth="220.0" prefHeight="24.0" prefWidth="220.0" styleClass="combo-boxSK" />
+               </children>
+            </HBox>
             </VBox>
               <VBox prefHeight="542.0" prefWidth="340.0" spacing="8.0" styleClass="order-details">
 
@@ -162,6 +168,15 @@
                                <Button fx:id="btnGoiY5" styleClass="quick-btn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                <Button fx:id="btnGoiY6" styleClass="quick-btn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                            </children>
+                     <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
                        </GridPane>
                   <HBox style="-fx-alignment: center;">
                      <children>
