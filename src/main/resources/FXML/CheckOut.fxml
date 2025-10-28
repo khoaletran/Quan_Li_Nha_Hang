@@ -112,16 +112,24 @@
 
             <GridPane hgap="10" vgap="5">
                 <Label text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <Label fx:id="lblTongTien" styleClass="bold-label" text="4.000.000 đ" GridPane.columnIndex="3" />
+                <Label fx:id="lblTongTien" styleClass="bold-label" text="0 đ" GridPane.columnIndex="3" />
 
                 <Label text="Giảm Giá:" GridPane.rowIndex="2" />
-                <Label fx:id="lblGiamGia" styleClass="red-label" text="-400.000 đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                <Label fx:id="lblGiamGia" styleClass="red-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                 <Label text="Thuế:" GridPane.rowIndex="3" />
                 <Label fx:id="lblThue" text="10%" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
-                <Label text="Tổng Thanh Toán:" GridPane.rowIndex="4" />
-                <Label fx:id="lblTongTT" styleClass="red-bold-label" text="3.960.000 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                <Label text="Tổng Tiền Sau Thuế" GridPane.rowIndex="4" />
+                <Label fx:id="lblTongTT" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+
+                <Label text="Tiền Đã Cọc:" GridPane.rowIndex="5" />
+                <Label fx:id="lblCoc" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+
+                <Label text="Tổng Thanh Toán:" GridPane.rowIndex="6" />
+                <Label fx:id="lblConLai" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+
+
                 <AnchorPane prefHeight="0.0" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </GridPane>
 

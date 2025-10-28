@@ -127,17 +127,6 @@
                           <Region HBox.hgrow="ALWAYS" />
                           <Label fx:id="lbl_total" styleClass="total-amount" text="0đ" />
                       </HBox>
-                       <HBox layoutX="10.0" layoutY="16.0" spacing="10">
-                          <children>
-                             <Label styleClass="total-label" text="Thuế" />
-                             <Region HBox.hgrow="ALWAYS" />
-                             <Label fx:id="lbl_thue" text="0đ" />
-                          </children>
-                       </HBox>
-                       <HBox spacing="10">
-                            <Label prefHeight="18.0" prefWidth="143.0" style="-fx-font-size: 14; -fx-font-weight: bold;" text="Tổng Tiền Phải Trả:" />
-                            <Label fx:id="lbl_total_PT" prefHeight="19.0" prefWidth="178.0" styleClass="total-amount" text="0đ" />
-                       </HBox>
                       <HBox spacing="10">
                           <Label styleClass="deposit-label" text="Cọc:" />
                           <Region HBox.hgrow="ALWAYS" />
