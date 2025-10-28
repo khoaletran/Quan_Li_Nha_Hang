@@ -41,20 +41,99 @@ public class HoaDonDAO {
                 hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
                 hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
                 hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
-                hd.setThue(rs.getDouble("thue"));
-                hd.setCoc(rs.getDouble("coc"));
                 hd.setTrangthai(rs.getInt("trangThai"));
-                hd.setTongTienTruoc(rs.getDouble("tongTienTruoc"));
-                hd.setTongTienSau(rs.getDouble("tongTienSau"));
-                hd.setTongTienKhuyenMai(rs.getDouble("tongTienKM"));
                 hd.setSoLuong(rs.getInt("soLuong"));
+                hd.setMoTa(rs.getString("moTa"));
 
                 ds.add(hd);
             }
 
         } catch (SQLException e) {
             System.err.println("Lỗi khi lấy danh sách hóa đơn: " + e.getMessage());
-            e.printStackTrace();
+        }
+
+        return ds;
+    }
+    public static List<HoaDon> getAllNgayHomNay() {
+        List<HoaDon> ds = new ArrayList<>();
+        String sql = "SELECT hd.*, " +
+                "kh.maKH, kh.tenKH, kh.sdt, " +
+                "nv.maNV, nv.tenNV, " +
+                "b.maBan, b.maLoaiBan, b.maKhuVuc, " +
+                "km.maKM, km.tenKM, " +
+                "sk.maSK, sk.tenSK " +
+                "FROM HoaDon hd " +
+                "LEFT JOIN KhachHang kh ON hd.maKH = kh.maKH " +
+                "LEFT JOIN NhanVien nv ON hd.maNV = nv.maNV " +
+                "LEFT JOIN Ban b ON hd.maBan = b.maBan " +
+                "LEFT JOIN KhuyenMai km ON hd.maKM = km.maKM " +
+                "LEFT JOIN SuKien sk ON hd.maSK = sk.maSK " +
+                "WHERE hd.tgCheckin >= CAST(GETDATE() AS DATE) " +
+                "AND hd.tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))";
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                HoaDon hd = new HoaDon();
+
+                // Set HoaDon basic fields
+                hd.setMaHD(rs.getString("maHD"));
+                hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
+                hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
+                hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
+                hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
+                hd.setTrangthai(rs.getInt("trangThai"));
+                hd.setSoLuong(rs.getInt("soLuong"));
+                hd.setMoTa(rs.getString("moTa"));
+
+                // Map KhachHang
+                String maKH = rs.getString("maKH");
+                if (maKH != null) {
+                    KhachHang kh = new KhachHang();
+                    kh.setMaKhachHang(maKH); // chỉ set mã
+                    hd.setKhachHang(kh);
+                }
+
+// Map NhanVien
+                String maNV = rs.getString("maNV");
+                if (maNV != null) {
+                    NhanVien nv = new NhanVien();
+                    nv.setMaNV(maNV); // chỉ set mã
+                    hd.setNhanVien(nv);
+                }
+
+// Map Ban
+                String maBan = rs.getString("maBan");
+                if (maBan != null) {
+                    Ban ban = new Ban();
+                    ban.setMaBan(maBan); // chỉ set mã
+                    hd.setBan(ban);
+                }
+
+// Map KhuyenMai
+                String maKM = rs.getString("maKM");
+                if (maKM != null) {
+                    KhuyenMai km = new KhuyenMai();
+                    km.setMaKM(maKM); // chỉ set mã
+                    hd.setKhuyenMai(km);
+                }
+
+// Map SuKien
+                String maSK = rs.getString("maSK");
+                if (maSK != null) {
+                    SuKien sk = new SuKien();
+                    sk.setMaSK(maSK); // chỉ set mã
+                    hd.setSuKien(sk);
+                }
+
+
+                ds.add(hd);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách hóa đơn: " + e.getMessage());
         }
 
         return ds;
@@ -94,19 +173,14 @@ public class HoaDonDAO {
                     hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
                     hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
                     hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
-                    hd.setThue(rs.getDouble("thue"));
-                    hd.setCoc(rs.getDouble("coc"));
                     hd.setTrangthai(rs.getInt("trangThai"));
-                    hd.setTongTienTruoc(rs.getDouble("tongTienTruoc"));
-                    hd.setTongTienSau(rs.getDouble("tongTienSau"));
-                    hd.setTongTienKhuyenMai(rs.getDouble("tongTienKM"));
                     hd.setSoLuong(rs.getInt("soLuong"));
+                    hd.setMoTa(rs.getString("moTa"));
                 }
             }
 
         } catch (SQLException e) {
             System.err.println("Lỗi khi lấy hóa đơn theo mã: " + e.getMessage());
-            e.printStackTrace();
         }
 
         return hd;
@@ -118,8 +192,8 @@ public class HoaDonDAO {
             INSERT INTO HoaDon(
                 maHD, maKH, maNV, maBan, maKM, maSK,
                 tgCheckin, tgCheckout, kieuThanhToan, kieuDatBan,
-                thue, coc, tongTienTruoc, tongTienSau, tongTienKM, trangThai, soLuong
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                trangThai, soLuong, moTa
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
@@ -135,13 +209,9 @@ public class HoaDonDAO {
             ps.setTimestamp(8, hd.getTgCheckOut() != null ? Timestamp.valueOf(hd.getTgCheckOut()) : null);
             ps.setBoolean(9, hd.isKieuThanhToan());
             ps.setBoolean(10, hd.isKieuDatBan());
-            ps.setDouble(11, hd.getThue());
-            ps.setDouble(12, hd.getCoc());
-            ps.setDouble(13, hd.getTongTienTruoc());
-            ps.setDouble(14, hd.getTongTienSau());
-            ps.setDouble(15, hd.getTongTienKhuyenMai());
-            ps.setInt(16, hd.getTrangthai());
-            ps.setInt(17, hd.getSoLuong());
+            ps.setInt(11, hd.getTrangthai());
+            ps.setInt(12, hd.getSoLuong());
+            ps.setString(13, hd.getMoTa());
 
             return ps.executeUpdate() > 0;
 
@@ -157,7 +227,7 @@ public class HoaDonDAO {
             UPDATE HoaDon SET 
                 maKH=?, maNV=?, maBan=?, maKM=?, maSK=?,
                 tgCheckin=?, tgCheckout=?, kieuThanhToan=?, kieuDatBan=?,
-                thue=?, coc=?, tongTienTruoc=?, tongTienSau=?, tongTienKM=?, trangThai=?, soLuong=?
+                trangThai=?, soLuong=?, moTa=?
             WHERE maHD=?
         """;
 
@@ -173,14 +243,10 @@ public class HoaDonDAO {
             ps.setTimestamp(7, hd.getTgCheckOut() != null ? Timestamp.valueOf(hd.getTgCheckOut()) : null);
             ps.setBoolean(8, hd.isKieuThanhToan());
             ps.setBoolean(9, hd.isKieuDatBan());
-            ps.setDouble(10, hd.getThue());
-            ps.setDouble(11, hd.getCoc());
-            ps.setDouble(12, hd.getTongTienTruoc());
-            ps.setDouble(13, hd.getTongTienSau());
-            ps.setDouble(14, hd.getTongTienKhuyenMai());
-            ps.setInt(15, hd.getTrangthai());
-            ps.setInt(16, hd.getSoLuong());
-            ps.setString(17, hd.getMaHD());
+            ps.setInt(10, hd.getTrangthai());
+            ps.setInt(11, hd.getSoLuong());
+            ps.setString(12, hd.getMoTa());
+            ps.setString(13, hd.getMaHD());
 
             return ps.executeUpdate() > 0;
 

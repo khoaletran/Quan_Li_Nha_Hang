@@ -52,19 +52,22 @@ public class QRThanhToan {
             QRThanhToanController controller = loader.getController();
             controller.setThongTin(tongTien, maHD);
 
-
             controller.setOnPaymentConfirmed(() -> {
                 if (onPaymentConfirmed != null) {
                     onPaymentConfirmed.run();
                 }
             });
 
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
             Stage stage = new Stage();
             stage.setTitle("Thanh Toán Qua QR");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
-            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initStyle(StageStyle.TRANSPARENT);
+
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();

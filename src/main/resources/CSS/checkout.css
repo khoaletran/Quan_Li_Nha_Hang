@@ -247,6 +247,7 @@
     -fx-font-weight: bold;
     -fx-background-radius: 10;
     -fx-pref-height: 45;
+    -fx-alignment: CENTER;
 }
 .confirm-btn:hover {
     -fx-background-color: #43A047;

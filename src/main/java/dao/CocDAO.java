@@ -130,4 +130,41 @@ public class CocDAO {
             return false;
         }
     }
+
+    public static Coc getByKhuVucVaLoaiBan(String maKV, String maLB) {
+        String sql = """
+            SELECT * FROM Coc 
+            WHERE maKhuVuc = ? AND maLoaiBan = ?
+        """;
+
+        Coc coc = null;
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maKV);
+            ps.setString(2, maLB);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    coc = new Coc();
+                    coc.setMaCoc(rs.getString("maCoc"));
+                    coc.setLoaiCoc(rs.getBoolean("loaiCoc"));
+                    coc.setPhanTramCoc(rs.getInt("phanTramCoc"));
+                    coc.setSoTienCoc(rs.getDouble("soTienCoc"));
+
+                    // 🔸 Gán khu vực và loại bàn nếu có
+                    KhuVuc kv = KhuVucDAO.getById(maKV);
+                    LoaiBan lb = LoaiBanDAO.getById(maLB);
+                    coc.setKhuVuc(kv);
+                    coc.setLoaiBan(lb);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy thông tin cọc theo KV & LB: " + e.getMessage());
+        }
+
+        return coc;
+    }
 }
