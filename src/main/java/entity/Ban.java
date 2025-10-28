@@ -19,6 +19,10 @@ public class Ban {
         setTrangThai(trangThai);
     }
 
+    public Ban() {
+
+    }
+
     public String getMaBan() {
         return maBan;
     }

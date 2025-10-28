@@ -18,6 +18,10 @@ public class KhuVuc {
         this.tenKhuVuc = tenKhuVuc;
     }
 
+    public KhuVuc() {
+
+    }
+
     public String getMaKhuVuc() {
         return maKhuVuc;
     }
