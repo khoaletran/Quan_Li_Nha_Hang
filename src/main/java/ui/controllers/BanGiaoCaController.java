@@ -7,6 +7,7 @@ import entity.HoaDon;
 import entity.NhanVien;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -26,6 +27,7 @@ public class BanGiaoCaController {
     @FXML private TextField txtCaLam,txtTGVC,txtsLHD,txtSoTienMat,txtSoTienCK,txtTongTien;
     @FXML private TextArea taMoTa;
     @FXML private Label lblTienMat,lblCKhoan,lblsoHD,lblDThu;
+    @FXML private Button btnKetCa;
 
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private NhanVien nhanVien;
@@ -132,5 +134,39 @@ public class BanGiaoCaController {
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
     }
+
+    @FXML
+//    private void ketCa() {
+//        if (nhanVien == null || thoiGianVaoCa == null) return;
+//
+//        String maPhieu = "PKC" + System.currentTimeMillis();
+//        String maNV = nhanVien.getMaNV();
+//        boolean ca = txtCaLam.getText().equals("Ca sáng") ? false : true;
+//        int soHoaDon = Integer.parseInt(txtsLHD.getText());
+//        double tongTienMat = Double.parseDouble(txtSoTienMat.getText());
+//        double tongTienCK = Double.parseDouble(txtSoTienCK.getText());
+//        double chenhLech =
+//
+//
+//        PhieuKetCa phieu = new PhieuKetCa(
+//                maPhieu,
+//                nhanVien,
+//                ca,
+//                soHoaDon,
+//                tongTienMat,
+//                tongTienCK,
+//                chenhLech,
+//                LocalDateTime.now(),
+//                taMoTa.getText().trim()
+//        );
+//
+//        boolean success = new PhieuKetCaDAO().insert(phieu);
+//        if (success) {
+//            System.out.println("Lưu phiếu kết ca thành công!");
+//        } else {
+//            System.err.println("Lỗi khi lưu phiếu kết ca!");
+//        }
+//    }
+
 
 }
