@@ -31,7 +31,7 @@ public class ChonMonController {
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btndatban, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
     @FXML private TextField txtTienKhachDua, sdtKhach, tften;
-    @FXML private TextField tf_ban, tftg, tfSLKhach;
+    @FXML private TextField tf_ban, tftg, tfSLKhach, tfghichu;
 
 
     private ui.controllers.MainController_NV mainController;
@@ -322,12 +322,7 @@ public class ChonMonController {
             }
         }
 
-        double thue = tongTien * 0.1;
-        double tienPT = tongTien + thue;
-
         lbl_total.setText(formatCurrency(tongTien));
-        lbl_thue.setText(formatCurrency(thue));
-        lbl_total_PT.setText(formatCurrency(tienPT));
     }
 
 
@@ -429,14 +424,14 @@ public class ChonMonController {
     }
 
     private void tinhTienThua(){
-        double tong = parseCurrency(lbl_total_PT.getText().trim());
-        double tienKD = parseCurrency(txtTienKhachDua.getText().trim());
-        lblTienThua.setText(formatCurrency(tienKD - tong));
+        double coc = parseCurrency(lblCoc.getText().trim());
+        double tien = parseCurrency(txtTienKhachDua.getText().trim());
+        lblTienThua.setText(formatCurrency(tien - coc));
     }
 
     private void tinhCoc(){
         Coc coc = CocDAO.getByKhuVucVaLoaiBan(banHienTai.getKhuVuc().getMaKhuVuc(),banHienTai.getLoaiBan().getMaLoaiBan());
-        double tong = parseCurrency(lbl_total_PT.getText().trim());
+        double tong = parseCurrency(lbl_total.getText().trim());
         double tienCoc = 0;
         if (coc.isLoaiCoc()) {
             tienCoc = tong * coc.getPhanTramCoc() / 100;
@@ -540,7 +535,6 @@ public class ChonMonController {
         chiTietMap.clear();
         soLuongMap.clear();
         lbl_total.setText("0 đ");
-        lbl_thue.setText("0 đ");
         lbl_total_PT.setText("0 đ");
         BanDAO.update(banHienTai,true);
         quayVeDatBan();
@@ -588,9 +582,6 @@ public class ChonMonController {
 
         String sdt = sdtKhach.getText().trim();
         KhachHang kh = new KhachHangDAO().findBySDT(sdt);
-        if (kh != null) {
-            congDiemTichLuy(kh, tinhDiem());
-        }
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thanh toán thành công");
@@ -602,23 +593,14 @@ public class ChonMonController {
         chiTietMap.clear();
         soLuongMap.clear();
         lbl_total.setText("0 đ");
-        lbl_thue.setText("0 đ");
         lbl_total_PT.setText("0 đ");
         BanDAO.update(banHienTai,true);
         quayVeDatBan();
     }
 
 
-    private void congDiemTichLuy(KhachHang khachHang, int diem) {
-        if (khachHang == null) return;
-        khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() + diem);
-        KhachHangDAO.update(khachHang);
-    }
 
-    private int tinhDiem() {
-        double tongTien = parseCurrency(lbl_total_PT.getText().trim());
-        return (int) (tongTien * 0.1 / 1000);
-    }
+
 
     private boolean themChiTietHoaDon(HoaDon hoaDon) {
         if (hoaDon == null) {
@@ -671,29 +653,16 @@ public class ChonMonController {
 
         if (!sdt.isEmpty()) {
             khachHang = new KhachHangDAO().findBySDT(sdt);
-            if (khachHang != null) {
-                congDiemTichLuy(khachHang, tinhDiem());
-            } else {
-                System.out.println("Không tìm thấy khách hàng có SDT: " + sdt);
-            }
         }
 
         if (khachHang == null) {
             khachHang = new KhachHang("KH0000", 0, true, sdt, "Khách lẻ", xetHang(0));
         }
         // ===== 3. Tính toán giá trị dẫn xuất =====
-        double tongTienTruoc = parseCurrency(lbl_total_PT.getText().trim());
-        double thue = tongTienTruoc * 0.1;
-        double tongSauThue = tongTienTruoc + thue;
 
-        KhuyenMai km = null; // tạm null
-        double tongKM = 0;
+        KhuyenMai km = null;
+
         SuKien suKien = null;
-        double tongSuKM = 0;
-        if(suKien!=null){
-            tongSuKM = suKien.getGia();
-        }
-        double tongtienSau = tongSauThue - tongKM + tongSuKM ;
 
         boolean kieuThanhToan = rdoChuyenKhoan.isSelected();
 
@@ -703,13 +672,14 @@ public class ChonMonController {
         hd.setKhachHang(khachHang);
         hd.setNhanVien(nhanVienHien);
         hd.setBan(banHienTai);
-        hd.setTgCheckIn(LocalDateTime.now());
+        hd.setTgCheckIn(thoiGianDat);
         hd.setTgCheckOut(null);
         hd.setKhuyenMai(km);
         hd.setTrangthai(trangthai);
         hd.setSuKien(suKien);
         hd.setKieuThanhToan(kieuThanhToan);
         hd.setKieuDatBan(kieudatban);
+        hd.setMoTa(tfghichu.getText().trim());
 
         System.out.println("Tạo hóa đơn thành công: " + hd.getMaHD());
         return hd;

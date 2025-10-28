@@ -331,8 +331,25 @@
 
 /* Khi nhấn */
 .icon-qr:pressed {
-    -fx-background-color: #cc5b1e;      /* cam đậm hơn */
+    -fx-background-color: #cc5b1e;
     -fx-scale-x: 0.95;
     -fx-scale-y: 0.95;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);
+}
+
+.checkout-btn {
+    -fx-background-color: #0078D7;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-padding: 8 20 8 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 4, 0, 0, 3);
+}
+.checkout-btn:hover {
+    -fx-background-color: #0a8ef3;
+}
+.checkout-btn:pressed {
+    -fx-background-color: #005fa3;
 }

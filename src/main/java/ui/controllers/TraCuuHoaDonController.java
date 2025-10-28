@@ -1,7 +1,7 @@
 /*
  * @ (#) TraCuuHoaDonController.java    1.1     10/27/2025
  *
- * Copyright (c) 2025 IUH. All rights reserved
+ * Phiên bản tinh gọn — giữ nguyên tên phương thức tiếng Việt
  */
 
 package ui.controllers;
@@ -16,70 +16,67 @@ import entity.ChiTietHoaDon;
 import entity.Mon;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.text.Font;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
-import javafx.scene.control.DatePicker;
 
-import java.util.List;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 public class TraCuuHoaDonController {
 
     // FXML - danh sách hóa đơn
-    @FXML private VBox vbox_center_scroll; // VBox chứa danh sách hóa đơn
+    @FXML private VBox vbox_center_scroll;
 
     // FXML - bộ lọc và tìm kiếm
-    @FXML private TextField txtMaBan; // TextField mã bàn
-    @FXML private DatePicker dpThoiGian; // DatePicker thay cho txtThoiGian
-    @FXML private TextField txtSDT; // TextField số điện thoại
-    @FXML private ComboBox<String> cboKhuVuc; // ComboBox khu vực
-    @FXML private Button btnXoaTrang; // Button xóa trắng
-    @FXML private Button btnTimKiem; // Button tìm kiếm
+    @FXML private TextField txtMaBan;
+    @FXML private DatePicker dpThoiGian;
+    @FXML private TextField txtSDT;
+    @FXML private ComboBox<String> cboKhuVuc;
+    @FXML private Button btnXoaTrang;
+    @FXML private Button btnTimKiem;
 
     // FXML - thông tin chi tiết hóa đơn
-    @FXML private TextField txtMaHoaDon; // Mã hóa đơn
-    @FXML private TextField txtTenKH; // Tên khách hàng
-    @FXML private TextField txtSDTChiTiet; // SĐT chi tiết
-    @FXML private TextField txtBan; // Bàn
-    @FXML private TextField txtSoLuong; // Số lượng
-    @FXML private TextField txtSuKien; // Sự kiện
-    @FXML private TextField txtKhuVuc; // Khu vực
-    @FXML private TextArea txtMoTa; // Mô tả
+    @FXML private TextField txtMaHoaDon;
+    @FXML private TextField txtTenKH;
+    @FXML private TextField txtSDTChiTiet;
+    @FXML private TextField txtBan;
+    @FXML private TextField txtSoLuong;
+    @FXML private TextField txtSuKien;
+    @FXML private TextField txtKhuVuc;
+    @FXML private TextArea txtMoTa;
 
     // FXML - bảng chi tiết hóa đơn
-    @FXML private TableView<ChiTietHoaDon> product_table; // TableView sản phẩm
-    @FXML private TableColumn<ChiTietHoaDon, String> colSanPham; // Cột sản phẩm
-    @FXML private TableColumn<ChiTietHoaDon, String> colSoLuong; // Cột số lượng
-    @FXML private TableColumn<ChiTietHoaDon, String> colGia; // Cột giá
-    @FXML private TableColumn<ChiTietHoaDon, String> colTong; // Cột tổng
+    @FXML private TableView<ChiTietHoaDon> product_table;
+    @FXML private TableColumn<ChiTietHoaDon, String> colSanPham;
+    @FXML private TableColumn<ChiTietHoaDon, String> colSoLuong;
+    @FXML private TableColumn<ChiTietHoaDon, String> colGia;
+    @FXML private TableColumn<ChiTietHoaDon, String> colTong;
 
     // FXML - nút in hóa đơn
-    @FXML private Button confirm_btn; // Button in hóa đơn
+    @FXML private Button confirm_btn;
 
-    // BIẾN TOÀN CỤC
+    // DAO + dữ liệu
     private final HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private final KhachHangDAO khachHangDAO = new KhachHangDAO();
     private final ChiTietHDDAO chiTietHDDAO = new ChiTietHDDAO();
 
-    private List<HoaDon> dsHoaDon = new java.util.ArrayList<>();
+    private final ObservableList<HoaDon> dsHoaDon = FXCollections.observableArrayList();
+    private final ObservableList<ChiTietHoaDon> chiTietHoaDonData = FXCollections.observableArrayList();
     private HoaDon hoaDonSelected = null;
-    private ObservableList<ChiTietHoaDon> chiTietHoaDonData = FXCollections.observableArrayList();
 
-    // Format ngày (hiển thị nếu cần)
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @FXML
@@ -96,10 +93,12 @@ public class TraCuuHoaDonController {
         ganSuKienChoNut();
         khoiTaoTableView();
         taiDanhSachHoaDon();
-
         resetForm();
     }
 
+    // =======================
+    // KẾT NỐI DB
+    // =======================
     private boolean ketNoiDatabase() {
         try {
             connectDB.getInstance().connect();
@@ -112,10 +111,13 @@ public class TraCuuHoaDonController {
         }
     }
 
+    // =======================
+    // KHỞI TẠO CONTROL
+    // =======================
     private void khoiTaoComboBox() {
         if (cboKhuVuc != null) {
             cboKhuVuc.getItems().clear();
-            cboKhuVuc.getItems().addAll("Tất cả", "Trong nhà", "Ngoài trời", "Khu VIP");
+            cboKhuVuc.getItems().addAll("Tất cả", "Indoor", "Outdoor", "VIP");
             cboKhuVuc.setValue("Tất cả");
         }
     }
@@ -123,7 +125,6 @@ public class TraCuuHoaDonController {
     private void khoiTaoDatePicker() {
         if (dpThoiGian != null) {
             dpThoiGian.setPromptText("dd/MM/yyyy");
-            // Nếu cần convert giữa String <-> LocalDate có thể set converter ở đây
         }
     }
 
@@ -134,69 +135,43 @@ public class TraCuuHoaDonController {
     }
 
     private void khoiTaoTableView() {
-        // Kiểm tra null trước khi khởi tạo
         if (colSanPham != null) {
-            colSanPham.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ChiTietHoaDon, String>, javafx.beans.value.ObservableValue<String>>() {
-                @Override
-                public javafx.beans.value.ObservableValue<String> call(TableColumn.CellDataFeatures<ChiTietHoaDon, String> param) {
-                    Mon mon = param.getValue().getMon();
-                    String tenMon = mon != null ? mon.getTenMon() : "Không xác định";
-                    return new javafx.beans.property.SimpleStringProperty(tenMon);
-                }
+            colSanPham.setCellValueFactory(cell -> {
+                Mon m = cell.getValue().getMon();
+                String ten = (m != null && m.getTenMon() != null) ? m.getTenMon() : "Không xác định";
+                return new javafx.beans.property.SimpleStringProperty(ten);
             });
         }
 
         if (colSoLuong != null) {
-            colSoLuong.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ChiTietHoaDon, String>, javafx.beans.value.ObservableValue<String>>() {
-                @Override
-                public javafx.beans.value.ObservableValue<String> call(TableColumn.CellDataFeatures<ChiTietHoaDon, String> param) {
-                    int soLuong = param.getValue().getSoLuong();
-                    return new javafx.beans.property.SimpleStringProperty(String.valueOf(soLuong));
-                }
-            });
+            colSoLuong.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(
+                    String.valueOf(cell.getValue().getSoLuong())));
         }
 
         if (colGia != null) {
-            colGia.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ChiTietHoaDon, String>, javafx.beans.value.ObservableValue<String>>() {
-                @Override
-                public javafx.beans.value.ObservableValue<String> call(TableColumn.CellDataFeatures<ChiTietHoaDon, String> param) {
-                    Mon mon = param.getValue().getMon();
-                    double gia = mon != null ? mon.getGiaBan() : 0;
-                    return new javafx.beans.property.SimpleStringProperty(String.format("%,.0f VNĐ", gia));
-                }
+            colGia.setCellValueFactory(cell -> {
+                Mon m = cell.getValue().getMon();
+                double g = (m != null) ? m.getGiaBan() : 0;
+                return new javafx.beans.property.SimpleStringProperty(String.format("%,.0f VNĐ", g));
             });
         }
 
         if (colTong != null) {
-            colTong.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ChiTietHoaDon, String>, javafx.beans.value.ObservableValue<String>>() {
-                @Override
-                public javafx.beans.value.ObservableValue<String> call(TableColumn.CellDataFeatures<ChiTietHoaDon, String> param) {
-                    double thanhTien = param.getValue().getThanhTien();
-                    return new javafx.beans.property.SimpleStringProperty(String.format("%,.0f VNĐ", thanhTien));
-                }
-            });
+            colTong.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(
+                    String.format("%,.0f VNĐ", cell.getValue().getThanhTien())));
         }
 
-        if (product_table != null) {
-            product_table.setItems(chiTietHoaDonData);
-        }
+        if (product_table != null) product_table.setItems(chiTietHoaDonData);
     }
 
+    // =======================
+    // TẢI & HIỂN THỊ DANH SÁCH HÓA ĐƠN
+    // =======================
     private void taiDanhSachHoaDon() {
         try {
-            List<HoaDon> listHD = HoaDonDAO.getAll();
+            List<HoaDon> listHD = hoaDonDAO.getAll();
             dsHoaDon.clear();
-            if (listHD != null) {
-                for (HoaDon hd : listHD) {
-                    System.out.println("🔍 Hóa đơn: " + hd.getMaHD() +
-                            ", Trạng thái: " + hd.getTrangthai() +
-                            ", Khách hàng: " + (hd.getKhachHang() != null ? hd.getKhachHang().getTenKhachHang() : "null") +
-                            ", Bàn: " + (hd.getBan() != null ? hd.getBan().getMaBan() : "null"));
-                    // Hiển thị tất cả hóa đơn
-                    dsHoaDon.add(hd);
-                }
-            }
-            System.out.println("✅ Đã tải " + dsHoaDon.size() + " hóa đơn");
+            if (listHD != null) dsHoaDon.addAll(listHD);
             hienThiDanhSachHoaDon();
         } catch (Exception ex) {
             System.err.println("Lỗi khi tải danh sách hóa đơn: " + ex.getMessage());
@@ -205,13 +180,8 @@ public class TraCuuHoaDonController {
     }
 
     private void hienThiDanhSachHoaDon() {
-        if (vbox_center_scroll == null) {
-            System.err.println("❌ vbox_center_scroll is null");
-            return;
-        }
-
+        if (vbox_center_scroll == null) return;
         vbox_center_scroll.getChildren().clear();
-        System.out.println("🔄 Hiển thị " + dsHoaDon.size() + " hóa đơn");
 
         if (dsHoaDon.isEmpty()) {
             Label empty = new Label("Không có hóa đơn nào");
@@ -228,15 +198,14 @@ public class TraCuuHoaDonController {
 
     private HBox taoCardHoaDon(HoaDon hd) {
         HBox card = new HBox(10);
-        card.getStyleClass().add("order-card");
         card.setPadding(new Insets(8));
         card.setCursor(Cursor.HAND);
         card.setPrefHeight(80);
         card.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #dee2e6; -fx-border-radius: 8; -fx-background-radius: 8;");
 
-        // Hình ảnh
+        // thumb
         StackPane thumb = new StackPane();
-        thumb.setStyle("-fx-background-radius: 10 0 0 10; -fx-overflow: hidden;");
+        thumb.setPrefSize(60, 60);
         ImageView iv = new ImageView();
         iv.setFitWidth(60);
         iv.setFitHeight(60);
@@ -244,58 +213,38 @@ public class TraCuuHoaDonController {
         try {
             Image img = new Image(getClass().getResourceAsStream("/IMG/avatar.png"));
             iv.setImage(img);
-        } catch (Exception e) {
-            System.out.println("Không load được ảnh: " + e.getMessage());
-            // Tạo hình ảnh mặc định
-            thumb.setStyle("-fx-background-color: #e9ecef; -fx-background-radius: 10 0 0 10;");
-            Label defaultLabel = new Label("HD");
-            defaultLabel.setStyle("-fx-text-fill: #666; -fx-font-weight: bold;");
-            thumb.getChildren().add(defaultLabel);
-        }
-        if (thumb.getChildren().isEmpty()) {
             thumb.getChildren().add(iv);
+        } catch (Exception e) {
+            thumb.setStyle("-fx-background-color: #e9ecef; -fx-alignment: center;");
+            Label lb = new Label("HD");
+            lb.setStyle("-fx-text-fill: #666; -fx-font-weight: bold;");
+            thumb.getChildren().add(lb);
         }
 
-        // Thông tin
+        // info
         VBox info = new VBox(2);
         Label lblMa = new Label(hd.getMaHD());
         lblMa.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #333;");
-
-        String sdt = "Không có";
-        if (hd.getKhachHang() != null && hd.getKhachHang().getSdt() != null) {
-            sdt = hd.getKhachHang().getSdt();
-        }
-        Label lblPhone = new Label("SĐT: " + sdt);
-        lblPhone.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
-
-        // Hiển thị thêm thông tin
-        String tenKH = "Không có";
-        if (hd.getKhachHang() != null && hd.getKhachHang().getTenKhachHang() != null) {
-            tenKH = hd.getKhachHang().getTenKhachHang();
-        }
+        String tenKH = Optional.ofNullable(hd.getKhachHang()).map(KhachHang::getTenKhachHang).orElse("Không có");
         Label lblTen = new Label("Tên: " + tenKH);
         lblTen.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
-
+        String sdt = Optional.ofNullable(hd.getKhachHang()).map(KhachHang::getSdt).orElse("Không có");
+        Label lblPhone = new Label("SĐT: " + sdt);
+        lblPhone.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
         info.getChildren().addAll(lblMa, lblTen, lblPhone);
         HBox.setHgrow(info, javafx.scene.layout.Priority.ALWAYS);
 
-        // Trạng thái
-        String trangThaiText = getTrangThaiText(hd.getTrangthai());
-        String trangThaiStyle = getTrangThaiStyle(hd.getTrangthai());
-        Label lblTrangThai = new Label(trangThaiText);
-        lblTrangThai.setStyle(trangThaiStyle);
+        Label lblTrangThai = new Label(getTrangThaiText(hd.getTrangthai()));
+        lblTrangThai.setStyle(getTrangThaiStyle(hd.getTrangthai()));
 
         card.getChildren().addAll(thumb, info, lblTrangThai);
 
-        // Sự kiện click
         card.setOnMouseClicked(e -> {
-            System.out.println("🎯 Click vào hóa đơn: " + hd.getMaHD());
+            System.out.println("Click vào hóa đơn: " + hd.getMaHD());
             clearSelectedStyles();
-
-            // Đánh dấu card được chọn
+            // style card được chọn
             card.setStyle("-fx-background-color: #007bff; -fx-border-color: #0056b3; -fx-border-radius: 8; -fx-background-radius: 8;");
-
-            // Đổi màu chữ trong card
+            // đổi màu chữ
             for (javafx.scene.Node node : card.getChildren()) {
                 if (node instanceof VBox) {
                     for (javafx.scene.Node child : ((VBox) node).getChildren()) {
@@ -342,7 +291,6 @@ public class TraCuuHoaDonController {
                     if (child instanceof VBox) {
                         for (javafx.scene.Node label : ((VBox) child).getChildren()) {
                             if (label instanceof Label) {
-                                // Reset style cho các label thông tin
                                 if (((Label) label).getText().startsWith("HD")) {
                                     ((Label) label).setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #333;");
                                 } else {
@@ -351,7 +299,6 @@ public class TraCuuHoaDonController {
                             }
                         }
                     } else if (child instanceof Label) {
-                        // Reset style cho label trạng thái
                         String text = ((Label) child).getText();
                         if (text.contains("Đặt trước")) {
                             ((Label) child).setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-font-size: 11px;");
@@ -366,36 +313,23 @@ public class TraCuuHoaDonController {
         }
     }
 
+    // =======================
+    // HIỂN THỊ CHI TIẾT HÓA ĐƠN
+    // =======================
     private void hienThiThongTinChiTiet(HoaDon hd) {
         if (hd == null) return;
-
-        System.out.println("📋 Hiển thị chi tiết hóa đơn: " + hd.getMaHD());
-
-        // Hiển thị thông tin cơ bản
         if (txtMaHoaDon != null) txtMaHoaDon.setText(hd.getMaHD());
 
         KhachHang kh = hd.getKhachHang();
-
-        // Nếu hoa don chưa có thông tin KhachHang, thử tải từ DB bằng maKH (dùng getById instance)
         if (kh == null) {
+            String maKH = null;
             try {
-                // Thử lấy maKH nếu entity HoaDon có getter tương ứng
-                String maKH = null;
-                try {
-                    Method m = hd.getClass().getMethod("getMaKH");
-                    Object obj = m.invoke(hd);
-                    if (obj != null) maKH = obj.toString();
-                } catch (NoSuchMethodException nsme) {
-                    // entity không có getMaKH, bỏ qua
-                }
-
-                if (maKH != null && !maKH.trim().isEmpty()) {
-                    kh = khachHangDAO.getById(maKH);
-                } else {
-                    // nếu chưa có maKH nhưng hd.getKhachHang() null, không làm gì
-                }
-            } catch (Exception ex) {
-                System.out.println("Không tải được KhachHang từ DAO: " + ex.getMessage());
+                Method m = hd.getClass().getMethod("getMaKH");
+                Object obj = m.invoke(hd);
+                if (obj != null) maKH = obj.toString();
+            } catch (Exception ignored) {}
+            if (maKH != null && !maKH.trim().isEmpty()) {
+                try { kh = khachHangDAO.getById(maKH); } catch (Exception ex) { System.out.println("Lỗi lấy KH: " + ex.getMessage()); }
             }
         }
 
@@ -407,7 +341,6 @@ public class TraCuuHoaDonController {
             if (txtSDTChiTiet != null) txtSDTChiTiet.setText("—");
         }
 
-        // Thông tin bàn và khu vực
         if (hd.getBan() != null) {
             if (txtBan != null) txtBan.setText(hd.getBan().getMaBan() != null ? hd.getBan().getMaBan() : "—");
             if (txtKhuVuc != null) {
@@ -422,98 +355,74 @@ public class TraCuuHoaDonController {
             if (txtKhuVuc != null) txtKhuVuc.setText("—");
         }
 
-        // Thông tin sự kiện
         if (txtSuKien != null) {
             try {
-                txtSuKien.setText(hd.getSuKien() != null && hd.getSuKien().getTenSK() != null ?
-                        hd.getSuKien().getTenSK() : "Không có");
+                txtSuKien.setText(hd.getSuKien() != null && hd.getSuKien().getTenSK() != null ? hd.getSuKien().getTenSK() : "Không có");
             } catch (Exception ex) {
                 txtSuKien.setText("Không có");
             }
         }
 
-        // Số lượng khách
         if (txtSoLuong != null) {
-            try {
-                txtSoLuong.setText(String.valueOf(hd.getSoLuong()));
-            } catch (Exception ex) {
-                txtSoLuong.setText("0");
-            }
+            try { txtSoLuong.setText(String.valueOf(hd.getSoLuong())); }
+            catch (Exception ex) { txtSoLuong.setText("0"); }
         }
 
-        // Mô tả/ghi chú
         if (txtMoTa != null) {
             try {
-                // Nếu entity có phương thức getGhiChu()
                 Method m = null;
-                try {
-                    m = hd.getClass().getMethod("getGhiChu");
-                } catch (NoSuchMethodException nsme) {
-                    m = null;
-                }
+                try { m = hd.getClass().getMethod("getGhiChu"); } catch (NoSuchMethodException nsme) { m = null; }
                 if (m != null) {
                     Object val = m.invoke(hd);
                     txtMoTa.setText(val != null ? val.toString() : "");
-                } else {
-                    txtMoTa.setText("");
-                }
+                } else txtMoTa.setText("");
             } catch (Exception ex) {
                 txtMoTa.setText("");
             }
         }
 
-        // Tải chi tiết hóa đơn
         loadChiTietDonHang(hd.getMaHD());
     }
 
     private void loadChiTietDonHang(String maHD) {
         chiTietHoaDonData.clear();
-
-        if (maHD == null || maHD.trim().isEmpty()) {
-            return;
-        }
-
+        if (maHD == null || maHD.trim().isEmpty()) return;
         try {
             List<ChiTietHoaDon> dsChiTiet = chiTietHDDAO.getByMaHD(maHD);
             if (dsChiTiet != null && !dsChiTiet.isEmpty()) {
                 chiTietHoaDonData.addAll(dsChiTiet);
                 System.out.println("✅ Đã tải " + dsChiTiet.size() + " chi tiết hóa đơn");
-
-                // Debug: in ra chi tiết
                 for (ChiTietHoaDon ct : dsChiTiet) {
                     System.out.println("   - " + (ct.getMon() != null ? ct.getMon().getTenMon() : "null") +
                             " x " + ct.getSoLuong() + " = " + ct.getThanhTien());
                 }
             } else {
-                System.out.println("ℹ️ Không có chi tiết hóa đơn cho mã: " + maHD);
+                System.out.println("Không có chi tiết hóa đơn cho mã: " + maHD);
             }
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi tải chi tiết hóa đơn: " + e.getMessage());
+            System.err.println("Lỗi khi tải chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+    // =======================
+    // TÌM KIẾM
+    // =======================
     @FXML
     private void timKiemHoaDon() {
         String maBan = txtMaBan != null ? txtMaBan.getText().trim() : "";
         String sdt = txtSDT != null ? txtSDT.getText().trim() : "";
         String khuVuc = cboKhuVuc != null && cboKhuVuc.getValue() != null ? cboKhuVuc.getValue() : "Tất cả";
-
-        LocalDate ngay = null;
-        if (dpThoiGian != null) {
-            ngay = dpThoiGian.getValue(); // null nếu chưa chọn
-        }
-
-        System.out.println("🔍 Tìm kiếm với: Mã bàn=" + maBan + ", SDT=" + sdt + ", Khu vực=" + khuVuc + ", Ngày=" + ngay);
+        LocalDate ngay = dpThoiGian != null ? dpThoiGian.getValue() : null;
 
         try {
-            List<HoaDon> allHD = HoaDonDAO.getAll();
+            List<HoaDon> allHD = hoaDonDAO.getAll();
             List<HoaDon> ketQua = new java.util.ArrayList<>();
 
             for (HoaDon hd : allHD) {
                 boolean match = true;
 
-                // Lọc theo mã bàn
+                // mã bàn
                 if (!maBan.isEmpty()) {
                     if (hd.getBan() == null || hd.getBan().getMaBan() == null ||
                             !hd.getBan().getMaBan().toLowerCase().contains(maBan.toLowerCase())) {
@@ -521,37 +430,30 @@ public class TraCuuHoaDonController {
                     }
                 }
 
-                // Lọc theo số điện thoại
+                // sdt
                 if (!sdt.isEmpty()) {
                     String sdtHD = null;
                     if (hd.getKhachHang() != null && hd.getKhachHang().getSdt() != null) {
                         sdtHD = hd.getKhachHang().getSdt();
                     } else {
-                        // nếu hd chưa có khachHang, thử lấy maKH và truy vấn dao
                         try {
                             String maKH = null;
                             try {
                                 Method m = hd.getClass().getMethod("getMaKH");
                                 Object obj = m.invoke(hd);
                                 if (obj != null) maKH = obj.toString();
-                            } catch (NoSuchMethodException nsme) {
-                                maKH = null;
-                            }
+                            } catch (NoSuchMethodException nsme) { maKH = null; }
                             if (maKH != null && !maKH.isEmpty()) {
                                 KhachHang kh = khachHangDAO.getById(maKH);
                                 if (kh != null) sdtHD = kh.getSdt();
                             }
-                        } catch (Exception ex) {
-                            // ignore
-                        }
+                        } catch (Exception ex) { /* ignore */ }
                     }
 
-                    if (sdtHD == null || !sdtHD.contains(sdt)) {
-                        match = false;
-                    }
+                    if (sdtHD == null || !sdtHD.contains(sdt)) match = false;
                 }
 
-                // Lọc theo khu vực
+                // khu vực
                 if (!khuVuc.equals("Tất cả")) {
                     if (hd.getBan() == null || hd.getBan().getKhuVuc() == null ||
                             hd.getBan().getKhuVuc().getTenKhuVuc() == null ||
@@ -560,72 +462,47 @@ public class TraCuuHoaDonController {
                     }
                 }
 
-                // Lọc theo ngày (sử dụng reflection để đọc trường ngày của HoaDon - hỗ trợ LocalDate, LocalDateTime, java.util.Date, String)
+                // ngày
                 if (ngay != null) {
                     try {
                         Object tgObj = null;
                         Method m = null;
-                        try {
-                            m = hd.getClass().getMethod("getTgCheckin");
-                        } catch (NoSuchMethodException nsme) {
-                            try {
-                                m = hd.getClass().getMethod("getTgCheckout");
-                            } catch (NoSuchMethodException ex2) {
-                                m = null;
-                            }
+                        try { m = hd.getClass().getMethod("getTgCheckin"); }
+                        catch (NoSuchMethodException nsme) {
+                            try { m = hd.getClass().getMethod("getTgCheckout"); }
+                            catch (NoSuchMethodException ex2) { m = null; }
                         }
-                        if (m != null) {
-                            tgObj = m.invoke(hd);
-                        }
+                        if (m != null) tgObj = m.invoke(hd);
 
                         LocalDate ngayHD = null;
-                        if (tgObj == null) {
-                            // không có thông tin thời gian -> coi như không match
-                            ngayHD = null;
-                        } else if (tgObj instanceof LocalDate) {
-                            ngayHD = (LocalDate) tgObj;
-                        } else if (tgObj instanceof LocalDateTime) {
-                            ngayHD = ((LocalDateTime) tgObj).toLocalDate();
-                        } else if (tgObj instanceof Date) {
-                            ngayHD = ((Date) tgObj).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        } else {
-                            // nếu là String, thử parse bằng dtf hoặc ISO
+                        if (tgObj == null) ngayHD = null;
+                        else if (tgObj instanceof LocalDate) ngayHD = (LocalDate) tgObj;
+                        else if (tgObj instanceof LocalDateTime) ngayHD = ((LocalDateTime) tgObj).toLocalDate();
+                        else if (tgObj instanceof Date) ngayHD = ((Date) tgObj).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        else {
                             String s = tgObj.toString();
-                            try {
-                                ngayHD = LocalDate.parse(s, dtf);
-                            } catch (Exception ex) {
-                                try {
-                                    ngayHD = LocalDate.parse(s); // ISO fallback
-                                } catch (Exception ex2) {
-                                    ngayHD = null;
-                                }
+                            try { ngayHD = LocalDate.parse(s, dtf); }
+                            catch (Exception ex) {
+                                try { ngayHD = LocalDate.parse(s); } catch (Exception ex2) { ngayHD = null; }
                             }
                         }
 
-                        if (ngayHD == null || !ngayHD.equals(ngay)) {
-                            match = false;
-                        }
+                        if (ngayHD == null || !ngayHD.equals(ngay)) match = false;
                     } catch (Exception ex) {
-                        // nếu không thể đọc trường ngày, bỏ qua bộ lọc ngày (hoặc bạn có thể set match=false)
                         System.out.println("Không thể lấy ngày từ HoaDon bằng reflection: " + ex.getMessage());
                         match = false;
                     }
                 }
 
-                if (match) {
-                    ketQua.add(hd);
-                }
+                if (match) ketQua.add(hd);
             }
 
             dsHoaDon.clear();
             dsHoaDon.addAll(ketQua);
             hienThiDanhSachHoaDon();
 
-            if (ketQua.isEmpty()) {
-                hienThiThongBao("Không tìm thấy hóa đơn nào phù hợp với điều kiện tìm kiếm");
-            } else {
-                hienThiThongBao("Tìm thấy " + ketQua.size() + " hóa đơn phù hợp");
-            }
+            if (ketQua.isEmpty()) hienThiThongBao("Không tìm thấy hóa đơn nào phù hợp với điều kiện tìm kiếm");
+            else hienThiThongBao("Tìm thấy " + ketQua.size() + " hóa đơn phù hợp");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -633,6 +510,9 @@ public class TraCuuHoaDonController {
         }
     }
 
+    // =======================
+    // XÓA TRẮNG BỘ LỌC / IN / RESET
+    // =======================
     @FXML
     private void xoaTrangBoLoc() {
         if (txtMaBan != null) txtMaBan.clear();
@@ -650,10 +530,8 @@ public class TraCuuHoaDonController {
             hienThiThongBao("Vui lòng chọn hóa đơn cần in");
             return;
         }
-
         try {
             hienThiThongBao("Đang in hóa đơn: " + hoaDonSelected.getMaHD() + "\nChức năng in đang được phát triển...");
-
         } catch (Exception e) {
             e.printStackTrace();
             hienThiThongBaoLoi("Lỗi khi in hóa đơn: " + e.getMessage());
@@ -675,6 +553,9 @@ public class TraCuuHoaDonController {
         clearSelectedStyles();
     }
 
+    // =======================
+    // HỘP THOẠI
+    // =======================
     private void hienThiThongBao(String msg) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Thông báo");
@@ -691,6 +572,9 @@ public class TraCuuHoaDonController {
         alert.showAndWait();
     }
 
+    // =======================
+    // API ngoại: Refresh
+    // =======================
     public void refreshData() {
         try {
             if (!ketNoiDatabase()) {

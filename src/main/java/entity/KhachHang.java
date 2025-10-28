@@ -23,6 +23,10 @@ public class KhachHang {
         setHangKhachHang(hangKhachHang);
     }
 
+    public KhachHang() {
+
+    }
+
     public String getMaKhachHang() {
         return maKhachHang;
     }
