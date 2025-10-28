@@ -93,8 +93,8 @@ public class ChiTietHDDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, ct.getSoLuong());
-            ps.setString(3, ct.getHoaDon().getMaHD());
-            ps.setString(4, ct.getMon().getMaMon());
+            ps.setString(2, ct.getHoaDon().getMaHD());
+            ps.setString(3, ct.getMon().getMaMon());
 
             return ps.executeUpdate() > 0;
 
