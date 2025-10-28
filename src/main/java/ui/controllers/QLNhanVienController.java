@@ -71,7 +71,14 @@ public class QLNhanVienController {
         VBox card = new VBox(5);
         card.getStyleClass().add("menu-card");
 
-        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/IMG/avatar.png")));
+        ImageView img;
+        if (nv.isGioiTinh()){
+            img = new ImageView(new Image(getClass().getResourceAsStream("/IMG/icon/man.png")));
+        } else{
+            img = new ImageView(new Image(getClass().getResourceAsStream("/IMG/icon/woman.png")));
+        }
+
+
         img.setFitWidth(120);
         img.setFitHeight(120);
 

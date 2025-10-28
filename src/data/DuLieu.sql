@@ -56,25 +56,14 @@ VALUES
 ('KM0004', N'Khuyến mãi cuối tuần', 200, '2025-03-01', '2025-03-31', NULL, 5, 0),
 ('KM0005', N'Giảm giá hè sôi động', 150, '2025-06-01', '2025-06-30', NULL, 25, 1);
 
--- =============== MÓN ĂN ===============
-INSERT INTO Mon VALUES
-('MN0001', N'Gỏi cua lột', N'Món khai vị tươi mát, vị chua ngọt', 'goi_cua_lot.jpg', 80000, 20, 'LM0001'),
-('MN0002', N'Cua hoàng đế hấp bia', N'Món chính sang trọng, thịt ngọt', 'cua_hoang_de.jpg', 1200000, 10, 'LM0002'),
-('MN0003', N'Chè hạt sen', N'Món tráng miệng thanh mát', 'che_hat_sen.jpg', 40000, 25, 'LM0003'),
-('MN0004', N'Sinh tố xoài', N'Nước uống trái cây tự nhiên', 'sinh_to_xoai.jpg', 30000, 40, 'LM0004'),
-('MN0005', N'Lẩu cua đồng', N'Món đặc biệt cho nhóm đông người', 'lau_cua_dong.jpg', 250000, 15, 'LM0005'),
-('MN0006', N'Cơm chiên hải sản', N'Món chính cho nhóm đông', 'com_chien_hai_san.jpg', 90000, 30, 'LM0002'),
-('MN0007', N'Tôm hùm nướng bơ tỏi', N'Món đặc biệt cao cấp', 'tom_hum_bo_toi.jpg', 950000, 8, 'LM0005');
-
 -- =============== PHẦN TRĂM GIÁ BÁN ===============
 INSERT INTO PhanTramGiaBan VALUES
-('PG0001', 'LM0001', 'MN0001', 35, '2025-04-01'),
-('PG0002', 'LM0002', 'MN0002', 45, '2025-04-01'),
-('PG0003', 'LM0003', 'MN0003', 25, '2025-04-01'),
-('PG0004', 'LM0004', 'MN0004', 20, '2025-04-01'),
-('PG0005', 'LM0005', 'MN0005', 50, '2025-04-01'),
-('PG0006', 'LM0002', 'MN0006', 40, '2025-04-01'),
-('PG0007', 'LM0005', 'MN0007', 55, '2025-04-01');
+('PG0001', 'LM0001', NUll, 35, '2025-04-01'),
+('PG0002', 'LM0002', NUll, 45, '2025-04-01'),
+('PG0003', 'LM0003', NUll, 25, '2025-04-01'),
+('PG0004', 'LM0004', NUll, 20, '2025-04-01'),
+('PG0005', 'LM0005', NUll, 50, '2025-04-01');
+
 
 -- =============== SỰ KIỆN ===============
 INSERT INTO SuKien VALUES
@@ -109,11 +98,4 @@ INSERT INTO Coc VALUES
 ('CO0010', 0, NULL, 500000, 'LB0005', 'KV0003');
 GO
 
-INSERT INTO PhieuKetCa (maPhieu, maNV, ca, soHoaDon, tienMat, tienCK, tienChenhLech, ngayKetCa,moTa)
-VALUES
-('PK0001', 'NV0001', 0, 25,  15000000, 5000000,  0,       '2025-10-25 12:00','khách làm vỡ 2 ly'),  -- Ca sáng NV0001
-('PK0002', 'NV0002', 1, 30,  18000000, 7000000,  50000,   '2025-10-25 22:00','Trẻ em làm hư cây cảnh'),  -- Ca tối NV0002
-('PK0003', 'NV0003', 0, 28,  15500000, 4500000, -100000,  '2025-10-26 12:00',null),  -- Ca sáng NV0003
-('PK0004', 'NV0004', 1, 35,  20000000, 8000000,  0,       '2025-10-26 22:00',null),  -- Ca tối NV0004
-('PK0005', 'NV0005', 0, 20,  12000000, 4000000,  20000,   '2025-10-27 12:00',null);  -- Ca sáng NV0005
-GO
+

@@ -18,6 +18,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
+<?import javafx.scene.image.ImageView?>
 <BorderPane prefHeight="800.0"
             prefWidth="1400.0"
             style="-fx-background-color: D9D9D9;"
@@ -41,16 +42,7 @@
                         <children>
                             <VBox layoutX="-1.0" layoutY="25.0" prefHeight="200.0" prefWidth="100.0">
                                 <StackPane alignment="CENTER">
-                                    <Circle fill="#f0f0f0" radius="100" stroke="#cccccc" strokeWidth="3" />
-                                    <Rectangle arcHeight="190" arcWidth="190" height="190" width="190">
-                                        <fill>
-                                            <ImagePattern>
-                                                <image>
-                                                    <Image url="@../IMG/avatar.png" />
-                                                </image>
-                                            </ImagePattern>
-                                        </fill>
-                                    </Rectangle>
+                                    <ImageView fx:id="avatarImage" fitWidth="190" fitHeight="190" preserveRatio="true" />
                                 </StackPane>
                             </VBox>
                         </children>
@@ -58,16 +50,12 @@
                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
                         <children>
                             <VBox layoutX="24.0" layoutY="18.0" prefHeight="218.0" prefWidth="372.0" spacing="6" styleClass="employee-info">
-                                <Label styleClass="info-label" text="Mã Nhân Viên: NV0002" />
-                                <Label styleClass="info-label" text="Họ Và Tên: Nguyễn Hà Nhật Khanh" />
-                                <Label styleClass="info-label" text="SĐT: 03222385253" />
-                                <Label styleClass="info-label" text="Chức Vụ: Quản Lý" />
-                                <Label styleClass="info-label" text="Giới Tính: Nam" />
-                                <Label styleClass="info-label" text="Ngày Vào Làm: 28/04/2005" />
-                                <HBox alignment="CENTER_LEFT" spacing="8">
-                                    <Label styleClass="info-label" text="Đã hoạt động" />
-                                    <Circle fill="green" radius="5" />
-                                </HBox>
+                                <Label fx:id="lblMaNV" styleClass="info-label" text="Mã Nhân Viên:" />
+                                <Label fx:id="lblTenNV" styleClass="info-label" text="Họ Và Tên:" />
+                                <Label fx:id="lblSDT" styleClass="info-label" text="SĐT:" />
+                                <Label fx:id="lblChucVu" styleClass="info-label" text="Chức Vụ:" />
+                                <Label fx:id="lblGioiTinh" styleClass="info-label" text="Giới Tính:" />
+                                <Label fx:id="lblNgayVaoLam" styleClass="info-label" text="Ngày Vào Làm:" />
                                 <HBox alignment="BOTTOM_RIGHT">
                                     <Button fx:id="btnChangePass" onAction="#showChangePassword" prefHeight="7.0" prefWidth="93.0" styleClass="small-btn" text="Đổi Mật Khẩu" />
                                 </HBox>

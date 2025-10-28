@@ -21,29 +21,42 @@ public class MainController_QL {
         return sidebar_QLController ;
     }
 
-
     @FXML
     public void initialize() {
         if (sidebar_QLController != null) {
             sidebar_QLController.setMainController(this);
         }
-        // Hiển thị Dashboard mặc định
-        setCenterContent("/FXML/DashBoard.fxml");
+        // ❌ Không gọi load Dashboard ở đây nữa
+        // Vì lúc này chưa có nhân viên
     }
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
+
+        // ✅ Khi có nhân viên rồi mới load Dashboard
+        setCenterContent("/FXML/DashBoard.fxml");
     }
+
     public NhanVien getNhanVien() {
         return nhanVien;
     }
 
     public void setCenterContent(String fxmlPath) {
         try {
-            Node node = FXMLLoader.load(getClass().getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Node node = loader.load();
+
+            // ✅ Truyền controller cha và nhân viên
+            Object controller = loader.getController();
+            if (controller instanceof DashboardController dashboardController) {
+                dashboardController.setMainController(this);
+                dashboardController.setNhanVien(nhanVien);
+            }
+
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
             fadeIn.setFromValue(0);
             fadeIn.setToValue(1);
+
             mainContent.getChildren().setAll(node);
             fadeIn.play();
         } catch (IOException e) {

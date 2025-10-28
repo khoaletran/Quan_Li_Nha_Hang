@@ -86,8 +86,9 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 2);
     -fx-cursor: hand;
     -fx-pref-width: 240;   /* mỗi card rộng 220px */
-    -fx-pref-height: 220;  /* cao 220px */
     -fx-spacing: 10;
+    -fx-border-color: #E6763E;
+    -fx-border-radius: 12;
 }
 
 

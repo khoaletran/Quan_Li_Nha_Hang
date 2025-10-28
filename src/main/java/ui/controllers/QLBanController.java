@@ -40,16 +40,6 @@ public class QLBanController {
         comboKhuVuc.setOnAction(event -> filterBan());
     }
 
-    private String imgLoaiBan(String urlLoaiBan) {
-        if(urlLoaiBan.equals("Indoor")){
-            return "/IMG/ban/IN.png";
-        } else if (urlLoaiBan.equals("Outdoor")) {
-            return "/IMG/ban/out.png";
-        }else if (urlLoaiBan.equals("VIP")) {
-            return "/IMG/ban/vip.png";
-        }else return "/IMG/ban/IN.png";
-    }
-
     // Load toàn bộ bàn
     private void loadAllBan() {
         flowPaneBan.getChildren().clear();
@@ -64,13 +54,6 @@ public class QLBanController {
     private VBox taoTheBan(Ban ban) {
         VBox card = new VBox();
         card.getStyleClass().add("menu-item");
-
-        ImageView img = new ImageView(
-                new Image(getClass().getResourceAsStream(imgLoaiBan(ban.getKhuVuc().getTenKhuVuc())))
-        );
-        img.setFitWidth(180);
-        img.setFitHeight(140);
-        img.setPreserveRatio(true);
 
         HBox infoBox = new HBox();
         infoBox.getStyleClass().add("item-info");
@@ -100,7 +83,7 @@ public class QLBanController {
         group3.getChildren().addAll(lbTitle3, lbDetail3);
 
         infoBox.getChildren().addAll(group1, group2, group3);
-        card.getChildren().addAll(img, infoBox);
+        card.getChildren().addAll(infoBox);
         return card;
     }
 
