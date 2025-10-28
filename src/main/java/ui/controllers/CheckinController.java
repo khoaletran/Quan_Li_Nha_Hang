@@ -57,11 +57,11 @@ public class CheckinController {
     }
     private void loadDanhSach() {
         // 1️⃣ Load thời gian đợi bàn 1 lần
-        int thoiGianDatTruoc = 0; // cho kieuDatBan = 0
-        int thoiGianCho = 0;      // cho kieuDatBan = 1
+        int thoiGianDatTruoc = 0; // cho kieuDatBan = 1
+        int thoiGianCho = 0;      // cho kieuDatBan = 0
         try {
-            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(false); // đặt trước
-            ThoiGianDoiBan tgCho = ThoiGianDoiBanDAO.getLatestByLoai(true);       // chờ
+            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(true); // đặt trước
+            ThoiGianDoiBan tgCho = ThoiGianDoiBanDAO.getLatestByLoai(false);       // chờ
             if (tgDatTruoc != null) thoiGianDatTruoc = tgDatTruoc.getThoiGian();
             if (tgCho != null) thoiGianCho = tgCho.getThoiGian();
         } catch (Exception e) {
@@ -79,11 +79,11 @@ public class CheckinController {
         for (HoaDon hd : dsHoaDon) {
             if (hd.getTrangthai() != 0) continue; // chỉ lấy trạng thái 0
 
-            int thoiGian = (hd.isKieuDatBan() == false) ? thoiGianDatTruoc : thoiGianCho;
+            int thoiGian = (hd.isKieuDatBan() == true) ? thoiGianDatTruoc : thoiGianCho;
 
             HBox item = createBookingItem(hd, thoiGian);
 
-            if (hd.isKieuDatBan() == false) { // đặt trước
+            if (hd.isKieuDatBan() == true) { // đặt trước
                 vboxDatTruoc.getChildren().add(item);
             } else { // chờ
                 vboxCho.getChildren().add(item);
@@ -201,7 +201,7 @@ public class CheckinController {
         }
 
         LocalDateTime now = LocalDateTime.now();
-        ThoiGianDoiBan tg = ThoiGianDoiBanDAO.getLatestByLoai(!hd.isKieuDatBan());
+        ThoiGianDoiBan tg = ThoiGianDoiBanDAO.getLatestByLoai(hd.isKieuDatBan());
         int thoiGianCho = (tg != null) ? tg.getThoiGian() : 0;
         LocalDateTime tgChoPhep = tgDat.plusMinutes(thoiGianCho);
 
@@ -310,11 +310,11 @@ public class CheckinController {
         vboxCho.getChildren().clear();
 
         // Lấy thời gian đợi bàn 1 lần
-        int thoiGianDatTruoc = 0; // kieuDatBan = 0
-        int thoiGianCho = 0;      // kieuDatBan = 1
+        int thoiGianDatTruoc = 0; // kieuDatBan = 1
+        int thoiGianCho = 0;      // kieuDatBan = 0
         try {
-            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(false);
-            ThoiGianDoiBan tgCho = ThoiGianDoiBanDAO.getLatestByLoai(true);
+            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(true);
+            ThoiGianDoiBan tgCho = ThoiGianDoiBanDAO.getLatestByLoai(false);
             if (tgDatTruoc != null) thoiGianDatTruoc = tgDatTruoc.getThoiGian();
             if (tgCho != null) thoiGianCho = tgCho.getThoiGian();
         } catch (Exception e) {
@@ -337,10 +337,10 @@ public class CheckinController {
 
             if (match) {
                 // Chọn thời gian đợi bàn theo loại
-                int thoiGian = (!hd.isKieuDatBan()) ? thoiGianDatTruoc : thoiGianCho;
+                int thoiGian = (hd.isKieuDatBan()) ? thoiGianDatTruoc : thoiGianCho;
                 HBox item = createBookingItem(hd, thoiGian);
 
-                if (!hd.isKieuDatBan()) { // đặt trước
+                if (hd.isKieuDatBan()) { // đặt trước
                     vboxDatTruoc.getChildren().add(item);
                 } else { // chờ
                     vboxCho.getChildren().add(item);
