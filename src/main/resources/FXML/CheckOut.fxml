@@ -25,7 +25,7 @@
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-         <VBox prefHeight="353.0" prefWidth="653.0" styleClass="top">
+         <VBox styleClass="top">
             <children>
 
                 <HBox alignment="CENTER_LEFT" spacing="5" styleClass="search_box">
@@ -41,9 +41,9 @@
                 </HBox>
 
                      <!-- Danh sách hóa đơn -->
-                  <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="275.0" prefWidth="653.0" styleClass="invoice-scroll">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="300.0" styleClass="invoice-scroll">
                   <content>
-                          <VBox fx:id="vboxHoaDon" alignment="CENTER_LEFT" prefHeight="303.0" prefWidth="651.0" spacing="12" style="-fx-background-color: #EFEFEF; -fx-background-radius: 0 0 20 20">
+                          <VBox fx:id="vboxHoaDon" alignment="CENTER_LEFT" spacing="12" style="-fx-background-color: #EFEFEF; -fx-background-radius: 0 0 20 20">
                               <padding>
                                   <Insets bottom="10" left="10" right="10" top="10" />
                               </padding>
@@ -52,9 +52,9 @@
                   </ScrollPane>
             </children>
          </VBox>
-         <VBox prefHeight="387.0" prefWidth="653.0" style="-fx-background-color: #EFEFEF; -fx-background-radius: 20 20 28 28">
+         <VBox style="-fx-background-color: #EFEFEF; -fx-background-radius: 20 20 28 28">
             <children>
-               <HBox alignment="CENTER_LEFT" style="-fx-spacing: 60;" styleClass="detail_box">
+               <HBox alignment="CENTER_LEFT" styleClass="detail_box">
                   <children>
                      <Label prefHeight="13.0" prefWidth="40.0" style="-fx-font-weight: bold" text="STT" />
                      <Label style="-fx-font-weight: bold" text="TÊN MÓN" />
@@ -66,7 +66,7 @@
                </HBox>
 
                   <!-- Danh sách món ăn -->
-                <ScrollPane fx:id="menuScroll" fitToWidth="true" prefHeight="387.0" prefWidth="653.0" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
+                <ScrollPane fx:id="menuScroll" fitToWidth="true" minHeight="300.0" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
                     <content>
                         <VBox fx:id="vboxMenu" spacing="10" styleClass="menu-list" />
                     </content>

@@ -125,4 +125,49 @@ public class ChiTietHDDAO {
         }
         return tongTien;
     }
+
+    // ===== 6. LẤY TOÀN BỘ CHI TIẾT HÓA ĐƠN =====
+    public static List<ChiTietHoaDon> getAll() {
+        List<ChiTietHoaDon> ds = new ArrayList<>();
+        String sql = "SELECT * FROM ChiTietHoaDon";
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            // 🔹 Lấy dữ liệu phụ trước để giảm truy vấn lặp
+            List<Mon> dsMon = MonDAO.getAll();
+            List<HoaDon> dsHD = HoaDonDAO.getAll();
+
+            while (rs.next()) {
+                String maHD = rs.getString("maHD");
+                String maMon = rs.getString("maMon");
+                int soLuong = rs.getInt("soLuong");
+
+                // 🔹 Lấy thông tin từ cache (RAM), không query SQL
+                Mon mon = dsMon.stream()
+                        .filter(m -> m.getMaMon().equals(maMon))
+                        .findFirst()
+                        .orElse(null);
+
+                HoaDon hd = dsHD.stream()
+                        .filter(h -> h.getMaHD().equals(maHD))
+                        .findFirst()
+                        .orElse(null);
+
+                if (mon != null && hd != null) {
+                    ds.add(new ChiTietHoaDon(hd, mon, soLuong));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi khi lấy danh sách chi tiết hóa đơn: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("⚠️ Lỗi khác khi lấy danh sách chi tiết hóa đơn: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return ds;
+    }
+
 }

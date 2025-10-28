@@ -15,10 +15,13 @@ public class MonDAO {
         List<Mon> ds = new ArrayList<>();
         Connection con = connectDB.getConnection();
         if (con == null) return ds;
-//abc
+
         String sql = "SELECT * FROM Mon";
         try (Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
+
+            // 🔹 Load toàn bộ loại món 1 lần
+            List<LoaiMon> dsLoai = LoaiMonDAO.getAll();
 
             while (rs.next()) {
                 Mon mon = new Mon();
@@ -29,10 +32,12 @@ public class MonDAO {
                 mon.setGiaGoc(rs.getDouble("giaGoc"));
                 mon.setSoLuong(rs.getInt("soLuong"));
 
-                // Lấy LoaiMon từ DAO
                 String maLoaiMon = rs.getString("loaiMon");
-                LoaiMon loaiMon = LoaiMonDAO.getByID(maLoaiMon);
-                mon.setLoaiMon(loaiMon);
+                LoaiMon loai = dsLoai.stream()
+                        .filter(l -> l.getMaLoaiMon().equals(maLoaiMon))
+                        .findFirst()
+                        .orElse(null);
+                mon.setLoaiMon(loai);
 
                 ds.add(mon);
             }
@@ -43,6 +48,7 @@ public class MonDAO {
 
         return ds;
     }
+
 
     // Thêm món mới
     public static boolean insert(Mon mon) {

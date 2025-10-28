@@ -3,22 +3,24 @@ package ui.controllers;
 import com.google.zxing.*;
 import dao.*;
 import entity.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import ui.AlertCus;
 import ui.HoaDonIn;
 import ui.QRThanhToan;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CheckoutController {
 
@@ -70,10 +72,6 @@ public class CheckoutController {
     private void updateThanhTien() {
         if (lblmaHD.getText().isEmpty()) return;
 
-        double tienTruoc = parseCurrency(lblTongTien.getText());
-        double tienThue = 0;
-        double tienGG = 0;
-
         String maGiamG = txtMaGG.getText().trim();
         if (!maGiamG.isEmpty()) {
             for (KhuyenMai km : listKM) {
@@ -85,112 +83,115 @@ public class CheckoutController {
         }
 
         lblGiamGia.setText(formatCurrency(hdHienTai.getTongTienKhuyenMai()));
-        lblTongTT.setText(formatCurrency(tienTruoc + tienThue - tienGG ));
 
         if (rdoTienMat.isSelected()) taoGoiYTienKhach();
 
+        double tongTien = hdHienTai.getTongTienTruoc();
+        double thue = tongTien * 0.1;
+        double tongTT = hdHienTai.getTongTienSau();
+        double coc = hdHienTai.getCoc();
+        double conLai = tongTT - coc ;
 
-        lblThue.setText(formatCurrency(hdHienTai.getThue()));
-        lblTongTT.setText(formatCurrency(hdHienTai.getTongTienSau()));
-        lblCoc.setText(formatCurrency(hdHienTai.getCoc()));
-        lblConLai.setText(formatCurrency(hdHienTai.getTongTienSau()-hdHienTai.getCoc()));
+        lblTongTien.setText(formatCurrency(tongTien));
+        lblThue.setText(formatCurrency(thue));
+        lblTongTT.setText(formatCurrency(tongTT));
+        lblCoc.setText(formatCurrency(coc));
+        lblConLai.setText(formatCurrency(conLai));
     }
+
 
 
     // ======== HIỂN THỊ DANH SÁCH HÓA ĐƠN ==========
     public void loadAllHoaDon() {
         vboxHoaDon.getChildren().clear();
 
-        HoaDonDAO hoaDonDAO = new HoaDonDAO();
-        KhachHangDAO khachHangDAO = new KhachHangDAO();
+        List<HoaDon> dsHoaDon = HoaDonDAO.getAll();
+        List<KhachHang> dsKH = KhachHangDAO.getAll();
+        List<KhuVuc> dsKV = KhuVucDAO.getAll();
+        List<ChiTietHoaDon> dsCTAll = ChiTietHDDAO.getAll();
 
-        List<HoaDon> dsHoaDon = hoaDonDAO.getAll();
+        // 🔹 Gom tất cả chi tiết theo mã hóa đơn
+        Map<String, List<ChiTietHoaDon>> mapCT = dsCTAll.stream()
+                .collect(Collectors.groupingBy(ct -> ct.getHoaDon().getMaHD()));
 
         for (HoaDon hd : dsHoaDon) {
-            if (hd.getTrangthai() == 1) {
-                HBox hbox = new HBox(15);
-                hbox.setAlignment(javafx.geometry.Pos.CENTER);
-                hbox.getStyleClass().add("invoice-card");
+            if (hd.getTrangthai() != 1) continue;
 
-                ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/IMG/ban/IN.png")));
-                imageView.setFitWidth(100);
-                imageView.setFitHeight(60);
+            HBox hbox = new HBox(15);
+            hbox.setAlignment(Pos.CENTER);
+            hbox.getStyleClass().add("invoice-card");
 
-                Label lblMaHD = new Label(hd.getMaHD());
-                lblMaHD.getStyleClass().add("invoice-id");
+            ImageView imageView = new ImageView(new Image(
+                    getClass().getResourceAsStream("/IMG/ban/IN.png")));
+            // Ảnh cache static
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(60);
 
-                KhachHang kh = khachHangDAO.getById(hd.getKhachHang().getMaKhachHang());
-                String tenKH = (kh != null) ? kh.getTenKhachHang() : "Không rõ";
-                String sdtKH = (kh != null) ? kh.getSdt() : "Không có";
+            Label lblMaHD = new Label(hd.getMaHD());
+            lblMaHD.getStyleClass().add("invoice-id");
 
-                Label lblSDT = new Label("SĐT: " + sdtKH);
-                lblSDT.getStyleClass().add("invoice-phone");
+            KhachHang kh = dsKH.stream()
+                    .filter(k -> k.getMaKhachHang().equals(hd.getKhachHang().getMaKhachHang()))
+                    .findFirst().orElse(null);
 
-                VBox vboxInfo = new VBox(lblMaHD, new AnchorPane(), lblSDT);
-                Region region = new Region();
-                HBox.setHgrow(region, javafx.scene.layout.Priority.ALWAYS);
+            String tenKH = kh != null ? kh.getTenKhachHang() : "Không rõ";
+            String sdtKH = kh != null ? kh.getSdt() : "Không có";
 
-                Button btnTime = new Button("🕒");
-                btnTime.getStyleClass().add("time-btn");
+            VBox info = new VBox(lblMaHD, new Label("SĐT: " + sdtKH));
+            Region region = new Region();
+            HBox.setHgrow(region, Priority.ALWAYS);
 
-                hbox.getChildren().addAll(imageView, vboxInfo, region, btnTime);
+            Button btnTime = new Button("🕒");
+            btnTime.getStyleClass().add("time-btn");
+            hbox.getChildren().addAll(imageView, info, region, btnTime);
 
-                // ======== SỰ KIỆN CLICK ==========
-                hbox.setOnMouseClicked(e -> {
-                    hdHienTai = hd;
-                    lblmaHD.setText(hd.getMaHD());
-                    lbltenKH.setText(tenKH);
-                    lblsdtKH.setText(sdtKH);
-                    lblsuKien.setText(hd.getSuKien() != null ? hd.getSuKien().getTenSK() : "Không có");
+            // 🔹 Sự kiện click
+            hbox.setOnMouseClicked(e -> {
+                hdHienTai = hd;
+                lblmaHD.setText(hd.getMaHD());
+                lbltenKH.setText(tenKH);
+                lblsdtKH.setText(sdtKH);
+                lblsuKien.setText(hd.getSuKien() != null ? hd.getSuKien().getTenSK() : "Không có");
 
-                    BanDAO banDAO = new BanDAO();
-                    KhuVucDAO khuVucDAO = new KhuVucDAO();
-                    KhuVuc kv = khuVucDAO.getById(hd.getBan().getKhuVuc().getMaKhuVuc());
-                    lblKhuVuc.setText(kv != null ? kv.getTenKhuVuc() : "?");
+                KhuVuc kv = dsKV.stream()
+                        .filter(k -> k.getMaKhuVuc().equals(hd.getBan().getKhuVuc().getMaKhuVuc()))
+                        .findFirst().orElse(null);
+                lblKhuVuc.setText(kv != null ? kv.getTenKhuVuc() : "?");
 
-                    txtMaGG.clear();
-                    lblSoLuong.setText(String.valueOf(hd.getSoLuong()));
-                    lblTongTien.setText(formatCurrency(hd.getTongTienTruoc()));
-                    lblThue.setText(formatCurrency(hd.getThue()));
-                    lblTongTT.setText(formatCurrency(hd.getTongTienSau()));
-                    lblCoc.setText(formatCurrency(hd.getCoc()));
-                    lblConLai.setText(formatCurrency(hd.getTongTienSau()-hd.getCoc()));
+                List<ChiTietHoaDon> dsCT = mapCT.getOrDefault(hd.getMaHD(), new ArrayList<>());
 
+                updateThanhTien();
 
-                    updateThanhTien();
+                new Thread(() -> {
+                    Platform.runLater(() -> {
+                        vboxMenu.getChildren().clear();
+                        int stt = 1;
+                        for (ChiTietHoaDon ct : dsCT) {
+                            HBox row = new HBox(10);
+                            row.getStyleClass().add("menu-row");
+                            Label lblSTT = new Label(String.valueOf(stt++));
+                            lblSTT.getStyleClass().add("col-stt");
+                            Label lblName = new Label(ct.getMon().getTenMon());
+                            lblName.getStyleClass().add("col-name");
+                            Label lblQty = new Label(String.valueOf(ct.getSoLuong()));
+                            lblQty.getStyleClass().add("col-qty");
+                            Label lblPrice = new Label(formatCurrency(ct.getMon().getGiaBanTaiLucLapHD(hd)));
+                            lblPrice.getStyleClass().add("col-price"); Label lblDiscount = new Label("0%");
+                            lblDiscount.getStyleClass().add("col-discount");
+                            Label lblTotal = new Label(formatCurrency(ct.getThanhTien()));
+                            lblTotal.getStyleClass().add("col-total");
+                            row.getChildren().addAll(lblSTT, lblName, lblQty, lblPrice, lblDiscount, lblTotal);
+                            vboxMenu.getChildren().add(row);
+                        }
+                    });
+                }).start();
+            });
 
-                    // load chi tiết món
-                    vboxMenu.getChildren().clear();
-                    ChiTietHDDAO ctDAO = new ChiTietHDDAO();
-                    List<ChiTietHoaDon> dsCT = ctDAO.getByMaHD(hd.getMaHD());
-
-                    int stt = 1;
-                    for (ChiTietHoaDon ct : dsCT) {
-                        HBox row = new HBox(10);
-                        row.getStyleClass().add("menu-row");
-
-                        Label lblSTT = new Label(String.valueOf(stt++));
-                        lblSTT.getStyleClass().add("col-stt");
-                        Label lblName = new Label(ct.getMon().getTenMon());
-                        lblName.getStyleClass().add("col-name");
-                        Label lblQty = new Label(String.valueOf(ct.getSoLuong()));
-                        lblQty.getStyleClass().add("col-qty");
-                        Label lblPrice = new Label(formatCurrency(ct.getMon().getGiaBanTaiLucLapHD(hd)));
-                        lblPrice.getStyleClass().add("col-price");
-                        Label lblDiscount = new Label("0%");
-                        lblDiscount.getStyleClass().add("col-discount");
-                        Label lblTotal = new Label(formatCurrency(ct.getThanhTien()));
-                        lblTotal.getStyleClass().add("col-total");
-
-                        row.getChildren().addAll(lblSTT, lblName, lblQty, lblPrice, lblDiscount, lblTotal);
-                        vboxMenu.getChildren().add(row);
-                    }
-                });
-
-                vboxHoaDon.getChildren().add(hbox);
-            }
+            vboxHoaDon.getChildren().add(hbox);
         }
     }
+
+
 
     // ======== GỢI Ý TIỀN MẶT + TÍNH TIỀN THỪA ==========
     private void xuLyHienThiTienMat() {
