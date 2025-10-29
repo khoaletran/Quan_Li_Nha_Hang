@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import ui.AlertCus;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -109,8 +110,8 @@ public class CheckinController {
             else if (tenKhuVuc.equals("VIP")) imgPath = "/IMG/ban/vip.png";
         }
         ImageView img = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
-        img.setFitWidth(80);
-        img.setFitHeight(70);
+        img.setFitWidth(70);
+        img.setFitHeight(60);
 
         img.setPreserveRatio(false);
         // 🔹 Bo góc
@@ -120,7 +121,6 @@ public class CheckinController {
         img.setClip(clip);
 
 // 🔹 Margin xung quanh (10px ví dụ)
-        HBox.setMargin(img, new Insets(10));
         img.getStyleClass().add("booking-image");
 
         // 🔹 2️⃣ Info khách hàng
@@ -207,19 +207,19 @@ public class CheckinController {
     private void checkin() {
         String maHD = lblMaHD.getText();
         if (maHD == null || maHD.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Thông báo", "Chưa chọn hóa đơn để check-in!");
+            AlertCus.show("Thông báo", "Chưa chọn hóa đơn để check-in!");
             return;
         }
 
         HoaDon hd = HoaDonDAO.getByID(maHD);
         if (hd == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không tìm thấy hóa đơn: " + maHD);
+            AlertCus.show("Lỗi", "Không tìm thấy hóa đơn: " + maHD);
             return;
         }
 
         LocalDateTime tgDat = hd.getTgCheckIn();
         if (tgDat == null) {
-            showAlert(Alert.AlertType.WARNING, "Thông báo", "Hóa đơn chưa có thời gian đặt bàn!");
+            AlertCus.show("Thông báo", "Hóa đơn chưa có thời gian đặt bàn!");
             return;
         }
 
@@ -229,12 +229,16 @@ public class CheckinController {
         LocalDateTime tgChoPhep = tgDat.plusMinutes(thoiGianCho);
 
         if (now.isBefore(tgDat)) {
-            showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Chưa tới giờ check-in!\nGiờ đặt: " + tgDat.toLocalTime());
+            AlertCus.show("Thông báo", "Chưa tới giờ check-in!\nGiờ đặt: " + tgDat.toLocalTime());
             return;
         }
 
         if (now.isAfter(tgChoPhep)) {
-            showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
+            AlertCus.show("Thông báo", "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
+
+            hd.setTrangthai(3);
+            HoaDonDAO.update(hd);
+            loadDanhSach();
             return;
         }
 
@@ -243,11 +247,11 @@ public class CheckinController {
 
         boolean ok = HoaDonDAO.update(hd);
         if (ok) {
-            showAlert(Alert.AlertType.INFORMATION, "Thành công", "Check-in thành công cho hóa đơn " + maHD + "!");
+            AlertCus.show("Thành công", "Check-in thành công cho hóa đơn " + maHD + "!");
             loadDanhSach();
             clearThongTin();
         } else {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể cập nhật trạng thái check-in!");
+            AlertCus.show("Lỗi", "Không thể cập nhật trạng thái check-in!");
         }
     }
 
@@ -371,6 +375,11 @@ public class CheckinController {
             }
         }
     }
-
+    @FXML
+    private void xoaTrang(){
+        txtSDT.setText("");
+        txtMaHD.setText("");
+        cboKhuVuc.getSelectionModel().selectFirst();
+    }
 
 }

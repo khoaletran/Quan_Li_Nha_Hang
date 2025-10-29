@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: #ffffff;                    -fx-background-radius: 20;                    -fx-border-radius: 20;                    -fx-border-color: #E6763E;                    -fx-border-width: 2;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AlertController">
+<AnchorPane prefHeight="200.0" prefWidth="460.0" style="-fx-background-color: #ffffff;                    -fx-background-radius: 20;                    -fx-border-radius: 20;                    -fx-border-color: #E6763E;                    -fx-border-width: 2;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AlertController">
 
-    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="500.0" spacing="15" style="-fx-padding: 25;">
+    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="460.0" spacing="15" style="-fx-padding: 25;">
 
         <!-- Tiêu đề -->
         <Label fx:id="lblTitle" alignment="CENTER" style="-fx-font-size: 20px;                       -fx-font-weight: bold;                       -fx-text-fill: #E6763E;                       -fx-alignment: center;" text="Thông báo" />
