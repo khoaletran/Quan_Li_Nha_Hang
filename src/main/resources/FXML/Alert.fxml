@@ -5,15 +5,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="180" prefWidth="500" style="-fx-background-color: #ffffff;                    -fx-background-radius: 20;                    -fx-border-radius: 20;                    -fx-border-color: #E6763E;                    -fx-border-width: 2;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AlertController">
+<AnchorPane prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: #ffffff;                    -fx-background-radius: 20;                    -fx-border-radius: 20;                    -fx-border-color: #E6763E;                    -fx-border-width: 2;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AlertController">
 
-    <VBox alignment="CENTER" prefHeight="180" prefWidth="500" spacing="15" style="-fx-padding: 25;">
+    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="500.0" spacing="15" style="-fx-padding: 25;">
 
         <!-- Tiêu đề -->
         <Label fx:id="lblTitle" alignment="CENTER" style="-fx-font-size: 20px;                       -fx-font-weight: bold;                       -fx-text-fill: #E6763E;                       -fx-alignment: center;" text="Thông báo" />
-
-        <!-- Nội dung -->
-        <Label fx:id="lblMessage" alignment="CENTER" prefHeight="21.0" prefWidth="515.0" style="-fx-font-size: 15px;                       -fx-text-fill: #333333;                       -fx-text-alignment: center;                       -fx-alignment: center;                       -fx-padding: 0 20 0 20;" text="Nội dung hiển thị ở đây" wrapText="true" />
+      <VBox prefWidth="450.0" VBox.vgrow="ALWAYS">
+         <children>
+      
+              <!-- Nội dung -->
+              <Label fx:id="lblMessage" alignment="CENTER" prefWidth="515.0" style="-fx-font-size: 15px; -fx-text-fill: #333333;-fx-text-alignment: center; -fx-alignment: center; -fx-padding: 0 20 0 20;" text="Nội dung hiển thị ở đây" wrapText="true" />
+         </children>
+      </VBox>
 
         <!-- Nút xác nhận -->
         <Button fx:id="btnConfirm" alignment="CENTER" style="-fx-background-color: #E6763E;                        -fx-text-fill: white;                        -fx-font-weight: bold;                        -fx-background-radius: 10;                        -fx-padding: 8 25;                        -fx-alignment: center;                        -fx-cursor: hand;" text="Xác nhận" />
