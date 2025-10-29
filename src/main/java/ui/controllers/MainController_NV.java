@@ -31,11 +31,12 @@ public class MainController_NV {
         if (sidebar_NVController != null) {
             sidebar_NVController.setMainController(this);
         }
-        loadDefaultView();
+
     }
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
+        loadDefaultView();
     }
 
     public NhanVien getNhanVien() {return nhanVien;}
@@ -76,6 +77,7 @@ public class MainController_NV {
 
             if (controller instanceof DashboardController dashboardCtrl) {
                 dashboardCtrl.setMainController(this);
+                dashboardCtrl.setNhanVien(nhanVien);
             }
 
             if (controller instanceof BanGiaoCaController banGiaoCaCtrl) {

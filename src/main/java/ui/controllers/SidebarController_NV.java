@@ -5,6 +5,8 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -25,14 +27,30 @@ public class SidebarController_NV {
     @FXML private Button btnKetCa;
     @FXML private Label lblTenNV;
     @FXML private Label lblChucVu;
+    @FXML private ImageView avatarImage;
 
     private MainController_NV mainController;
     private Button currentMainSelected = null;  // menu lớn
-    private Button currentSubSelected = null;   // menu con
+    private Button currentSubSelected = null;
+
+    @FXML
+    public void initialize() {
+        javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(55, 55, 55);
+        avatarImage.setClip(clip);
+    }
 
     public void setThongTinNhanVien(NhanVien nv) {
         lblTenNV.setText(nv.getTenNV());
         lblChucVu.setText(nv.isQuanLi() ? "Quản Lí" : "Nhân Viên");
+
+        Image img;
+        if (nv.isGioiTinh()) {
+            img = new Image(getClass().getResourceAsStream("/IMG/icon/man.png"));
+        } else {
+            img = new Image(getClass().getResourceAsStream("/IMG/icon/woman.png"));
+        }
+
+        avatarImage.setImage(img);
     }
 
     public void setMainController(MainController_NV controller) {

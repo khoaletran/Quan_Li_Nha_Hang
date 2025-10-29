@@ -19,16 +19,7 @@
             <HBox alignment="CENTER" spacing="15" styleClass="avatar_section">
                 <children>
                     <StackPane alignment="CENTER">
-                        <Circle fill="#f0f0f0" radius="57" stroke="#cccccc" strokeWidth="2" />
-                        <Circle radius="55">
-                            <fill>
-                                <ImagePattern>
-                                    <image>
-                                        <Image url="@../IMG/icon/man.png" />
-                                    </image>
-                                </ImagePattern>
-                            </fill>
-                        </Circle>
+                        <ImageView fx:id="avatarImage" fitHeight="110" fitWidth="110"/>
                     </StackPane>
                     <VBox alignment="CENTER_LEFT" spacing="5">
                         <Label fx:id="lblTenNV" styleClass="username" text="Tên nhân viên" />

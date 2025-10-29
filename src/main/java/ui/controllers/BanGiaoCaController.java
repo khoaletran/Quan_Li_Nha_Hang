@@ -148,6 +148,22 @@ public class BanGiaoCaController {
         PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
         String maPhieu = phieuKCDAO.generateNewMaPhieu();
 
+        if (!isNumeric(txtsLHD.getText())) {
+            AlertCus.show("Thông báo lỗi","Số hóa đơn phải là số!");
+            return;
+        }
+        if (!isNumeric(txtSoTienMat.getText())) {
+            AlertCus.show("Thông báo lỗi","Số tiền mặt phải là số!");
+            return;
+        }
+        if (!isNumeric(txtSoTienCK.getText())) {
+            AlertCus.show("Thông báo lỗi","Số tiền chuyển khoản phải là số!");
+            return;
+        }
+        if (!isNumeric(txtTongTien.getText())) {
+            AlertCus.show("Thông báo lỗi","Số tổng tiền phải là số!");
+            return;
+        }
         boolean ca = txtCaLam.getText().equals("Ca sáng") ? false : true;
         int soHoaDon = Integer.parseInt(txtsLHD.getText());
         double tongTM = Double.parseDouble(txtSoTienMat.getText());
@@ -174,10 +190,15 @@ public class BanGiaoCaController {
                 AlertCus.show("Bàn giao ca","Lỗi lưu báo cáo kết ca!");
             }
         }
-
-
-
     }
 
-
+    private boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) return false;
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
