@@ -36,6 +36,9 @@ public class DashboardController {
     @FXML private Label lblDoanhThu;
     @FXML private Label lblSoKhach;
     @FXML private Label lblKhuVuc;
+    @FXML private Label lblIn;
+    @FXML private Label lblOut;
+    @FXML private Label lblVip;
 
     private NhanVien nv;
 
@@ -113,7 +116,7 @@ public class DashboardController {
                 return;
             }
 
-//            int tongDon = 0;
+           int tongKhachHang = 0;
             double tongDoanhThu = 0;
             Set<String> tapKhachHang = new HashSet<>();
             Set<String> tapKhuVuc = new HashSet<>();
@@ -123,11 +126,16 @@ public class DashboardController {
             int donDangDung = 0; // trạng thái = 1
             int donHoanThanh = 0;// trạng thái = 2
 
+            //Khu vuc
+            int in =0;
+            int out =0;
+            int vip =0;
+
             // Duyệt danh sách hóa đơn
             for (HoaDon hd : danhSach) {
                 if (hd == null) continue;
 
-//                tongDon++;
+                tongKhachHang+=hd.getSoLuong();
                 tongDoanhThu += hd.getTongTienSau();
 
                 // Đếm khách hàng duy nhất
@@ -150,15 +158,30 @@ public class DashboardController {
                 } else if (tt == 2) {
                     donHoanThanh++;
                 }
+
+                String maKV = hd.getBan().getKhuVuc().getMaKhuVuc();
+                if(maKV.equals("KV0001")){
+                    in++;
+                }
+                else if(maKV.equals("KV0002")){
+                    out++;
+                }
+                else if(maKV.equals("KV0003")){
+                    vip++;
+                }
             }
 
             // ✅ Cập nhật hiển thị
             lblTongDonDangDoi.setText(String.valueOf("Số đơn đang đợi: "+donCho));
             lblTongDonDaNhan.setText(String.valueOf("Số đơn đang dùng: "+donDangDung));
             lblTongDonDaThanhToan.setText(String.valueOf("Số đơn đã thanh toán: "+donHoanThanh));
+            lblIn.setText(String.valueOf("Khu vực IN: "+in));
+            lblOut.setText(String.valueOf("Khu vực Out: "+out));
+            lblVip.setText(String.valueOf("Khu vực Vip: "+vip));
             lblDoanhThu.setText(String.format("%,.0f đ", tongDoanhThu));
-            lblSoKhach.setText(String.valueOf(tapKhachHang.size()));
-            lblKhuVuc.setText(String.valueOf(tapKhuVuc.size()));
+            lblSoKhach.setText(String.valueOf(tongKhachHang));
+//            lblKhuVuc.setText(String.valueOf(tapKhuVuc.size()));
+
 
             // 💬 In ra log cho dễ kiểm tra (hoặc có thể hiển thị lên UI)
             System.out.println("Đơn chờ: " + donCho);

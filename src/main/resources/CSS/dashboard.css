@@ -29,7 +29,7 @@
 
 .card-title {
     -fx-font-weight: bold;
-    -fx-font-size: 14px;
+    -fx-font-size: 15px;
 }
 
 .text-green { -fx-text-fill: #22aa33; }
@@ -110,11 +110,12 @@
     -fx-background-radius: 18;
     -fx-border-radius: 18;
     -fx-border-width: 1.2;
-    -fx-padding: 16;
+    -fx-padding: 10;
     -fx-spacing: 12;
-    -fx-alignment: center;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, 3, 3);
     -fx-transition: 0.3s;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 .card_infoRT {
@@ -164,6 +165,49 @@
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: #2980b9;
+}
+
+/*HOA DON*/
+.countHD{
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2980b9;
+}
+.mauHD1{
+    -fx-text-fill: #ff0000;
+}
+
+.mauHD2{
+    -fx-text-fill: #ffd500;
+}
+
+.mauHD3{
+     -fx-text-fill: #1aff00;
+ }
+.vboxHD{
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+/*KHU VUC*/
+.countKV{
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2980b9;
+}
+.mauKV1{
+    -fx-text-fill: #ff0000;
+}
+
+.mauKV2{
+    -fx-text-fill: #ffd500;
+}
+
+.mauKV3{
+    -fx-text-fill: #1aff00;
+}
+.vboxKV{
+    -fx-text-alignment: center;
+    -fx-alignment: center;
 }
 
 /*css biểu đồ*/
