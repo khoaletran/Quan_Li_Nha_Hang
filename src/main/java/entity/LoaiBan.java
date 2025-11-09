@@ -25,7 +25,9 @@ public class LoaiBan {
     }
 
     public void setMaLoaiBan(String maLoaiBan) {
-        this.maLoaiBan = maLoaiBan;
+        if(maLoaiBan == null || !maLoaiBan.matches("^LB\\d{4}$")) {
+            throw new IllegalArgumentException("Mã loại bàn sai định dạng.");
+        }this.maLoaiBan = maLoaiBan;
     }
 
     public int getSoLuong() {
@@ -33,7 +35,9 @@ public class LoaiBan {
     }
 
     public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
+        if (soLuong < 0) {
+            throw new IllegalArgumentException("Số lượng không được nhỏ hơn 0.");
+        }this.soLuong = soLuong;
     }
 
     public String getTenLoaiBan() {
@@ -41,6 +45,9 @@ public class LoaiBan {
     }
 
     public void setTenLoaiBan(String tenLoaiBan) {
+        if (tenLoaiBan == null || tenLoaiBan.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên loại bàn không được để trống.");
+        }
         this.tenLoaiBan = tenLoaiBan;
     }
 

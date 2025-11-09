@@ -38,7 +38,9 @@ public class NhanVien {
     }
 
     public void setMaNV(String maNV) {
-        this.maNV = maNV;
+        if(maNV == null || !maNV.matches("^NV\\d{4}$")) {
+            throw new IllegalArgumentException("Mã nhân viên sai định dạng.");
+        }this.maNV = maNV;
     }
 
     public boolean isTrangThai() {
@@ -54,7 +56,9 @@ public class NhanVien {
     }
 
     public void setNgayVaoLam(LocalDate ngayVaoLam) {
-        this.ngayVaoLam = ngayVaoLam;
+        if (ngayVaoLam == null || !ngayVaoLam.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Ngày vào làm phải trước ngày hiện tại.");
+        }this.ngayVaoLam = ngayVaoLam;
     }
 
     public boolean isQuanLi() {
@@ -70,7 +74,9 @@ public class NhanVien {
     }
 
     public void setSdt(String sdt) {
-        this.sdt = sdt;
+        if (sdt == null || !sdt.matches("^0[3-9]\\d{8}$")) {
+            throw new IllegalArgumentException("Số điện thoại không hợp lệ. Phải gồm 10 chữ số và bắt đầu bằng 03–09.");
+        }this.sdt = sdt;
     }
 
     public String getTenNV() {
@@ -78,7 +84,9 @@ public class NhanVien {
     }
 
     public void setTenNV(String tenNV) {
-        this.tenNV = tenNV;
+        if (tenNV == null || tenNV.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên nhân viên không được để trống.");
+        }this.tenNV = tenNV;
     }
 
     public boolean isGioiTinh() {
@@ -94,7 +102,11 @@ public class NhanVien {
     }
 
     public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
+        if (matKhau == null || !matKhau.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+            throw new IllegalArgumentException(
+                    "Mật khẩu không hợp lệ. Phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt (@$!%*?&)."
+            );
+        }this.matKhau = matKhau;
     }
 
     @Override

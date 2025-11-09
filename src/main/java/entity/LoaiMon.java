@@ -24,7 +24,9 @@ public class LoaiMon {
     }
 
     public void setMaLoaiMon(String maLoaiMon) {
-        this.maLoaiMon = maLoaiMon;
+        if(maLoaiMon == null || !maLoaiMon.matches("^LM\\d{4}$")) {
+            throw new IllegalArgumentException("Mã khu vực sai định dạng.");
+        }this.maLoaiMon = maLoaiMon;
     }
 
     public String getTenLoaiMon() {
@@ -32,7 +34,9 @@ public class LoaiMon {
     }
 
     public void setTenLoaiMon(String tenLoaiMon) {
-        this.tenLoaiMon = tenLoaiMon;
+        if (tenLoaiMon == null || tenLoaiMon.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên loại món không được để trống.");
+        }this.tenLoaiMon = tenLoaiMon;
     }
 
     public String getMoTa() {

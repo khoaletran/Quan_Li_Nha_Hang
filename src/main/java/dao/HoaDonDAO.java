@@ -2,6 +2,7 @@ package dao;
 
 import connectDB.connectDB;
 import entity.*;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,39 +55,62 @@ public class HoaDonDAO {
 
         return ds;
     }
+
     public static List<HoaDon> getAllNgayHomNay() {
         List<HoaDon> ds = new ArrayList<>();
-        String sql = "select * from HoaDon \n" +
-                "where tgCheckin >= CAST(GETDATE() AS DATE) \n" +
-                "AND tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))";
+        String sql = "select hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maKM, hd.maSK, hd.tgCheckin, hd.kieuDatBan, hd.moTa,hd.trangThai,hd.soLuong, kh.tenKH, kh.sdt, sk.tenSK,b.maKhuVuc, kv.tenKhuVuc from HoaDon hd join KhachHang kh on hd.maKH = kh.maKH\n" +
+                "join Ban b on hd.maBan = b.maBan\n" +
+                "join KhuVuc kv on b.maKhuVuc = kv.maKhuVuc\n" +
+                "join NhanVien nv on hd.maNV = nv.maNV\n" +
+                "left join KhuyenMai km on km.maKM = hd.maKM\n" +
+                "left join SuKien sk on hd.maSK = sk.maSK\n" +
+                "where tgCheckin >= CAST(GETDATE() AS DATE)\n" +
+                "AND tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))\n";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                String maKH = rs.getString("maKH");
-                String maNV = rs.getString("maNV");
-                String maBan = rs.getString("maBan");
-                String maKM = rs.getString("maKM");
-                String maSK = rs.getString("maSK");
+                KhachHang kh = new KhachHang();
+                kh.setMaKhachHang(rs.getString("maKH"));
+                kh.setTenKhachHang(rs.getString("tenKH"));
+                kh.setSdt(rs.getString("sdt"));
 
-                KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
-                NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
-                Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
-                KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
-                SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
+                NhanVien nv = new NhanVien();
+                nv.setMaNV(rs.getString("maNV"));
+
+                Ban ban = new Ban();
+                ban.setMaBan(rs.getString("maBan"));
+
+                KhuVuc kv = new KhuVuc();
+                kv.setMaKhuVuc(rs.getString("maKhuVuc"));
+                kv.setTenKhuVuc(rs.getString("tenKhuVuc"));
+
+                KhuyenMai km = new KhuyenMai();
+                if (rs.getString("maKM") == null) {
+                    km = null;
+                } else {
+                    km.setMaKM(rs.getString("maKM"));
+                }
+
+                SuKien sk = new SuKien();
+                if (rs.getString("maSK") == null) {
+                    sk = null;
+                } else {
+                    sk.setMaSK(rs.getString("maSK"));
+                    sk.setTenSK(rs.getString("tenSK"));
+                }
 
                 HoaDon hd = new HoaDon();
                 hd.setMaHD(rs.getString("maHD"));
                 hd.setKhachHang(kh);
                 hd.setNhanVien(nv);
                 hd.setBan(ban);
+                hd.getBan().setKhuVuc(kv);
                 hd.setKhuyenMai(km);
                 hd.setSuKien(sk);
                 hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
-                hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
-                hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
                 hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
                 hd.setTrangthai(rs.getInt("trangThai"));
                 hd.setSoLuong(rs.getInt("soLuong"));
@@ -152,12 +176,12 @@ public class HoaDonDAO {
     // ===================== INSERT =====================
     public static boolean insert(HoaDon hd) {
         String sql = """
-            INSERT INTO HoaDon(
-                maHD, maKH, maNV, maBan, maKM, maSK,
-                tgCheckin, tgCheckout, kieuThanhToan, kieuDatBan,
-                trangThai, soLuong, moTa
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO HoaDon(
+                        maHD, maKH, maNV, maBan, maKM, maSK,
+                        tgCheckin, tgCheckout, kieuThanhToan, kieuDatBan,
+                        trangThai, soLuong, moTa
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -187,12 +211,12 @@ public class HoaDonDAO {
     // ===================== UPDATE =====================
     public static boolean update(HoaDon hd) {
         String sql = """
-            UPDATE HoaDon SET 
-                maKH=?, maNV=?, maBan=?, maKM=?, maSK=?,
-                tgCheckin=?, tgCheckout=?, kieuThanhToan=?, kieuDatBan=?,
-                trangThai=?, soLuong=?, moTa=?
-            WHERE maHD=?
-        """;
+                    UPDATE HoaDon SET 
+                        maKH=?, maNV=?, maBan=?, maKM=?, maSK=?,
+                        tgCheckin=?, tgCheckout=?, kieuThanhToan=?, kieuDatBan=?,
+                        trangThai=?, soLuong=?, moTa=?
+                    WHERE maHD=?
+                """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -255,6 +279,7 @@ public class HoaDonDAO {
 
         return result;
     }
+
     public static List<HoaDon> getTheoMaNV(String maNV) {
         List<HoaDon> ds = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon WHERE maNV = ?";

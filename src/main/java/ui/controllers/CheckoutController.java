@@ -33,7 +33,6 @@ public class CheckoutController {
 
     private HoaDon hdHienTai;
 
-
     private List<KhuyenMai> listKM = KhuyenMaiDAO.getAll();
 
     @FXML

@@ -332,11 +332,11 @@ public class ChinhSachController {
         StackPane stack = new StackPane();
 
         // Kiểm tra ảnh món, nếu không có thì dùng ảnh mặc định
-        String imagePath = "/IMG/" + (mon.getHinhAnh() != null && !mon.getHinhAnh().isEmpty() ? mon.getHinhAnh() : "avatar.png");
+        String imagePath = "/IMG/food/" + (mon.getHinhAnh() != null && !mon.getHinhAnh().isEmpty() ? mon.getHinhAnh() : "avatar.png");
         InputStream is = getClass().getResourceAsStream(imagePath);
         if (is == null) {
             System.out.println("Không tìm thấy ảnh: " + imagePath + ", dùng ảnh mặc định.");
-            is = getClass().getResourceAsStream("/IMG/avatar.png");
+            is = getClass().getResourceAsStream("/IMG/food/restaurant.png");
         }
 
         Image img = new Image(is, 40, 40, true, true);

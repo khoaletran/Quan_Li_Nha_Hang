@@ -12,7 +12,9 @@ public class ChiTietHoaDon {
         this.soLuong = soLuong;
         this.thanhTien = mon.getGiaBanTaiLucLapHD(hd)* soLuong;
     }
+public ChiTietHoaDon(){
 
+}
     public void setHoaDon(HoaDon hoaDon) {this.hoaDon = hoaDon;}
 
     public HoaDon getHoaDon() {
