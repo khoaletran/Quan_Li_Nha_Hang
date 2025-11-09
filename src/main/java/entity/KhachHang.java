@@ -32,7 +32,9 @@ public class KhachHang {
     }
 
     public void setMaKhachHang(String maKhachHang) {
-        this.maKhachHang = maKhachHang;
+        if(maKhachHang == null || !maKhachHang.matches("^KH\\d{4}$")) {
+            throw new IllegalArgumentException("Mã khách hàng sai định dạng.");
+        }this.maKhachHang = maKhachHang;
     }
 
     public int getDiemTichLuy() {
@@ -48,7 +50,9 @@ public class KhachHang {
     }
 
     public void setSdt(String sdt) {
-        this.sdt = sdt;
+        if (sdt == null || !sdt.matches("^0[3-9]\\d{8}$")) {
+            throw new IllegalArgumentException("Số điện thoại không hợp lệ. Phải gồm 10 chữ số và bắt đầu bằng 03–09.");
+        }this.sdt = sdt;
     }
 
     public String getTenKhachHang() {
@@ -56,7 +60,9 @@ public class KhachHang {
     }
 
     public void setTenKhachHang(String tenKhachHang) {
-        this.tenKhachHang = tenKhachHang;
+        if (tenKhachHang == null || tenKhachHang.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên khách hàng không được để trống.");
+        }this.tenKhachHang = tenKhachHang.trim();
     }
 
     public boolean isGioiTinh() {

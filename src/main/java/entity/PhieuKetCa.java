@@ -18,15 +18,15 @@ public class PhieuKetCa {
     public PhieuKetCa(String maPhieu, NhanVien nhanVien, boolean ca, int soHoaDon,
                       double tienMat, double tienCK, double tienChenhLech,
                       LocalDateTime ngayKetCa, String moTa) {
-        this.maPhieu = maPhieu;
-        this.nhanVien = nhanVien;
-        this.ca = ca;
-        this.soHoaDon = soHoaDon;
-        this.tienMat = tienMat;
-        this.tienCK = tienCK;
-        this.tienChenhLech = tienChenhLech;
-        this.ngayKetCa = ngayKetCa;
-        this.moTa = moTa;
+        setMaPhieu(maPhieu);
+        setNhanVien(nhanVien);
+        setCa(ca);
+        setSoHoaDon(soHoaDon);
+        setTienMat(tienMat);
+        setTienCK(tienCK);
+        setTienChenhLech(tienChenhLech);
+        setNgayKetCa(ngayKetCa);
+        setMoTa(moTa);
     }
 
     // ===== Getter & Setter =====
