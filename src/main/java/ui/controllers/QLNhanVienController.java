@@ -14,14 +14,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.StringConverter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class QLNhanVienController {
 
     @FXML private FlowPane menuFlow;
-    @FXML private TextField txtTenNV, txtSDT, txtNgayVaoLam, txtMatKhau;
+    @FXML private TextField txtTenNV, txtSDT, txtMatKhau;
+    @FXML private DatePicker txtNgayVaoLam;
     @FXML private ComboBox<String> comboChucVu;
     @FXML private RadioButton rdoNam, rdoNu, rdoConLam, rdoNghiLam;
     @FXML private Label lblMaNV;
@@ -30,6 +33,7 @@ public class QLNhanVienController {
     private final NhanVienDAO nvDAO = new NhanVienDAO();
     private final ToggleGroup genderGroup = new ToggleGroup();
     private final ToggleGroup statusGroup = new ToggleGroup();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @FXML
     public void initialize() {
@@ -52,6 +56,25 @@ public class QLNhanVienController {
 
         // load danh sách ban đầu
         loadNhanVienCards();
+        txtNgayVaoLam.setConverter(new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return formatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, formatter);
+                } else {
+                    return null;
+                }
+            }
+        });
     }
 
     // =========================
@@ -101,7 +124,8 @@ public class QLNhanVienController {
         lblMaNV.setText(nv.getMaNV());
         txtTenNV.setText(nv.getTenNV());
         txtSDT.setText(nv.getSdt());
-        txtNgayVaoLam.setText(nv.getNgayVaoLam().toString());
+//        txtNgayVaoLam.setText(nv.getNgayVaoLam().toString());
+        txtNgayVaoLam.setValue(nv.getNgayVaoLam());
         comboChucVu.setValue(nv.isQuanLi() ? "Quản lý" : "Nhân viên");
 
         rdoNam.setSelected(nv.isGioiTinh());
@@ -114,7 +138,8 @@ public class QLNhanVienController {
         lblMaNV.setText(tuSinhMaNV(NhanVienDAO.maNVCuoi()));
         txtTenNV.clear();
         txtSDT.clear();
-        txtNgayVaoLam.clear();
+//        txtNgayVaoLam.clear();
+        txtNgayVaoLam.setValue(null);
         comboChucVu.setValue(null);
         rdoNam.setSelected(false);
         rdoNu.setSelected(false);
@@ -191,7 +216,8 @@ public class QLNhanVienController {
     private NhanVien taoNhanVienTuForm(String maNV) {
         String tenNV = txtTenNV.getText().trim();
         String sdt = txtSDT.getText().trim();
-        LocalDate ngayVaoLam = LocalDate.parse(txtNgayVaoLam.getText().trim());
+//        LocalDate ngayVaoLam = LocalDate.parse(txtNgayVaoLam.getText().trim());
+        LocalDate ngayVaoLam = txtNgayVaoLam.getValue();
         boolean gioiTinh = rdoNam.isSelected();
         boolean trangThai = rdoConLam.isSelected();
         boolean quanLi = "Quản lý".equalsIgnoreCase(comboChucVu.getValue());

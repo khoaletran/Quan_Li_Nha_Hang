@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.DatePicker?>
 <BorderPane prefHeight="800" prefWidth="1400" styleClass="root-pane" stylesheets="@../CSS/qlnhanvien.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.QLNhanVienController">
 
     <!-- Nội dung chính ở giữa -->
@@ -89,7 +90,7 @@
 
                     <!-- Ngày vào làm -->
                     <Label styleClass="form-label" text="Ngày Vào Làm:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                    <TextField fx:id="txtNgayVaoLam" promptText="yyyy-mm-dd" styleClass="form-input" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    <DatePicker fx:id="txtNgayVaoLam" promptText="dd-mm-yyyy" styleClass="form-input" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
                     <!-- Chức vụ -->
                     <Label styleClass="form-label" text="Chức Vụ:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
