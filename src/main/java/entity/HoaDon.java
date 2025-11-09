@@ -21,7 +21,7 @@ public class HoaDon {
     private int trangthai;
     private boolean kieuThanhToan;
     private boolean kieuDatBan;
-    private int soLuongNguoi;
+    private int soLuong;
     private String moTa;
 
     // Derived fields
@@ -84,12 +84,12 @@ public class HoaDon {
     public int getTrangthai() { return trangthai; }
     public void setTrangthai(int trangthai) { this.trangthai = trangthai; }
 
-    public int getSoLuongNguoi() { return soLuongNguoi; }
-    public void setSoLuongNguoi(int soLuongNguoi) {
-        if(soLuongNguoi <=0){
+    public int getSoLuong() { return soLuong; }
+    public void setSoLuong(int soLuong) {
+        if(soLuong <=0){
             throw new IllegalArgumentException("Số lượng người phải lớn hơn 0");
         }
-        this.soLuongNguoi = soLuongNguoi;
+        this.soLuong = soLuong;
     }
 
     public String getMoTa() { return moTa; }
