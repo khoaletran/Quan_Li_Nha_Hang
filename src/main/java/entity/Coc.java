@@ -43,7 +43,7 @@ public class Coc {
     }
 
     public void setSoTienCoc(double soTienCoc) {
-        if(soTienCoc <=0) {
+        if(soTienCoc <0) {
             throw new IllegalArgumentException("Số tiền cọc lớn hơn 0");
         }
         this.soTienCoc = soTienCoc;
