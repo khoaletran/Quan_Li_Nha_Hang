@@ -4,6 +4,7 @@ import connectDB.connectDB;
 import entity.*;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,14 @@ public class HoaDonDAO {
                 KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
                 SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
 
+                // Tách riêng hai thời điểm, xử lý thứ tự an toàn
+                LocalDateTime checkIn = rs.getTimestamp("tgCheckin") != null
+                        ? rs.getTimestamp("tgCheckin").toLocalDateTime()
+                        : null;
+                LocalDateTime checkOut = rs.getTimestamp("tgCheckout") != null
+                        ? rs.getTimestamp("tgCheckout").toLocalDateTime()
+                        : null;
+
                 HoaDon hd = new HoaDon();
                 hd.setMaHD(rs.getString("maHD"));
                 hd.setKhachHang(kh);
@@ -38,8 +47,19 @@ public class HoaDonDAO {
                 hd.setBan(ban);
                 hd.setKhuyenMai(km);
                 hd.setSuKien(sk);
-                hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
-                hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
+
+                // Gán check-in trước
+                if (checkIn != null) {
+                    hd.setTgCheckIn(checkIn);
+                }
+
+                // Chỉ set checkout nếu hợp lệ
+                if (checkOut != null && checkIn != null && checkOut.isAfter(checkIn)) {
+                    hd.setTgCheckOut(checkOut);
+                } else {
+                    hd.setTgCheckOut(null);
+                }
+
                 hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
                 hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
                 hd.setTrangthai(rs.getInt("trangThai"));
@@ -55,6 +75,7 @@ public class HoaDonDAO {
 
         return ds;
     }
+
 
     public static List<HoaDon> getAllNgayHomNay() {
         List<HoaDon> ds = new ArrayList<>();

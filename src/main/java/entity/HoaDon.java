@@ -61,7 +61,8 @@ public class HoaDon {
     public LocalDateTime getTgCheckOut() { return tgCheckOut; }
     public void setTgCheckOut(LocalDateTime tgCheckOut) {
         if (tgCheckOut== null) {
-            throw new IllegalArgumentException("Thời gian check out không được rỗng");
+            this.tgCheckOut = null;
+            return;
         }
         if (!tgCheckOut.isAfter(this.tgCheckIn)) {
             throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");

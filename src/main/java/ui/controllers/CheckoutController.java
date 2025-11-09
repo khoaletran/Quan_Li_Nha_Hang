@@ -109,7 +109,7 @@ public class CheckoutController {
         List<KhuVuc> dsKV = KhuVucDAO.getAll();
         List<ChiTietHoaDon> dsCTAll = ChiTietHDDAO.getAll();
 
-        // 🔹 Gom tất cả chi tiết theo mã hóa đơn
+        // Gom tất cả chi tiết theo mã hóa đơn
         Map<String, List<ChiTietHoaDon>> mapCT = dsCTAll.stream()
                 .collect(Collectors.groupingBy(ct -> ct.getHoaDon().getMaHD()));
 

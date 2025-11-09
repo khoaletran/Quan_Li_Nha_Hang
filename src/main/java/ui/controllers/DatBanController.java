@@ -35,6 +35,11 @@ public class DatBanController {
     @FXML private VBox tableIN_01, tableIN_02, tableIN_03, tableIN_04;
     @FXML private VBox tableVIP_01, tableVIP_02;
 
+    @FXML private Button btnWaitlist;
+    @FXML private TextField txtTenKH, txtSDT, txtGhiChu, txtSoLuong;
+    @FXML private ComboBox<String> cboKhuVuc, cboLoaiBan;
+
+
     private MainController_NV mainController;
     private NhanVien nv;
 
