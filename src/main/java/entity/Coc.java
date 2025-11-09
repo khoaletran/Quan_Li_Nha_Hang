@@ -13,6 +13,9 @@ public class Coc {
     }
 
     public void setMaCoc(String maCoc) {
+        if(maCoc == null || !maCoc.matches("^CO\\d{4}$")) {
+            throw new IllegalArgumentException("Mã cọc sai định dạng.");
+        }
         this.maCoc = maCoc;
     }
 
@@ -29,6 +32,9 @@ public class Coc {
     }
 
     public void setPhanTramCoc(int phanTramCoc) {
+        if(phanTramCoc < 0 || phanTramCoc > 100) {
+            throw new IllegalArgumentException("Phần trăm cọc từ 0 đến 100");
+        }
         this.phanTramCoc = phanTramCoc;
     }
 
@@ -37,6 +43,9 @@ public class Coc {
     }
 
     public void setSoTienCoc(double soTienCoc) {
+        if(soTienCoc <=0) {
+            throw new IllegalArgumentException("Số tiền cọc lớn hơn 0");
+        }
         this.soTienCoc = soTienCoc;
     }
 

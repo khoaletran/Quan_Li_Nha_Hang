@@ -12,7 +12,9 @@ public class ChiTietHoaDon {
         this.soLuong = soLuong;
         this.thanhTien = mon.getGiaBanTaiLucLapHD(hd)* soLuong;
     }
+public ChiTietHoaDon(){
 
+}
     public void setHoaDon(HoaDon hoaDon) {this.hoaDon = hoaDon;}
 
     public HoaDon getHoaDon() {
@@ -32,6 +34,9 @@ public class ChiTietHoaDon {
     }
 
     public void setSoLuong(int soLuong) {
+        if(soLuong < 0) {
+            throw new IllegalArgumentException("Số lượng không được âm.");
+        }
         this.soLuong = soLuong;
     }
 

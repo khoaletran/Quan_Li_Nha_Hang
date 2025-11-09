@@ -28,7 +28,11 @@ public class Ban {
     }
 
     public void setMaBan(String maBan) {
-        this.maBan = maBan;
+        if (!maBan.matches("^B[OIV]\\d{4}$")) {
+            throw new IllegalArgumentException(
+                    "Mã bàn không hợp lệ. Phải gồm 6 ký tự: B + (O/I/V) + 4 chữ số."
+            );
+        }this.maBan = maBan;
     }
 
     public KhuVuc getKhuVuc() {
@@ -36,7 +40,9 @@ public class Ban {
     }
 
     public void setKhuVuc(KhuVuc khuVuc) {
-        this.khuVuc = khuVuc;
+        if (khuVuc == null) {
+            throw new IllegalArgumentException("Khu vực không được để trống.");
+        }this.khuVuc = khuVuc;
     }
 
     public LoaiBan getLoaiBan() {
@@ -44,7 +50,9 @@ public class Ban {
     }
 
     public void setLoaiBan(LoaiBan loaiBan) {
-        this.loaiBan = loaiBan;
+        if (loaiBan == null) {
+            throw new IllegalArgumentException("Loại bàn không được để trống.");
+        }this.loaiBan = loaiBan;
     }
 
     public boolean isTrangThai() {return trangThai;}

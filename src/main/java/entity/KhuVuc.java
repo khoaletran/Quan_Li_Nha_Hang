@@ -27,7 +27,9 @@ public class KhuVuc {
     }
 
     public void setMaKhuVuc(String maKhuVuc) {
-        this.maKhuVuc = maKhuVuc;
+        if(maKhuVuc == null || !maKhuVuc.matches("^KV\\d{4}$")) {
+            throw new IllegalArgumentException("Mã khu vực sai định dạng.");
+        }this.maKhuVuc = maKhuVuc;
     }
 
     public String getTenKhuVuc() {
@@ -35,7 +37,9 @@ public class KhuVuc {
     }
 
     public void setTenKhuVuc(String tenKhuVuc) {
-        this.tenKhuVuc = tenKhuVuc;
+        if (tenKhuVuc == null || tenKhuVuc.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên khu vực không được để trống.");
+        }this.tenKhuVuc = tenKhuVuc;
     }
 
     @Override

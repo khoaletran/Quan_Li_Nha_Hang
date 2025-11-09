@@ -33,9 +33,13 @@ public class HoaDon {
 
     public HoaDon() {}
 
-    // ====== GET/SET DB FIELDS ======
     public String getMaHD() { return maHD; }
-    public void setMaHD(String maHD) { this.maHD = maHD; }
+    public void setMaHD(String maHD) {
+        if (maHD == null || !maHD.matches("^HD[01]\\d{6}\\d{4}$")) {
+            throw new IllegalArgumentException("Mã hóa đơn sai định dạng!"); // (Định dạng đúng: HDxDDMMYYnnnn)
+        }
+        this.maHD = maHD;
+    }
 
     public KhachHang getKhachHang() { return khachHang; }
     public void setKhachHang(KhachHang khachHang) { this.khachHang = khachHang; }
@@ -47,10 +51,23 @@ public class HoaDon {
     public void setBan(Ban ban) { this.ban = ban; }
 
     public LocalDateTime getTgCheckIn() { return tgCheckIn; }
-    public void setTgCheckIn(LocalDateTime tgCheckIn) { this.tgCheckIn = tgCheckIn; }
+    public void setTgCheckIn(LocalDateTime tgCheckIn) {
+        if (tgCheckIn== null) {
+            throw new IllegalArgumentException("Thời gian check in không được rỗng");
+        }
+        this.tgCheckIn = tgCheckIn;
+    }
 
     public LocalDateTime getTgCheckOut() { return tgCheckOut; }
-    public void setTgCheckOut(LocalDateTime tgCheckOut) { this.tgCheckOut = tgCheckOut; }
+    public void setTgCheckOut(LocalDateTime tgCheckOut) {
+        if (tgCheckOut== null) {
+            throw new IllegalArgumentException("Thời gian check out không được rỗng");
+        }
+        if (!tgCheckOut.isAfter(this.tgCheckIn)) {
+            throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
+        }
+        this.tgCheckOut = tgCheckOut;
+    }
 
     public KhuyenMai getKhuyenMai() { return khuyenMai; }
     public void setKhuyenMai(KhuyenMai khuyenMai) { this.khuyenMai = khuyenMai; }
@@ -68,12 +85,15 @@ public class HoaDon {
     public void setTrangthai(int trangthai) { this.trangthai = trangthai; }
 
     public int getSoLuong() { return soLuong; }
-    public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
+    public void setSoLuong(int soLuong) {
+        if(soLuong <=0){
+            throw new IllegalArgumentException("Số lượng người phải lớn hơn 0");
+        }
+        this.soLuong = soLuong;
+    }
 
     public String getMoTa() { return moTa; }
     public void setMoTa(String moTa) { this.moTa = moTa; }
-
-    // ====== CÁC HÀM DẪN XUẤT ======
 
     public double getTongTienTruoc() {
         tongTienTruoc = 0;

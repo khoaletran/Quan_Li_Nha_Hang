@@ -282,7 +282,7 @@ public class CheckinController {
         lblSuKien.setText(hd.getSuKien() != null ? hd.getSuKien().getTenSK() : "-");
         lblKhuVuc.setText(hd.getBan().getKhuVuc() != null ? hd.getBan().getKhuVuc().getTenKhuVuc() : "-");
 
-        List<ChiTietHoaDon> chiTietList = ChiTietHDDAO.getByMaHD(hd.getMaHD());
+        List<ChiTietHoaDon> chiTietList = ChiTietHDDAO.getAllByMaHD(hd.getMaHD());
         gridChiTietHD.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
 
         int row = 1;
