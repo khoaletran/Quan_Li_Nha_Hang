@@ -230,6 +230,7 @@ CREATE TABLE HoaDon
     maBan         NVARCHAR(6) FOREIGN KEY REFERENCES Ban (maBan),
     maKM          NVARCHAR(6) FOREIGN KEY REFERENCES KhuyenMai (maKM),
     maSK          NVARCHAR(6) FOREIGN KEY REFERENCES SuKien (maSK),
+    tgLapHD       SMALLDATETIME,
     tgCheckin     SMALLDATETIME,
     tgCheckout    SMALLDATETIME,
     kieuThanhToan BIT, -- 1: ck, 0: tiền mặt

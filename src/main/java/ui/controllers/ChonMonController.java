@@ -789,11 +789,20 @@ public class ChonMonController {
         hd.setKhachHang(khachHang);
         hd.setNhanVien(nhanVienHien);
         hd.setBan(banHienTai);
+        hd.setTgLapHD(LocalDateTime.now());
+        // Nếu là bàn đợi → chưa check-in
         if (banHienTai.getMaBan().startsWith("W")) {
-            hd.setTgCheckIn(LocalDateTime.now());
-        } else {
+            hd.setTgCheckIn(null);
+        }
+        // Nếu là bàn đã đặt trước (đến sau) → thời gian checkin theo lịch đặt
+        else if (trangthai == 0 && thoiGianDat != null) {
+            hd.setTgCheckIn(thoiGianDat);
+        }
+        // Nếu khách vào ngay → checkin thời điểm hiện tại
+        else {
             hd.setTgCheckIn(LocalDateTime.now());
         }
+
         hd.setSoLuong(soLuongKhach);
         hd.setTgCheckOut(null);
         hd.setKhuyenMai(km);

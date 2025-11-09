@@ -52,7 +52,7 @@ public class Mon {
     public int getPTGBTaiHD(HoaDon hd) {
         if (hd == null) return 0;
 
-        LocalDate ngayHD = hd.getTgCheckIn().toLocalDate();
+        LocalDate ngayHD = hd.getTgLapHD().toLocalDate();
 
         PhanTramGiaBan ptMon = PhanTramGiaBanDAO.getEffectiveForMonAtDate(maMon, ngayHD);
         if (ptMon != null) {
@@ -81,7 +81,7 @@ public class Mon {
     }
 
     public void setMaMon(String maMon) {
-        if(maMon == null || !maMon.matches("^MN\\d{4}$")) {
+        if(maMon == null || !maMon.matches("^MM\\d{4}$")) {
             throw new IllegalArgumentException("Mã món sai định dạng.");
         }this.maMon = maMon;
     }
