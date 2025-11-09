@@ -161,7 +161,7 @@
 
 /* --- Tổng khách --- */
 .count-text {
-    -fx-font-size: 32px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: #2980b9;
 }
