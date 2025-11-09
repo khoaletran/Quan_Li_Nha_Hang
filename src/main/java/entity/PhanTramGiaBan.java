@@ -29,6 +29,9 @@ public class PhanTramGiaBan {
     }
 
     public void setMaPTGB(String maPTGB) {
+        if(maPTGB == null || !maPTGB.matches("^PG\\d{4}$")) {
+            throw new IllegalArgumentException("Mã phần trăm giá bán sai định dạng.");
+        }
         this.maPTGB = maPTGB;
     }
 
@@ -37,6 +40,9 @@ public class PhanTramGiaBan {
     }
 
     public void setPhanTramLoi(int phanTramLoi) {
+        if(phanTramLoi <0){
+            throw new IllegalArgumentException("Phần trăm lời không được âm");
+        }
         this.phanTramLoi = phanTramLoi;
     }
 
@@ -45,6 +51,9 @@ public class PhanTramGiaBan {
     }
 
     public void setNgayApDung(LocalDate ngayApDung) {
+        if(ngayApDung == null){
+            throw new IllegalArgumentException("Ngày áp dụng không được rỗng");
+        }
         this.ngayApDung = ngayApDung;
     }
 
