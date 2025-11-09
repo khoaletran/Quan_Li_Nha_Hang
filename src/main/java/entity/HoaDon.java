@@ -52,9 +52,6 @@ public class HoaDon {
 
     public LocalDateTime getTgCheckIn() { return tgCheckIn; }
     public void setTgCheckIn(LocalDateTime tgCheckIn) {
-        if (tgCheckIn== null) {
-            throw new IllegalArgumentException("Thời gian check in không được rỗng");
-        }
         this.tgCheckIn = tgCheckIn;
     }
 

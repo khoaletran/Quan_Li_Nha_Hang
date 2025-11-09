@@ -299,4 +299,20 @@ public class HoaDonDAO {
 
         return hd;
     }
+
+    public static List<HoaDon> getAllWaitlistCho() {
+        List<HoaDon> list = new ArrayList<>();
+        String sql = "SELECT * FROM HoaDon WHERE maBan LIKE 'W%' AND trangThai = 0";
+        try (Connection conn = connectDB.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                HoaDon hd = mapHoaDon(rs);
+                list.add(hd);
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi getAllWaitlistCho: " + e.getMessage());
+        }
+        return list;
+    }
 }

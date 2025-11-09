@@ -20,6 +20,9 @@ public class LoaiBan {
         this.tenLoaiBan = tenLoaiBan;
     }
 
+    public LoaiBan() {
+    }
+
     public String getMaLoaiBan() {
         return maLoaiBan;
     }
