@@ -54,6 +54,9 @@ public class HoaDon {
     public LocalDateTime getTgLapHD() { return tgLapHD; }
 
     public void setTgLapHD(LocalDateTime tgLapHD) {
+        if (!tgLapHD.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
+        }
         this.tgLapHD = tgLapHD;
     }
 
@@ -63,8 +66,8 @@ public class HoaDon {
             this.tgCheckIn = null;
             return;
         }
-        if (!tgCheckIn.isAfter(this.tgLapHD)) {
-            throw new IllegalArgumentException("Thời gian check in phải sau thời gian lập HD");
+        if (!tgCheckIn.isAfter(tgLapHD)) {
+            throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
         }
         this.tgCheckIn = tgCheckIn;
     }
