@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import ui.AlertCus;
+import ui.ConfirmCus;
 import ui.QRThanhToan;
 
 import java.text.DecimalFormat; // ADDED
@@ -35,6 +36,7 @@ public class ChonMonController {
     @FXML private TextField txtTienKhachDua, sdtKhach, tften, tfTimKiem;
     @FXML private TextField tf_ban, tftg, tfSLKhach, tfghichu;
 
+    private boolean kieudatban;
 
     private ui.controllers.MainController_NV mainController;
 
@@ -112,6 +114,18 @@ public class ChonMonController {
         tfSLKhach.setText(String.valueOf(soLuongKhach));
     }
 
+    public void setSdtKhach(String sdt) {
+        sdtKhach.setText(sdt);
+    }
+
+    public void setTen(String ten) {
+        tften.setText(ten);
+    }
+
+    public void setKieudatban(boolean kieudatban) {
+        this.kieudatban = kieudatban;
+    }
+
     public void setThongTinBan(Ban ban) {
         this.banHienTai = ban;
         tf_ban.setText(ban.getMaBan());
@@ -139,15 +153,36 @@ public class ChonMonController {
         }
     }
 
-
-
     @FXML
     private void quayVeDatBan() {
         if (mainController != null) {
-            mainController.setCenterContent("/FXML/DatBan.fxml");
+            boolean xacNhan = ConfirmCus.show(
+                    "Xác nhận hủy bàn đợi",
+                    "Khách hàng không đặt nữa. Bạn có muốn xóa bàn chờ này không?"
+            );
+
+            if (xacNhan) {
+                try {
+                    Ban ban = banHienTai;
+                    if (ban != null && ban.getMaBan().startsWith("W")) {
+                        BanDAO banDAO = new BanDAO();
+                        if (banDAO.delete(ban.getMaBan())) {
+                            System.out.println("Đã xóa bàn đợi: " + ban.getMaBan());
+                        } else {
+                            System.err.println("Lỗi khi xóa bàn đợi khỏi DB!");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ConfirmCus.show("Lỗi hệ thống", "Không thể xóa bàn đợi: " + e.getMessage());
+                }
+
+                mainController.setCenterContent("/FXML/DatBan.fxml");
+            } else {
+                System.out.println("Người dùng hủy thao tác quay lại, vẫn ở màn chọn món.");
+            }
         }
     }
-
 
     private void loadComboDanhMuc() {
         comboDanhMuc.getItems().clear();
@@ -737,6 +772,8 @@ public class ChonMonController {
             khachHang = new KhachHangDAO().findBySDT(sdt);
         }
 
+
+
         if (khachHang == null) {
             khachHang = new KhachHang("KH0000", 0, true, sdt, "Khách lẻ", xetHang(0));
         }
@@ -752,11 +789,19 @@ public class ChonMonController {
         hd.setKhachHang(khachHang);
         hd.setNhanVien(nhanVienHien);
         hd.setBan(banHienTai);
-        hd.setTgCheckIn(thoiGianDat);
+        if (banHienTai.getMaBan().startsWith("W")) {
+            hd.setTgCheckIn(LocalDateTime.now());
+        } else {
+            hd.setTgCheckIn(LocalDateTime.now());
+        }
         hd.setSoLuong(soLuongKhach);
         hd.setTgCheckOut(null);
         hd.setKhuyenMai(km);
-        hd.setTrangthai(trangthai);
+        if (banHienTai.getMaBan().startsWith("W")) {
+            hd.setTrangthai(0);
+        } else {
+            hd.setTrangthai(trangthai);
+        }
         hd.setSuKien(sk);
         hd.setKieuThanhToan(kieuThanhToan);
         hd.setKieuDatBan(kieudatban);

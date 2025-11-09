@@ -2,6 +2,8 @@ package ui.controllers;
 
 import dao.BanDAO;
 import dao.HoaDonDAO;
+import dao.KhuVucDAO;
+import dao.LoaiBanDAO;
 import entity.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,11 +15,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import ui.ConfirmCus;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 
 public class DatBanController {
@@ -94,6 +98,10 @@ public class DatBanController {
         minuteSpinner.valueProperty().addListener((obs, o, n) -> scheduleRefresh());
 
         locTheoRealTime();
+
+        loadComboBoxes();
+
+        btnWaitlist.setOnAction(e -> {themVaoWaitlist();});
     }
 
     private LocalTime getDefaultTimePlus5() {
@@ -157,6 +165,13 @@ public class DatBanController {
 
         capNhatHienThi(starVIP_01, tableVIP_01, "KV0003", "LB0004", 8, 12, dsHD);
         capNhatHienThi(starVIP_02, tableVIP_02, "KV0003", "LB0005", 12, 100, dsHD);
+
+        String maKV = getSelectedMaKhuVuc();
+        boolean conBanTrongKV = BanDAO.getAll().stream()
+                .anyMatch(b -> b.getKhuVuc().getMaKhuVuc().equals(maKV) && !b.isTrangThai());
+
+        btnWaitlist.setVisible(!BanDAO.conBanTrongTheoKhuVuc(getSelectedMaKhuVuc()));
+
     }
 
     private void voHieuHoaTatCaBan() {
@@ -277,10 +292,10 @@ public class DatBanController {
         Ban ban = BanDAO.getBanTrong(maKV, maLB);
         if (ban == null) return;
 
-        chonBan(ban, soLuong, date, hour, minute);
+        chonBan(ban, soLuong, date, hour, minute,true);
     }
 
-    private void chonBan(Ban ban, int soLuong, LocalDate date, int hour, int minute) {
+    private void chonBan(Ban ban, int soLuong, LocalDate date, int hour, int minute, boolean kieudatban) {
         if (mainController != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ChonMon.fxml"));
@@ -290,7 +305,10 @@ public class DatBanController {
                 chonMonCtrl.setMainController(mainController);
                 chonMonCtrl.setThongTinBan(ban);
                 chonMonCtrl.setNhanVien(nv);
+                chonMonCtrl.setTen(txtTenKH.getText());
+                chonMonCtrl.setSdtKhach(txtSDT.getText());
                 chonMonCtrl.setSoLuongKhach(soLuong);
+                chonMonCtrl.setKieudatban(kieudatban);
                 chonMonCtrl.setThoiGianDat(LocalDateTime.of(date, LocalTime.of(hour, minute)));
 
                 mainController.getMainContent().getChildren().setAll(node);
@@ -299,4 +317,91 @@ public class DatBanController {
             }
         }
     }
+
+    private void loadComboBoxes() {
+        // Load danh sách khu vực
+        List<KhuVuc> dsKV = dao.KhuVucDAO.getAll();
+        cboKhuVuc.getItems().clear();
+        for (KhuVuc kv : dsKV) {
+            cboKhuVuc.getItems().add(kv.getTenKhuVuc() + " (" + kv.getMaKhuVuc() + ")");
+        }
+        if (!cboKhuVuc.getItems().isEmpty()) cboKhuVuc.getSelectionModel().selectFirst();
+    }
+
+    @FXML
+    private void themVaoWaitlist() {
+        try {
+            BanDAO banDAO = new BanDAO();
+            String tenKH = txtTenKH.getText().trim();
+            String sdt = txtSDT.getText().trim();
+            String txtSo = txtSoLuong.getText().trim();
+
+            if (tenKH.isEmpty() || sdt.isEmpty() || txtSo.isEmpty()) {
+                ConfirmCus.show("Thiếu thông tin", "Vui lòng nhập đầy đủ họ tên, SĐT và số lượng khách.");
+                return;
+            }
+
+            int soLuong;
+            try {
+                soLuong = Integer.parseInt(txtSo);
+            } catch (NumberFormatException ex) {
+                ConfirmCus.show("Lỗi nhập liệu", "Số lượng khách phải là số nguyên hợp lệ!");
+                return;
+            }
+
+            boolean xacNhan = ConfirmCus.show(
+                    "Xác nhận tạo bàn đợi",
+                    "Tạo bàn đợi cho " + soLuong + " khách tại khu vực đã chọn?"
+            );
+
+            if (!xacNhan) {
+                System.out.println("Người dùng đã hủy tạo bàn đợi.");
+                return;
+            }
+
+            String maKV = getSelectedMaKhuVuc();
+            KhuVuc kv = KhuVucDAO.getById(maKV);
+            List<LoaiBan> dsLoaiBan = LoaiBanDAO.getAll();
+
+            LoaiBan loaiPhuHop = dsLoaiBan.stream()
+                    .filter(lb -> lb.getSoLuong() >= soLuong)
+                    .min(Comparator.comparingInt(LoaiBan::getSoLuong))
+                    .orElse(dsLoaiBan.get(dsLoaiBan.size() - 1));
+
+            String maBanMoi = banDAO.taoMaBanChoTheoKhuVuc(kv);
+            Ban banCho = new Ban(maBanMoi, kv, loaiPhuHop, false);
+
+            if (!banDAO.insert(banCho, false)) {
+                ConfirmCus.show("Lỗi", "Không thể thêm bàn đợi vào hệ thống!");
+                return;
+            }
+
+            System.out.println("Tạo bàn đợi thành công: " + banCho.getMaBan());
+            chonBan(banCho, soLuong, LocalDate.now(),
+                    LocalTime.now().getHour(), LocalTime.now().getMinute(), false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ConfirmCus.show("Lỗi hệ thống", e.getMessage());
+        }
+    }
+
+
+    private String getSelectedMaKhuVuc() {
+        String val = cboKhuVuc.getValue();
+        if (val == null || val.isEmpty()) {
+            return "KV0001";
+        }
+
+        int start = val.indexOf("(");
+        int end = val.indexOf(")");
+
+        if (start != -1 && end != -1 && end > start) {
+            return val.substring(start + 1, end);
+        }
+
+        return "KV0001";
+    }
+
+
 }
