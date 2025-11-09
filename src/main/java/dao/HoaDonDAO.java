@@ -2,7 +2,6 @@ package dao;
 
 import connectDB.connectDB;
 import entity.*;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,73 +19,33 @@ public class HoaDonDAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                String maKH = rs.getString("maKH");
-                String maNV = rs.getString("maNV");
-                String maBan = rs.getString("maBan");
-                String maKM = rs.getString("maKM");
-                String maSK = rs.getString("maSK");
-
-                KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
-                NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
-                Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
-                KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
-                SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
-
-                // Tách riêng hai thời điểm, xử lý thứ tự an toàn
-                LocalDateTime checkIn = rs.getTimestamp("tgCheckin") != null
-                        ? rs.getTimestamp("tgCheckin").toLocalDateTime()
-                        : null;
-                LocalDateTime checkOut = rs.getTimestamp("tgCheckout") != null
-                        ? rs.getTimestamp("tgCheckout").toLocalDateTime()
-                        : null;
-
-                HoaDon hd = new HoaDon();
-                hd.setMaHD(rs.getString("maHD"));
-                hd.setKhachHang(kh);
-                hd.setNhanVien(nv);
-                hd.setBan(ban);
-                hd.setKhuyenMai(km);
-                hd.setSuKien(sk);
-
-                // Gán check-in trước
-                if (checkIn != null) {
-                    hd.setTgCheckIn(checkIn);
-                }
-
-                // Chỉ set checkout nếu hợp lệ
-                if (checkOut != null && checkIn != null && checkOut.isAfter(checkIn)) {
-                    hd.setTgCheckOut(checkOut);
-                } else {
-                    hd.setTgCheckOut(null);
-                }
-
-                hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
-                hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
-                hd.setTrangthai(rs.getInt("trangThai"));
-                hd.setSoLuong(rs.getInt("soLuong"));
-                hd.setMoTa(rs.getString("moTa"));
-
+                HoaDon hd = mapHoaDon(rs);
                 ds.add(hd);
             }
 
         } catch (SQLException e) {
             System.err.println("Lỗi khi lấy danh sách hóa đơn: " + e.getMessage());
         }
-
         return ds;
     }
 
-
+    // ===================== GET ALL NGÀY HÔM NAY =====================
     public static List<HoaDon> getAllNgayHomNay() {
         List<HoaDon> ds = new ArrayList<>();
-        String sql = "select hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maKM, hd.maSK, hd.tgCheckin, hd.kieuDatBan, hd.moTa,hd.trangThai,hd.soLuong, kh.tenKH, kh.sdt, sk.tenSK,b.maKhuVuc, kv.tenKhuVuc from HoaDon hd join KhachHang kh on hd.maKH = kh.maKH\n" +
-                "join Ban b on hd.maBan = b.maBan\n" +
-                "join KhuVuc kv on b.maKhuVuc = kv.maKhuVuc\n" +
-                "join NhanVien nv on hd.maNV = nv.maNV\n" +
-                "left join KhuyenMai km on km.maKM = hd.maKM\n" +
-                "left join SuKien sk on hd.maSK = sk.maSK\n" +
-                "where tgCheckin >= CAST(GETDATE() AS DATE)\n" +
-                "AND tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))\n";
+        String sql = """
+            SELECT hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maSK,
+                   hd.tgCheckin, hd.kieuDatBan, hd.moTa, hd.trangThai, hd.soLuong,
+                   kh.tenKH, kh.sdt, sk.tenSK, b.maKhuVuc, kv.tenKhuVuc
+            FROM HoaDon hd
+            JOIN KhachHang kh ON hd.maKH = kh.maKH
+            JOIN Ban b ON hd.maBan = b.maBan
+            JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
+            JOIN NhanVien nv ON hd.maNV = nv.maNV
+            LEFT JOIN KhuyenMai km ON km.maKM = hd.maKM
+            LEFT JOIN SuKien sk ON hd.maSK = sk.maSK
+            WHERE tgCheckin >= CAST(GETDATE() AS DATE)
+              AND tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
+        """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -107,18 +66,17 @@ public class HoaDonDAO {
                 KhuVuc kv = new KhuVuc();
                 kv.setMaKhuVuc(rs.getString("maKhuVuc"));
                 kv.setTenKhuVuc(rs.getString("tenKhuVuc"));
+                ban.setKhuVuc(kv);
 
-                KhuyenMai km = new KhuyenMai();
-                if (rs.getString("maKM") == null) {
-                    km = null;
-                } else {
+                KhuyenMai km = null;
+                if (rs.getString("maKM") != null) {
+                    km = new KhuyenMai();
                     km.setMaKM(rs.getString("maKM"));
                 }
 
-                SuKien sk = new SuKien();
-                if (rs.getString("maSK") == null) {
-                    sk = null;
-                } else {
+                SuKien sk = null;
+                if (rs.getString("maSK") != null) {
+                    sk = new SuKien();
                     sk.setMaSK(rs.getString("maSK"));
                     sk.setTenSK(rs.getString("tenSK"));
                 }
@@ -128,10 +86,10 @@ public class HoaDonDAO {
                 hd.setKhachHang(kh);
                 hd.setNhanVien(nv);
                 hd.setBan(ban);
-                hd.getBan().setKhuVuc(kv);
                 hd.setKhuyenMai(km);
                 hd.setSuKien(sk);
-                hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
+                hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null
+                        ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
                 hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
                 hd.setTrangthai(rs.getInt("trangThai"));
                 hd.setSoLuong(rs.getInt("soLuong"));
@@ -141,7 +99,7 @@ public class HoaDonDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy danh sách hóa đơn: " + e.getMessage());
+            System.err.println("Lỗi khi lấy danh sách hóa đơn hôm nay: " + e.getMessage());
         }
 
         return ds;
@@ -158,32 +116,7 @@ public class HoaDonDAO {
             ps.setString(1, maHD);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String maKH = rs.getString("maKH");
-                    String maNV = rs.getString("maNV");
-                    String maBan = rs.getString("maBan");
-                    String maKM = rs.getString("maKM");
-                    String maSK = rs.getString("maSK");
-
-                    KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
-                    NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
-                    Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
-                    KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
-                    SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
-
-                    hd = new HoaDon();
-                    hd.setMaHD(rs.getString("maHD"));
-                    hd.setKhachHang(kh);
-                    hd.setNhanVien(nv);
-                    hd.setBan(ban);
-                    hd.setKhuyenMai(km);
-                    hd.setSuKien(sk);
-                    hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
-                    hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
-                    hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
-                    hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
-                    hd.setTrangthai(rs.getInt("trangThai"));
-                    hd.setSoLuong(rs.getInt("soLuong"));
-                    hd.setMoTa(rs.getString("moTa"));
+                    hd = mapHoaDon(rs);
                 }
             }
 
@@ -197,12 +130,12 @@ public class HoaDonDAO {
     // ===================== INSERT =====================
     public static boolean insert(HoaDon hd) {
         String sql = """
-                    INSERT INTO HoaDon(
-                        maHD, maKH, maNV, maBan, maKM, maSK,
-                        tgCheckin, tgCheckout, kieuThanhToan, kieuDatBan,
-                        trangThai, soLuong, moTa
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """;
+            INSERT INTO HoaDon(
+                maHD, maKH, maNV, maBan, maKM, maSK,
+                tgCheckin, tgCheckout, kieuThanhToan, kieuDatBan,
+                trangThai, soLuong, moTa
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -232,12 +165,12 @@ public class HoaDonDAO {
     // ===================== UPDATE =====================
     public static boolean update(HoaDon hd) {
         String sql = """
-                    UPDATE HoaDon SET 
-                        maKH=?, maNV=?, maBan=?, maKM=?, maSK=?,
-                        tgCheckin=?, tgCheckout=?, kieuThanhToan=?, kieuDatBan=?,
-                        trangThai=?, soLuong=?, moTa=?
-                    WHERE maHD=?
-                """;
+            UPDATE HoaDon SET 
+                maKH=?, maNV=?, maBan=?, maKM=?, maSK=?,
+                tgCheckin=?, tgCheckout=?, kieuThanhToan=?, kieuDatBan=?,
+                trangThai=?, soLuong=?, moTa=?
+            WHERE maHD=?
+        """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -301,6 +234,7 @@ public class HoaDonDAO {
         return result;
     }
 
+    // ===================== GET THEO MÃ NHÂN VIÊN =====================
     public static List<HoaDon> getTheoMaNV(String maNV) {
         List<HoaDon> ds = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon WHERE maNV = ?";
@@ -311,32 +245,7 @@ public class HoaDonDAO {
             ps.setString(1, maNV);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String maKH = rs.getString("maKH");
-                    String maBan = rs.getString("maBan");
-                    String maKM = rs.getString("maKM");
-                    String maSK = rs.getString("maSK");
-
-                    KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
-                    NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
-                    Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
-                    KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
-                    SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
-
-                    HoaDon hd = new HoaDon();
-                    hd.setMaHD(rs.getString("maHD"));
-                    hd.setKhachHang(kh);
-                    hd.setNhanVien(nv);
-                    hd.setBan(ban);
-                    hd.setKhuyenMai(km);
-                    hd.setSuKien(sk);
-                    hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
-                    hd.setTgCheckOut(rs.getTimestamp("tgCheckout") != null ? rs.getTimestamp("tgCheckout").toLocalDateTime() : null);
-                    hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
-                    hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
-                    hd.setTrangthai(rs.getInt("trangThai"));
-                    hd.setSoLuong(rs.getInt("soLuong"));
-                    hd.setMoTa(rs.getString("moTa"));
-
+                    HoaDon hd = mapHoaDon(rs);
                     ds.add(hd);
                 }
             }
@@ -346,4 +255,48 @@ public class HoaDonDAO {
         return ds;
     }
 
+    // ===================== MAP TỪ RESULTSET -> HÓA ĐƠN =====================
+    private static HoaDon mapHoaDon(ResultSet rs) throws SQLException {
+        String maKH = rs.getString("maKH");
+        String maNV = rs.getString("maNV");
+        String maBan = rs.getString("maBan");
+        String maKM = rs.getString("maKM");
+        String maSK = rs.getString("maSK");
+
+        KhachHang kh = (maKH != null) ? KhachHangDAO.getByID(maKH) : null;
+        NhanVien nv = (maNV != null) ? NhanVienDAO.getByID(maNV) : null;
+        Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
+        KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
+        SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
+
+        LocalDateTime checkIn = rs.getTimestamp("tgCheckin") != null
+                ? rs.getTimestamp("tgCheckin").toLocalDateTime()
+                : null;
+        LocalDateTime checkOut = rs.getTimestamp("tgCheckout") != null
+                ? rs.getTimestamp("tgCheckout").toLocalDateTime()
+                : null;
+
+        HoaDon hd = new HoaDon();
+        hd.setMaHD(rs.getString("maHD"));
+        hd.setKhachHang(kh);
+        hd.setNhanVien(nv);
+        hd.setBan(ban);
+        hd.setKhuyenMai(km);
+        hd.setSuKien(sk);
+
+        if (checkIn != null)
+            hd.setTgCheckIn(checkIn);
+        if (checkOut != null && checkIn != null && checkOut.isAfter(checkIn))
+            hd.setTgCheckOut(checkOut);
+        else
+            hd.setTgCheckOut(null);
+
+        hd.setKieuThanhToan(rs.getBoolean("kieuThanhToan"));
+        hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
+        hd.setTrangthai(rs.getInt("trangThai"));
+        hd.setSoLuong(rs.getInt("soLuong"));
+        hd.setMoTa(rs.getString("moTa"));
+
+        return hd;
+    }
 }
