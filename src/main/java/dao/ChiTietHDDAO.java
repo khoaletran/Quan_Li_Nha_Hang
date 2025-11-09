@@ -161,10 +161,10 @@ public class ChiTietHDDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Lỗi khi lấy danh sách chi tiết hóa đơn: " + e.getMessage());
+            System.err.println("Lỗi khi lấy danh sách chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("⚠️ Lỗi khác khi lấy danh sách chi tiết hóa đơn: " + e.getMessage());
+            System.err.println("Lỗi khác khi lấy danh sách chi tiết hóa đơn: " + e.getMessage());
             e.printStackTrace();
         }
         return ds;

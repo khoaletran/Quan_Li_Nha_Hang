@@ -115,8 +115,8 @@ public class HoaDonInController {
 
         lblThanhToan.setText(
                 hd.isKieuThanhToan()
-                        ? "💳 Thanh toán: Thẻ/QR"
-                        : "💵 Thanh toán: Tiền mặt"
+                        ? "Thanh toán: Thẻ/QR"
+                        : "Thanh toán: Tiền mặt"
         );
     }
 }

@@ -104,7 +104,7 @@ public class QrCodeController {
         window.setVisible(true);
         window.setLocationRelativeTo(null);
 
-        // ✅ Khi người dùng bấm nút tắt (dấu X)
+
         window.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -115,7 +115,7 @@ public class QrCodeController {
         });
 
         try {
-            while (running.get()) { // ✅ chỉ chạy khi chưa tắt
+            while (running.get()) {
                 BufferedImage image = webcam.getImage();
                 if (image == null) continue;
 

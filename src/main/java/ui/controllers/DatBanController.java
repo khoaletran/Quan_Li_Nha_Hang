@@ -44,7 +44,7 @@ public class DatBanController {
 
     @FXML
     public void initialize() {
-        LocalTime defaultTime = getDefaultTimePlus5(); // 👉 gọi hàm riêng
+        LocalTime defaultTime = getDefaultTimePlus5();
 
         datePicker.setValue(LocalDate.now());
 

@@ -156,7 +156,7 @@
                 </GridPane>
 
                 <!--  khung tiìm món-->
-                <VBox spacing="10" styleClass="food-search-box">
+                <VBox spacing="10" styleClass="food-search-box" visible="false">
 
                     <!-- Thanh tìm kiếm -->
                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-bar">
