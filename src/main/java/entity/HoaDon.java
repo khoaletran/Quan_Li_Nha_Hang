@@ -54,20 +54,21 @@ public class HoaDon {
     public LocalDateTime getTgLapHD() { return tgLapHD; }
 
     public void setTgLapHD(LocalDateTime tgLapHD) {
-        if (!tgLapHD.isAfter(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
-        }
         this.tgLapHD = tgLapHD;
     }
 
     public LocalDateTime getTgCheckIn() { return tgCheckIn; }
     public void setTgCheckIn(LocalDateTime tgCheckIn) {
-        if (tgCheckIn== null) {
+        if (tgCheckIn == null) {
             this.tgCheckIn = null;
             return;
         }
-        if (!tgCheckIn.isAfter(tgLapHD)) {
-            throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
+        if (tgCheckIn.isEqual(tgLapHD)) {
+            this.tgCheckIn = tgCheckIn;
+            return;
+        }
+        if (!tgCheckIn.isAfter(tgLapHD) || tgCheckIn.isEqual(tgLapHD)) {
+            throw new IllegalArgumentException("Thời gian check in phải sau thời gian lập HD");
         }
         this.tgCheckIn = tgCheckIn;
     }
