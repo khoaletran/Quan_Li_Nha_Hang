@@ -1,5 +1,6 @@
 package entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PhieuKetCa {
@@ -35,7 +36,9 @@ public class PhieuKetCa {
     }
 
     public void setMaPhieu(String maPhieu) {
-        this.maPhieu = maPhieu;
+        if(maPhieu == null || !maPhieu.matches("^MP\\d{4}$")) {
+            throw new IllegalArgumentException("Mã Phiếu sai định dạng.");
+        }this.maPhieu = maPhieu;
     }
 
     public NhanVien getNhanVien() {
@@ -43,7 +46,9 @@ public class PhieuKetCa {
     }
 
     public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
+        if (nhanVien == null) {
+            throw new IllegalArgumentException("Nhân viên không được để trống.");
+        }this.nhanVien = nhanVien;
     }
 
     public boolean isCa() { return ca;}
@@ -68,7 +73,12 @@ public class PhieuKetCa {
 
     public LocalDateTime getNgayKetCa() { return ngayKetCa; }
 
-    public void setNgayKetCa(LocalDateTime ngayKetCa) { this.ngayKetCa = ngayKetCa; }
+    public void setNgayKetCa(LocalDateTime ngayKetCa) {
+        if (ngayKetCa == null || !ngayKetCa.toLocalDate().equals(LocalDate.now())) {
+            throw new IllegalArgumentException("Ngày kết ca phải bằng ngày hiện tại.");
+        }
+        this.ngayKetCa = ngayKetCa;
+    }
 
     public String getMoTa() { return moTa; }
 
