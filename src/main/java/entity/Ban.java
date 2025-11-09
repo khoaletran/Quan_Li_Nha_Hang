@@ -28,9 +28,9 @@ public class Ban {
     }
 
     public void setMaBan(String maBan) {
-        if (!maBan.matches("^B[OIV]\\d{4}$")) {
+        if (!maBan.matches("^[BW][OIV]\\d{4}$")) {
             throw new IllegalArgumentException(
-                    "Mã bàn không hợp lệ. Phải gồm 6 ký tự: B + (O/I/V) + 4 chữ số."
+                    "Mã bàn không hợp lệ. Phải gồm 6 ký tự: B hoặc W + (O/I/V) + 4 chữ số."
             );
         }this.maBan = maBan;
     }
