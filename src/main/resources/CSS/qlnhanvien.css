@@ -181,6 +181,18 @@
     -fx-font-size: 14px;
 }
 
+.form-input .text-field {
+    -fx-background-color: #f8f8f8;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.form-input .arrow-button {
+    -fx-background-radius: 2px;
+    -fx-padding: 4;
+    -fx-cursor: hand;
+}
+
 .form-combo {
     -fx-background-color: #f8f8f8;
     -fx-background-radius: 8;
