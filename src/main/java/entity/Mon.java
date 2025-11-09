@@ -81,7 +81,9 @@ public class Mon {
     }
 
     public void setMaMon(String maMon) {
-        this.maMon = maMon;
+        if(maMon == null || !maMon.matches("^MM\\d{4}$")) {
+            throw new IllegalArgumentException("Mã món sai định dạng.");
+        }this.maMon = maMon;
     }
 
     public String getTenMon() {
@@ -89,7 +91,9 @@ public class Mon {
     }
 
     public void setTenMon(String tenMon) {
-        this.tenMon = tenMon;
+        if (tenMon == null || tenMon.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên món không được để trống.");
+        }this.tenMon = tenMon;
     }
 
     public String getMoTa() {
@@ -113,7 +117,9 @@ public class Mon {
     }
 
     public void setLoaiMon(LoaiMon loaiMon) {
-        this.loaiMon = loaiMon;
+        if (loaiMon == null) {
+            throw new IllegalArgumentException("Loại món không được để trống.");
+        }this.loaiMon = loaiMon;
     }
 
     public double getGiaGoc() {
@@ -121,6 +127,9 @@ public class Mon {
     }
 
     public void setGiaGoc(double giaGoc) {
+        if (giaGoc < 0) {
+            throw new IllegalArgumentException("Giá gốc không được nhỏ hơn 0.");
+        }
         this.giaGoc = giaGoc;
     }
 

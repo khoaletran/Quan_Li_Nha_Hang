@@ -22,6 +22,9 @@ public class SuKien {
     }
 
     public void setMaSK(String maSK) {
+        if(maSK == null || !maSK.matches("^SK\\d{4}$")) {
+            throw new IllegalArgumentException("Mã sự kiện sai định dạng.");
+        }
         this.maSK = maSK;
     }
 
@@ -30,6 +33,9 @@ public class SuKien {
     }
 
     public void setTenSK(String tenSK) {
+        if(tenSK == null) {
+            throw new IllegalArgumentException("Tên sự kiện không được rỗng.");
+        }
         this.tenSK = tenSK;
     }
 
@@ -46,6 +52,9 @@ public class SuKien {
     }
 
     public void setGia(double gia) {
+        if(gia < 0) {
+            throw new IllegalArgumentException("Giá không được âm");
+        }
         this.gia = gia;
     }
 

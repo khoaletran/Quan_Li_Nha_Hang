@@ -308,6 +308,16 @@ public class CheckinController {
         if (dpThoiGian != null) addAutoSearch(dpThoiGian);
     }
 
+    @FXML
+    private void xoaTrang() {
+        clearThongTin();
+        txtMaHD.clear();
+        txtSDT.clear();
+        dpThoiGian.setValue(null);
+        cboKhuVuc.getSelectionModel().selectFirst();
+    }
+
+
     private void addAutoSearch(TextField field) {
         field.textProperty().addListener((obs, oldVal, newVal) -> filterDanhSach());
     }

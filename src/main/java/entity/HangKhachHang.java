@@ -24,7 +24,9 @@ public class HangKhachHang {
     }
 
     public void setMaHang(String maHang) {
-        this.maHang = maHang;
+        if(maHang == null || !maHang.matches("^HH\\d{4}$")) {
+            throw new IllegalArgumentException("Mã hàng sai định dạng.");
+        }this.maHang = maHang;
     }
 
     public String getMoTa() {
@@ -40,6 +42,9 @@ public class HangKhachHang {
     }
 
     public void setGiamGia(int giamGia) {
+        if (giamGia < 0 || giamGia > 100) {
+            throw new IllegalArgumentException("Giảm giá phải từ 0 đến 100.");
+        }
         this.giamGia = giamGia;
     }
 
@@ -48,6 +53,9 @@ public class HangKhachHang {
     }
 
     public void setDiemHang(int diemHang) {
+        if (diemHang < 0) {
+            throw new IllegalArgumentException("Điểm hạng không được nhỏ hơn 0.");
+        }
         this.diemHang = diemHang;
     }
 
