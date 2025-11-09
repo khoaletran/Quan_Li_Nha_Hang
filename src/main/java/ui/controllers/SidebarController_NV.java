@@ -83,7 +83,7 @@ public class SidebarController_NV {
 
         if (!isSubItem && source != btnQuanLiDatBan && subMenuDatBan.isVisible()) {
             hideSubMenu();
-            clearAllSelected(); // ✅ xóa luôn cha
+            clearAllSelected();
         }
 
         // ===================== ĐIỀU HƯỚNG =====================

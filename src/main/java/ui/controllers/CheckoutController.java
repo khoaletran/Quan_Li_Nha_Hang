@@ -33,7 +33,6 @@ public class CheckoutController {
 
     private HoaDon hdHienTai;
 
-
     private List<KhuyenMai> listKM = KhuyenMaiDAO.getAll();
 
     @FXML
@@ -269,7 +268,7 @@ public class CheckoutController {
 
     private void xuLyThanhToan() {
         if (hdHienTai == null) {
-            AlertCus.show("⚠️ Chưa chọn hóa đơn", "Vui lòng chọn hóa đơn trước khi thanh toán!");
+            AlertCus.show("Chưa chọn hóa đơn", "Vui lòng chọn hóa đơn trước khi thanh toán!");
             return;
         }
 
@@ -277,12 +276,12 @@ public class CheckoutController {
         boolean isTienMat = rdoTienMat.isSelected();
         double tongConLai = parseCurrency(lblConLai.getText().trim());
 
-        // ===== 💵 THANH TOÁN TIỀN MẶT =====
+
         if (isTienMat) {
             double tienKhach = parseCurrency(txtTienKhachDua.getText().trim());
 
             if (tienKhach < tongConLai) {
-                AlertCus.show("⚠️ Thiếu tiền", "Số tiền khách đưa chưa đủ để thanh toán!");
+                AlertCus.show("Thiếu tiền", "Số tiền khách đưa chưa đủ để thanh toán!");
                 return;
             }
 
@@ -299,16 +298,16 @@ public class CheckoutController {
 
             // thông báo
             double tienThua = tienKhach - tongConLai;
-            AlertCus.show("✅ Thanh toán thành công",
+            AlertCus.show("Thanh toán thành công",
                     "Khách đã thanh toán " + formatCurrency(tienKhach) +
                             "\nTiền thừa: " + formatCurrency(tienThua));
 
-            HoaDonIn.inHoaDonNhanh(hdHienTai);
+            HoaDonIn.previewHoaDon(hdHienTai);
             loadAllHoaDon(); // làm mới danh sách
+            vboxMenu.getChildren().clear();
             return;
         }
 
-        // ===== 💳 THANH TOÁN CHUYỂN KHOẢN =====
         QRThanhToan.hienThiQRPanel(tongConLai, hdHienTai.getMaHD(), () -> {
             hdHienTai.setTrangthai(2);
             hdHienTai.setTgCheckOut(java.time.LocalDateTime.now());
@@ -318,12 +317,13 @@ public class CheckoutController {
             BanDAO.update(hdHienTai.getBan(), false);
 
             javafx.application.Platform.runLater(() -> {
-                AlertCus.show("✅ Thanh toán thành công",
+                AlertCus.show("Thanh toán thành công",
                         "Khách đã chuyển khoản đủ " + formatCurrency(tongConLai) +
                                 "\nHóa đơn " + hdHienTai.getMaHD() + " đã hoàn tất.");
 
                 HoaDonIn.previewHoaDon(hdHienTai);
                 loadAllHoaDon();
+                vboxMenu.getChildren().clear();
             });
         });
     }

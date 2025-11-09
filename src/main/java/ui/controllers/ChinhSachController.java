@@ -460,7 +460,6 @@ public class ChinhSachController {
             return;
         }
 
-        // ✅ Nếu đã chọn món, cập nhật riêng cho món
         if (selectedMon != null) {
             PhanTramGiaBan pt = new PhanTramGiaBan();
             PhanTramGiaBan latestPG = PhanTramGiaBanDAO.getLatest();
@@ -482,7 +481,6 @@ public class ChinhSachController {
             return;
         }
 
-        // ✅ Nếu không chọn món, lấy loại món từ ComboBox
         String tenLoai = cbLoaiMon.getSelectionModel().getSelectedItem();
         if (tenLoai == null || tenLoai.isEmpty()) {
             System.out.println("Chưa chọn món hoặc loại món!");
