@@ -14,6 +14,7 @@ public class HoaDon {
     private KhachHang khachHang;
     private NhanVien nhanVien;
     private Ban ban;
+    private LocalDateTime tgLapHD;
     private LocalDateTime tgCheckIn;
     private LocalDateTime tgCheckOut;
     private KhuyenMai khuyenMai;
@@ -50,10 +51,23 @@ public class HoaDon {
     public Ban getBan() { return ban; }
     public void setBan(Ban ban) { this.ban = ban; }
 
+    public LocalDateTime getTgLapHD() { return tgLapHD; }
+
+    public void setTgLapHD(LocalDateTime tgLapHD) {
+        if (!tgLapHD.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
+        }
+        this.tgLapHD = tgLapHD;
+    }
+
     public LocalDateTime getTgCheckIn() { return tgCheckIn; }
     public void setTgCheckIn(LocalDateTime tgCheckIn) {
         if (tgCheckIn== null) {
-            throw new IllegalArgumentException("Thời gian check in không được rỗng");
+            this.tgCheckIn = null;
+            return;
+        }
+        if (!tgCheckIn.isAfter(tgLapHD)) {
+            throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
         }
         this.tgCheckIn = tgCheckIn;
     }

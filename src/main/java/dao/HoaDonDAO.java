@@ -33,7 +33,7 @@ public class HoaDonDAO {
     public static List<HoaDon> getAllNgayHomNay() {
         List<HoaDon> ds = new ArrayList<>();
         String sql = """
-            SELECT hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maSK,
+            SELECT hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maSK,hd.tgLapHD,
                    hd.tgCheckin, hd.kieuDatBan, hd.moTa, hd.trangThai, hd.soLuong,
                    kh.tenKH, kh.sdt, sk.tenSK, b.maKhuVuc, kv.tenKhuVuc
             FROM HoaDon hd
@@ -88,6 +88,8 @@ public class HoaDonDAO {
                 hd.setBan(ban);
                 hd.setKhuyenMai(km);
                 hd.setSuKien(sk);
+                hd.setTgLapHD(rs.getTimestamp("tgLapHD") != null
+                        ? rs.getTimestamp("tgLapHD").toLocalDateTime() : null);
                 hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null
                         ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
                 hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
@@ -268,7 +270,9 @@ public class HoaDonDAO {
         Ban ban = (maBan != null) ? BanDAO.getByID(maBan) : null;
         KhuyenMai km = (maKM != null) ? KhuyenMaiDAO.getByID(maKM) : null;
         SuKien sk = (maSK != null) ? SuKienDAO.getByID(maSK) : null;
-
+        LocalDateTime tgLapHD = rs.getTimestamp("tgLapHD") != null
+                ? rs.getTimestamp("tgLapHD").toLocalDateTime()
+                : null;
         LocalDateTime checkIn = rs.getTimestamp("tgCheckin") != null
                 ? rs.getTimestamp("tgCheckin").toLocalDateTime()
                 : null;
@@ -283,7 +287,8 @@ public class HoaDonDAO {
         hd.setBan(ban);
         hd.setKhuyenMai(km);
         hd.setSuKien(sk);
-
+        if (tgLapHD != null)
+            hd.setTgLapHD(tgLapHD);
         if (checkIn != null)
             hd.setTgCheckIn(checkIn);
         if (checkOut != null && checkIn != null && checkOut.isAfter(checkIn))
@@ -298,5 +303,21 @@ public class HoaDonDAO {
         hd.setMoTa(rs.getString("moTa"));
 
         return hd;
+    }
+
+    public static List<HoaDon> getAllWaitlistCho() {
+        List<HoaDon> list = new ArrayList<>();
+        String sql = "SELECT * FROM HoaDon WHERE maBan LIKE 'W%' AND trangThai = 0";
+        try (Connection conn = connectDB.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                HoaDon hd = mapHoaDon(rs);
+                list.add(hd);
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi getAllWaitlistCho: " + e.getMessage());
+        }
+        return list;
     }
 }

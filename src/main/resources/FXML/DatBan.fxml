@@ -297,12 +297,6 @@
                     <ComboBox fx:id="cboKhuVuc" prefWidth="150.0" />
                 </HBox>
 
-                <!-- Loại bàn -->
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label styleClass="info-label" text="Loại bàn:" />
-                    <ComboBox fx:id="cboLoaiBan" prefWidth="150.0" />
-                </HBox>
-
                 <!-- Số lượng khách -->
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label prefHeight="18.0" prefWidth="120.0"

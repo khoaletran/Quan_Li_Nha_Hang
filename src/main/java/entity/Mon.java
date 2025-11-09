@@ -52,7 +52,7 @@ public class Mon {
     public int getPTGBTaiHD(HoaDon hd) {
         if (hd == null) return 0;
 
-        LocalDate ngayHD = hd.getTgCheckIn().toLocalDate();
+        LocalDate ngayHD = hd.getTgLapHD().toLocalDate();
 
         PhanTramGiaBan ptMon = PhanTramGiaBanDAO.getEffectiveForMonAtDate(maMon, ngayHD);
         if (ptMon != null) {

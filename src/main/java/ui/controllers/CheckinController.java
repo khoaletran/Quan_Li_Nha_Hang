@@ -1,13 +1,7 @@
 package ui.controllers;
 
-import dao.ChiTietHDDAO;
-import dao.HoaDonDAO;
-import dao.KhuVucDAO;
-import dao.ThoiGianDoiBanDAO;
-import entity.ChiTietHoaDon;
-import entity.HoaDon;
-import entity.KhuVuc;
-import entity.ThoiGianDoiBan;
+import dao.*;
+import entity.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -47,6 +41,14 @@ public class CheckinController {
         loadDanhSach();
         loadComboKhuVuc();
         setupFilterEvents();
+
+        javafx.animation.Timeline autoRefresh = new javafx.animation.Timeline(
+                new javafx.animation.KeyFrame(javafx.util.Duration.seconds(100), e -> {
+                    autoAssignWaitlistToFreeTable();
+                })
+        );
+        autoRefresh.setCycleCount(javafx.animation.Animation.INDEFINITE);
+        autoRefresh.play();
     }
     //a
     private void loadComboKhuVuc(){
@@ -378,6 +380,49 @@ public class CheckinController {
                     vboxCho.getChildren().add(item);
                 }
             }
+        }
+    }
+
+    private void autoAssignWaitlistToFreeTable() {
+        try {
+            // Lấy danh sách bàn trống
+            List<Ban> dsBanTrong = BanDAO.getAllTrong();
+            BanDAO banDAO = new BanDAO();
+
+            List<HoaDon> dsWaitlist = HoaDonDAO.getAllWaitlistCho();
+
+            for (HoaDon hdWait : dsWaitlist) {
+                Ban banCho = hdWait.getBan();
+                int soLuongKhach = hdWait.getSoLuong();
+                String maKV = banCho.getKhuVuc().getMaKhuVuc();
+                String maLoaiBan = banCho.getLoaiBan().getMaLoaiBan();
+
+                Ban banPhuHop = dsBanTrong.stream()
+                        .filter(b -> b.getKhuVuc().getMaKhuVuc().equals(maKV)
+                                && b.getLoaiBan().getSoLuong() >= soLuongKhach)
+                        .findFirst()
+                        .orElse(null);
+
+                if (banPhuHop != null) {
+                    hdWait.setBan(banPhuHop);
+                    hdWait.setTrangthai(1);
+                    hdWait.setTgCheckIn(LocalDateTime.now());
+                    HoaDonDAO.update(hdWait);
+
+                    BanDAO.update(banPhuHop, true);
+
+                    banDAO.delete(banCho.getMaBan());
+
+                    System.out.println("Đã đổi bàn chờ " + banCho.getMaBan() +
+                            " → bàn thật " + banPhuHop.getMaBan() +
+                            " cho hóa đơn " + hdWait.getMaHD());
+                }
+            }
+
+            loadDanhSach();
+        } catch (Exception e) {
+            System.err.println("Lỗi khi auto gán bàn chờ: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

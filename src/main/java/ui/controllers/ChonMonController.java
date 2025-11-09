@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import ui.AlertCus;
+import ui.ConfirmCus;
 import ui.QRThanhToan;
 
 import java.text.DecimalFormat; // ADDED
@@ -35,6 +36,7 @@ public class ChonMonController {
     @FXML private TextField txtTienKhachDua, sdtKhach, tften, tfTimKiem;
     @FXML private TextField tf_ban, tftg, tfSLKhach, tfghichu;
 
+    private boolean kieudatban;
 
     private ui.controllers.MainController_NV mainController;
 
@@ -68,18 +70,47 @@ public class ChonMonController {
 
 
         btndatban.setOnAction(e -> {
+            // ===== Kiểm tra dữ liệu chung =====
+            if (banHienTai == null) {
+                AlertCus.show("Thiếu thông tin", "Chưa chọn bàn phục vụ!\nVui lòng chọn bàn trước khi đặt.");
+                return;
+            }
+            if (soLuongMap.isEmpty()) {
+                AlertCus.show("Thiếu thông tin", "Chưa chọn món ăn nào!\nVui lòng chọn ít nhất 1 món trước khi thanh toán.");
+                return;
+            }
+            if (soLuongKhach <= 0) {
+                AlertCus.show("Số lượng khách không hợp lệ", "Vui lòng nhập số lượng khách lớn hơn 0.");
+                return;
+            }
+            String sdt = sdtKhach.getText().trim();
+            if (sdt.isEmpty()) {
+                AlertCus.show("Thiếu thông tin", "Vui lòng nhập số điện thoại khách hàng trước khi đặt bàn.");
+                return;
+            }
+            if (!sdt.matches("^0[3-9]\\d{8}$")) {
+                AlertCus.show("Số điện thoại không hợp lệ", "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03–09.");
+                return;
+            }
+
+            // ===== Xử lý theo hình thức thanh toán =====
             if (rdoTienMat.isSelected()) {
                 datBan();
             } else {
                 double tongTien = parseCurrency(lblCoc.getText().trim());
-                String maHD = tuSinhMaHD();
+                if (tongTien <= 0) {
+                    AlertCus.show("Tổng tiền không hợp lệ", "Không thể thanh toán hóa đơn có tổng tiền bằng 0.\nVui lòng kiểm tra lại món ăn đã chọn.");
+                    return;
+                }
 
+                String maHD = tuSinhMaHD();
                 QRThanhToan.hienThiQRPanel(tongTien, maHD, () -> {
                     System.out.println("Thanh toán chuyển khoản thành công → Tạo hóa đơn...");
                     datBanSauKhiXacNhan(maHD);
                 });
             }
         });
+
 
 
         sdtKhach.setOnKeyReleased(e -> timKhachHang());
@@ -112,6 +143,18 @@ public class ChonMonController {
         tfSLKhach.setText(String.valueOf(soLuongKhach));
     }
 
+    public void setSdtKhach(String sdt) {
+        sdtKhach.setText(sdt);
+    }
+
+    public void setTen(String ten) {
+        tften.setText(ten);
+    }
+
+    public void setKieudatban(boolean kieudatban) {
+        this.kieudatban = kieudatban;
+    }
+
     public void setThongTinBan(Ban ban) {
         this.banHienTai = ban;
         tf_ban.setText(ban.getMaBan());
@@ -139,15 +182,36 @@ public class ChonMonController {
         }
     }
 
-
-
     @FXML
     private void quayVeDatBan() {
         if (mainController != null) {
-            mainController.setCenterContent("/FXML/DatBan.fxml");
+            boolean xacNhan = ConfirmCus.show(
+                    "Xác nhận hủy bàn đợi",
+                    "Khách hàng không đặt nữa. Bạn có muốn xóa bàn chờ này không?"
+            );
+
+            if (xacNhan) {
+                try {
+                    Ban ban = banHienTai;
+                    if (ban != null && ban.getMaBan().startsWith("W")) {
+                        BanDAO banDAO = new BanDAO();
+                        if (banDAO.delete(ban.getMaBan())) {
+                            System.out.println("Đã xóa bàn đợi: " + ban.getMaBan());
+                        } else {
+                            System.err.println("Lỗi khi xóa bàn đợi khỏi DB!");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ConfirmCus.show("Lỗi hệ thống", "Không thể xóa bàn đợi: " + e.getMessage());
+                }
+
+                mainController.setCenterContent("/FXML/DatBan.fxml");
+            } else {
+                System.out.println("Người dùng hủy thao tác quay lại, vẫn ở màn chọn món.");
+            }
         }
     }
-
 
     private void loadComboDanhMuc() {
         comboDanhMuc.getItems().clear();
@@ -576,12 +640,6 @@ public class ChonMonController {
     private void datBan() {
         LocalDateTime now = LocalDateTime.now();
 
-        // ===== Kiểm tra dữ liệu =====
-        if (banHienTai == null || soLuongMap.isEmpty()) {
-            System.out.println("⚠️ Chưa chọn bàn hoặc món!");
-            AlertCus.show("Thiếu thông tin", "Chưa chọn bàn hoặc món ăn!\nVui lòng kiểm tra lại trước khi đặt bàn.");
-            return;
-        }
 
         long phutCachNhau = java.time.Duration.between(now, thoiGianDat).toMinutes();
         boolean kieuDatBan = !(phutCachNhau >= 0 && phutCachNhau <= 15);
@@ -624,7 +682,7 @@ public class ChonMonController {
         soLuongMap.clear();
         lbl_total.setText("0 đ");
         BanDAO.update(banHienTai,true);
-        quayVeDatBan();
+        mainController.setCenterContent("/FXML/DatBan.fxml");
     }
 
 
@@ -679,7 +737,7 @@ public class ChonMonController {
         soLuongMap.clear();
         lbl_total.setText("0 đ");
         BanDAO.update(banHienTai,true);
-        quayVeDatBan();
+        mainController.setCenterContent("/FXML/DatBan.fxml");
     }
 
 
@@ -736,10 +794,10 @@ public class ChonMonController {
         if (!sdt.isEmpty()) {
             khachHang = new KhachHangDAO().findBySDT(sdt);
         }
-
         if (khachHang == null) {
             khachHang = new KhachHang("KH0000", 0, true, sdt, "Khách lẻ", xetHang(0));
         }
+
         // ===== 3. Tính toán giá trị dẫn xuất =====
 
         KhuyenMai km = null;
@@ -752,11 +810,28 @@ public class ChonMonController {
         hd.setKhachHang(khachHang);
         hd.setNhanVien(nhanVienHien);
         hd.setBan(banHienTai);
-        hd.setTgCheckIn(thoiGianDat);
+        hd.setTgLapHD(LocalDateTime.now());
+        // Nếu là bàn đợi → chưa check-in
+        if (banHienTai.getMaBan().startsWith("W")) {
+            hd.setTgCheckIn(null);
+        }
+        // Nếu là bàn đã đặt trước (đến sau) → thời gian checkin theo lịch đặt
+        else if (trangthai == 0 && thoiGianDat != null) {
+            hd.setTgCheckIn(thoiGianDat);
+        }
+        // Nếu khách vào ngay → checkin thời điểm hiện tại
+        else {
+            hd.setTgCheckIn(LocalDateTime.now());
+        }
+
         hd.setSoLuong(soLuongKhach);
         hd.setTgCheckOut(null);
         hd.setKhuyenMai(km);
-        hd.setTrangthai(trangthai);
+        if (banHienTai.getMaBan().startsWith("W")) {
+            hd.setTrangthai(0);
+        } else {
+            hd.setTrangthai(trangthai);
+        }
         hd.setSuKien(sk);
         hd.setKieuThanhToan(kieuThanhToan);
         hd.setKieuDatBan(kieudatban);
