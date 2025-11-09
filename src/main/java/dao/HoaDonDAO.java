@@ -33,7 +33,7 @@ public class HoaDonDAO {
     public static List<HoaDon> getAllNgayHomNay() {
         List<HoaDon> ds = new ArrayList<>();
         String sql = """
-            SELECT hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maSK,hd.tgLapHD
+            SELECT hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maSK,hd.tgLapHD,
                    hd.tgCheckin, hd.kieuDatBan, hd.moTa, hd.trangThai, hd.soLuong,
                    kh.tenKH, kh.sdt, sk.tenSK, b.maKhuVuc, kv.tenKhuVuc
             FROM HoaDon hd
