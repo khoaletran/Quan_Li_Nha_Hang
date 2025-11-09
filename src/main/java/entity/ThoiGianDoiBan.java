@@ -11,7 +11,7 @@ public class ThoiGianDoiBan {
 
     public void setMaTGDB(String maTGDB) {
         if(maTGDB == null || !maTGDB.matches("^TD\\d{4}$")) {
-            throw new IllegalArgumentException("Mã thời gian đợi bàn sai định dạng.");
+            throw new IllegalArgumentException("Mã thời gian đổi bàn sai định dạng.");
         }
         this.maTGDB = maTGDB;
     }
@@ -30,7 +30,7 @@ public class ThoiGianDoiBan {
 
     public void setThoiGian(int thoiGian) {
         if(thoiGian <=0){
-            throw new IllegalArgumentException("Thời gian đợi phải lớn hơn 0");
+            throw new IllegalArgumentException("Thời gian đổi phải lớn hơn 0");
         }
         this.thoiGian = thoiGian;
     }

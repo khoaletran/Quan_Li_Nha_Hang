@@ -38,8 +38,6 @@ public class SidebarController_QL {
     private MainController_QL mainController;
     private Button currentSelected = null;
 
-
-
     @FXML
     public void initialize() {
         javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(55, 55, 55);
