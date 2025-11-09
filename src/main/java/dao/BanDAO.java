@@ -2,6 +2,7 @@ package dao;
 
 import connectDB.connectDB;
 import entity.Ban;
+import entity.HoaDon;
 import entity.KhuVuc;
 import entity.LoaiBan;
 
@@ -175,5 +176,84 @@ public class BanDAO {
         }
         return null;
     }
+
+    public String taoMaBanChoTheoKhuVuc(KhuVuc khuVuc) {
+        String prefix;
+        String maKV = khuVuc.getMaKhuVuc();
+        switch (maKV) {
+            case "KV0001": prefix = "WO"; break; // Outdoor
+            case "KV0002": prefix = "WI"; break; // Indoor
+            case "KV0003": prefix = "WV"; break; // VIP
+            default: prefix = "WX"; break;
+        }
+
+        String sql = "SELECT TOP 1 maBan FROM Ban WHERE maBan LIKE ? ORDER BY maBan DESC";
+
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, prefix + "%");
+            ResultSet rs = ps.executeQuery();
+
+            int nextId = 1;
+            if (rs.next()) {
+                String lastId = rs.getString("maBan");
+                String numPart = lastId.substring(2);
+                nextId = Integer.parseInt(numPart) + 1;
+            }
+
+            return prefix + String.format("%04d", nextId);
+
+        } catch (Exception e) {
+            System.err.println("Lỗi khi tạo mã bàn chờ: " + e.getMessage());
+            return prefix + "0001"; // fallback
+        }
+    }
+
+
+    public static boolean conBanTrongTheoKhuVuc(String maKhuVuc) {
+        return getAll().stream()
+                .anyMatch(b -> b.getKhuVuc().getMaKhuVuc().equals(maKhuVuc) && !b.isTrangThai());
+    }
+
+
+    public static List<Ban> getAllTrong() {
+        List<Ban> list = new ArrayList<>();
+        String sql = "SELECT * FROM Ban WHERE trangThai = 0 AND maBan NOT LIKE 'W%'";
+
+        try (Connection conn = connectDB.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            List<LoaiBan> dsLoaiBan = LoaiBanDAO.getAll();
+            List<KhuVuc> dsKhuVuc = KhuVucDAO.getAll();
+            while (rs.next()) {
+                String maBan = rs.getString("maBan");
+                String maLoaiBan = rs.getString("maLoaiBan");
+                String maKhuVuc = rs.getString("maKhuVuc");
+                boolean trangThai = rs.getBoolean("trangThai");
+
+                // Tìm đối tượng liên kết
+                LoaiBan loaiBan = dsLoaiBan.stream()
+                        .filter(lb -> lb.getMaLoaiBan().equals(maLoaiBan))
+                        .findFirst()
+                        .orElse(null);
+
+                KhuVuc khuVuc = dsKhuVuc.stream()
+                        .filter(kv -> kv.getMaKhuVuc().equals(maKhuVuc))
+                        .findFirst()
+                        .orElse(null);
+
+                list.add(new Ban(maBan, khuVuc, loaiBan, trangThai));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Lỗi getAllTrong: " + e.getMessage());
+        }
+
+        return list;
+    }
+
+
 
 }

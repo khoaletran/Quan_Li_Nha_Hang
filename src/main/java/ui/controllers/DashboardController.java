@@ -1,5 +1,7 @@
 package ui.controllers;
 
+import dao.HoaDonDAO;
+import entity.HoaDon;
 import entity.NhanVien;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,12 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DashboardController {
 
@@ -23,10 +26,16 @@ public class DashboardController {
     @FXML private Label lblChucVu;
     @FXML private Label lblGioiTinh;
     @FXML private Label lblNgayVaoLam;
-    @FXML private Circle circleTrangThai;
-
     @FXML private ImageView avatarImage;
     @FXML private Circle avatarClip;
+
+    // 🧮 Thống kê
+    @FXML private Label lblTongDonDangDoi;
+    @FXML private Label lblTongDonDaNhan;
+    @FXML private Label lblTongDonDaThanhToan;
+    @FXML private Label lblDoanhThu;
+    @FXML private Label lblSoKhach;
+    @FXML private Label lblKhuVuc;
 
     private NhanVien nv;
 
@@ -35,9 +44,12 @@ public class DashboardController {
         if (avatarImage != null && avatarClip != null) {
             avatarImage.setClip(avatarClip);
         }
+
+        // Load thống kê khi mở dashboard
+        taiThongKeDashboard();
     }
 
-    /** Nhận controller cha (NV hoặc QL) */
+    // ================= SETUP NHÂN VIÊN =================
     public void setMainController(Object controller) {
         if (controller instanceof MainController_NV nvCtrl) {
             this.nv = nvCtrl.getNhanVien();
@@ -58,6 +70,7 @@ public class DashboardController {
         hienThiThongTinNhanVien();
     }
 
+    // ================= HIỂN THỊ NHÂN VIÊN =================
     private void hienThiThongTinNhanVien() {
         if (nv == null) return;
 
@@ -74,8 +87,6 @@ public class DashboardController {
             lblNgayVaoLam.setText("Ngày Vào Làm: -");
         }
 
-
-        // Avatar theo giới tính
         try {
             String imgPath = nv.isGioiTinh()
                     ? "/IMG/icon/man.png"
@@ -86,6 +97,87 @@ public class DashboardController {
         }
     }
 
+    // ================= TẢI THỐNG KÊ DASHBOARD =================
+    private void taiThongKeDashboard() {
+        try {
+            // Lấy danh sách hóa đơn trong ngày
+            List<HoaDon> danhSach = HoaDonDAO.getAllNgayHomNay();
+
+            if (danhSach == null || danhSach.isEmpty()) {
+                lblTongDonDangDoi.setText("0");
+                lblTongDonDaNhan.setText("0");
+                lblTongDonDaThanhToan.setText("0");
+                lblDoanhThu.setText("0đ");
+                lblSoKhach.setText("0");
+                lblKhuVuc.setText("0");
+                return;
+            }
+
+//            int tongDon = 0;
+            double tongDoanhThu = 0;
+            Set<String> tapKhachHang = new HashSet<>();
+            Set<String> tapKhuVuc = new HashSet<>();
+
+            //Đếm theo trạng thái
+            int donCho = 0;      // trạng thái = 0
+            int donDangDung = 0; // trạng thái = 1
+            int donHoanThanh = 0;// trạng thái = 2
+
+            // Duyệt danh sách hóa đơn
+            for (HoaDon hd : danhSach) {
+                if (hd == null) continue;
+
+//                tongDon++;
+                tongDoanhThu += hd.getTongTienSau();
+
+                // Đếm khách hàng duy nhất
+                if (hd.getKhachHang() != null && hd.getKhachHang().getMaKhachHang() != null) {
+                    tapKhachHang.add(hd.getKhachHang().getMaKhachHang());
+                }
+
+                // Đếm khu vực duy nhất
+                if (hd.getBan() != null && hd.getBan().getKhuVuc() != null) {
+                    String tenKV = hd.getBan().getKhuVuc().getTenKhuVuc();
+                    if (tenKV != null) tapKhuVuc.add(tenKV);
+                }
+
+                // Đếm theo trạng thái
+                int tt = hd.getTrangthai();
+                if (tt == 0) {
+                    donCho++;
+                } else if (tt == 1) {
+                    donDangDung++;
+                } else if (tt == 2) {
+                    donHoanThanh++;
+                }
+            }
+
+            // ✅ Cập nhật hiển thị
+            lblTongDonDangDoi.setText(String.valueOf("Số đơn đang đợi: "+donCho));
+            lblTongDonDaNhan.setText(String.valueOf("Số đơn đang dùng: "+donDangDung));
+            lblTongDonDaThanhToan.setText(String.valueOf("Số đơn đã thanh toán: "+donHoanThanh));
+            lblDoanhThu.setText(String.format("%,.0f đ", tongDoanhThu));
+            lblSoKhach.setText(String.valueOf(tapKhachHang.size()));
+            lblKhuVuc.setText(String.valueOf(tapKhuVuc.size()));
+
+            // 💬 In ra log cho dễ kiểm tra (hoặc có thể hiển thị lên UI)
+            System.out.println("Đơn chờ: " + donCho);
+            System.out.println("Đơn đang dùng: " + donDangDung);
+            System.out.println("Đơn hoàn thành: " + donHoanThanh);
+
+        } catch (Exception e) {
+            System.err.println("[DashboardController] ❌ Lỗi tải thống kê: " + e.getMessage());
+            lblTongDonDangDoi.setText("-");
+            lblTongDonDaNhan.setText("-");
+            lblTongDonDaThanhToan.setText("-");
+            lblDoanhThu.setText("-");
+            lblSoKhach.setText("-");
+            lblKhuVuc.setText("-");
+        }
+    }
+
+
+    // ================= ĐỔI MẬT KHẨU =================
     @FXML
     private void showChangePassword() {
         try {
