@@ -22,7 +22,7 @@ public class HangKhachDAO {
                     ds.add(new HangKhachHang(
                             rs.getString("maHang"),
                             rs.getString("moTa"),
-                            rs.getInt("giaGiam"),
+                            rs.getInt("giamGia"),
                             rs.getInt("diemHang")
                     ));
                 }
@@ -37,7 +37,7 @@ public class HangKhachDAO {
     }
 
     public boolean insert(HangKhachHang hkh) {
-        String sql = "INSERT INTO HangKhachHang(maHang, diemHang, giaGiam, moTa) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO HangKhachHang(maHang, diemHang, giamGia, moTa) VALUES (?, ?, ?, ?)";
         try {
             connectDB.getInstance().connect();
             Connection conn = connectDB.getConnection();
@@ -57,7 +57,7 @@ public class HangKhachDAO {
     }
 
     public boolean update(HangKhachHang hkh) {
-        String sql = "UPDATE HangKhachHang SET diemHang=?, giaGiam=?, moTa=? WHERE maHang=?";
+        String sql = "UPDATE HangKhachHang SET diemHang=?, giamGia=?, moTa=? WHERE maHang=?";
         try {
             connectDB.getInstance().connect();
             Connection conn = connectDB.getConnection();
@@ -106,7 +106,7 @@ public class HangKhachDAO {
                         return new HangKhachHang(
                                 rs.getString("maHang"),
                                 rs.getString("moTa"),
-                                rs.getInt("giaGiam"),
+                                rs.getInt("giamGia"),
                                 rs.getInt("diemHang")
                         );
                     }
@@ -136,7 +136,7 @@ public class HangKhachDAO {
                         return new HangKhachHang(
                                 rs.getString("maHang"),
                                 rs.getString("moTa"),
-                                rs.getInt("giaGiam"),
+                                rs.getInt("giamGia"),
                                 rs.getInt("diemHang")
                         );
                     }
