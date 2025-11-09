@@ -26,14 +26,11 @@ public class MainController_QL {
         if (sidebar_QLController != null) {
             sidebar_QLController.setMainController(this);
         }
-        // ❌ Không gọi load Dashboard ở đây nữa
-        // Vì lúc này chưa có nhân viên
     }
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
 
-        // ✅ Khi có nhân viên rồi mới load Dashboard
         setCenterContent("/FXML/DashBoard.fxml");
     }
 
@@ -46,7 +43,6 @@ public class MainController_QL {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Node node = loader.load();
 
-            // ✅ Truyền controller cha và nhân viên
             Object controller = loader.getController();
             if (controller instanceof DashboardController dashboardController) {
                 dashboardController.setMainController(this);

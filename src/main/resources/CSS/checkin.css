@@ -14,8 +14,6 @@
 
 
 .booking-image {
-    -fx-fit-width: 65px;
-    -fx-fit-height: 57px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2,0,0,1);
 }
 
@@ -39,11 +37,9 @@
 .booking-remaining {
     -fx-background-color: #34C759;
     -fx-background-radius: 0 16 16 0;
-    -fx-font-size: 16;
-    -fx-min-width: 58;
 }
 .booking-remaining > Label{
-    -fx-font-size: 16;
+    -fx-font-size: 14;
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-padding: 0 8;
@@ -81,28 +77,17 @@
     -fx-background-radius: 6;
 }
 
-.btn-primary {
-    -fx-background-color: #0d6efd;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 10;
-}
 
 .btn-secondary {
     -fx-background-color: #e0e0e0;
     -fx-text-fill: #333;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
+    -fx-cursor: hand;
 }
-
-.btn-checkin {
-    -fx-background-color: #0066ff;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 15;
+.btn-secondary:hover{
+    -fx-cursor: hand;
 }
-
 .info-grid Label {
     -fx-font-size: 14px;
 }
@@ -231,10 +216,13 @@
     -fx-font-size: 14;
     -fx-padding: 15 40;
     -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+.action-btn-secondary{
+    -fx-cursor: hand;
 }
 
-
-/*Scroll Pane*/
+    /*Scroll Pane*/
 .scroll-bar:vertical {
     -fx-pref-width: 12px;
     -fx-background-color: transparent;

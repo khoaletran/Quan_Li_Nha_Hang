@@ -18,13 +18,13 @@ import java.io.File;
 public class HoaDonIn {
 
     /**
-     * 🔹 In hóa đơn có hộp thoại chọn máy in (có thể chọn Microsoft Print to PDF)
+     * In hóa đơn có hộp thoại chọn máy in (có thể chọn Microsoft Print to PDF)
      * Gợi ý tên file PDF theo mã hóa đơn (VD: HD2410250001.pdf)
      */
     public static void inHoaDonFXML(HoaDon hd) {
         try {
             if (hd == null) {
-                System.err.println("⚠️ Không có dữ liệu hóa đơn để in!");
+                System.err.println(" Không có dữ liệu hóa đơn để in!");
                 return;
             }
 
@@ -36,7 +36,7 @@ public class HoaDonIn {
 
             PrinterJob job = PrinterJob.createPrinterJob();
             if (job == null) {
-                System.err.println("❌ Không khởi tạo được PrinterJob!");
+                System.err.println("Không khởi tạo được PrinterJob!");
                 return;
             }
 
@@ -48,7 +48,7 @@ public class HoaDonIn {
             File file = chooser.showSaveDialog(null);
 
             if (file == null) {
-                System.out.println("🟡 Hủy in hóa đơn.");
+                System.out.println("Hủy in hóa đơn.");
                 return;
             }
 
@@ -56,24 +56,24 @@ public class HoaDonIn {
             boolean success = job.showPrintDialog(null) && job.printPage(hoaDonUI);
             if (success) {
                 job.endJob();
-                System.out.println("✅ In hóa đơn " + file.getName() + " thành công!");
+                System.out.println("In hóa đơn " + file.getName() + " thành công!");
             } else {
-                System.err.println("❌ In hóa đơn thất bại!");
+                System.err.println("In hóa đơn thất bại!");
             }
 
         } catch (Exception e) {
-            System.err.println("💥 Lỗi khi in hóa đơn:");
+            System.err.println("Lỗi khi in hóa đơn:");
             e.printStackTrace();
         }
     }
 
     /**
-     * 🔹 In nhanh không hiển thị hộp thoại chọn máy in (in ra máy mặc định)
+     * In nhanh không hiển thị hộp thoại chọn máy in (in ra máy mặc định)
      */
     public static void inHoaDonNhanh(HoaDon hd) {
         try {
             if (hd == null) {
-                System.err.println("⚠️ Không có dữ liệu hóa đơn để in!");
+                System.err.println("Không có dữ liệu hóa đơn để in!");
                 return;
             }
 
@@ -89,27 +89,27 @@ public class HoaDonIn {
                 boolean success = job.printPage(hoaDonUI);
                 if (success) {
                     job.endJob();
-                    System.out.println("✅ In nhanh hóa đơn " + hd.getMaHD() + " thành công!");
+                    System.out.println("In nhanh hóa đơn " + hd.getMaHD() + " thành công!");
                 } else {
-                    System.err.println("❌ In nhanh thất bại.");
+                    System.err.println("In nhanh thất bại.");
                 }
             } else {
-                System.err.println("⚠️ Không có máy in mặc định!");
+                System.err.println("Không có máy in mặc định!");
             }
 
         } catch (Exception e) {
-            System.err.println("💥 Lỗi khi in nhanh hóa đơn:");
+            System.err.println("Lỗi khi in nhanh hóa đơn:");
             e.printStackTrace();
         }
     }
 
     /**
-     * 🔹 Xem trước hóa đơn trên giao diện (không in)
+     * Xem trước hóa đơn trên giao diện (không in)
      */
     public static void previewHoaDon(HoaDon hd) {
         try {
             if (hd == null) {
-                System.err.println("⚠️ Không có dữ liệu hóa đơn để xem trước!");
+                System.err.println("Không có dữ liệu hóa đơn để xem trước!");
                 return;
             }
 
@@ -120,14 +120,14 @@ public class HoaDonIn {
             ctrl.setData(hd);
 
             Stage stage = new Stage();
-            stage.setTitle("🧾 Xem trước hóa đơn - " + hd.getMaHD());
+            stage.setTitle("Xem trước hóa đơn - " + hd.getMaHD());
             stage.setScene(new Scene(root));
             stage.show();
 
-            System.out.println("👁️ Đã hiển thị xem trước hóa đơn " + hd.getMaHD());
+            System.out.println("Đã hiển thị xem trước hóa đơn " + hd.getMaHD());
 
         } catch (Exception e) {
-            System.err.println("💥 Lỗi khi xem trước hóa đơn:");
+            System.err.println("Lỗi khi xem trước hóa đơn:");
             e.printStackTrace();
         }
     }

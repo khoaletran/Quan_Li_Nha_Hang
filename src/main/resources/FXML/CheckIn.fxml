@@ -106,16 +106,12 @@
                         </children>
                     </HBox>
 
-                    <HBox styleClass="filter-actions">
-                        <children>
-                            <Button fx:id="btnXoaTrang" styleClass="btn-secondary" text="Xóa trắng" />
-                            <Button fx:id="btnTim" styleClass="btn-primary" text="Tìm kiếm">
-                                <HBox.margin>
-                                    <Insets right="20.0" />
-                                </HBox.margin>
-                            </Button>
-                        </children>
-                    </HBox>
+                    <VBox styleClass="filter-actions">
+                            <Button fx:id="btnXoaTrang" styleClass="btn-secondary" text="Xóa trắng" onAction="#xoaTrang"/>
+                            <VBox.margin>
+                                <Insets right="30" />
+                            </VBox.margin>
+                    </VBox>
                 </children>
             </VBox>
 

@@ -6,8 +6,8 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import ui.controllers.AlertController;
 import javafx.scene.paint.Color;
+import ui.controllers.AlertController;
 
 public class AlertCus {
 
@@ -16,7 +16,7 @@ public class AlertCus {
             FXMLLoader loader = new FXMLLoader(AlertCus.class.getResource("/FXML/Alert.fxml"));
             Parent root = loader.load();
 
-            // Gán dữ liệu cho controller
+            // Lấy controller và truyền dữ liệu vào
             AlertController controller = loader.getController();
             controller.setAlertData(title, message);
 

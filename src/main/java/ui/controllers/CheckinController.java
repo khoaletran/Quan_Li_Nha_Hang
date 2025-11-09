@@ -38,10 +38,8 @@ public class CheckinController {
     @FXML
     private ComboBox<String> cboKhuVuc;
 
-    // 🔹 Biến toàn cục lưu danh sách hóa đơn
     private List<HoaDon> dsHoaDon;
-
-    // 🔹 Biến lưu item đang chọn
+    
     private HBox lastSelected = null;
 
     @FXML
@@ -59,8 +57,8 @@ public class CheckinController {
         }
         cboKhuVuc.getSelectionModel().selectFirst();
     }
-    private void loadDanhSach() {
-        // 1️⃣ Load thời gian đợi bàn 1 lần
+    private void  loadDanhSach() {
+
         int thoiGianDatTruoc = 0; // cho kieuDatBan = 1
         int thoiGianCho = 0;      // cho kieuDatBan = 0
         try {
@@ -72,14 +70,14 @@ public class CheckinController {
             System.err.println("Lỗi load thời gian đợi bàn: " + e.getMessage());
         }
 
-        // 2️⃣ Load danh sách hóa đơn hôm nay
+
         dsHoaDon = HoaDonDAO.getAllNgayHomNay(); // đã tối ưu: chỉ set ID và tên, không gọi DAO phụ
 
-        // 3️⃣ Xóa vbox trước khi add item
+
         vboxDatTruoc.getChildren().clear();
         vboxCho.getChildren().clear();
 
-        // 4️⃣ Tạo UI items
+
         for (HoaDon hd : dsHoaDon) {
             if (hd.getTrangthai() != 0) continue; // chỉ lấy trạng thái 0
 
@@ -100,7 +98,6 @@ public class CheckinController {
         HBox hbox = new HBox(10);
         hbox.getStyleClass().add("booking-item");
 
-        // 🔹 1️⃣ Hình ảnh bàn theo loại
         String imgPath = "/IMG/ban/IN"; // mặc định
         if (hd.getBan() != null && hd.getBan().getMaBan() != null) {
             String tenKhuVuc = hd.getBan().getKhuVuc().getTenKhuVuc();
@@ -113,17 +110,16 @@ public class CheckinController {
         img.setFitHeight(70);
 
         img.setPreserveRatio(false);
-        // 🔹 Bo góc
+
         Rectangle clip = new Rectangle(93, 80);
         clip.setArcWidth(15);   // bán kính bo góc ngang
         clip.setArcHeight(15);  // bán kính bo góc dọc
         img.setClip(clip);
 
-// 🔹 Margin xung quanh (10px ví dụ)
+
         HBox.setMargin(img, new Insets(10));
         img.getStyleClass().add("booking-image");
 
-        // 🔹 2️⃣ Info khách hàng
         VBox info = new VBox();
         info.setStyle("-fx-alignment: CENTER_LEFT;");
         info.getStyleClass().add("booking-info");
@@ -133,7 +129,7 @@ public class CheckinController {
         lblPhone.getStyleClass().add("booking-phone");
         info.getChildren().addAll(lblId, lblPhone);
 
-        // 🔹 3️⃣ Thời gian đặt
+
         VBox dateBox = new VBox();
         dateBox.getStyleClass().add("booking-date");
         String timeStr = (hd.getTgCheckIn() != null)
@@ -142,14 +138,14 @@ public class CheckinController {
         Label lblDate = new Label(timeStr);
         dateBox.getChildren().add(lblDate);
 
-        // 🔹 4️⃣ Thời gian còn lại
+
         VBox remainingBox = new VBox();
         remainingBox.setStyle("-fx-alignment: CENTER;");
         remainingBox.getStyleClass().add("booking-remaining");
         Label lblRemaining = new Label();
         remainingBox.getChildren().add(lblRemaining);
 
-        // 🔹 5️⃣ Đếm ngược
+
         if (hd.getTgCheckIn() != null) {
             LocalDateTime checkInTime = hd.getTgCheckIn();
             long totalSeconds = thoiGianCho * 60;
@@ -235,6 +231,9 @@ public class CheckinController {
 
         if (now.isAfter(tgChoPhep)) {
             showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
+            hd.setTrangthai(3);
+            HoaDonDAO.update(hd);
+            loadDanhSach();
             return;
         }
 

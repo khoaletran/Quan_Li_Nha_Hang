@@ -263,15 +263,17 @@ public class TraCuuHoaDonController {
             case 0: return "Đặt trước";
             case 1: return "Đang phục vụ";
             case 2: return "Đã thanh toán";
+            case 3: return "Không nhận đơn";
             default: return "Không xác định";
         }
     }
 
     private String getTrangThaiStyle(int trangThai) {
         switch (trangThai) {
-            case 0: return "-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-font-size: 11px;";
+            case 0: return "-fx-text-fill: yellow; -fx-font-weight: bold; -fx-font-size: 11px;";
             case 1: return "-fx-text-fill: #f39c12; -fx-font-weight: bold; -fx-font-size: 11px;";
             case 2: return "-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 11px;";
+            case 3: return "-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 11px;";
             default: return "-fx-text-fill: #666; -fx-font-weight: bold; -fx-font-size: 11px;";
         }
     }
@@ -383,7 +385,7 @@ public class TraCuuHoaDonController {
             List<ChiTietHoaDon> dsChiTiet = chiTietHDDAO.getByMaHD(maHD);
             if (dsChiTiet != null && !dsChiTiet.isEmpty()) {
                 chiTietHoaDonData.addAll(dsChiTiet);
-                System.out.println("✅ Đã tải " + dsChiTiet.size() + " chi tiết hóa đơn");
+                System.out.println("Đã tải " + dsChiTiet.size() + " chi tiết hóa đơn");
                 for (ChiTietHoaDon ct : dsChiTiet) {
                     System.out.println("   - " + (ct.getMon() != null ? ct.getMon().getTenMon() : "null") +
                             " x " + ct.getSoLuong() + " = " + ct.getThanhTien());
@@ -567,10 +569,10 @@ public class TraCuuHoaDonController {
             }
             taiDanhSachHoaDon();
             resetForm();
-            hienThiThongBao("✅ Đã làm mới dữ liệu");
+            hienThiThongBao("Đã làm mới dữ liệu");
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi refresh data: " + e.getMessage());
-            hienThiThongBao("❌ Lỗi khi làm mới dữ liệu");
+            System.err.println("Lỗi khi refresh data: " + e.getMessage());
+            hienThiThongBao("Lỗi khi làm mới dữ liệu");
         }
     }
 }

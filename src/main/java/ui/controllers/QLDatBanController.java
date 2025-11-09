@@ -285,7 +285,7 @@ public class QLDatBanController {
         iv.setFitHeight(60);
         iv.setPreserveRatio(true);
         try {
-            Image img = new Image(getClass().getResourceAsStream("/IMG/avatar.png"));
+            Image img = new Image(getClass().getResourceAsStream("/IMG/ban/vip.png"));
             iv.setImage(img);
         } catch (Exception e) {
             thumb.setStyle("-fx-background-color: #e9ecef; -fx-background-radius: 8;");
@@ -561,7 +561,7 @@ public class QLDatBanController {
         iv.setFitHeight(60);
         iv.setPreserveRatio(true);
         try {
-            Image img = new Image(getClass().getResourceAsStream("/IMG/avatar.png"));
+            Image img = new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png"));
             iv.setImage(img);
         } catch (Exception ex) {
             // bỏ qua nếu không load được ảnh
@@ -703,7 +703,7 @@ public class QLDatBanController {
             // reload món
             khoiTaoChonMon();
             resetForm();
-            hienThiThongBao("✅ Đã làm mới dữ liệu");
+            hienThiThongBao("Đã làm mới dữ liệu");
         } catch (Exception e) {
             System.err.println("Lỗi khi refresh data: " + e.getMessage());
             hienThiThongBao("Lỗi khi làm mới dữ liệu");
