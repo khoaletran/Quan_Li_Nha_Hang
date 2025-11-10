@@ -35,7 +35,9 @@ public class DashboardController {
     @FXML private Label lblTongDonDaThanhToan;
     @FXML private Label lblDoanhThu;
     @FXML private Label lblSoKhach;
-    @FXML private Label lblKhuVuc;
+    @FXML private Label lblIn;
+    @FXML private Label lblOut;
+    @FXML private Label lblVip;
 
     private NhanVien nv;
 
@@ -101,7 +103,7 @@ public class DashboardController {
     private void taiThongKeDashboard() {
         try {
             // Lấy danh sách hóa đơn trong ngày
-            List<HoaDon> danhSach = HoaDonDAO.getAllNgayHomNay();
+            List<HoaDon> danhSach = HoaDonDAO.getAll();
 
             if (danhSach == null || danhSach.isEmpty()) {
                 lblTongDonDangDoi.setText("0");
@@ -109,37 +111,31 @@ public class DashboardController {
                 lblTongDonDaThanhToan.setText("0");
                 lblDoanhThu.setText("0đ");
                 lblSoKhach.setText("0");
-                lblKhuVuc.setText("0");
+                lblIn.setText("0");
+                lblOut.setText("0");
+                lblVip.setText("0");
                 return;
             }
 
-//            int tongDon = 0;
+           int tongKhachHang = 0;
             double tongDoanhThu = 0;
-            Set<String> tapKhachHang = new HashSet<>();
-            Set<String> tapKhuVuc = new HashSet<>();
 
             //Đếm theo trạng thái
             int donCho = 0;      // trạng thái = 0
             int donDangDung = 0; // trạng thái = 1
             int donHoanThanh = 0;// trạng thái = 2
 
+            //Khu vuc
+            int in =0;
+            int out =0;
+            int vip =0;
+
             // Duyệt danh sách hóa đơn
             for (HoaDon hd : danhSach) {
                 if (hd == null) continue;
 
-//                tongDon++;
+                tongKhachHang+=hd.getSoLuong();
                 tongDoanhThu += hd.getTongTienSau();
-
-                // Đếm khách hàng duy nhất
-                if (hd.getKhachHang() != null && hd.getKhachHang().getMaKhachHang() != null) {
-                    tapKhachHang.add(hd.getKhachHang().getMaKhachHang());
-                }
-
-                // Đếm khu vực duy nhất
-                if (hd.getBan() != null && hd.getBan().getKhuVuc() != null) {
-                    String tenKV = hd.getBan().getKhuVuc().getTenKhuVuc();
-                    if (tenKV != null) tapKhuVuc.add(tenKV);
-                }
 
                 // Đếm theo trạng thái
                 int tt = hd.getTrangthai();
@@ -150,17 +146,31 @@ public class DashboardController {
                 } else if (tt == 2) {
                     donHoanThanh++;
                 }
+                //Đếm theo khu vực
+                String maKV = hd.getBan().getKhuVuc().getMaKhuVuc();
+                if(maKV.equals("KV0001")){
+                    in++;
+                }
+                else if(maKV.equals("KV0002")){
+                    out++;
+                }
+                else if(maKV.equals("KV0003")){
+                    vip++;
+                }
             }
 
-            // ✅ Cập nhật hiển thị
+            // Cập nhật hiển thị
             lblTongDonDangDoi.setText(String.valueOf("Số đơn đang đợi: "+donCho));
             lblTongDonDaNhan.setText(String.valueOf("Số đơn đang dùng: "+donDangDung));
             lblTongDonDaThanhToan.setText(String.valueOf("Số đơn đã thanh toán: "+donHoanThanh));
+            lblIn.setText(String.valueOf("Khu vực IN: "+in));
+            lblOut.setText(String.valueOf("Khu vực Out: "+out));
+            lblVip.setText(String.valueOf("Khu vực Vip: "+vip));
             lblDoanhThu.setText(String.format("%,.0f đ", tongDoanhThu));
-            lblSoKhach.setText(String.valueOf(tapKhachHang.size()));
-            lblKhuVuc.setText(String.valueOf(tapKhuVuc.size()));
+            lblSoKhach.setText(String.valueOf(tongKhachHang));
 
-            // 💬 In ra log cho dễ kiểm tra (hoặc có thể hiển thị lên UI)
+
+            //In ra log cho dễ kiểm tra (hoặc có thể hiển thị lên UI)
             System.out.println("Đơn chờ: " + donCho);
             System.out.println("Đơn đang dùng: " + donDangDung);
             System.out.println("Đơn hoàn thành: " + donHoanThanh);
@@ -172,7 +182,9 @@ public class DashboardController {
             lblTongDonDaThanhToan.setText("-");
             lblDoanhThu.setText("-");
             lblSoKhach.setText("-");
-            lblKhuVuc.setText("-");
+            lblIn.setText("-");
+            lblOut.setText("-");
+            lblVip.setText("-");
         }
     }
 
