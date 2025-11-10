@@ -95,8 +95,10 @@
                     <!-- Chức vụ -->
                     <Label styleClass="form-label" text="Hạng :" GridPane.columnIndex="0" GridPane.rowIndex="4" />
 <!--                    <ComboBox fx:id="comboChucVu" promptText="Chọn chức vụ" styleClass="form-combo" GridPane.columnIndex="1" GridPane.rowIndex="6" />-->
-                    <TextField fx:id="txtHangKH" promptText="Nhập hạng khách hàng" styleClass="form-input" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    <TextField fx:id="txtHangKH" editable="false" promptText="Không nhập" styleClass="form-input" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
+                    <Label styleClass="form-label" text="Điểm tích lũy :" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                    <TextField fx:id="txtDiemTL" promptText="Nhập điểm tích lũy" styleClass="form-input" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                     <!-- Trạng thái -->
 <!--                    <Label styleClass="form-label" text="Trạng Thái:" GridPane.columnIndex="0" GridPane.rowIndex="7" />-->
 <!--                    <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="7">-->

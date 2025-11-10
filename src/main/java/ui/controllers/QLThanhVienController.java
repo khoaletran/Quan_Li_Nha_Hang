@@ -1,6 +1,8 @@
 package ui.controllers;
 
 import dao.KhachHangDAO;
+import dao.PhieuKetCaDAO;
+import entity.HangKhachHang;
 import entity.KhachHang;
 import entity.NhanVien;
 import javafx.fxml.FXML;
@@ -16,6 +18,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
+import ui.AlertCus;
+import ui.ConfirmCus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,17 +28,13 @@ import java.util.List;
 public class QLThanhVienController {
 
     @FXML private FlowPane menuFlow;
-    @FXML private TextField txtTenNV, txtSDT, txtMatKhau,txtHangKH;
-    @FXML private DatePicker txtNgayVaoLam;
-    @FXML private ComboBox<String> comboHangKH;
-    @FXML private RadioButton rdoNam, rdoNu, rdoConLam, rdoNghiLam;
+    @FXML private TextField txtTenNV, txtSDT, txtMatKhau,txtHangKH,txtDiemTL;
+    @FXML private RadioButton rdoNam, rdoNu;
     @FXML private Label lblMaNV;
     @FXML private Button btnThemNV, btnXacNhan, btnXoa;
 
     private final KhachHangDAO khDAO = new KhachHangDAO();
     private final ToggleGroup genderGroup = new ToggleGroup();
-    private final ToggleGroup statusGroup = new ToggleGroup();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @FXML
     public void initialize() {
@@ -98,12 +98,29 @@ public class QLThanhVienController {
     // FORM HIỂN THỊ / RESET
     // =========================
     private void hienThiThongTin(KhachHang kh) {
+        int diemHang = kh.getHangKhachHang().getDiemHang();
+        String hang;
+
+        if (diemHang >= 0 && diemHang <= 199) {
+            hang = "Đồng";
+        } else if (diemHang >= 200 && diemHang <= 499) {
+            hang = "Bạc";
+        } else if (diemHang >= 500 && diemHang <= 999) {
+            hang = "Vàng";
+        } else if (diemHang >= 1000 && diemHang <= 1999) {
+            hang = "Bạch kim";
+        } else if (diemHang >= 2000) {
+            hang = "Kim cương";
+        } else {
+            hang = "Đồng";
+        }
         lblMaNV.setText(kh.getMaKhachHang());
         txtTenNV.setText(kh.getTenKhachHang());
         txtSDT.setText(kh.getSdt());
-        txtHangKH.setText(kh.getHangKhachHang().getMaHang());
+        txtHangKH.setText(hang);
         rdoNam.setSelected(kh.isGioiTinh());
         rdoNu.setSelected(!kh.isGioiTinh());
+        txtDiemTL.setText(String.valueOf(kh.getDiemTichLuy()));
     }
 
     private void xoaTrangThongTin() {
@@ -113,6 +130,7 @@ public class QLThanhVienController {
         txtHangKH.clear();
         rdoNam.setSelected(false);
         rdoNu.setSelected(false);
+        txtDiemTL.clear();
     }
 
     // =========================
@@ -123,7 +141,7 @@ public class QLThanhVienController {
             boolean tonTai = KhachHangDAO.getAll()
                     .stream()
                     .anyMatch(nv -> nv.getMaKhachHang().equalsIgnoreCase(newValue.trim()));
-            btnXacNhan.setText(tonTai ? "Lưu Thay Đổi" : "Thêm Khách Hàng");
+            btnXacNhan.setText(tonTai ? "Lưu Thay Đổi" : "Thêm Khách");
         });
     }
 
@@ -150,25 +168,37 @@ public class QLThanhVienController {
     // =========================
     private void themNV() {
         KhachHang kh = taoKhachHangTuForm(tuSinhMaNV(KhachHangDAO.maKHCuoi()));
-        if (KhachHangDAO.insert(kh)) {
-            System.out.println("Thêm khách hàng thành công: " + kh.getMaKhachHang());
-            loadNhanVienCards();
-            xoaTrangThongTin();
-        } else System.err.println("Thêm khách hàng thất bại!");
+        boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận thêm khách làm thành viên");
+        if (answer) {
+            boolean success = KhachHangDAO.insert(kh);
+            if (success) {
+                AlertCus.show("Thông báo", "Thêm khách hàng thành công: " + kh.getMaKhachHang());
+                loadNhanVienCards();
+                xoaTrangThongTin();
+            } else {
+                AlertCus.show("Thông báo", "Thêm khách hàng thất bại!: " + kh.getMaKhachHang());
+            }
+        }
     }
 
     private void capNhatNV(String maKH) {
         KhachHang kh = taoKhachHangTuForm(maKH);
-        if (KhachHangDAO.update(kh)) {
-            System.out.println("Cập nhật khách hàng: " + maKH + " thành công!");
-            loadNhanVienCards();
-        } else System.err.println("Cập nhật thất bại cho mã: " + maKH);
+        boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận cập nhật thông tin khách hàng");
+        if (answer) {
+            boolean success = KhachHangDAO.update(kh);
+            if (success) {
+                AlertCus.show("Thông báo", "Cập nhật khách hàng thành công: " + kh.getMaKhachHang());
+                loadNhanVienCards();
+            } else {
+                AlertCus.show("Thông báo", "Cập nhật khách hàng thất bại!: " + kh.getMaKhachHang());
+            }
+        }
     }
 
     private void xoaNV() {
         String maKH = lblMaNV.getText().trim();
         if (maKH.isEmpty()) {
-            System.err.println("Vui lòng chọn khách hàng cần xóa!");
+            AlertCus.show("Thông báo","Vui lòng chọn khách hàng cần xóa");
             return;
         }
         if (ui.XacNhanXoa.hienHopThoaiXacNhan("Xác nhận xóa", "Bạn có chắc muốn xóa khách hàng " + maKH + " không?")) {
@@ -185,13 +215,55 @@ public class QLThanhVienController {
         String tenKH = txtTenNV.getText().trim();
         String sdt = txtSDT.getText().trim();
         boolean gioiTinh = rdoNam.isSelected();
-        String hangKH = txtHangKH.getText().trim();
+        int diemTL = 0;
+        if(txtDiemTL.getText().equals("") || txtDiemTL.getText() == null) {
+            diemTL = 0;
+        }else diemTL = Integer.parseInt(txtDiemTL.getText().trim());
+        String maHang;
+        int giamGia;
+        String moTa;
+        int diemHang;
+        if (diemTL >= 0 && diemTL <= 199) {
+            maHang = "HH0001";
+            giamGia = 0;
+            moTa = "Hạng Đồng - Mới tham gia";
+            diemHang = 0;
+        } else if (diemTL >= 200 && diemTL <= 499) {
+            maHang = "HH0002";
+            giamGia = 5;
+            moTa = "Hạng Bạc - Khách thân thiết";
+            diemHang = 200;
+        } else if (diemTL >= 500 && diemTL <= 999) {
+            maHang = "HH0003";
+            giamGia = 10;
+            moTa = "Hạng Vàng - Khách VIP nhỏ";
+            diemHang = 500;
+        } else if (diemTL >= 1000 && diemTL <= 1999) {
+            maHang = "HH0004";
+            giamGia = 15;
+            moTa = "Hạng Bạch Kim - Khách VIP lớn";
+            diemHang = 1000;
+        } else if (diemTL >= 2000) {
+            maHang = "HH0005";
+            giamGia = 20;
+            moTa = "Hạng Kim Cương - Khách siêu VIP";
+            diemHang = 2000;
+        } else {
+            maHang = "HH0001";
+            giamGia = 0;
+            moTa = "Hạng Đồng - Mới tham gia";
+            diemHang = 0;
+        }
+
+        HangKhachHang hangKH = new HangKhachHang(maHang,moTa,giamGia,diemHang);
 
         KhachHang kh = new KhachHang();
         kh.setMaKhachHang(maKH);
         kh.setTenKhachHang(tenKH);
         kh.setSdt(sdt);
         kh.setGioiTinh(gioiTinh);
+        kh.setDiemTichLuy(diemTL);
+        kh.setHangKhachHang(hangKH);
         return kh;
     }
 }
