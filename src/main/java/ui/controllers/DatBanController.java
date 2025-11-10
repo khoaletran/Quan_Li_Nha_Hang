@@ -98,9 +98,10 @@ public class DatBanController {
         minuteSpinner.valueProperty().addListener((obs, o, n) -> scheduleRefresh());
 
         locTheoRealTime();
+        thayDoiSLKhach();
 
         loadComboBoxes();
-
+        cboKhuVuc.setOnAction(e -> {scheduleRefresh();});
         btnWaitlist.setOnAction(e -> {themVaoWaitlist();});
     }
 
@@ -114,6 +115,15 @@ public class DatBanController {
         }
 
         return now.toLocalTime();
+    }
+
+    private void thayDoiSLKhach(){
+        txtSoLuong.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!noteField.getText().equals(newVal)) noteField.setText(newVal);
+        });
+        noteField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!txtSoLuong.getText().equals(newVal)) txtSoLuong.setText(newVal);
+        });
     }
 
 
@@ -167,10 +177,30 @@ public class DatBanController {
         capNhatHienThi(starVIP_02, tableVIP_02, "KV0003", "LB0005", 12, 100, dsHD);
 
         String maKV = getSelectedMaKhuVuc();
-        boolean conBanTrongKV = BanDAO.getAll().stream()
-                .anyMatch(b -> b.getKhuVuc().getMaKhuVuc().equals(maKV) && !b.isTrangThai());
 
-        btnWaitlist.setVisible(!BanDAO.conBanTrongTheoKhuVuc(getSelectedMaKhuVuc()));
+        // Trễ 150ms để đảm bảo dữ liệu bàn đã load xong trước khi check
+        int finalSoLuong = soLuong;
+        Timeline delayCheck = new Timeline(new KeyFrame(Duration.millis(150), ev -> {
+            boolean conBanTrongKV = BanDAO.conBanTrongTheoKhuVuc(maKV, finalSoLuong);
+
+
+            // Nếu hết bàn thì mới hiện nút Waitlist
+            btnWaitlist.setVisible(!conBanTrongKV);
+
+            // Hiệu ứng fade cho nút Waitlist (ẩn/hiện mượt)
+            btnWaitlist.setOpacity(btnWaitlist.isVisible() ? 0 : 1);
+            Timeline fade = new Timeline(
+                    new KeyFrame(Duration.ZERO,
+                            new javafx.animation.KeyValue(btnWaitlist.opacityProperty(), btnWaitlist.isVisible() ? 0 : 1)),
+                    new KeyFrame(Duration.millis(250),
+                            new javafx.animation.KeyValue(btnWaitlist.opacityProperty(), btnWaitlist.isVisible() ? 1 : 0))
+            );
+            fade.play();
+
+            System.out.println("Khu vực đang chọn: " + maKV + " | Còn bàn trống: " + conBanTrongKV);
+        }));
+        delayCheck.play();
+
 
     }
 
@@ -263,7 +293,7 @@ public class DatBanController {
         tableIN_03.setOnMouseClicked(e -> chonBanNeuDuoc("KV0002", "LB0003", 8));
         tableIN_04.setOnMouseClicked(e -> chonBanNeuDuoc("KV0002", "LB0004", 12));
         tableVIP_01.setOnMouseClicked(e -> chonBanNeuDuoc("KV0003", "LB0004", 12));
-        tableVIP_02.setOnMouseClicked(e -> chonBanNeuDuoc("KV0003", "LB0005", 100));
+        tableVIP_02.setOnMouseClicked(e -> chonBanNeuDuoc("KV0003", "LB0005", 20));
     }
 
     private int getThoiGianDatTruocToiThieu(String maLoaiBan) {
@@ -292,10 +322,10 @@ public class DatBanController {
         Ban ban = BanDAO.getBanTrong(maKV, maLB);
         if (ban == null) return;
 
-        chonBan(ban, soLuong, date, hour, minute,true);
+        chonBan(ban, soLuong, date, hour, minute);
     }
 
-    private void chonBan(Ban ban, int soLuong, LocalDate date, int hour, int minute, boolean kieudatban) {
+    private void chonBan(Ban ban, int soLuong, LocalDate date, int hour, int minute) {
         if (mainController != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ChonMon.fxml"));
@@ -308,7 +338,6 @@ public class DatBanController {
                 chonMonCtrl.setTen(txtTenKH.getText());
                 chonMonCtrl.setSdtKhach(txtSDT.getText());
                 chonMonCtrl.setSoLuongKhach(soLuong);
-                chonMonCtrl.setKieudatban(kieudatban);
                 chonMonCtrl.setThoiGianDat(LocalDateTime.of(date, LocalTime.of(hour, minute)));
 
                 mainController.getMainContent().getChildren().setAll(node);
@@ -369,7 +398,7 @@ public class DatBanController {
                     .orElse(dsLoaiBan.get(dsLoaiBan.size() - 1));
 
             String maBanMoi = banDAO.taoMaBanChoTheoKhuVuc(kv);
-            Ban banCho = new Ban(maBanMoi, kv, loaiPhuHop, false);
+            Ban banCho = new Ban(maBanMoi, kv, loaiPhuHop, true);
 
             if (!banDAO.insert(banCho, false)) {
                 ConfirmCus.show("Lỗi", "Không thể thêm bàn đợi vào hệ thống!");
@@ -378,7 +407,7 @@ public class DatBanController {
 
             System.out.println("Tạo bàn đợi thành công: " + banCho.getMaBan());
             chonBan(banCho, soLuong, LocalDate.now(),
-                    LocalTime.now().getHour(), LocalTime.now().getMinute(), false);
+                    LocalTime.now().getHour(), LocalTime.now().getMinute());
 
         } catch (Exception e) {
             e.printStackTrace();

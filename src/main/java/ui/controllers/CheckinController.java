@@ -43,7 +43,7 @@ public class CheckinController {
         setupFilterEvents();
 
         javafx.animation.Timeline autoRefresh = new javafx.animation.Timeline(
-                new javafx.animation.KeyFrame(javafx.util.Duration.seconds(100), e -> {
+                new javafx.animation.KeyFrame(javafx.util.Duration.seconds(30), e -> {
                     autoAssignWaitlistToFreeTable();
                 })
         );
@@ -385,18 +385,21 @@ public class CheckinController {
 
     private void autoAssignWaitlistToFreeTable() {
         try {
-            // Lấy danh sách bàn trống
+            // Lấy danh sách bàn trống thật
             List<Ban> dsBanTrong = BanDAO.getAllTrong();
-            BanDAO banDAO = new BanDAO();
 
+            // Lấy danh sách hóa đơn đang chờ
             List<HoaDon> dsWaitlist = HoaDonDAO.getAllWaitlistCho();
 
             for (HoaDon hdWait : dsWaitlist) {
                 Ban banCho = hdWait.getBan();
+                if (banCho == null || banCho.getKhuVuc() == null || banCho.getLoaiBan() == null)
+                    continue;
+
                 int soLuongKhach = hdWait.getSoLuong();
                 String maKV = banCho.getKhuVuc().getMaKhuVuc();
-                String maLoaiBan = banCho.getLoaiBan().getMaLoaiBan();
 
+                // Tìm bàn thật cùng khu vực và đủ chỗ
                 Ban banPhuHop = dsBanTrong.stream()
                         .filter(b -> b.getKhuVuc().getMaKhuVuc().equals(maKV)
                                 && b.getLoaiBan().getSoLuong() >= soLuongKhach)
@@ -404,27 +407,37 @@ public class CheckinController {
                         .orElse(null);
 
                 if (banPhuHop != null) {
+                    // Cập nhật bàn mới cho hóa đơn
                     hdWait.setBan(banPhuHop);
-                    hdWait.setTrangthai(1);
                     hdWait.setTgCheckIn(LocalDateTime.now());
-                    HoaDonDAO.update(hdWait);
+                    hdWait.setTrangthai(0); // vẫn là chờ, không chuyển sang phục vụ
 
-                    BanDAO.update(banPhuHop, true);
+                    // Update hóa đơn sang bàn thật
+                    boolean ok = HoaDonDAO.update(hdWait);
 
-                    banDAO.delete(banCho.getMaBan());
+                    if (ok) {
+                        // Xóa bàn đợi (bàn tạm chờ) khỏi DB
+                        boolean xoaBanTam = BanDAO.delete(banCho.getMaBan());
+                        System.out.println("💡 Đã gán bàn thật " + banPhuHop.getMaBan() +
+                                " cho hóa đơn chờ " + hdWait.getMaHD() +
+                                (xoaBanTam ? " và xóa bàn tạm " + banCho.getMaBan() + " " : "  KHÔNG XÓA ĐƯỢC bàn tạm"));
 
-                    System.out.println("Đã đổi bàn chờ " + banCho.getMaBan() +
-                            " → bàn thật " + banPhuHop.getMaBan() +
-                            " cho hóa đơn " + hdWait.getMaHD());
+                    } else {
+                        System.err.println("Không thể cập nhật hóa đơn " + hdWait.getMaHD());
+                    }
                 }
             }
 
+            System.out.println("Hoàn tất tự động gán bàn thật cho các hóa đơn chờ.");
             loadDanhSach();
+
         } catch (Exception e) {
             System.err.println("Lỗi khi auto gán bàn chờ: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
+
 
 
 }

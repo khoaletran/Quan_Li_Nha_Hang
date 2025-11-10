@@ -17,102 +17,97 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: #D9D9D9" stylesheets="@../CSS/checkout.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.CheckoutController">
+<BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: #D9D9D9" stylesheets="@../CSS/checkout.css, @../CSS/AppMD.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.CheckoutController">
 
     <!-- Khu vực trung tâm -->
     <center>
-        <VBox spacing="20" style="-fx-background-color: #D9D9D9" styleClass="center-pane" VBox.vgrow="ALWAYS">
+        <VBox spacing="20" style="-fx-background-color: #D9D9D9" VBox.vgrow="ALWAYS">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-         <VBox styleClass="top">
-            <children>
 
-                <HBox alignment="CENTER_LEFT" spacing="5" styleClass="search_box">
-                    <TextField fx:id="searchField" promptText="Tìm kiếm: số điện thoại, bàn, hóa đơn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+            <!-- Khung tìm kiếm + danh sách hóa đơn -->
+            <VBox styleClass="top" VBox.vgrow="ALWAYS">
+                <children>
+                    <HBox alignment="CENTER_LEFT" spacing="5" styleClass="search_box" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchField" prefWidth="623.0" promptText="Tìm kiếm: số điện thoại, bàn, hóa đơn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+                        <Region prefHeight="34.0" prefWidth="155.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnSearch" styleClass="search-btn" text="🔍">
+                            <HBox.margin>
+                                <Insets right="20.0" />
+                            </HBox.margin>
+                        </Button>
+                    </HBox>
 
-                    <!-- Region đẩy nút ra cuối -->
-                    <Region HBox.hgrow="ALWAYS" />
+                    <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="300.0" styleClass="invoice-scroll" VBox.vgrow="ALWAYS">
+                        <content>
+                            <VBox fx:id="vboxHoaDon" alignment="CENTER_LEFT" spacing="12" style="-fx-background-color: #EFEFEF; -fx-background-radius: 0 0 20 20" VBox.vgrow="ALWAYS">
+                                <padding>
+                                    <Insets bottom="10" left="10" right="10" top="10" />
+                                </padding>
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+                </children>
+            </VBox>
 
-                    <Button fx:id="btnSearch" styleClass="search-btn" text="🔍">
-                     <HBox.margin>
-                        <Insets right="20.0" />
-                     </HBox.margin></Button>
-                </HBox>
+            <!-- Danh sách món ăn -->
+            <VBox minHeight="180.0" style="-fx-background-color: #EFEFEF; -fx-background-radius: 20 20 28 28" VBox.vgrow="ALWAYS">
+                <children>
+                    <HBox alignment="CENTER_LEFT" styleClass="detail_box" HBox.hgrow="ALWAYS">
+                        <children>
+                            <Label prefHeight="13.0" prefWidth="40.0" style="-fx-font-weight: bold" text="STT" />
+                            <Label style="-fx-font-weight: bold" text="TÊN MÓN" />
+                            <Label style="-fx-font-weight: bold" text="SỐ LƯỢNG" />
+                            <Label style="-fx-font-weight: bold" text="ĐƠN GIÁ" />
+                            <Label prefHeight="18.0" prefWidth="135.0" style="-fx-font-weight: bold" text="KHUYẾN MÃI" />
+                            <Label style="-fx-font-weight: bold" text="THÀNH TIỀN" />
+                        </children>
+                    </HBox>
 
-                     <!-- Danh sách hóa đơn -->
-                  <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="300.0" styleClass="invoice-scroll">
-                  <content>
-                          <VBox fx:id="vboxHoaDon" alignment="CENTER_LEFT" spacing="12" style="-fx-background-color: #EFEFEF; -fx-background-radius: 0 0 20 20">
-                              <padding>
-                                  <Insets bottom="10" left="10" right="10" top="10" />
-                              </padding>
-                          </VBox>
-                  </content>
-                  </ScrollPane>
-            </children>
-         </VBox>
-         <VBox style="-fx-background-color: #EFEFEF; -fx-background-radius: 20 20 28 28">
-            <children>
-               <HBox alignment="CENTER_LEFT" styleClass="detail_box">
-                  <children>
-                     <Label prefHeight="13.0" prefWidth="40.0" style="-fx-font-weight: bold" text="STT" />
-                     <Label style="-fx-font-weight: bold" text="TÊN MÓN" />
-                     <Label style="-fx-font-weight: bold" text="SỐ LƯỢNG" />
-                     <Label style="-fx-font-weight: bold" text="ĐƠN GIÁ" />
-                     <Label prefHeight="18.0" prefWidth="135.0" style="-fx-font-weight: bold" text="KHUYẾN MÃI" />
-                     <Label style="-fx-font-weight: bold" text="THÀNH TIỀN" />
-                  </children>
-               </HBox>
+                    <ScrollPane fx:id="menuScroll" fitToWidth="true" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
+                        <content>
+                            <VBox fx:id="vboxMenu" spacing="10" styleClass="menu-list" VBox.vgrow="ALWAYS" />
+                        </content>
+                    </ScrollPane>
 
-                  <!-- Danh sách món ăn -->
-                <ScrollPane fx:id="menuScroll" fitToWidth="true" minHeight="300.0" styleClass="menu-scroll" VBox.vgrow="ALWAYS">
-                    <content>
-                        <VBox fx:id="vboxMenu" spacing="10" styleClass="menu-list" />
-                    </content>
-                </ScrollPane>
-               <AnchorPane prefHeight="89.0" prefWidth="653.0" />
-            </children>
-         </VBox>
+                    <AnchorPane VBox.vgrow="NEVER" />
+                </children>
+            </VBox>
         </VBox>
     </center>
 
     <!-- Cột phải -->
     <right>
-        <VBox prefWidth="350" spacing="15" styleClass="right-pane">
+        <VBox prefWidth="350" spacing="15" styleClass="right-pane" VBox.vgrow="ALWAYS">
             <padding>
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
-         <AnchorPane prefHeight="39.0" prefWidth="403.0">
-            <children>
-                  <Label prefHeight="39.0" prefWidth="356.0" styleClass="section-title" text="Thông Tin Đặt Bàn" />
-            </children>
-         </AnchorPane>
 
-            <GridPane hgap="10" vgap="6">
+            <AnchorPane>
+                <children>
+                    <Label prefHeight="39.0" prefWidth="356.0" styleClass="section-title" text="Thông Tin Đặt Bàn" AnchorPane.topAnchor="0" />
+                </children>
+            </AnchorPane>
+
+            <GridPane hgap="10" vgap="6" VBox.vgrow="NEVER">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" />
+                    <ColumnConstraints hgrow="ALWAYS" />
+                    <ColumnConstraints hgrow="SOMETIMES" />
+                </columnConstraints>
                 <Label text="Mã Hóa Đơn:" />
                 <Label fx:id="lblmaHD" styleClass="strong-label" text="HD1210820250002" GridPane.columnIndex="2" />
-
                 <Label text="Tên Khách Hàng:" GridPane.rowIndex="1" />
                 <Label fx:id="lbltenKH" text="Trần Quốc Nhã" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-
                 <Label text="SĐT:" GridPane.rowIndex="3" />
                 <Label fx:id="lblsdtKH" text="0391234242" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-
                 <Label text="Số lượng:" GridPane.rowIndex="4" />
                 <Label fx:id="lblSoLuong" text="4" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-
                 <Label text="Sự kiện:" GridPane.rowIndex="5" />
                 <Label fx:id="lblsuKien" text="Không có" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-
                 <Label text="Khu vực:" GridPane.rowIndex="6" />
                 <Label fx:id="lblKhuVuc" text="IN" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-            <AnchorPane prefHeight="0.0" prefWidth="79.0" GridPane.columnIndex="1" />
-            <columnConstraints>
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-            </columnConstraints>
             <rowConstraints>
                <RowConstraints />
                <RowConstraints />
@@ -124,40 +119,32 @@
             </rowConstraints>
             </GridPane>
 
-            <Separator />
+            <Separator VBox.vgrow="NEVER" />
             <Label text="Mã Giảm Giá:" />
-            <HBox spacing="5">
+            <HBox spacing="5" HBox.hgrow="ALWAYS">
                 <TextField fx:id="txtMaGG" promptText="Nhập mã giảm giá" styleClass="filter-tf" HBox.hgrow="ALWAYS" />
                 <Button fx:id="btnCamera" onAction="#handleCameraButton" prefHeight="30.0" prefWidth="30.0" styleClass="icon-qr" text="📷" />
             </HBox>
 
             <GridPane hgap="10" vgap="5">
-                <Label text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" />
+                    <ColumnConstraints hgrow="SOMETIMES" />
+                    <ColumnConstraints hgrow="ALWAYS" />
+                    <ColumnConstraints hgrow="SOMETIMES" />
+                </columnConstraints>
+                <Label text="Tổng Tiền:" />
                 <Label fx:id="lblTongTien" styleClass="bold-label" text="0 đ" GridPane.columnIndex="3" />
-
                 <Label text="Chiết Khấu:" GridPane.rowIndex="2" />
                 <Label fx:id="lblGiamGia" styleClass="red-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-
                 <Label text="Thuế (10%):" GridPane.rowIndex="3" />
                 <Label fx:id="lblThue" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-
                 <Label text="Tổng Tiền Sau Thuế" GridPane.rowIndex="4" />
                 <Label fx:id="lblTongTT" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-
                 <Label text="Tiền Đã Cọc:" GridPane.rowIndex="5" />
                 <Label fx:id="lblCoc" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-
                 <Label text="Tổng Thanh Toán:" GridPane.rowIndex="6" />
                 <Label fx:id="lblConLai" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-
-
-                <AnchorPane prefHeight="0.0" prefWidth="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <columnConstraints>
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-            </columnConstraints>
             <rowConstraints>
                <RowConstraints />
                <RowConstraints />
@@ -178,29 +165,29 @@
                 </RadioButton>
                 <RadioButton fx:id="rdoTienMat" text="Tiền Mặt" toggleGroup="$paymentGroup" />
             </HBox>
-            <VBox fx:id="vboxTienMat" spacing="10.0" style="-fx-padding: 0 0 0 10" visible="false">
+
+            <VBox fx:id="vboxTienMat" spacing="10.0" style="-fx-padding: 0 0 0 10" visible="false" VBox.vgrow="NEVER">
                 <children>
                     <Label style="-fx-font-weight: bold;" text="Tiền Khách Đưa:" />
                     <TextField fx:id="txtTienKhachDua" promptText="Nhập số tiền khách đưa" styleClass="filter-tf" />
                     <GridPane alignment="CENTER" hgap="10.0" vgap="5.0">
+                        <columnConstraints>
+                            <ColumnConstraints />
+                            <ColumnConstraints />
+                            <ColumnConstraints />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints />
+                            <RowConstraints />
+                        </rowConstraints>
                         <children>
                             <Button fx:id="btnGoiY1" styleClass="quick-btn" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                             <Button fx:id="btnGoiY2" styleClass="quick-btn" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                             <Button fx:id="btnGoiY3" styleClass="quick-btn" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-
                             <Button fx:id="btnGoiY4" styleClass="quick-btn" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                             <Button fx:id="btnGoiY5" styleClass="quick-btn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             <Button fx:id="btnGoiY6" styleClass="quick-btn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         </children>
-                  <columnConstraints>
-                     <ColumnConstraints />
-                     <ColumnConstraints />
-                     <ColumnConstraints />
-                  </columnConstraints>
-                  <rowConstraints>
-                     <RowConstraints />
-                     <RowConstraints />
-                  </rowConstraints>
                     </GridPane>
                     <HBox style="-fx-alignment: center;">
                         <children>
@@ -210,12 +197,12 @@
                     </HBox>
                 </children>
             </VBox>
-         <HBox style="-fx-alignment: CENTER;">
-            <children>
-                   <Button fx:id="btnThanhToan" alignment="CENTER" prefHeight="45" prefWidth="280" styleClass="checkout-btn" text="💳 Thanh Toán" />
-            </children>
-         </HBox>
 
+            <HBox style="-fx-alignment: CENTER;" VBox.vgrow="NEVER">
+                <children>
+                    <Button fx:id="btnThanhToan" alignment="CENTER" prefHeight="45" prefWidth="280" styleClass="checkout-btn" text="💳 Thanh Toán" />
+                </children>
+            </HBox>
         </VBox>
     </right>
 </BorderPane>

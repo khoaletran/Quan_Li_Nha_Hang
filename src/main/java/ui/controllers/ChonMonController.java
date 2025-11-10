@@ -36,8 +36,6 @@ public class ChonMonController {
     @FXML private TextField txtTienKhachDua, sdtKhach, tften, tfTimKiem;
     @FXML private TextField tf_ban, tftg, tfSLKhach, tfghichu;
 
-    private boolean kieudatban;
-
     private ui.controllers.MainController_NV mainController;
 
     private final Map<String, HBox> chiTietMap = new HashMap<>();
@@ -149,10 +147,6 @@ public class ChonMonController {
 
     public void setTen(String ten) {
         tften.setText(ten);
-    }
-
-    public void setKieudatban(boolean kieudatban) {
-        this.kieudatban = kieudatban;
     }
 
     public void setThongTinBan(Ban ban) {
@@ -777,6 +771,36 @@ public class ChonMonController {
         return tatCaOK;
     }
 
+    private KhachHang taoKHMoi() {
+        try {
+            KhachHang khachHang = new KhachHang();
+            khachHang.setMaKhachHang(KhachHangDAO.tuSinhMaKhachHang());
+            khachHang.setTenKhachHang(tften.getText().trim());
+            khachHang.setSdt(sdtKhach.getText().trim());
+            khachHang.setDiemTichLuy(0);
+            khachHang.setGioiTinh(true);
+            khachHang.setHangKhachHang(xetHang(0));
+            KhachHang khMoi = new KhachHangDAO().taoKhachHangMoi(khachHang);
+
+            if (khMoi != null) {
+                System.out.println("✅ Đã thêm khách hàng mới: " + khMoi.getTenKhachHang());
+                return khMoi; // Trả về đối tượng khách hàng vừa tạo
+            } else {
+                AlertCus.show("Lỗi hệ thống", "Không thể thêm khách hàng mới. Vui lòng thử lại!");
+                return null;
+            }
+
+        } catch (IllegalArgumentException ex) {
+            AlertCus.show("Số điện thoại không hợp lệ",
+                    ex.getMessage() + "\nVui lòng nhập lại số điện thoại đúng định dạng (03–09, 10 chữ số).");
+            return null;
+        } catch (Exception e) {
+            AlertCus.show("Lỗi hệ thống", "Có lỗi khi tạo khách hàng mới: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     private HoaDon taoHoaDon(boolean kieudatban, int trangthai) {
         if (banHienTai == null || nhanVienHien == null) {
@@ -795,8 +819,9 @@ public class ChonMonController {
             khachHang = new KhachHangDAO().findBySDT(sdt);
         }
         if (khachHang == null) {
-            khachHang = new KhachHang("KH0000", 0, true, sdt, "Khách lẻ", xetHang(0));
+            khachHang = taoKHMoi();
         }
+
 
         // ===== 3. Tính toán giá trị dẫn xuất =====
 

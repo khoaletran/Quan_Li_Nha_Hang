@@ -44,7 +44,7 @@ public class KhachHangDAO {
     }
 
     // ===== THÊM KHÁCH HÀNG MỚI =====
-    public static boolean insert(KhachHang kh) {
+    public boolean insert(KhachHang kh) {
         String sql = "INSERT INTO KhachHang(maKH, maHang, tenKH, sdt, gioiTinh, diemTichLuy) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, kh.getMaKhachHang());
@@ -77,7 +77,7 @@ public class KhachHangDAO {
     }
 
     // ===== XÓA KHÁCH HÀNG =====
-    public static boolean delete(String maKH) {
+    public boolean delete(String maKH) {
         String sql = "DELETE FROM KhachHang WHERE maKH=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, maKH);
@@ -204,26 +204,51 @@ public class KhachHangDAO {
         return kh;
     }
 
-    public static String maKHCuoi() {
+
+    public static String tuSinhMaKhachHang() {
         String sql = "SELECT TOP 1 maKH FROM KhachHang ORDER BY maKH DESC";
-        String maKHCuoi = null;
+        String lastMa = null;
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) lastMa = rs.getString("maKH");
+        } catch (SQLException e) {
+            System.err.println("Lỗi lấy mã KH cuối: " + e.getMessage());
+        }
 
-        try {
-            connectDB.getInstance().connect();
-            Connection con = connectDB.getConnection();
+        int so = (lastMa != null) ? Integer.parseInt(lastMa.substring(2)) + 1 : 1;
+        return String.format("KH%04d", so);
+    }
 
-            try (PreparedStatement ps = con.prepareStatement(sql);
-                 ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    maKHCuoi = rs.getString("maKH");
-                }
+    public KhachHang taoKhachHangMoi(KhachHang kh) {
+        String sql = """
+        INSERT INTO KhachHang(maKH, tenKH, sdt, gioiTinh, diemTichLuy, maHang)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """;
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, kh.getMaKhachHang());
+            ps.setString(2, kh.getTenKhachHang());
+            ps.setString(3, kh.getSdt());
+            ps.setBoolean(4, kh.isGioiTinh());
+            ps.setInt(5, kh.getDiemTichLuy());
+            ps.setString(6, kh.getHangKhachHang().getMaHang());
+
+            if (ps.executeUpdate() > 0) {
+                System.out.println("Đã thêm khách hàng mới vào DB: " + kh.getMaKhachHang());
+                return kh;
             }
 
         } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy mã khách hàng cuối: " + e.getMessage());
+            System.err.println("Lỗi khi thêm khách hàng mới: " + e.getMessage());
         }
-        return maKHCuoi;
+
+        return null;
     }
+
+
 
 
 }

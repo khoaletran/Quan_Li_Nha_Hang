@@ -37,6 +37,7 @@
 .search_box {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 20 20 28 28;
+    -fx-padding: 10;
 }
 
 /* Ô tìm kiếm */

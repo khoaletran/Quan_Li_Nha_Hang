@@ -110,10 +110,14 @@ CREATE TABLE Ban
     trangThai BIT,
     maLoaiBan NVARCHAR(6) FOREIGN KEY REFERENCES LoaiBan (maLoaiBan),
     maKhuVuc  NVARCHAR(6) FOREIGN KEY REFERENCES KhuVuc (maKhuVuc),
-    CONSTRAINT chk_maBan_BAN CHECK (maBan LIKE 'B[OIV][0-9][0-9][0-9][0-9]'),
+    CONSTRAINT chk_maBan_BAN CHECK (maBan LIKE '[BW][OIV][0-9][0-9][0-9][0-9]'),
     CONSTRAINT chk_trangThai_BAN CHECK (trangThai IN (0, 1))
 );
 
+ALTER TABLE Ban
+    ADD CONSTRAINT chk_maBan_BAN CHECK (
+        maBan LIKE '[BW][OIV][0-9][0-9][0-9][0-9]'
+        );
 -- =========================================
 -- BẢNG SỰ KIỆN
 -- =========================================
