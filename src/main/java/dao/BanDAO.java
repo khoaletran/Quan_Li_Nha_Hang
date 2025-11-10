@@ -100,7 +100,7 @@ public class BanDAO {
     // ==============================
     // XOÁ BÀN
     // ==============================
-    public boolean delete(String maBan) {
+    public static boolean delete(String maBan) {
         String sql = "DELETE FROM Ban WHERE maBan=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, maBan);
@@ -211,10 +211,14 @@ public class BanDAO {
     }
 
 
-    public static boolean conBanTrongTheoKhuVuc(String maKhuVuc) {
+    public static boolean conBanTrongTheoKhuVuc(String maKhuVuc, int soLuongKhach) {
         return getAll().stream()
-                .anyMatch(b -> b.getKhuVuc().getMaKhuVuc().equals(maKhuVuc) && !b.isTrangThai());
+                .anyMatch(b -> b.getKhuVuc().getMaKhuVuc().equals(maKhuVuc)
+                        && !b.isTrangThai()
+                        && b.getLoaiBan() != null
+                        && b.getLoaiBan().getSoLuong() >= soLuongKhach);
     }
+
 
 
     public static List<Ban> getAllTrong() {

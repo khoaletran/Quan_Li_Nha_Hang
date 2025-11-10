@@ -87,4 +87,6 @@ public class KhachHang {
                 ", diemTichLuy=" + diemTichLuy +
                 '}';
     }
+
+
 }

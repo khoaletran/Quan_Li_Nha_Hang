@@ -205,6 +205,50 @@ public class KhachHangDAO {
     }
 
 
+    public static String tuSinhMaKhachHang() {
+        String sql = "SELECT TOP 1 maKH FROM KhachHang ORDER BY maKH DESC";
+        String lastMa = null;
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) lastMa = rs.getString("maKH");
+        } catch (SQLException e) {
+            System.err.println("Lỗi lấy mã KH cuối: " + e.getMessage());
+        }
+
+        int so = (lastMa != null) ? Integer.parseInt(lastMa.substring(2)) + 1 : 1;
+        return String.format("KH%04d", so);
+    }
+
+    public KhachHang taoKhachHangMoi(KhachHang kh) {
+        String sql = """
+        INSERT INTO KhachHang(maKH, tenKH, sdt, gioiTinh, diemTichLuy, maHang)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """;
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, kh.getMaKhachHang());
+            ps.setString(2, kh.getTenKhachHang());
+            ps.setString(3, kh.getSdt());
+            ps.setBoolean(4, kh.isGioiTinh());
+            ps.setInt(5, kh.getDiemTichLuy());
+            ps.setString(6, kh.getHangKhachHang().getMaHang());
+
+            if (ps.executeUpdate() > 0) {
+                System.out.println("Đã thêm khách hàng mới vào DB: " + kh.getMaKhachHang());
+                return kh;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi thêm khách hàng mới: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+
 
 
 }

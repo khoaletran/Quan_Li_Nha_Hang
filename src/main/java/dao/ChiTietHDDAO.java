@@ -3,6 +3,7 @@ package dao;
 import connectDB.connectDB;
 import entity.ChiTietHoaDon;
 import entity.HoaDon;
+import entity.LoaiMon;
 import entity.Mon;
 
 import java.sql.*;
@@ -13,42 +14,42 @@ public class ChiTietHDDAO {
     public static List<ChiTietHoaDon> getAllByMaHD(String maHD) {
         List<ChiTietHoaDon> list = new ArrayList<>();
         String sql = """
-                SELECT
-                    cthd.*,
-                    m.tenMon,
-                    m.giaGoc,
-                    ISNULL(pt.phanTramLoi, ptLoai.phanTramLoi) AS phanTramLoi
-                FROM ChiTietHoaDon cthd
-                JOIN Mon m ON cthd.maMon = m.maMon
-                
-                -- lấy % lợi nhuận mới nhất cho từng món
-                LEFT JOIN (
-                    SELECT p1.maMon, p1.phanTramLoi
-                    FROM PhanTramGiaBan p1
-                    WHERE p1.maPTGB = (
-                        SELECT TOP 1 p2.maPTGB
-                        FROM PhanTramGiaBan p2
-                        WHERE p2.maMon = p1.maMon
-                        ORDER BY p2.maPTGB DESC
-                    )
-                ) pt ON pt.maMon = m.maMon
-                
-                -- lấy % lợi nhuận mới nhất cho từng loại món (fallback)
-                LEFT JOIN (
-                    SELECT p3.maLoaiMon, p3.phanTramLoi
-                    FROM PhanTramGiaBan p3
-                    WHERE p3.maPTGB = (
-                        SELECT TOP 1 p4.maPTGB
-                        FROM PhanTramGiaBan p4
-                        WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
-                        ORDER BY p4.maPTGB DESC
-                    )
-                ) ptLoai ON ptLoai.maLoaiMon = m.loaiMon
-                
-                WHERE cthd.maHD = ?;
-                """;
+            SELECT
+                cthd.*,
+                m.tenMon,
+                m.giaGoc,
+                lm.maLoaiMon,
+                lm.tenLoaiMon,
+                ISNULL(pt.phanTramLoi, ptLoai.phanTramLoi) AS phanTramLoi
+            FROM ChiTietHoaDon cthd
+            JOIN Mon m ON cthd.maMon = m.maMon
+            JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
+            LEFT JOIN (
+                SELECT p1.maMon, p1.phanTramLoi
+                FROM PhanTramGiaBan p1
+                WHERE p1.maPTGB = (
+                    SELECT TOP 1 p2.maPTGB
+                    FROM PhanTramGiaBan p2
+                    WHERE p2.maMon = p1.maMon
+                    ORDER BY p2.maPTGB DESC
+                )
+            ) pt ON pt.maMon = m.maMon
+            LEFT JOIN (
+                SELECT p3.maLoaiMon, p3.phanTramLoi
+                FROM PhanTramGiaBan p3
+                WHERE p3.maPTGB = (
+                    SELECT TOP 1 p4.maPTGB
+                    FROM PhanTramGiaBan p4
+                    WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
+                    ORDER BY p4.maPTGB DESC
+                )
+            ) ptLoai ON ptLoai.maLoaiMon = m.loaiMon
+            WHERE cthd.maHD = ?;
+    """;
+
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, maHD);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -57,6 +58,11 @@ public class ChiTietHDDAO {
                     m.setTenMon(rs.getString("tenMon"));
                     m.setGiaGoc(rs.getDouble("giaGoc"));
 
+                    LoaiMon loai = new LoaiMon();
+                    loai.setMaLoaiMon(rs.getString("maLoaiMon"));
+                    loai.setTenLoaiMon(rs.getString("tenLoaiMon"));
+                    m.setLoaiMon(loai);
+
                     HoaDon hd = new HoaDon();
                     hd.setMaHD(rs.getString("maHD"));
 
@@ -64,20 +70,20 @@ public class ChiTietHDDAO {
                     cthd.setHoaDon(hd);
                     cthd.setMon(m);
                     cthd.setSoLuong(rs.getInt("soLuong"));
+
                     int ptgb = rs.getInt("phanTramLoi");
-                    cthd.setThanhTien(m.getGiaGoc() * (1 + ptgb));
+                    double thanhTien = m.getGiaGoc() * (1 + ptgb / 100.0) * cthd.getSoLuong();
+                    cthd.setThanhTien(thanhTien);
+
                     list.add(cthd);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return list;
     }
+
 
     // ===== 1. LẤY DANH SÁCH CHI TIẾT THEO MÃ HÓA ĐƠN =====
     public static List<ChiTietHoaDon> getByMaHD(String maHD) {

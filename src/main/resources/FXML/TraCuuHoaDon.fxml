@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" styleClass="borderPane_main" stylesheets="@../CSS/tracuuhoadon.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.TraCuuHoaDonController">
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" styleClass="borderPane_main" stylesheets="@../CSS/tracuuhoadon.css, @../CSS/AppMD.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.TraCuuHoaDonController">
 
     <!-- Trung tâm -->
     <center>
