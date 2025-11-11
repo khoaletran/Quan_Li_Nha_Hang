@@ -72,7 +72,7 @@
 
             <Label alignment="CENTER" prefHeight="54.0" prefWidth="351.0" styleClass="section-title" text="Thông Tin Đặt Bàn" textAlignment="CENTER" />
 
-            <VBox maxHeight="150.0" prefHeight="150.0" spacing="12" styleClass="customer-info">
+            <VBox maxHeight="234.0" spacing="12" styleClass="customer-info">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Họ và tên:" />
                     <TextField fx:id="tften" prefHeight="24.0" prefWidth="228.0" promptText="Nhập họ tên" styleClass="filter-tf" />
@@ -104,21 +104,15 @@
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="165.0" prefHeight="13.0" prefWidth="340.0" spacing="10">
                <children>
                   <Label styleClass="info-label" text="Đặt sự kiện:" />
-                  <ComboBox fx:id="comboSuKien" promptText="Chọn Sự Kiện" minWidth="220.0" prefHeight="24.0" prefWidth="220.0" styleClass="combo-boxSK" />
+                  <ComboBox fx:id="comboSuKien" minWidth="220.0" prefHeight="24.0" prefWidth="220.0" promptText="Chọn Sự Kiện" styleClass="combo-boxSK" />
                </children>
             </HBox>
             </VBox>
               <VBox prefHeight="542.0" prefWidth="340.0" spacing="8.0" styleClass="order-details">
 
                         <!-- Hàng tiêu đề cột -->
-                  <HBox styleClass="order-header">
-                      <Label prefHeight="15.0" prefWidth="59.0" styleClass="order-col product" text="Tên món" textAlignment="RIGHT" />
-                      <Region HBox.hgrow="ALWAYS" />
-                      <Label styleClass="order-col quantity" text="Số lượng" />
-                      <Region HBox.hgrow="ALWAYS" />
-                      <Label styleClass="order-col price" text="Giá" />
-                      <Region HBox.hgrow="ALWAYS" />
-                      <Label prefHeight="15.0" prefWidth="78.0" styleClass="order-col total" text="Tổng tiền" />
+                  <HBox style="-fx-alignment: center;" styleClass="order-header">
+                      <Label styleClass="order-col product" text="Món Đã Chọn" textAlignment="RIGHT" />
                   </HBox>
 
                 <ScrollPane fx:id="scrollChiTiet" fitToHeight="true" fitToWidth="true" prefHeight="150.0" prefWidth="320.0" styleClass="scrollp_od">

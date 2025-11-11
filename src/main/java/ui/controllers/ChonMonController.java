@@ -181,7 +181,7 @@ public class ChonMonController {
         if (mainController != null) {
             boolean xacNhan = ConfirmCus.show(
                     "Xác nhận hủy bàn đợi",
-                    "Khách hàng không đặt nữa. Bạn có muốn xóa bàn chờ này không?"
+                    "Khách hàng không đặt nữa. Bạn có muốn hủy đơn không?"
             );
 
             if (xacNhan) {
@@ -367,6 +367,7 @@ public class ChonMonController {
 
                 if (soLuong == 0) {
                     removeMonFromOrder(mon);
+                    capNhatSoLuongTrenMenu(mon, 0);
                     loadTT();
 
                 } else {
@@ -377,6 +378,7 @@ public class ChonMonController {
         });
 
         card.getChildren().addAll(imageView, lblTen, lblGia, soLuongBox);
+        card.setUserData(mon);
         return card;
     }
 
@@ -423,38 +425,76 @@ public class ChonMonController {
     }
 
     private HBox taoDongChiTiet(Mon mon, int soLuong) {
-        HBox row = new HBox();
-        row.getStyleClass().add("order-row");
-        row.setSpacing(10);
-        row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        VBox vbox = new VBox(4); // chứa tên và hàng thông tin
+        vbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
+        // ===== Tên món (nằm trên) =====
         Label lblTen = new Label(mon.getTenMon());
         lblTen.getStyleClass().addAll("order-col", "product");
-        lblTen.setPrefWidth(100);
+        lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 13.5px; -fx-text-fill: #333;");
+
+        // ===== Hàng dưới: SL – Giá – Tổng tiền – Nút =====
+        HBox hboxInfo = new HBox(10);
+        hboxInfo.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         Label lblSoLuong = new Label(String.valueOf(soLuong));
         lblSoLuong.getStyleClass().addAll("order-col", "quantity", "lblSoLuongCT");
-        lblSoLuong.setPrefWidth(60);
+        lblSoLuong.setPrefWidth(30);
+        lblSoLuong.setAlignment(javafx.geometry.Pos.CENTER);
 
-        // CHANGED
         Label lblGia = new Label(formatCurrency(mon.getGiaBan()));
         lblGia.getStyleClass().addAll("order-col", "price");
         lblGia.setPrefWidth(70);
+        lblGia.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 
         Label lblTongTien = new Label(formatCurrency(mon.getGiaBan() * soLuong));
         lblTongTien.getStyleClass().addAll("order-col", "total", "lblTongTienCT");
         lblTongTien.setPrefWidth(80);
+        lblTongTien.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 
-        Region space1 = new Region();
-        Region space2 = new Region();
-        Region space3 = new Region();
-        HBox.setHgrow(space1, javafx.scene.layout.Priority.ALWAYS);
-        HBox.setHgrow(space2, javafx.scene.layout.Priority.ALWAYS);
-        HBox.setHgrow(space3, javafx.scene.layout.Priority.ALWAYS);
+        // === Nút giảm ===
+        Button btnMinus = new Button("-");
+        btnMinus.getStyleClass().add("btn-minus");
+        btnMinus.setOnAction(e -> {
+            int sl = Integer.parseInt(lblSoLuong.getText());
+            if (sl > 1) {
+                sl--;
+                lblSoLuong.setText(String.valueOf(sl));
+                lblTongTien.setText(formatCurrency(mon.getGiaBan() * sl));
+                soLuongMap.put(mon.getMaMon(), sl);
+                capNhatSoLuongTrenMenu(mon, sl);
+            } else {
+                removeMonFromOrder(mon);
+                capNhatSoLuongTrenMenu(mon, 0);
+            }
+            capNhatTongTien();
+            tinhCoc();
+            taoGoiYTienKhach();
+        });
 
-        row.getChildren().addAll(lblTen, space1, lblSoLuong, space2, lblGia, space3, lblTongTien);
+        // === Nút xóa ===
+        Button btnXoa = new Button("x");
+        btnXoa.getStyleClass().add("btn-delete");
+        btnXoa.setOnAction(e -> {
+            removeMonFromOrder(mon);
+            capNhatSoLuongTrenMenu(mon, 0);
+            capNhatTongTien();
+            tinhCoc();
+            taoGoiYTienKhach();
+        });
+
+        hboxInfo.getChildren().addAll(lblSoLuong, lblGia, lblTongTien, btnMinus, btnXoa);
+        vbox.getChildren().addAll(lblTen, hboxInfo);
+
+        HBox row = new HBox(vbox);
+        row.getStyleClass().add("order-row");
+        row.setSpacing(10);
+        row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
         return row;
     }
+
+
 
     private void capNhatTongTien() {
         double tongTien = 0;
@@ -582,11 +622,22 @@ public class ChonMonController {
         }
     }
 
-    private void tinhTienThua(){
-        double coc = parseCurrency(lblCoc.getText().trim());
-        double tien = parseCurrency(txtTienKhachDua.getText().trim());
-        lblTienThua.setText(formatCurrency(tien - coc));
+    private void tinhTienThua() {
+        double tong = parseCurrency(lblConLai.getText());
+        double tienKD = parseCurrency(txtTienKhachDua.getText());
+        double tienThua = tienKD - tong;
+
+        // Nếu tiền thừa < 1000 hoặc âm → gán 0
+        if (tienThua < 1000) {
+            tienThua = 0;
+        } else {
+            // Làm tròn đến 1.000 gần nhất
+            tienThua = Math.round(tienThua / 1000.0) * 1000;
+        }
+
+        lblTienThua.setText(formatCurrency(tienThua));
     }
+
 
     private void tinhCoc(){
         Coc coc = CocDAO.getByKhuVucVaLoaiBan(banHienTai.getKhuVuc().getMaKhuVuc(),banHienTai.getLoaiBan().getMaLoaiBan());
@@ -878,6 +929,28 @@ public class ChonMonController {
             tften.setText(kh.getTenKhachHang());
         } else {
             tften.setText("Khách lẻ");
+        }
+    }
+
+    // ==================== CẬP NHẬT MENU MÓN ====================
+    private void capNhatSoLuongTrenMenu(Mon mon, int soLuongMoi) {
+        for (javafx.scene.Node node : flowMonAn.getChildren()) {
+            if (node instanceof VBox card) {
+                Mon monCard = (Mon) card.getUserData();
+                if (monCard != null && monCard.getMaMon().equals(mon.getMaMon())) {
+                    for (javafx.scene.Node child : card.getChildren()) {
+                        if (child instanceof HBox box) {
+                            for (javafx.scene.Node subChild : box.getChildren()) {
+                                if (subChild instanceof Label label &&
+                                        label.getStyleClass().contains("qty-label")) {
+                                    label.setText(String.valueOf(soLuongMoi));
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

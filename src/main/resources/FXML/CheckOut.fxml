@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
@@ -29,15 +28,11 @@
             <!-- Khung tìm kiếm + danh sách hóa đơn -->
             <VBox styleClass="top" VBox.vgrow="ALWAYS">
                 <children>
-                    <HBox alignment="CENTER_LEFT" spacing="5" styleClass="search_box" HBox.hgrow="ALWAYS">
-                        <TextField fx:id="searchField" prefWidth="623.0" promptText="Tìm kiếm: số điện thoại, bàn, hóa đơn" styleClass="search-field" HBox.hgrow="ALWAYS" />
-                        <Region prefHeight="34.0" prefWidth="155.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnSearch" styleClass="search-btn" text="🔍">
-                            <HBox.margin>
-                                <Insets right="20.0" />
-                            </HBox.margin>
-                        </Button>
+                    <HBox alignment="CENTER_LEFT" spacing="8" styleClass="search_box" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchField" maxWidth="Infinity" minWidth="150" prefWidth="300" promptText="Tìm kiếm: số điện thoại, bàn, hóa đơn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnSearch" focusTraversable="false" minWidth="40" styleClass="search-btn" text="🔍" />
                     </HBox>
+
 
                     <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="300.0" styleClass="invoice-scroll" VBox.vgrow="ALWAYS">
                         <content>
@@ -158,12 +153,12 @@
 
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Label prefHeight="15.0" prefWidth="79.0" style="-fx-font-weight: bold;" styleClass="bold-label" text="Thanh Toán:" />
-                <RadioButton fx:id="rdoChuyenKhoan" prefHeight="30.0" prefWidth="136.0" selected="true" text="Chuyển Khoản">
+                <RadioButton fx:id="rdoChuyenKhoan" prefHeight="30.0" prefWidth="136.0" selected="true" style="-fx-font-size: 12" text="Chuyển Khoản">
                     <toggleGroup>
                         <ToggleGroup fx:id="paymentGroup" />
                     </toggleGroup>
                 </RadioButton>
-                <RadioButton fx:id="rdoTienMat" text="Tiền Mặt" toggleGroup="$paymentGroup" />
+                <RadioButton fx:id="rdoTienMat" style="-fx-font-size: 12" text="Tiền Mặt" toggleGroup="$paymentGroup" />
             </HBox>
 
             <VBox fx:id="vboxTienMat" spacing="10.0" style="-fx-padding: 0 0 0 10" visible="false" VBox.vgrow="NEVER">
@@ -171,15 +166,6 @@
                     <Label style="-fx-font-weight: bold;" text="Tiền Khách Đưa:" />
                     <TextField fx:id="txtTienKhachDua" promptText="Nhập số tiền khách đưa" styleClass="filter-tf" />
                     <GridPane alignment="CENTER" hgap="10.0" vgap="5.0">
-                        <columnConstraints>
-                            <ColumnConstraints />
-                            <ColumnConstraints />
-                            <ColumnConstraints />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints />
-                            <RowConstraints />
-                        </rowConstraints>
                         <children>
                             <Button fx:id="btnGoiY1" styleClass="quick-btn" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                             <Button fx:id="btnGoiY2" styleClass="quick-btn" GridPane.columnIndex="1" GridPane.rowIndex="0" />
@@ -188,6 +174,15 @@
                             <Button fx:id="btnGoiY5" styleClass="quick-btn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             <Button fx:id="btnGoiY6" styleClass="quick-btn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         </children>
+                  <columnConstraints>
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
                     </GridPane>
                     <HBox style="-fx-alignment: center;">
                         <children>

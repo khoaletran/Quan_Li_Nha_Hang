@@ -51,6 +51,8 @@
     -fx-text-fill: white;
     -fx-background-radius: 20;
     -fx-padding: 8 16;
+    -fx-border-color: #E6763E;
+    -fx-border-radius: 20;
 }
 
 .search-btn:hover {

@@ -26,9 +26,9 @@ public class CheckoutController {
 
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoChuyenKhoan, rdoTienMat;
-    @FXML private TextField txtMaGG, txtTienKhachDua;
+    @FXML private TextField txtMaGG, txtTienKhachDua, searchField;
     @FXML private VBox vboxHoaDon, vboxMenu, vboxTienMat;
-    @FXML private Button btnCamera, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6, btnThanhToan;
+    @FXML private Button btnSearch, btnCamera, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6, btnThanhToan;
     @FXML private Label lblmaHD, lbltenKH, lblsdtKH, lblSoLuong, lblsuKien, lblKhuVuc, lblTongTien, lblGiamGia, lblThue, lblTongTT, lblTienThua, lblCoc, lblConLai;
 
     private HoaDon hdHienTai;
@@ -42,6 +42,8 @@ public class CheckoutController {
         btnThanhToan.setOnAction(e -> xuLyThanhToan());
 
         txtMaGG.setOnAction(e -> updateThanhTien());
+
+
     }
 
     // ======== QUÉT MÃ QR GIẢM GIÁ ==========
@@ -136,7 +138,7 @@ public class CheckoutController {
             String tenKH = kh != null ? kh.getTenKhachHang() : "Không rõ";
             String sdtKH = kh != null ? kh.getSdt() : "Không có";
 
-            VBox info = new VBox(lblMaHD, new Label("SĐT: " + sdtKH));
+            VBox info = new VBox(lblMaHD, new Label("SĐT: " + sdtKH), new Label("Bàn: " + hd.getBan().getMaBan()));
             Region region = new Region();
             HBox.setHgrow(region, Priority.ALWAYS);
 
@@ -206,7 +208,7 @@ public class CheckoutController {
     }
 
     private void taoGoiYTienKhach() {
-        double tongTien = parseCurrency(lblTongTT.getText());
+        double tongTien = parseCurrency(lblConLai.getText());
         if (tongTien <= 0) return;
 
         double base = Math.round(tongTien / 1000.0) * 1000;
@@ -245,9 +247,19 @@ public class CheckoutController {
     }
 
     private void tinhTienThua() {
-        double tong = parseCurrency(lblTongTT.getText());
+        double tong = parseCurrency(lblConLai.getText());
         double tienKD = parseCurrency(txtTienKhachDua.getText());
-        lblTienThua.setText(formatCurrency(tienKD - tong));
+        double tienThua = tienKD - tong;
+
+        // Nếu tiền thừa < 1000 hoặc âm → gán 0
+        if (tienThua < 1000) {
+            tienThua = 0;
+        } else {
+            // Làm tròn đến 1.000 gần nhất
+            tienThua = Math.round(tienThua / 1000.0) * 1000;
+        }
+
+        lblTienThua.setText(formatCurrency(tienThua));
     }
 
     // ======== ĐỊNH DẠNG TIỀN ==========
