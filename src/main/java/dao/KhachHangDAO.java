@@ -44,7 +44,7 @@ public class KhachHangDAO {
     }
 
     // ===== THÊM KHÁCH HÀNG MỚI =====
-    public boolean insert(KhachHang kh) {
+    public static boolean insert(KhachHang kh) {
         String sql = "INSERT INTO KhachHang(maKH, maHang, tenKH, sdt, gioiTinh, diemTichLuy) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, kh.getMaKhachHang());
@@ -77,7 +77,7 @@ public class KhachHangDAO {
     }
 
     // ===== XÓA KHÁCH HÀNG =====
-    public boolean delete(String maKH) {
+    public static boolean delete(String maKH) {
         String sql = "DELETE FROM KhachHang WHERE maKH=?";
         try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
             ps.setString(1, maKH);
@@ -118,7 +118,7 @@ public class KhachHangDAO {
     }
 
     // ===== LẤY MÃ KHÁCH HÀNG CUỐI CÙNG =====
-    public String getMaKHCuoi() {
+    public static String getMaKHCuoi() {
         String sql = "SELECT TOP 1 maKH FROM KhachHang ORDER BY maKH DESC";
         try (Statement st = connectDB.getConnection().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
