@@ -163,7 +163,7 @@ public class DashboardController {
             lblTongDonDangDoi.setText(String.valueOf("Số đơn đang đợi: "+donCho));
             lblTongDonDaNhan.setText(String.valueOf("Số đơn đang dùng: "+donDangDung));
             lblTongDonDaThanhToan.setText(String.valueOf("Số đơn đã thanh toán: "+donHoanThanh));
-            lblIn.setText(String.valueOf("Khu vực IN: "+in));
+            lblIn.setText(String.valueOf("Khu vực In: "+in));
             lblOut.setText(String.valueOf("Khu vực Out: "+out));
             lblVip.setText(String.valueOf("Khu vực Vip: "+vip));
             lblDoanhThu.setText(String.format("%,.0f đ", tongDoanhThu));
