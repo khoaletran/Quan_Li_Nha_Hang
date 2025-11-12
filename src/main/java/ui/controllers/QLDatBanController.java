@@ -88,6 +88,8 @@ public class QLDatBanController {
             return;
         }
 
+        txtSoLuongKhach.setEditable(false);
+
         khoiTaoComboBox();
         ganSuKienChoNut();
         khoiTaoTableView();

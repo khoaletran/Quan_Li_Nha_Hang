@@ -249,6 +249,26 @@ public class KhachHangDAO {
     }
 
 
+    public static String maKHCuoi() {
+        String sql = "SELECT TOP 1 maKH FROM KhachHang ORDER BY maKH DESC";
+        String maKHCuoi = null;
+
+        try {
+            connectDB.getInstance().connect();
+            Connection con = connectDB.getConnection();
+
+            try (PreparedStatement ps = con.prepareStatement(sql);
+                 ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    maKHCuoi = rs.getString("maKH");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy mã khách hàng cuối: " + e.getMessage());
+        }
+        return maKHCuoi;
+    }
 
 
 }

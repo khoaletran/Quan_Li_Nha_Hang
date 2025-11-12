@@ -57,6 +57,11 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);
     -fx-spacing: 0;
 }
+.header-section{
+    -fx-background-color: #E6763E;
+    -fx-background-radius: 12 12 0 0;
+}
+
 
 .title-label {
     -fx-font-size: 20;
@@ -64,8 +69,6 @@
     -fx-text-fill: white;
     -fx-alignment: center;
     -fx-padding: 15 0 10 0;
-    -fx-background-color: #E6763E;
-    -fx-background-radius: 12 12 0 0;
 }
 
 .form-section {

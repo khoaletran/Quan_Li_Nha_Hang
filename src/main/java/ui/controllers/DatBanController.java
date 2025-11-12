@@ -102,6 +102,8 @@ public class DatBanController {
 
         loadComboBoxes();
         cboKhuVuc.setOnAction(e -> {scheduleRefresh();});
+        txtSoLuong.textProperty().addListener((obs, oldVal, newVal) -> locTheoRealTime());
+        cboKhuVuc.setOnAction(e -> locTheoRealTime());
         btnWaitlist.setOnAction(e -> {themVaoWaitlist();});
     }
 
@@ -177,29 +179,33 @@ public class DatBanController {
         capNhatHienThi(starVIP_02, tableVIP_02, "KV0003", "LB0005", 12, 100, dsHD);
 
         String maKV = getSelectedMaKhuVuc();
-
-        // Trễ 150ms để đảm bảo dữ liệu bàn đã load xong trước khi check
         int finalSoLuong = soLuong;
-        Timeline delayCheck = new Timeline(new KeyFrame(Duration.millis(150), ev -> {
-            boolean conBanTrongKV = BanDAO.conBanTrongTheoKhuVuc(maKV, finalSoLuong);
 
+// Kiểm tra bàn trống ngay lập tức
+        boolean conBanTrongKV = BanDAO.conBanTrongTheoKhuVuc(maKV, finalSoLuong);
 
-            // Nếu hết bàn thì mới hiện nút Waitlist
-            btnWaitlist.setVisible(!conBanTrongKV);
+// Cập nhật trạng thái nút Waitlist ngay lập tức
+        boolean hienWaitlist = !conBanTrongKV;
+        if (btnWaitlist.isVisible() != hienWaitlist) {
+            btnWaitlist.setVisible(true); // luôn giữ visible để fade
+            double start = hienWaitlist ? 0 : 1;
+            double end = hienWaitlist ? 1 : 0;
 
-            // Hiệu ứng fade cho nút Waitlist (ẩn/hiện mượt)
-            btnWaitlist.setOpacity(btnWaitlist.isVisible() ? 0 : 1);
             Timeline fade = new Timeline(
                     new KeyFrame(Duration.ZERO,
-                            new javafx.animation.KeyValue(btnWaitlist.opacityProperty(), btnWaitlist.isVisible() ? 0 : 1)),
-                    new KeyFrame(Duration.millis(250),
-                            new javafx.animation.KeyValue(btnWaitlist.opacityProperty(), btnWaitlist.isVisible() ? 1 : 0))
+                            new javafx.animation.KeyValue(btnWaitlist.opacityProperty(), start)),
+                    new KeyFrame(Duration.millis(100),
+                            new javafx.animation.KeyValue(btnWaitlist.opacityProperty(), end))
             );
+            fade.setOnFinished(ev -> {
+                btnWaitlist.setVisible(hienWaitlist);
+                btnWaitlist.setDisable(!hienWaitlist);
+            });
             fade.play();
+        }
 
-            System.out.println("Khu vực đang chọn: " + maKV + " | Còn bàn trống: " + conBanTrongKV);
-        }));
-        delayCheck.play();
+        System.out.println("Khu vực: " + maKV + " | SL khách: " + soLuong + " | Còn bàn trống: " + conBanTrongKV);
+
 
 
     }

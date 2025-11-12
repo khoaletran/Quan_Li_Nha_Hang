@@ -576,3 +576,25 @@
 .combo-boxSK .arrow-button {
     -fx-padding: 0 6 0 6;
 }
+
+.btn-minus {
+    -fx-background-color: #ff6b6b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8;
+    -fx-background-radius: 8;
+}
+.btn-minus:hover {
+    -fx-background-color: #ff3434;
+}
+
+.btn-delete {
+    -fx-background-color: #ff5555;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8;
+    -fx-background-radius: 8;
+}
+.btn-delete:hover {
+    -fx-background-color: #ff2222;
+}
