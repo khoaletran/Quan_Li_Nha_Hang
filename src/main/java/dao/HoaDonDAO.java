@@ -2,10 +2,13 @@ package dao;
 
 import connectDB.connectDB;
 import entity.*;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HoaDonDAO {
 
@@ -34,28 +37,28 @@ public class HoaDonDAO {
         List<HoaDon> ds = new ArrayList<>();
 
         String sql = """
-        SELECT hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maSK,
-               hd.tgLapHD, hd.tgCheckin, hd.kieuDatBan, hd.moTa, hd.trangThai, hd.soLuong,
-               kh.tenKH, kh.sdt, sk.tenSK, b.maKhuVuc, kv.tenKhuVuc
-        FROM HoaDon hd
-        JOIN KhachHang kh ON hd.maKH = kh.maKH
-        JOIN Ban b ON hd.maBan = b.maBan
-        JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
-        JOIN NhanVien nv ON hd.maNV = nv.maNV
-        LEFT JOIN KhuyenMai km ON km.maKM = hd.maKM
-        LEFT JOIN SuKien sk ON hd.maSK = sk.maSK
-        WHERE
-        (
-           (hd.kieuDatBan = 1
-            AND (hd.tgCheckin IS NULL OR
-                 (hd.tgCheckin >= CAST(GETDATE() AS DATE)
-                  AND hd.tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)))))
-           OR
-           (hd.kieuDatBan = 0
-            AND (hd.tgLapHD IS NULL OR
-                 (hd.tgLapHD >= CAST(GETDATE() AS DATE)
-                  AND hd.tgLapHD < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)))))
-        )""";
+                SELECT hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maSK,
+                       hd.tgLapHD, hd.tgCheckin, hd.kieuDatBan, hd.moTa, hd.trangThai, hd.soLuong,
+                       kh.tenKH, kh.sdt, sk.tenSK, b.maKhuVuc, kv.tenKhuVuc
+                FROM HoaDon hd
+                JOIN KhachHang kh ON hd.maKH = kh.maKH
+                JOIN Ban b ON hd.maBan = b.maBan
+                JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
+                JOIN NhanVien nv ON hd.maNV = nv.maNV
+                LEFT JOIN KhuyenMai km ON km.maKM = hd.maKM
+                LEFT JOIN SuKien sk ON hd.maSK = sk.maSK
+                WHERE
+                (
+                   (hd.kieuDatBan = 1
+                    AND (hd.tgCheckin IS NULL OR
+                         (hd.tgCheckin >= CAST(GETDATE() AS DATE)
+                          AND hd.tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)))))
+                   OR
+                   (hd.kieuDatBan = 0
+                    AND (hd.tgLapHD IS NULL OR
+                         (hd.tgLapHD >= CAST(GETDATE() AS DATE)
+                          AND hd.tgLapHD < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)))))
+                )""";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -143,12 +146,12 @@ public class HoaDonDAO {
     // ===================== INSERT =====================
     public static boolean insert(HoaDon hd) {
         String sql = """
-            INSERT INTO HoaDon(
-                maHD, maKH, maNV, maBan, maKM, maSK, tgLapHd,
-                tgCheckin, tgCheckout, kieuThanhToan, kieuDatBan,
-                trangThai, soLuong, moTa
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO HoaDon(
+                        maHD, maKH, maNV, maBan, maKM, maSK, tgLapHd,
+                        tgCheckin, tgCheckout, kieuThanhToan, kieuDatBan,
+                        trangThai, soLuong, moTa
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -179,12 +182,12 @@ public class HoaDonDAO {
     // ===================== UPDATE =====================
     public static boolean update(HoaDon hd) {
         String sql = """
-            UPDATE HoaDon SET 
-                maKH=?, maNV=?, maBan=?, maKM=?, maSK=?, tgLapHD = ?,
-                tgCheckin=?, tgCheckout=?, kieuThanhToan=?, kieuDatBan=?,
-                trangThai=?, soLuong=?, moTa=?
-            WHERE maHD=?
-        """;
+                    UPDATE HoaDon SET 
+                        maKH=?, maNV=?, maBan=?, maKM=?, maSK=?, tgLapHD = ?,
+                        tgCheckin=?, tgCheckout=?, kieuThanhToan=?, kieuDatBan=?,
+                        trangThai=?, soLuong=?, moTa=?
+                    WHERE maHD=?
+                """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -322,15 +325,15 @@ public class HoaDonDAO {
     public static List<HoaDon> getAllWaitlistCho() {
         List<HoaDon> ds = new ArrayList<>();
         String sql = """
-        SELECT 
-            hd.maHD, hd.maKH, hd.maNV, hd.maBan, hd.maSK,
-            hd.tgLapHD, hd.tgCheckin,
-            hd.kieuThanhToan, hd.kieuDatBan,
-            hd.trangThai, hd.soLuong, hd.moTa
-        FROM HoaDon hd
-        WHERE hd.kieuDatBan = 0 AND hd.trangThai = 0 AND maBan LIKE 'W%'
-        ORDER BY hd.maHD DESC
-    """;
+                    SELECT 
+                        hd.maHD, hd.maKH, hd.maNV, hd.maBan, hd.maSK,
+                        hd.tgLapHD, hd.tgCheckin,
+                        hd.kieuThanhToan, hd.kieuDatBan,
+                        hd.trangThai, hd.soLuong, hd.moTa
+                    FROM HoaDon hd
+                    WHERE hd.kieuDatBan = 0 AND hd.trangThai = 0 AND maBan LIKE 'W%'
+                    ORDER BY hd.maHD DESC
+                """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -379,7 +382,108 @@ public class HoaDonDAO {
         return ds;
     }
 
+    public static Map<HoaDon, Double> getAllForThongKe() {
+        Map<HoaDon, Double> ds = new LinkedHashMap<>();
+        String sql =
+                """      
+                        WITH ChiTiet_TinhTien AS (
+                            SELECT
+                                hd.maHD,
+                                cthd.maMon,
+                                cthd.soLuong,
+                                m.loaiMon,
+                                m.giaGoc,
+                                COALESCE(
+                                    (
+                                        SELECT TOP 1 p1.phanTramLoi
+                                        FROM PhanTramGiaBan p1
+                                        WHERE p1.maMon = m.maMon
+                                          AND p1.ngayApDung <= hd.tgLapHD
+                                        ORDER BY p1.ngayApDung DESC
+                                    ),
+                                    (
+                                        SELECT TOP 1 p2.phanTramLoi
+                                        FROM PhanTramGiaBan p2
+                                        WHERE p2.maLoaiMon = m.loaiMon
+                                          AND p2.ngayApDung <= hd.tgLapHD
+                                        ORDER BY p2.ngayApDung DESC
+                                    ),
+                                    0
+                                ) AS phanTramLoi
+                            FROM HoaDon hd
+                            JOIN ChiTietHoaDon cthd ON hd.maHD = cthd.maHD
+                            JOIN Mon m ON cthd.maMon = m.maMon
+                        ),
+                        TongTien AS (
+                            SELECT
+                                hd.maHD,
+                                SUM(COALESCE(ct.soLuong * ct.giaGoc * (1 + ct.phanTramLoi / 100.0), 0)) AS tongTienMon,
+                                COALESCE(MAX(sk.gia), 0) AS giaSuKien
+                            FROM HoaDon hd
+                            LEFT JOIN ChiTiet_TinhTien ct ON hd.maHD = ct.maHD
+                            LEFT JOIN SuKien sk ON sk.maSK = hd.maSK
+                            GROUP BY hd.maHD
+                        )
+                        SELECT
+                            hd.maHD,
+                            hd.tgLapHD,
+                            hd.tgCheckOut,
+                            hd.trangThai,
+                        	hd.maBan,
+                        	kv.maKhuVuc,
+                        	kv.tenKhuVuc,
+                            (t.tongTienMon + t.giaSuKien) AS tongTienTruoc,
+                            ((COALESCE(kh.hangGiam, 0) + COALESCE(km.phanTramGiamGia, 0)) / 100.0)
+                                * (t.tongTienMon + t.giaSuKien) AS tongTienKhuyenMai,
+                            (t.tongTienMon + t.giaSuKien) * 0.1 AS thue,
+                            (t.tongTienMon + t.giaSuKien)
+                              - ((COALESCE(kh.hangGiam, 0) + COALESCE(km.phanTramGiamGia, 0)) / 100.0)
+                                * (t.tongTienMon + t.giaSuKien)
+                              + ((t.tongTienMon + t.giaSuKien) * 0.1) AS tongTienSau
+                        FROM HoaDon hd
+                        JOIN TongTien t ON hd.maHD = t.maHD
+                        LEFT JOIN KhuyenMai km ON km.maKM = hd.maKM
+                        LEFT JOIN (
+                            SELECT kh.maKH, hh.giamGia AS hangGiam
+                            FROM KhachHang kh
+                            JOIN HangKhachHang hh ON kh.maHang = hh.maHang
+                        ) kh ON kh.maKH = hd.maKH
+                        join Ban b on b.maBan = hd.maBan
+                        join KhuVuc kv on kv.maKhuVuc = b.maKhuVuc
+                        order by hd.tgLapHD
+                        """;
+        try (
+                Connection conn = connectDB.getInstance().getNewConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while(rs.next()){
+                KhuVuc kv = new KhuVuc();
+                kv.setMaKhuVuc(rs.getString("maKhuVuc"));
+                kv.setTenKhuVuc(rs.getString("tenKhuVuc"));
 
+                Ban b = new Ban();
+                b.setMaBan(rs.getString("maBan"));
+                b.setKhuVuc(kv);
+
+                HoaDon hd = new HoaDon();
+                hd.setMaHD(rs.getString("maHD"));
+                hd.setTgLapHD(rs.getTimestamp("tgLapHD") != null
+                        ? rs.getTimestamp("tgLapHD").toLocalDateTime() : null);
+                hd.setTgCheckOut(rs.getTimestamp("tgCheckOut") != null
+                        ? rs.getTimestamp("tgCheckOut").toLocalDateTime() : null);
+                hd.setTrangthai(rs.getInt("trangThai"));
+                hd.setBan(b);
+
+                Double tongTienSau = rs.getDouble("tongTienSau");
+                ds.put(hd, tongTienSau);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ds;
+    }
 
 
 }

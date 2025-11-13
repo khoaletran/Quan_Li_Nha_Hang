@@ -1,10 +1,12 @@
 package ui.controllers;
 
+import entity.Mon;
 import entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
@@ -47,6 +49,8 @@ public class MainController_QL {
             if (controller instanceof DashboardController dashboardController) {
                 dashboardController.setMainController(this);
                 dashboardController.setNhanVien(nhanVien);
+            } else if (controller instanceof ThongKeController thongKeController) {
+                thongKeController.setMainController(this); // truyền MainController_QL
             }
 
             FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
@@ -59,4 +63,24 @@ public class MainController_QL {
             e.printStackTrace();
         }
     }
+
+
+
+    public void setCenterContent(String fxmlPath, Mon mon) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            // Lấy controller của QLMenu
+            QLMenuController controller = loader.getController();
+            if (mon != null) {
+                controller.setSearchKeyword(mon.getTenMon());
+            }
+
+            mainContent.getChildren().setAll(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

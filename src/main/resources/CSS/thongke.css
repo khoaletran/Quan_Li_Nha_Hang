@@ -196,3 +196,20 @@
 .btn-secondary:hover{
     -fx-cursor: hand;
 }
+
+.date-picker {
+    -fx-background-color: white;
+    -fx-border-color: #cfcfcf;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-font-size: 12px;
+}
+
+.date-picker:hover {
+    -fx-border-color: #7cb9e8;
+}
+
+.date-picker:focused {
+    -fx-border-color: #1e90ff;
+    -fx-effect: dropshadow(three-pass-box, rgba(30,144,255,0.3), 5, 0, 0, 0);
+}
