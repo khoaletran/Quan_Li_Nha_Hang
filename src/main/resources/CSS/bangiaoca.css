@@ -44,7 +44,7 @@
     -fx-padding: 15;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);
 }
-.right-sidebar {
+.right {
     -fx-background-color: white;
     -fx-background-radius: 32 0 0 32;
     -fx-padding: 25;

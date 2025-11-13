@@ -135,7 +135,7 @@
     -fx-padding: 5;
 }
 
-.right-section{
+.right{
     -fx-background-color: white;
     -fx-background-radius: 32 0 0 32;
     -fx-border-radius: 32 0 0 32;

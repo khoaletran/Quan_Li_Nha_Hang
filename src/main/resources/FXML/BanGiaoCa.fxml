@@ -7,7 +7,7 @@
 
 <BorderPane fx:id="root"
             prefHeight="800.0" prefWidth="1400.0"
-            stylesheets="@../CSS/bangiaoca.css"
+            stylesheets="@../CSS/bangiaoca.css, @../CSS/AppMD.css"
             xmlns="http://javafx.com/javafx/24.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ui.controllers.BanGiaoCaController">
@@ -107,10 +107,9 @@
     <!-- ================== BÊN PHẢI ================== -->
     <right>
         <VBox fx:id="rightSidebar"
-              prefWidth="400"
               BorderPane.alignment="CENTER"
               VBox.vgrow="ALWAYS"
-              styleClass="right-sidebar">
+              styleClass="right">
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15"/>
             </padding>
