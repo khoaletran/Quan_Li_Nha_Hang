@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import dao.KhachHangDAO;
 import dao.NhanVienDAO;
 import entity.NhanVien;
 import javafx.fxml.FXML;
@@ -15,6 +16,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
+import ui.AlertCus;
+import ui.ConfirmCus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -182,19 +185,31 @@ public class QLNhanVienController {
     // =========================
     private void themNV() {
         NhanVien nv = taoNhanVienTuForm(tuSinhMaNV(NhanVienDAO.maNVCuoi()));
-        if (NhanVienDAO.insert(nv)) {
-            System.out.println("Thêm nhân viên thành công: " + nv.getMaNV());
-            loadNhanVienCards();
-            xoaTrangThongTin();
-        } else System.err.println("Thêm nhân viên thất bại!");
+        boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận thêm nhân viên mới");
+        if (answer) {
+            boolean success = NhanVienDAO.insert(nv);
+            if (success) {
+                AlertCus.show("Thông báo", "Thêm nhân viên thành công: " + nv.getMaNV());
+                loadNhanVienCards();
+                xoaTrangThongTin();
+            } else {
+                AlertCus.show("Thông báo", "Thêm nhân viên thất bại!: " + nv.getMaNV());
+            }
+        }
     }
 
     private void capNhatNV(String maNV) {
         NhanVien nv = taoNhanVienTuForm(maNV);
-        if (NhanVienDAO.update(nv)) {
-            System.out.println("Cập nhật nhân viên: " + maNV + " thành công!");
-            loadNhanVienCards();
-        } else System.err.println("Cập nhật thất bại cho mã: " + maNV);
+        boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận cập nhật thông tin nhân viên");
+        if (answer) {
+            boolean success = NhanVienDAO.update(nv);
+            if (success) {
+                AlertCus.show("Thông báo", "Cập nhật nhân viên thành công: " + maNV);
+                loadNhanVienCards();
+            } else {
+                AlertCus.show("Thông báo", "Cập nhật nhân viên thất bại!: " + maNV);
+            }
+        }
     }
 
     private void xoaNV() {

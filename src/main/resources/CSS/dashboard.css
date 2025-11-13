@@ -265,3 +265,35 @@
     -fx-pref-width: 0;
 }
 
+/*!*moi*!*/
+/*.chart_Background {*/
+/*    -fx-background-color: #ffd500;*/
+/*    -fx-background-radius: 12px;*/
+/*    -fx-padding: 12px;*/
+/*    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);*/
+/*}*/
+/*!* Màu thân cột *!*/
+/*.default-color0.chart-bar {*/
+/*    -fx-bar-fill: #4CAF50;   !* Xanh lá đẹp *!*/
+/*}*/
+
+/*!* Màu chữ trên trục X và Y *!*/
+/*.axis-label {*/
+/*    -fx-text-fill: #333;*/
+/*    -fx-font-size: 14px;*/
+/*}*/
+
+/*.chart-legend-item-symbol {*/
+/*    -fx-background-color: #4CAF50; !* trùng màu cột *!*/
+/*}*/
+/*!* Màu đường *!*/
+/*.default-color0.chart-series-line {*/
+/*    -fx-stroke: #ff0000; !* Đỏ cam *!*/
+/*    -fx-stroke-width: 3px;*/
+/*}*/
+
+/*!* Màu điểm (symbols) *!*/
+/*.default-color0.chart-line-symbol {*/
+/*    -fx-background-color: #FF5722, white;*/
+/*    -fx-padding: 4px;*/
+/*}*/

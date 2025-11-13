@@ -132,11 +132,11 @@
             <!-- Biểu đồ -->
             <HBox alignment="CENTER" spacing="24">
                 <!-- Biểu đồ cột -->
-                <AnchorPane prefHeight="380.0" prefWidth="600.0" styleClass="chart_Background">
+                <AnchorPane prefHeight="380.0" prefWidth="650.0" styleClass="chart_Background">
                     <children>
                         <VBox alignment="TOP_CENTER" spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="10">
                             <Label styleClass="subtitle_Chart" text="Biểu đồ lượng top 5 món bán chạy nhất trong ngày" />
-                            <BarChart fx:id="barChart" prefHeight="330.0" prefWidth="550.0">
+                            <BarChart fx:id="barChart" prefHeight="330.0" prefWidth="500.0">
                                 <xAxis>
                                     <CategoryAxis label="Tên Món" />
                                 </xAxis>
@@ -149,11 +149,11 @@
                 </AnchorPane>
 
                 <!-- Biểu đồ đường -->
-                <AnchorPane prefHeight="380.0" prefWidth="520.0" styleClass="chart_Background">
+                <AnchorPane prefHeight="380.0" prefWidth="600.0" styleClass="chart_Background">
                     <children>
                         <VBox alignment="TOP_CENTER" spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="10">
                             <Label styleClass="subtitle_Chart" text="Biểu đồ lượng khách theo giờ trong ngày" />
-                            <LineChart fx:id="lineChart" prefHeight="330.0" prefWidth="470.0">
+                            <LineChart fx:id="lineChart" prefHeight="330.0" prefWidth="650.0">
                                 <xAxis>
                                     <CategoryAxis label="Giờ trong ngày" />
                                 </xAxis>
