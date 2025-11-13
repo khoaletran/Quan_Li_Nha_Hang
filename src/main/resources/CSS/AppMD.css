@@ -1,3 +1,14 @@
+/* ==========================
+   RIGHT SIDEBAR CHUNG
+   ========================== */
+.right,
+.right-pane,
+.right-out,
+.right-sidebar {
+    -fx-pref-width: 380px;
+    -fx-min-width: 400px;
+    -fx-max-width: 420px;
+}
 
 /*Scroll Pane*/
 .scroll-bar:vertical {

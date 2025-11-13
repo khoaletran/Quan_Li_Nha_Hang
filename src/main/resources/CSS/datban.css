@@ -147,7 +147,6 @@
 }
 
 .filter-tf {
-    -fx-pref-height: 34px;
     -fx-background-color: white;
     -fx-background-radius: 10;
     -fx-padding: 0 10 0 10;

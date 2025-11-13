@@ -16,7 +16,7 @@
 }
 
 /* Phần chi tiết */
-.details-section {
+.right {
     -fx-background-color: white;
     -fx-background-radius: 20 0 0 20;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);

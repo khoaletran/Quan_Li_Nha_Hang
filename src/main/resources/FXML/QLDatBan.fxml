@@ -67,7 +67,7 @@
     <!-- Phần phải -->
     <right>
         <!-- Phần thông tin chi tiết và tìm kiếm món ăn -->
-        <VBox prefHeight="800.0" prefWidth="435.0" spacing="20" styleClass="details-section">
+        <VBox prefHeight="800.0" prefWidth="435.0" spacing="20" styleClass="right">
             <!-- Thông tin đặt bàn -->
             <HBox styleClass="hbox-section-title">
                 <Label styleClass="section-title" text="Thông Tin Đặt Bàn" />

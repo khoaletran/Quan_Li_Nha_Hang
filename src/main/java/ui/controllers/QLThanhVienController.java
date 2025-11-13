@@ -52,6 +52,8 @@ public class QLThanhVienController {
 
         // load danh sách ban đầu
         loadNhanVienCards();
+
+        txtDiemTL.setEditable(false);
     }
 
     // =========================
