@@ -79,6 +79,12 @@
     -fx-font-size: 12px;
 }
 
+.dish-status-red { -fx-text-fill: #E53935; -fx-font-weight: bold; -fx-font-size: 10}
+.dish-status-orange { -fx-text-fill: #FB8C00; -fx-font-weight: bold; -fx-font-size: 10}
+.dish-status-green { -fx-text-fill: #43A047; -fx-font-weight: bold; -fx-font-size: 10}
+.dish-status-yellow { -fx-text-fill: #FDD835; -fx-font-weight: bold; -fx-font-size: 10}
+.dish-status-gray { -fx-text-fill: #9E9E9E; -fx-font-weight: bold; -fx-font-size: 10}
+
 .dish-status-red   { -fx-text-fill: red;    -fx-font-weight: bold; -fx-font-size: 10}
 .dish-status-orange{ -fx-text-fill: orange; -fx-font-weight: bold; -fx-font-size: 10}
 .dish-status-yellow{ -fx-text-fill: #d6a800; -fx-font-weight: bold; -fx-font-size: 10}
