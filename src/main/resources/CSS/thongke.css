@@ -5,7 +5,7 @@
 .grid-item{
     -fx-background-color: #F1F1F1;
     -fx-background-radius: 0 0 20 20 ;
-    -fx-padding: 6 10;
+    -fx-padding: 2;
 }
 .grid-item-2{
     -fx-background-color: #ffffff;
@@ -78,6 +78,12 @@
     -fx-text-fill: #777;
     -fx-font-size: 12px;
 }
+
+.dish-status-red { -fx-text-fill: #E53935; -fx-font-weight: bold; -fx-font-size: 10}
+.dish-status-orange { -fx-text-fill: #FB8C00; -fx-font-weight: bold; -fx-font-size: 10}
+.dish-status-green { -fx-text-fill: #43A047; -fx-font-weight: bold; -fx-font-size: 10}
+.dish-status-yellow { -fx-text-fill: #FDD835; -fx-font-weight: bold; -fx-font-size: 10}
+.dish-status-gray { -fx-text-fill: #9E9E9E; -fx-font-weight: bold; -fx-font-size: 10}
 
 .dish-status-red   { -fx-text-fill: red;    -fx-font-weight: bold; -fx-font-size: 10}
 .dish-status-orange{ -fx-text-fill: orange; -fx-font-weight: bold; -fx-font-size: 10}
@@ -158,6 +164,7 @@
     -fx-font-weight: bold;
 }
 
+
 .spacer {
     -fx-pref-width: 26;
     -fx-pref-height: 142;
@@ -175,4 +182,17 @@
     -fx-font-weight: bold;
     -fx-text-fill: #2c7be5;
     -fx-padding: 0 0 10 0;
+}
+
+
+
+.btn-secondary {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover{
+    -fx-cursor: hand;
 }

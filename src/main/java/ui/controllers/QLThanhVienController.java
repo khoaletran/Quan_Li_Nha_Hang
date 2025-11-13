@@ -48,7 +48,7 @@ public class QLThanhVienController {
 //        btnXoa.setOnAction(e -> xoaNV());
 
         // lắng nghe mã NV để đổi nút động
-        langNgheThayDoiMaNV();
+        langNgheThayDoiMaKH();
 
         // load danh sách ban đầu
         loadNhanVienCards();
@@ -126,7 +126,7 @@ public class QLThanhVienController {
     }
 
     private void xoaTrangThongTin() {
-        lblMaNV.setText(tuSinhMaNV(KhachHangDAO.maKHCuoi()));
+        lblMaNV.setText(tuSinhMaKH(KhachHangDAO.getMaKHCuoi()));
         txtTenNV.clear();
         txtSDT.clear();
         txtHangKH.clear();
@@ -138,7 +138,7 @@ public class QLThanhVienController {
     // =========================
     // LẮNG NGHE + XỬ LÝ NÚT
     // =========================
-    private void langNgheThayDoiMaNV() {
+    private void langNgheThayDoiMaKH() {
         lblMaNV.textProperty().addListener((obs, oldValue, newValue) -> {
             boolean tonTai = KhachHangDAO.getAll()
                     .stream()
@@ -160,7 +160,7 @@ public class QLThanhVienController {
     // =========================
     // HÀM TỰ SINH MÃ
     // =========================
-    private String tuSinhMaNV(String maKH) {
+    private String tuSinhMaKH(String maKH) {
         int so = Integer.parseInt(maKH.substring(2));
         return String.format("KH%04d", so + 1);
     }
@@ -169,7 +169,8 @@ public class QLThanhVienController {
     // THÊM / CẬP NHẬT / XÓA
     // =========================
     private void themNV() {
-        KhachHang kh = taoKhachHangTuForm(tuSinhMaNV(KhachHangDAO.maKHCuoi()));
+        KhachHang kh = taoKhachHangTuForm(tuSinhMaKH(KhachHangDAO.getMaKHCuoi()));
+        if (kh == null) return;
         boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận thêm khách làm thành viên");
         if (answer) {
             boolean success = KhachHangDAO.insert(kh);
@@ -185,6 +186,7 @@ public class QLThanhVienController {
 
     private void capNhatNV(String maKH) {
         KhachHang kh = taoKhachHangTuForm(maKH);
+        if (kh == null) return;
         boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận cập nhật thông tin khách hàng");
         if (answer) {
             boolean success = KhachHangDAO.update(kh);
@@ -214,6 +216,7 @@ public class QLThanhVienController {
     // TẠO NHÂN VIÊN TỪ FORM
     // =========================
     private KhachHang taoKhachHangTuForm(String maKH) {
+        if (!validTextField()) return null;
         String tenKH = txtTenNV.getText().trim();
         String sdt = txtSDT.getText().trim();
         boolean gioiTinh = rdoNam.isSelected();
@@ -268,4 +271,49 @@ public class QLThanhVienController {
         kh.setHangKhachHang(hangKH);
         return kh;
     }
+
+    private boolean validTextField() {
+        String ten = txtTenNV.getText().trim();
+        String sdt = txtSDT.getText().trim();
+        String diemTLText = txtDiemTL.getText().trim();
+
+        if (ten.isEmpty()) {
+            AlertCus.show("Thông báo", "Bạn chưa nhập tên khách hàng!");
+            txtTenNV.requestFocus();
+            return false;
+        }
+        if (sdt.isEmpty()) {
+            AlertCus.show("Thông báo", "Bạn chưa nhập số điện thoại!");
+            txtSDT.requestFocus();
+            return false;
+        }
+        if (!sdt.matches("^0[3-9]\\d{8}$")) {
+            AlertCus.show("Thông báo", "Số điện thoại không hợp lệ! Phải gồm 10 chữ số và bắt đầu bằng 03–09!");
+            txtSDT.requestFocus();
+            return false;
+        }
+        if (!rdoNam.isSelected() && !rdoNu.isSelected()) {
+            AlertCus.show("Thông báo", "Vui lòng chọn giới tính!");
+            return false;
+        }
+        if (diemTLText.isEmpty()) {
+            AlertCus.show("Thông báo", "Bạn chưa nhập điểm tích lũy!");
+            txtDiemTL.requestFocus();
+            return false;
+        }
+        try {
+            int diemTL = Integer.parseInt(diemTLText);
+            if (diemTL < 0) {
+                AlertCus.show("Thông báo", "Điểm tích lũy không được âm!");
+                txtDiemTL.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            AlertCus.show("Thông báo", "Điểm tích lũy phải là số nguyên!");
+            txtDiemTL.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
 }

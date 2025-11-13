@@ -118,7 +118,7 @@ public class KhachHangDAO {
     }
 
     // ===== LẤY MÃ KHÁCH HÀNG CUỐI CÙNG =====
-    public String getMaKHCuoi() {
+    public static String getMaKHCuoi() {
         String sql = "SELECT TOP 1 maKH FROM KhachHang ORDER BY maKH DESC";
         try (Statement st = connectDB.getConnection().createStatement();
              ResultSet rs = st.executeQuery(sql)) {

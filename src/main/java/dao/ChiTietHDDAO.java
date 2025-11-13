@@ -8,44 +8,46 @@ import entity.Mon;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChiTietHDDAO {
     public static List<ChiTietHoaDon> getAllByMaHD(String maHD) {
         List<ChiTietHoaDon> list = new ArrayList<>();
         String sql = """
-            SELECT
-                cthd.*,
-                m.tenMon,
-                m.giaGoc,
-                lm.maLoaiMon,
-                lm.tenLoaiMon,
-                ISNULL(pt.phanTramLoi, ptLoai.phanTramLoi) AS phanTramLoi
-            FROM ChiTietHoaDon cthd
-            JOIN Mon m ON cthd.maMon = m.maMon
-            JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
-            LEFT JOIN (
-                SELECT p1.maMon, p1.phanTramLoi
-                FROM PhanTramGiaBan p1
-                WHERE p1.maPTGB = (
-                    SELECT TOP 1 p2.maPTGB
-                    FROM PhanTramGiaBan p2
-                    WHERE p2.maMon = p1.maMon
-                    ORDER BY p2.maPTGB DESC
-                )
-            ) pt ON pt.maMon = m.maMon
-            LEFT JOIN (
-                SELECT p3.maLoaiMon, p3.phanTramLoi
-                FROM PhanTramGiaBan p3
-                WHERE p3.maPTGB = (
-                    SELECT TOP 1 p4.maPTGB
-                    FROM PhanTramGiaBan p4
-                    WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
-                    ORDER BY p4.maPTGB DESC
-                )
-            ) ptLoai ON ptLoai.maLoaiMon = m.loaiMon
-            WHERE cthd.maHD = ?;
-    """;
+                        SELECT
+                            cthd.*,
+                            m.tenMon,
+                            m.giaGoc,
+                            lm.maLoaiMon,
+                            lm.tenLoaiMon,
+                            ISNULL(pt.phanTramLoi, ptLoai.phanTramLoi) AS phanTramLoi
+                        FROM ChiTietHoaDon cthd
+                        JOIN Mon m ON cthd.maMon = m.maMon
+                        JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
+                        LEFT JOIN (
+                            SELECT p1.maMon, p1.phanTramLoi
+                            FROM PhanTramGiaBan p1
+                            WHERE p1.maPTGB = (
+                                SELECT TOP 1 p2.maPTGB
+                                FROM PhanTramGiaBan p2
+                                WHERE p2.maMon = p1.maMon
+                                ORDER BY p2.maPTGB DESC
+                            )
+                        ) pt ON pt.maMon = m.maMon
+                        LEFT JOIN (
+                            SELECT p3.maLoaiMon, p3.phanTramLoi
+                            FROM PhanTramGiaBan p3
+                            WHERE p3.maPTGB = (
+                                SELECT TOP 1 p4.maPTGB
+                                FROM PhanTramGiaBan p4
+                                WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
+                                ORDER BY p4.maPTGB DESC
+                            )
+                        ) ptLoai ON ptLoai.maLoaiMon = m.loaiMon
+                        WHERE cthd.maHD = ?;
+                """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -242,6 +244,83 @@ public class ChiTietHDDAO {
             e.printStackTrace();
         }
         return ds;
+    }
+
+
+    public static List<ChiTietHoaDon> getAllCTHDTheoThangNam(int nam, int thang) {
+        List<ChiTietHoaDon> dsct = new ArrayList<>();
+
+        String sql = """
+                    SELECT
+                        m.maMon,
+                        m.tenMon,
+                        m.hinhAnh,
+                        m.soLuong as soLuongTon,
+                        SUM(cthd.soLuong) AS tongSoLuong
+                    FROM ChiTietHoaDon cthd
+                    JOIN HoaDon hd ON cthd.maHD = hd.maHD
+                    JOIN Mon m ON cthd.maMon = m.maMon
+                    WHERE YEAR(hd.tgLapHD) = ?
+                """;
+
+        if (thang != 0) { // 0 nghĩa tất cả tháng
+            sql += " AND MONTH(hd.tgLapHD) = ? ";
+        }
+
+        sql += " GROUP BY m.maMon, m.soLuong, m.tenMon, m.hinhAnh ORDER BY tongSoLuong DESC";
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, nam);
+            if (thang != 0) {
+                ps.setInt(2, thang);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ChiTietHoaDon cthd = new ChiTietHoaDon();
+                Mon m = new Mon();
+                m.setMaMon(rs.getString("maMon"));
+                m.setTenMon(rs.getString("tenMon"));
+                m.setHinhAnh(rs.getString("hinhAnh"));
+                m.setSoLuong(rs.getInt("soLuongTon"));
+                cthd.setMon(m);
+                cthd.setSoLuong(rs.getInt("tongSoLuong")); // cheat tạm
+                dsct.add(cthd);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return dsct;
+    }
+    public static Map<String, Integer> getSoLuongTheoThangNam(int nam, int thang) {
+        Map<String, Integer> map = new HashMap<>();
+        String sql = """
+        SELECT m.maMon, SUM(cthd.soLuong) AS tongSoLuong
+        FROM ChiTietHoaDon cthd
+        JOIN HoaDon hd ON cthd.maHD = hd.maHD
+        JOIN Mon m ON cthd.maMon = m.maMon
+        WHERE YEAR(hd.tgLapHD) = ? AND MONTH(hd.tgLapHD) = ?
+        GROUP BY m.maMon
+    """;
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, nam);
+            ps.setInt(2, thang);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                map.put(rs.getString("maMon"), rs.getInt("tongSoLuong"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 
 }
