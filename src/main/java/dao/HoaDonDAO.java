@@ -486,4 +486,79 @@ public class HoaDonDAO {
     }
 
 
+    public static boolean biDatChuaCheckout(String maBan, LocalDateTime tg) {
+        String sql = """
+        SELECT COUNT(*)
+        FROM HoaDon
+        WHERE maBan = ?
+          AND CAST(tgCheckIn AS DATE) = CAST(? AS DATE)
+          AND tgCheckIn <= ?
+          AND tgCheckOut IS NULL
+    """;
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maBan);
+            ps.setTimestamp(2, Timestamp.valueOf(tg));
+            ps.setTimestamp(3, Timestamp.valueOf(tg));
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+
+    public static boolean dangSuDungBan(String maBan) {
+        String sql = """
+        SELECT COUNT(*)
+        FROM HoaDon
+        WHERE maBan = ?
+          AND tgCheckOut IS NULL
+    """;
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maBan);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+    public static boolean banDuocSuDungLuc(String maBan, LocalDateTime tg) {
+        String sql = """
+        SELECT COUNT(*)
+        FROM HoaDon
+        WHERE maBan = ?
+          AND CAST(tgCheckIn AS DATE) = CAST(? AS DATE)
+          AND tgCheckIn <= ?
+          AND (tgCheckOut IS NULL OR tgCheckOut > ?)
+    """;
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maBan);
+            ps.setTimestamp(2, Timestamp.valueOf(tg));
+            ps.setTimestamp(3, Timestamp.valueOf(tg));
+            ps.setTimestamp(4, Timestamp.valueOf(tg));
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+
+
 }

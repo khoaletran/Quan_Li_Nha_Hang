@@ -7,6 +7,7 @@ import entity.KhuVuc;
 import entity.LoaiBan;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,8 +118,7 @@ public class BanDAO {
         SELECT TOP 1 *
         FROM Ban
         WHERE maKhuVuc = ? 
-          AND maLoaiBan = ? 
-          AND trangThai = 0
+          AND maLoaiBan = ?
     """;
 
         try (Connection con = connectDB.getConnection();
@@ -149,6 +149,43 @@ public class BanDAO {
         }
         return banTrong;
     }
+
+    public static Ban getBanTheoLoaiVaKV(String maKV, String maLB) {
+        String sql = """
+        SELECT TOP 1 *
+        FROM Ban
+        WHERE maKhuVuc = ?
+          AND maLoaiBan = ?
+        ORDER BY maBan
+    """;
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maKV);
+            ps.setString(2, maLB);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String maBan = rs.getString("maBan");
+                boolean trangThai = rs.getBoolean("trangThai");
+                String maLoaiBan = rs.getString("maLoaiBan");
+                String maKhuVuc = rs.getString("maKhuVuc");
+
+                LoaiBan loaiBan = LoaiBanDAO.getById(maLoaiBan);
+                KhuVuc khuVuc = KhuVucDAO.getById(maKhuVuc);
+
+                return new Ban(maBan, khuVuc, loaiBan, trangThai);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
 
     public static Ban getByID(String maBan) {
         String sql = "SELECT * FROM Ban WHERE maBan = ?";

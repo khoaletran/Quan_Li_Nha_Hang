@@ -181,11 +181,12 @@ public class DatBanController {
         String maKV = getSelectedMaKhuVuc();
         int finalSoLuong = soLuong;
 
-// Kiểm tra bàn trống ngay lập tức
+        // Kiểm tra bàn trống ngay lập tức
         boolean conBanTrongKV = BanDAO.conBanTrongTheoKhuVuc(maKV, finalSoLuong);
 
-// Cập nhật trạng thái nút Waitlist ngay lập tức
-        boolean hienWaitlist = !conBanTrongKV;
+        // Cập nhật trạng thái nút Waitlist ngay lập tức
+        boolean isToday = selectedTime.toLocalDate().isEqual(LocalDate.now());
+        boolean hienWaitlist = isToday && !conBanTrongKV;
         if (btnWaitlist.isVisible() != hienWaitlist) {
             btnWaitlist.setVisible(true); // luôn giữ visible để fade
             double start = hienWaitlist ? 0 : 1;
@@ -235,15 +236,32 @@ public class DatBanController {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime selected = LocalDateTime.of(date, LocalTime.of(hour, minute));
 
-        if (soLuong <= 0 || BanDAO.getBanTrong(maKV, maLB) == null || selected.isBefore(now)) {
+        Ban ban = BanDAO.getBanTheoLoaiVaKV(maKV, maLB);
+
+        if (soLuong <= 0 || ban == null || selected.isBefore(now)) {
             tatBan(star, table);
             return;
         }
 
+        // 1. Bàn đang được dùng tại thời điểm selected
+        if (HoaDonDAO.banDuocSuDungLuc(ban.getMaBan(), selected)) {
+            tatBan(star, table);
+            return;
+        }
+
+        // 2. Có khách đặt đúng giờ selected mà chưa checkout
+        if (HoaDonDAO.biDatChuaCheckout(ban.getMaBan(), selected)) {
+            tatBan(star, table);
+            return;
+        }
+
+        // --- Tối thiểu giờ đặt trước (chỉ dùng nếu cùng ngày)
+        boolean cungNgay = selected.toLocalDate().equals(now.toLocalDate());
         long phut = java.time.Duration.between(now, selected).toMinutes();
         boolean anLien = phut >= 0 && phut <= 15;
         int gioToiThieu = getThoiGianDatTruocToiThieu(maLB);
-        if (!anLien && selected.isBefore(now.plusHours(gioToiThieu))) {
+
+        if (cungNgay && !anLien && selected.isBefore(now.plusHours(gioToiThieu))) {
             tatBan(star, table);
             return;
         }
@@ -253,17 +271,14 @@ public class DatBanController {
             return;
         }
 
-        boolean trungLich = dsHD.stream().anyMatch(hd ->
-                hd.getTgCheckIn() != null && hd.getTgCheckIn().equals(selected));
-
-        if (trungLich) {
-            moBanSaoMo(star, table);
-        } else if (soLuong >= minKhach && soLuong <= maxKhach) {
+        // Nếu hợp lệ
+        if (soLuong >= minKhach && soLuong <= maxKhach) {
             moBanSaoSang(star, table);
         } else {
             moBanSaoTrang(star, table);
         }
     }
+
 
     private void tatBan(ImageView star, VBox table) {
         table.setDisable(true);
@@ -325,7 +340,7 @@ public class DatBanController {
         int minute = minuteSpinner.getValue();
         LocalDateTime selected = LocalDateTime.of(date, LocalTime.of(hour, minute));
 
-        Ban ban = BanDAO.getBanTrong(maKV, maLB);
+        Ban ban = BanDAO.getBanTheoLoaiVaKV(maKV, maLB);
         if (ban == null) return;
 
         chonBan(ban, soLuong, date, hour, minute);
