@@ -75,7 +75,7 @@ public class HoaDon {
             this.tgCheckOut = null;
             return;
         }
-        if (!tgCheckOut.isAfter(this.tgCheckIn)) {
+        if (this.tgCheckIn != null &&!tgCheckOut.isAfter(this.tgCheckIn)) {
             throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
         }
         this.tgCheckOut = tgCheckOut;

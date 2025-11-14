@@ -6,24 +6,32 @@ import entity.ChiTietHoaDon;
 import entity.HoaDon;
 
 import entity.Mon;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-
 import java.io.InputStream;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,8 +61,141 @@ public class ThongKeController {
     private ComboBox<String> comboNamMon, comboThangMon;
     @FXML
     private VBox vboxDishList;
-    private List<HoaDon> dsHoaDon;
 
+    //  Biểu đồ
+    @FXML
+    private LineChart<Number, Number> lineChart;
+
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private BarChart<String, Number> barChart;
+    @FXML
+    private DatePicker datePickerTuan;
+
+    @FXML
+    private Map<HoaDon, Double> mapHoaDon;
+    private MainController_QL mainController;
+
+    public void setMainController(MainController_QL controller) {
+        this.mainController = controller;
+    }
+
+
+
+    private void loadBieuDoBarChart(LocalDate ngayChon) {
+        // Xác định tuần chứa ngày được chọn
+        LocalDate ngayDauTuan = ngayChon.with(DayOfWeek.MONDAY);
+        LocalDate ngayCuoiTuan = ngayDauTuan.plusDays(6);
+
+        Map<String, Integer> soLuongTheoThu = new LinkedHashMap<>();
+        String[] thuList = {"Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"};
+        for (String thu : thuList) soLuongTheoThu.put(thu, 0);
+
+        // Duyệt mapHoaDon để đếm số lượng đơn hàng
+        for (Map.Entry<HoaDon, Double> entry : mapHoaDon.entrySet()) {
+            HoaDon hd = entry.getKey();
+            LocalDateTime tgCheckOut = hd.getTgCheckOut();
+
+            if (tgCheckOut != null && hd.getTrangthai() == 2) {
+                LocalDate ngay = tgCheckOut.toLocalDate();
+                if (!ngay.isBefore(ngayDauTuan) && !ngay.isAfter(ngayCuoiTuan)) {
+                    DayOfWeek dow = tgCheckOut.getDayOfWeek();
+                    String tenThu = switch (dow) {
+                        case MONDAY -> "Thứ 2";
+                        case TUESDAY -> "Thứ 3";
+                        case WEDNESDAY -> "Thứ 4";
+                        case THURSDAY -> "Thứ 5";
+                        case FRIDAY -> "Thứ 6";
+                        case SATURDAY -> "Thứ 7";
+                        case SUNDAY -> "Chủ nhật";
+                    };
+                    soLuongTheoThu.put(tenThu, soLuongTheoThu.get(tenThu) + 1);
+                }
+            }
+        }
+
+        // Tạo series cho BarChart
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName(String.format("Tuần %s - %s", ngayDauTuan, ngayCuoiTuan));
+
+        for (String thu : thuList) {
+            int soLuong = soLuongTheoThu.getOrDefault(thu, 0);
+            XYChart.Data<String, Number> data = new XYChart.Data<>(thu, soLuong);
+            series.getData().add(data);
+        }
+
+        // Cập nhật chart
+        barChart.getData().clear();
+        barChart.setLegendVisible(true);
+        barChart.getData().add(series);
+
+        // Cài tooltip
+        Platform.runLater(() -> {
+            for (XYChart.Data<String, Number> data : series.getData()) {
+                Node node = data.getNode();
+                if (node != null) {
+                    Tooltip tooltip = new Tooltip(
+                            String.format("%s: %d đơn", data.getXValue(), data.getYValue().intValue()));
+                    Tooltip.install(node, tooltip);
+                }
+            }
+        });
+    }
+
+    private void loadBieuDoLineChart(LocalDate ngayChon) {
+        Map<Integer, Double> doanhThuTheoGio = new HashMap<>();
+
+        // Tính doanh thu theo giờ
+        for (Map.Entry<HoaDon, Double> entry : mapHoaDon.entrySet()) {
+            HoaDon hd = entry.getKey();
+            double tongTienSau = entry.getValue();
+
+            LocalDateTime tgCheckOut = hd.getTgCheckOut();
+
+            if (tgCheckOut != null && hd.getTrangthai() == 2 && tgCheckOut.toLocalDate().equals(ngayChon)) {
+                int gio = tgCheckOut.getHour();
+                doanhThuTheoGio.put(gio, doanhThuTheoGio.getOrDefault(gio, 0.0) + tongTienSau);
+            }
+        }
+
+        // Chuẩn bị LineChart
+        lineChart.getData().clear();
+        lineChart.setCreateSymbols(true); // hiển thị symbol cho tất cả điểm
+
+        // Set trục X 0-23
+        NumberAxis xAxis = (NumberAxis) lineChart.getXAxis();
+        xAxis.setAutoRanging(false);
+        xAxis.setLowerBound(0);
+        xAxis.setUpperBound(23);
+        xAxis.setTickUnit(1);
+        xAxis.setMinorTickCount(0);
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Doanh thu ngày " + ngayChon);
+
+        // Thêm dữ liệu cho 24 giờ
+        for (int gio = 0; gio <= 23; gio++) {
+            double value = doanhThuTheoGio.getOrDefault(gio, 0.0);
+            XYChart.Data<Number, Number> data = new XYChart.Data<>(gio, value);
+            series.getData().add(data);
+        }
+
+        lineChart.getData().add(series);
+
+        // Cài tooltip sau khi chart render xong
+        Platform.runLater(() -> {
+            for (XYChart.Data<Number, Number> data : series.getData()) {
+                Node node = data.getNode();
+                if (node != null) {
+                    Tooltip tooltip = new Tooltip(
+                            String.format("Giờ: %d\nDoanh thu: %.2f triệu", data.getXValue().intValue(), data.getYValue().doubleValue()));
+                    Tooltip.install(node, tooltip);
+                }
+            }
+        });
+    }
 
 
     private void loadThangNam() {
@@ -90,7 +231,7 @@ public class ThongKeController {
             namTruoc = nam - 1;
         }
         Map<String, Integer> mapThangTruoc = ChiTietHDDAO.getSoLuongTheoThangNam(namTruoc, thangTruoc);
-
+        vboxDishList.setFillWidth(true);
         vboxDishList.getChildren().clear();
 
         for (ChiTietHoaDon cthd : dscthd) {
@@ -189,10 +330,19 @@ public class ThongKeController {
             percentBox.getChildren().add(percentLabel);
 
             hbox.getChildren().addAll(imageView, infoBox, region, statusBox, percentBox);
+            hbox.setMaxWidth(Double.MAX_VALUE);
+
+
             vboxDishList.getChildren().add(hbox);
+
+            hbox.setOnMouseClicked(event -> {
+                if (mainController != null) {
+                    mainController.setCenterContent("/FXML/QLMenu.fxml", m);
+                }
+            });
+
         }
     }
-
 
     private String trangThaiTheoSoLuong(int sl) {
         if (sl >= 1000) return "🔥 Best Seller";
@@ -201,7 +351,6 @@ public class ThongKeController {
         if (sl >= 50) return "Cần Có Khuyến Mãi Hoặc Giảm Giá";
         return "Ít Người Mua";
     }
-
 
     private void loadDoanhThu() {
         String namStr = comboNamTK.getValue();
@@ -225,31 +374,35 @@ public class ThongKeController {
         int tongHoaDon = 0;
         int in = 0, out = 0, vip = 0;
         double tongIn = 0, tongOut = 0, tongVip = 0;
-        for (HoaDon hd : dsHoaDon) {
+
+        for(Map.Entry<HoaDon, Double> entry: mapHoaDon.entrySet()){
+            HoaDon hd = entry.getKey();
+            double tongTienSau = entry.getValue();
+
             LocalDate ngayLap = hd.getTgLapHD().toLocalDate();
             boolean matchNam = ngayLap.getYear() == nam;
-            boolean matchThang = (thang == null) || (ngayLap.getMonthValue() == thang);
-            boolean matchNgay = (ngay == null) || (ngayLap.getDayOfMonth() == ngay);
-            if (matchNam && matchThang && matchNgay) {
-                double temp = hd.getTongTienSau();
-                tong += temp;
+            boolean matchThang = (thang==null) || (ngayLap.getMonthValue() == thang);
+            boolean matchNgay = (ngay==null) || (ngayLap.getDayOfMonth()== ngay);
+            if(matchNam && matchThang && matchNgay){
+                tong+= tongTienSau;
                 tongHoaDon++;
                 String kv = hd.getBan().getKhuVuc().getTenKhuVuc();
                 if (kv.equals("Indoor")) {
                     in++;
-                    tongIn += temp;
+                    tongIn += tongTienSau;
                 } else if (kv.equals("Outdoor")) {
                     out++;
-                    tongOut += temp;
+                    tongOut += tongTienSau;
                 } else {
                     vip++;
-                    tongVip += hd.getTongTienSau();
+                    tongVip += tongTienSau;
                 }
             }
         }
 
+
         double doanhThuHienTai = tong;
-        double doanhThuTruoc = tinhDoanhThuKyTruoc(nam, thang, ngay);
+        double doanhThuTruoc = tinhDoanhThuKyTruoc(nam, thang, ngay, mapHoaDon);
         double chenhlech = doanhThuHienTai - doanhThuTruoc;
         double tile = (doanhThuTruoc == 0) ? 0 : (chenhlech / doanhThuTruoc) * 100;
 
@@ -272,34 +425,37 @@ public class ThongKeController {
 
     }
 
-    private double tinhDoanhThu(Integer nam, Integer thang, Integer ngay) {
+    private double tinhDoanhThu(Integer nam, Integer thang, Integer ngay, Map<HoaDon, Double> mapHoaDon) {
         double tong = 0;
-        for (HoaDon hd : dsHoaDon) {
+        for (Map.Entry<HoaDon, Double> entry : mapHoaDon.entrySet()) {
+            HoaDon hd = entry.getKey();
+            double tongTienSau = entry.getValue();
+
             LocalDate ngayLap = hd.getTgLapHD().toLocalDate();
             boolean matchNam = ngayLap.getYear() == nam;
             boolean matchThang = (thang == null) || (ngayLap.getMonthValue() == thang);
             boolean matchNgay = (ngay == null) || (ngayLap.getDayOfMonth() == ngay);
+
             if (matchNam && matchThang && matchNgay) {
-                tong += hd.getTongTienSau();
+                tong += tongTienSau;
             }
         }
         return tong;
     }
 
-    private double tinhDoanhThuKyTruoc(Integer nam, Integer thang, Integer ngay) {
-        if (ngay != null) { // lọc theo ngày
+    private double tinhDoanhThuKyTruoc(Integer nam, Integer thang, Integer ngay, Map<HoaDon, Double> mapHoaDon) {
+        if (ngay != null) {
             LocalDate current = LocalDate.of(nam, thang, ngay);
             LocalDate prev = current.minusDays(1);
-            return tinhDoanhThu(prev.getYear(), prev.getMonthValue(), prev.getDayOfMonth());
-        } else if (thang != null) { // lọc theo tháng
+            return tinhDoanhThu(prev.getYear(), prev.getMonthValue(), prev.getDayOfMonth(), mapHoaDon);
+        } else if (thang != null) {
             YearMonth current = YearMonth.of(nam, thang);
             YearMonth prev = current.minusMonths(1);
-            return tinhDoanhThu(prev.getYear(), prev.getMonthValue(), null);
-        } else { // lọc theo năm
-            return tinhDoanhThu(nam - 1, null, null);
+            return tinhDoanhThu(prev.getYear(), prev.getMonthValue(), null, mapHoaDon);
+        } else {
+            return tinhDoanhThu(nam - 1, null, null, mapHoaDon);
         }
     }
-
 
     private void updateComboNgay(int nam, int thang) {
         comboNgayTK.getItems().clear();
@@ -338,8 +494,7 @@ public class ThongKeController {
 
     @FXML
     public void initialize() {
-        dsHoaDon = HoaDonDAO.getAllNgayHomNay();
-
+        mapHoaDon = HoaDonDAO.getAllForThongKe();
         loadThangNam();
 
         reset(); // set mặc định ngày hiện tại
@@ -348,16 +503,28 @@ public class ThongKeController {
         loadDoanhThu();
         loadMon();
 
-        String namString = comboNamMon.getValue();
-        String thangString = comboThangMon.getValue();
-        System.out.println("Năm: " + namString + " | Tháng: " + thangString);
-        int nam = Integer.parseInt(namString);
-        int thang = (thangString != null && !thangString.equals("Tất cả")) ? Integer.parseInt(thangString) : 0;
+        // Mặc định chọn ngày hôm nay
+        datePicker.setValue(LocalDate.now());
 
-        List<ChiTietHoaDon> dscthd = ChiTietHDDAO.getAllCTHDTheoThangNam(2025, 6);
-        for (ChiTietHoaDon cthd : dscthd) {
-            System.out.println(cthd);
-        }
+        // Khi thay đổi ngày, reload biểu đồ
+        datePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
+            if (newDate != null) {
+                loadBieuDoLineChart(newDate);
+            }
+        });
+
+        // Load lần đầu tiên
+        loadBieuDoLineChart(datePicker.getValue());
+
+
+
+        datePickerTuan.setValue(LocalDate.now());
+        loadBieuDoBarChart(datePickerTuan.getValue());
+
+        // Khi đổi ngày → tự cập nhật biểu đồ
+        datePickerTuan.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) loadBieuDoBarChart(newVal);
+        });
 
         comboNamTK.setOnAction(e -> {
             isUpdating = true; // bắt đầu update programmatically

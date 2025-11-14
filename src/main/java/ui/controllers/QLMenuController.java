@@ -359,4 +359,14 @@ public class QLMenuController {
         DecimalFormat df = new DecimalFormat("#,###", symbols);
         return df.format(amount) + " đ";
     }
+
+
+    public void setSearchKeyword(String keyword) {
+        if (keyword == null || keyword.isBlank()) return;
+
+        searchField.setText(keyword);      // điền tên món
+        filterMon();                        // lọc danh sách theo keyword
+    }
+
+
 }
