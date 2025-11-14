@@ -10,7 +10,7 @@ public class ChiTietHoaDon {
         setHoaDon(hd);
         this.mon = mon;
         this.soLuong = soLuong;
-        this.thanhTien = mon.getGiaBanTaiLucLapHD(hd)* soLuong;
+        this.thanhTien = mon.getGiaBanTaiLucLapHD(hd) * soLuong;
     }
 public ChiTietHoaDon(){
 

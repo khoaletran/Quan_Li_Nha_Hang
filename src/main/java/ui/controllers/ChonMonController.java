@@ -853,7 +853,7 @@ public class ChonMonController {
     }
 
 
-    private HoaDon taoHoaDon(boolean kieudatban, int trangthai) {
+    private HoaDon taoHoaDon(boolean kdb, int trangthai) {
         if (banHienTai == null || nhanVienHien == null) {
             System.out.println("Thiếu thông tin bàn hoặc nhân viên!");
             return null;
@@ -910,7 +910,7 @@ public class ChonMonController {
         }
         hd.setSuKien(sk);
         hd.setKieuThanhToan(kieuThanhToan);
-        hd.setKieuDatBan(kieudatban);
+        hd.setKieuDatBan(kdb);
         hd.setMoTa(tfghichu.getText().trim());
 
         System.out.println("Tạo hóa đơn thành công: " + hd.getMaHD());

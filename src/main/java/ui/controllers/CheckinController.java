@@ -169,6 +169,8 @@ public class CheckinController {
                             } else {
                                 lblRemaining.setText("00:00:00");
                                 remainingBox.setStyle("-fx-background-color: #FF3B30;");
+                                Ban banhethan = hd.getBan();
+                                BanDAO.update(banhethan, false);
                             }
                         }
                     })
@@ -409,6 +411,7 @@ public class CheckinController {
                 if (banPhuHop != null) {
                     // Cập nhật bàn mới cho hóa đơn
                     hdWait.setBan(banPhuHop);
+                    boolean okban = BanDAO.update(banPhuHop,true);
                     hdWait.setTgCheckIn(LocalDateTime.now());
                     hdWait.setTrangthai(0); // vẫn là chờ, không chuyển sang phục vụ
 
