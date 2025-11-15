@@ -13,6 +13,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+//import nối qua thống kê
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.Parent;
+
+//import hiện dữ liệu khi hover
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
+
+
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -54,11 +68,32 @@ public class DashboardController {
         if (avatarImage != null && avatarClip != null) {
             avatarImage.setClip(avatarClip);
         }
+        // tắt animation để node không bị tái tạo gây mất listener
+        if (barChart != null) barChart.setAnimated(false);
+        if (lineChart != null) lineChart.setAnimated(false);
 
         //load thống kê với biểu đồ
         taiThongKeDashboard();
         hienThiTop5MonAn();
         hienThiBieuDoLuongKhachTheoGio();
+        // du liệu hover
+        // chạy trong initialize()
+        if (barChart != null) {
+            barChart.getData().addListener((ListChangeListener<XYChart.Series<String, Number>>) change -> {
+                while (change.next()) {
+                    if (change.wasAdded()) Platform.runLater(this::attachBarTooltips);
+                }
+            });
+        }
+
+        if (lineChart != null) {
+            lineChart.getData().addListener((ListChangeListener<XYChart.Series<String, Number>>) change -> {
+                while (change.next()) {
+                    if (change.wasAdded()) Platform.runLater(this::attachLinePointTooltips);
+                }
+            });
+        }
+
     }
 
     //Nhân viên
@@ -229,6 +264,14 @@ public class DashboardController {
 
         barChart.getData().clear();
         barChart.getData().add(series);
+
+        // dữ liệu biểu đồ hover
+
+        // sau khi thêm dữ liệu vào barChart
+
+// gắn tooltip ngay sau khi dữ liệu đã được thêm
+        attachBarTooltips();
+
     }
     private void hienThiBieuDoLuongKhachTheoGio() {
         List<HoaDon> danhSach = HoaDonDAO.getAll(); // cái này sẽ lấy hd trong ngày
@@ -271,8 +314,135 @@ public class DashboardController {
         CategoryAxis xAxis = (CategoryAxis) lineChart.getXAxis();
         xAxis.setTickLabelRotation(0); // để chữ nằm ngang
 
+        //dữ liệu khi hover
+        // gắn tooltip cho các điểm line
+        attachLinePointTooltips();
     }
 
+    //hiển thị dữ liệu khi hover biểu đồ
+
+    // Gắn tooltip cho BarChart (các cột)
+    private void attachBarTooltips() {
+        if (barChart == null) return;
+
+        // Đảm bảo chạy trên JavaFX thread sau khi node được dựng xong
+        Platform.runLater(() -> {
+            for (XYChart.Series<String, Number> series : barChart.getData()) {
+                for (XYChart.Data<String, Number> data : series.getData()) {
+                    if (data.getNode() != null) {
+                        installBarTooltip(data);
+                    } else {
+                        data.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                            if (newNode != null) installBarTooltip(data);
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    private void installBarTooltip(XYChart.Data<String, Number> data) {
+        // debug: in ra thông tin để kiểm tra
+        System.out.println("[DEBUG] installBarTooltip for: " + data.getXValue() + " = " + data.getYValue()
+                + " nodeExists=" + (data.getNode() != null));
+
+        Tooltip tooltip = new Tooltip();
+        tooltip.setText(String.format("%s\nSố lượng: %s", data.getXValue(), data.getYValue()));
+
+        // cập nhật tooltip nếu giá trị thay đổi
+        data.YValueProperty().addListener((obs, oldV, newV) ->
+                tooltip.setText(String.format("%s\nSố lượng: %s", data.getXValue(), newV))
+        );
+
+        // Nếu node đã có, gắn luôn; nếu chưa có, listener nodeProperty đã được thêm ở attachBarTooltips()
+        Node node = data.getNode();
+        if (node != null) {
+            Tooltip.install(node, tooltip);
+            // đảm bảo vùng hover dễ chạm
+            node.setOnMouseEntered(e -> {
+                node.getStyleClass().add("chart-bar-hover");
+                // fallback: show tooltip tại vị trí con trỏ (hữu ích nếu Tooltip.install không hiện)
+                try {
+                    tooltip.show(node, e.getScreenX() + 10, e.getScreenY() + 10);
+                } catch (IllegalStateException ex) { /* ignore */ }
+            });
+            node.setOnMouseMoved(e -> {
+                // di chuyển tooltip theo chuột khi hover
+                if (tooltip.isShowing()) {
+                    tooltip.setAnchorX(e.getScreenX() + 10);
+                    tooltip.setAnchorY(e.getScreenY() + 10);
+                }
+            });
+            node.setOnMouseExited(e -> {
+                node.getStyleClass().remove("chart-bar-hover");
+                tooltip.hide();
+            });
+            // tăng "hit area" nếu cần (thay đổi size style nếu muốn)
+            node.setStyle("-fx-padding: 4;");
+        } else {
+            // nếu node chưa có, lắng nghe khi node tạo
+            data.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                if (newNode != null) {
+                    installBarTooltip(data); // gọi lại chính nó khi node sẵn sàng
+                }
+            });
+        }
+    }
+
+    // Gắn tooltip cho LineChart (các điểm)
+    private void attachLinePointTooltips() {
+        if (lineChart == null) return;
+
+        Platform.runLater(() -> {
+            for (XYChart.Series<String, Number> series : lineChart.getData()) {
+                for (XYChart.Data<String, Number> data : series.getData()) {
+                    if (data.getNode() != null) {
+                        installLineTooltip(data, series.getName());
+                    } else {
+                        data.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                            if (newNode != null) installLineTooltip(data, series.getName());
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    // Thay thế installLineTooltip hiện tại bằng version này
+    private void installLineTooltip(XYChart.Data<String, Number> data, String seriesName) {
+        System.out.println("[DEBUG] installLineTooltip for: " + seriesName + " - " + data.getXValue() + "=" + data.getYValue()
+                + " nodeExists=" + (data.getNode() != null));
+
+        String title = (seriesName == null ? "" : seriesName + "\n");
+        Tooltip tooltip = new Tooltip(String.format("%sGiờ: %s\nLượng: %s", title, data.getXValue(), data.getYValue()));
+
+        data.YValueProperty().addListener((obs, oldV, newV) ->
+                tooltip.setText(String.format("%sGiờ: %s\nLượng: %s", title, data.getXValue(), newV))
+        );
+
+        Node node = data.getNode();
+        if (node != null) {
+            Tooltip.install(node, tooltip);
+
+            node.setOnMouseEntered(e -> {
+                try { tooltip.show(node, e.getScreenX() + 10, e.getScreenY() + 10); } catch (IllegalStateException ex) {}
+            });
+            node.setOnMouseMoved(e -> {
+                if (tooltip.isShowing()) {
+                    tooltip.setAnchorX(e.getScreenX() + 10);
+                    tooltip.setAnchorY(e.getScreenY() + 10);
+                }
+            });
+            node.setOnMouseExited(e -> tooltip.hide());
+
+            // tăng vùng nhạy cho symbol điểm (nếu symbol quá nhỏ)
+            node.setStyle("-fx-padding: 6;");
+        } else {
+            data.nodeProperty().addListener((obs, oldNode, newNode) -> {
+                if (newNode != null) installLineTooltip(data, seriesName);
+            });
+        }
+    }
 
 
 
@@ -296,4 +466,35 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+//    //nối qua thống kê
+//    @FXML private BorderPane rootPane; // nếu Dashboard.fxml có BorderPane chính
+//    // hoặc các control khác: @FXML private BarChart<?,?> barChart; ...
+//
+//    @FXML
+//    private void openThongKe(MouseEvent event) {
+//        try {
+//            // Load FXML Thống kê
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ThongKe.fxml"));
+//            Parent thongKeRoot = loader.load();
+//
+//            // Nếu bạn có một main BorderPane ở cấp cao hơn với fx:id="mainRoot",
+//            // tìm nó qua scene lookup (phổ biến khi Dashboard nằm trong mainRoot center)
+//            Node mainRootNode = rootPane.getScene().lookup("#mainRoot");
+//            if (mainRootNode instanceof BorderPane) {
+//                BorderPane mainRoot = (BorderPane) mainRootNode;
+//                mainRoot.setCenter(thongKeRoot);
+//            } else {
+//                // fallback: thay root của scene (ít khuyến nghị nếu bạn có header/menu)
+//                rootPane.getScene().setRoot(thongKeRoot);
+//            }
+//
+//            // Nếu cần truyền dữ liệu vào ThongKeController:
+//            // ThongKeController tk = loader.getController();
+//            // tk.initData(someFilterOrModel);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            // TODO: show Alert thông báo lỗi load FXML
+//        }
+//    }
 }

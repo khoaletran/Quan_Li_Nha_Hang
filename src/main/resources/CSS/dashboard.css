@@ -264,6 +264,21 @@
     -fx-pref-height: 0;
     -fx-pref-width: 0;
 }
+/*màu cột*/
+/*.chart-bar {*/
+/*    -fx-padding: 0 45;      !* giảm padding để cột nhỏ lại *!*/
+/*}*/
+
+/*.bar-chart .chart-plot-background {*/
+/*    -fx-padding: 10;*/
+/*}*/
+
+.chart-bar:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0, 0, 2);
+    -fx-opacity: 0.8;
+    -fx-bar-fill: green;
+}
+
 
 /*!*moi*!*/
 /*.chart_Background {*/
