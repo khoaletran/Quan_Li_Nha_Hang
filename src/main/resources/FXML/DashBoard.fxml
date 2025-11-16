@@ -132,7 +132,8 @@
             <!-- Biểu đồ -->
             <HBox alignment="CENTER" spacing="24">
                 <!-- Biểu đồ cột -->
-                <AnchorPane prefHeight="380.0" prefWidth="650.0" styleClass="chart_Background">
+<!--      onMouseClicked="#openThongKe"          -->
+                <AnchorPane  prefHeight="380.0" prefWidth="650.0" styleClass="chart_Background">
                     <children>
                         <VBox alignment="TOP_CENTER" spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="10">
                             <Label styleClass="subtitle_Chart" text="Biểu đồ lượng top 5 món bán chạy nhất trong ngày" />
