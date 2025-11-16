@@ -563,6 +563,7 @@ public class HoaDonDAO {
                 hd.setTgCheckOut(rs.getTimestamp("tgCheckOut") != null
                         ? rs.getTimestamp("tgCheckOut").toLocalDateTime() : null);
                 hd.setTrangthai(rs.getInt("trangThai"));
+                hd.setSoLuong(rs.getInt("soLuong"));
                 hd.setBan(b);
 
                 double tongTienSau = rs.getDouble("tongTienSau");

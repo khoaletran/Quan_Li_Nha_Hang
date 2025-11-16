@@ -157,9 +157,96 @@ public class DashboardController {
     }
 
     //thống kê
+//    private void taiThongKeDashboard() {
+//        try {
+//            List<HoaDon> danhSach = HoaDonDAO.getAll(); //cái này mai mốt sửa lại lấy hóa đơn trong ngày
+//
+//            if (danhSach == null || danhSach.isEmpty()) {
+//                lblTongDonDangDoi.setText("0");
+//                lblTongDonDaNhan.setText("0");
+//                lblTongDonDaThanhToan.setText("0");
+//                lblDoanhThu.setText("0đ");
+//                lblSoKhach.setText("0");
+//                lblIn.setText("0");
+//                lblOut.setText("0");
+//                lblVip.setText("0");
+//                return;
+//            }
+//
+//            //trạng thái
+//            int donCho = 0;      // trạng thái = 0
+//            int donDangDung = 0; // trạng thái = 1
+//            int donHoanThanh = 0;// trạng thái = 2
+//
+//            //Khu vuc
+//            int in =0;
+//            int out =0;
+//            int vip =0;
+//
+//            int tongKhachHang = 0;
+//            double tongDoanhThu = 0;
+//
+//            for (HoaDon hd : danhSach) {
+//                if (hd == null) continue;
+//
+//                //Đếm theo trạng thái
+//                int tt = hd.getTrangthai();
+//                if (tt == 0) {
+//                    donCho++;
+//                }
+//                else if (tt == 1) {
+//                    donDangDung++;
+//                }
+//                else if (tt == 2) {
+//                    donHoanThanh++;
+//                }
+//                //Đếm theo khu vực
+//                String maKV = hd.getBan().getKhuVuc().getMaKhuVuc();
+//                if(maKV.equals("KV0001")){
+//                    in++;
+//                }
+//                else if(maKV.equals("KV0002")){
+//                    out++;
+//                }
+//                else if(maKV.equals("KV0003")){
+//                    vip++;
+//                }
+//                //tổng khách hàng với doanh thu
+//                tongKhachHang+=hd.getSoLuong();
+//                tongDoanhThu+=hd.getTongTienSau();
+//            }
+//
+//            //hiển thị
+//            lblTongDonDangDoi.setText(String.valueOf("Số đơn đang đợi: "+donCho));
+//            lblTongDonDaNhan.setText(String.valueOf("Số đơn đang dùng: "+donDangDung));
+//            lblTongDonDaThanhToan.setText(String.valueOf("Số đơn đã thanh toán: "+donHoanThanh));
+//            lblIn.setText(String.valueOf("Khu vực In: "+in));
+//            lblOut.setText(String.valueOf("Khu vực Out: "+out));
+//            lblVip.setText(String.valueOf("Khu vực Vip: "+vip));
+//            lblDoanhThu.setText(String.format("%,.0f đ", tongDoanhThu));
+//            lblSoKhach.setText(String.valueOf(tongKhachHang));
+//
+//
+//            //In ra log cho dễ kiểm tra (hoặc có thể hiển thị lên UI)
+////            System.out.println("Đơn chờ: " + donCho);
+////            System.out.println("Đơn đang dùng: " + donDangDung);
+////            System.out.println("Đơn hoàn thành: " + donHoanThanh);
+//
+//        } catch (Exception e) {
+//            System.err.println("[DashboardController] Lỗi tải thống kê: " + e.getMessage());
+//            lblTongDonDangDoi.setText("-");
+//            lblTongDonDaNhan.setText("-");
+//            lblTongDonDaThanhToan.setText("-");
+//            lblDoanhThu.setText("-");
+//            lblSoKhach.setText("-");
+//            lblIn.setText("-");
+//            lblOut.setText("-");
+//            lblVip.setText("-");
+//        }
+//    }
     private void taiThongKeDashboard() {
         try {
-            List<HoaDon> danhSach = HoaDonDAO.getAll(); //cái này mai mốt sửa lại lấy hóa đơn trong ngày
+            Map<HoaDon, Double> danhSach = HoaDonDAO.getAllForThongKe(); // Lấy dữ liệu đã tính sẵn từ DB
 
             if (danhSach == null || danhSach.isEmpty()) {
                 lblTongDonDangDoi.setText("0");
@@ -173,64 +260,49 @@ public class DashboardController {
                 return;
             }
 
-            //trạng thái
-            int donCho = 0;      // trạng thái = 0
-            int donDangDung = 0; // trạng thái = 1
-            int donHoanThanh = 0;// trạng thái = 2
+            // Trạng thái
+            int donCho = 0;
+            int donDangDung = 0;
+            int donHoanThanh = 0;
 
-            //Khu vuc
-            int in =0;
-            int out =0;
-            int vip =0;
+            // Khu vực
+            int in = 0;
+            int out = 0;
+            int vip = 0;
 
             int tongKhachHang = 0;
             double tongDoanhThu = 0;
 
-            for (HoaDon hd : danhSach) {
-                if (hd == null) continue;
+            for (Map.Entry<HoaDon, Double> entry : danhSach.entrySet()) {
+                HoaDon hd = entry.getKey();
+                double tongSau = entry.getValue();
 
-                //Đếm theo trạng thái
+                // Đếm trạng thái
                 int tt = hd.getTrangthai();
-                if (tt == 0) {
-                    donCho++;
-                }
-                else if (tt == 1) {
-                    donDangDung++;
-                }
-                else if (tt == 2) {
-                    donHoanThanh++;
-                }
-                //Đếm theo khu vực
+                if (tt == 0) donCho++;
+                else if (tt == 1) donDangDung++;
+                else if (tt == 2) donHoanThanh++;
+
+                // Đếm khu vực
                 String maKV = hd.getBan().getKhuVuc().getMaKhuVuc();
-                if(maKV.equals("KV0001")){
-                    in++;
-                }
-                else if(maKV.equals("KV0002")){
-                    out++;
-                }
-                else if(maKV.equals("KV0003")){
-                    vip++;
-                }
-                //tổng khách hàng với doanh thu
-                tongKhachHang+=hd.getSoLuong();
-                tongDoanhThu+=hd.getTongTienSau();
+                if (maKV.equals("KV0001")) in++;
+                else if (maKV.equals("KV0002")) out++;
+                else if (maKV.equals("KV0003")) vip++;
+
+                // Tổng khách hàng & doanh thu
+                tongKhachHang += hd.getSoLuong();
+                tongDoanhThu += tongSau;
             }
 
-            //hiển thị
-            lblTongDonDangDoi.setText(String.valueOf("Số đơn đang đợi: "+donCho));
-            lblTongDonDaNhan.setText(String.valueOf("Số đơn đang dùng: "+donDangDung));
-            lblTongDonDaThanhToan.setText(String.valueOf("Số đơn đã thanh toán: "+donHoanThanh));
-            lblIn.setText(String.valueOf("Khu vực In: "+in));
-            lblOut.setText(String.valueOf("Khu vực Out: "+out));
-            lblVip.setText(String.valueOf("Khu vực Vip: "+vip));
+            // Hiển thị
+            lblTongDonDangDoi.setText("Số đơn đang đợi: " + donCho);
+            lblTongDonDaNhan.setText("Số đơn đang dùng: " + donDangDung);
+            lblTongDonDaThanhToan.setText("Số đơn đã thanh toán: " + donHoanThanh);
+            lblIn.setText("Khu vực In: " + in);
+            lblOut.setText("Khu vực Out: " + out);
+            lblVip.setText("Khu vực Vip: " + vip);
             lblDoanhThu.setText(String.format("%,.0f đ", tongDoanhThu));
             lblSoKhach.setText(String.valueOf(tongKhachHang));
-
-
-            //In ra log cho dễ kiểm tra (hoặc có thể hiển thị lên UI)
-//            System.out.println("Đơn chờ: " + donCho);
-//            System.out.println("Đơn đang dùng: " + donDangDung);
-//            System.out.println("Đơn hoàn thành: " + donHoanThanh);
 
         } catch (Exception e) {
             System.err.println("[DashboardController] Lỗi tải thống kê: " + e.getMessage());
@@ -244,6 +316,7 @@ public class DashboardController {
             lblVip.setText("-");
         }
     }
+
     private void hienThiTop5MonAn() {
         ChiTietHDDAO cthdDAO = new ChiTietHDDAO();
         List<ChiTietHoaDon> dsChiTiet = cthdDAO.getAll(); // Lấy toàn bộ chi tiết hóa đơn
