@@ -25,6 +25,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ui.HoaDonIn;
 
 import java.lang.reflect.Method;
 import java.time.LocalDate;
@@ -127,7 +128,7 @@ public class TraCuuHoaDonController {
     private void ganSuKienChoNut() {
         if (btnTimKiem != null) btnTimKiem.setOnAction(e -> timKiemHoaDon());
         if (btnXoaTrang != null) btnXoaTrang.setOnAction(e -> xoaTrangBoLoc());
-        if (confirm_btn != null) confirm_btn.setOnAction(e -> inHoaDon());
+        if (confirm_btn != null) confirm_btn.setOnAction(e -> HoaDonIn.previewHoaDon(hoaDonSelected));
     }
 
     private void khoiTaoTableView() {

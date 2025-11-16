@@ -1,130 +1,124 @@
 package dao;
 
 import connectDB.connectDB;
-import entity.ChiTietHoaDon;
-import entity.HoaDon;
-import entity.LoaiMon;
-import entity.Mon;
+import entity.*;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ChiTietHDDAO {
+
+    // ============================================================================
+    //  MAPPER KHÔNG getByID – TẠO ĐỦ Món + Loại + Hóa Đơn (maHD)
+    // ============================================================================
+    private static ChiTietHoaDon mapCTHDFull(ResultSet rs) throws SQLException {
+
+        // ===== MÓN =====
+        Mon mon = new Mon();
+        mon.setMaMon(rs.getString("maMon"));
+        mon.setTenMon(rs.getString("tenMon"));
+        mon.setGiaGoc(rs.getDouble("giaGoc"));
+        mon.setHinhAnh(rs.getString("hinhAnh"));
+
+        // ===== LOẠI MÓN =====
+        LoaiMon loai = new LoaiMon();
+        loai.setMaLoaiMon(rs.getString("maLoaiMon"));
+        loai.setTenLoaiMon(rs.getString("tenLoaiMon"));
+        mon.setLoaiMon(loai);
+
+        // ===== HÓA ĐƠN =====
+        HoaDon hd = new HoaDon();
+        hd.setMaHD(rs.getString("maHD"));
+
+        // ===== CHI TIẾT HÓA ĐƠN =====
+        ChiTietHoaDon ct = new ChiTietHoaDon();
+        ct.setHoaDon(hd);
+        ct.setMon(mon);
+        ct.setSoLuong(rs.getInt("soLuong"));
+
+        // ===== GIÁ BÁN =====
+        int ptgb = rs.getInt("phanTramLoi");
+        double thanhTien = mon.getGiaGoc() * (1 + ptgb / 100.0) * ct.getSoLuong();
+        ct.setThanhTien(thanhTien);
+
+        return ct;
+    }
+
+
+    // ============================================================================
+    // 1. GET ALL CHI TIẾT HÓA ĐƠN THEO MÃ HÓA ĐƠN (FULL JOIN)
+    // ============================================================================
     public static List<ChiTietHoaDon> getAllByMaHD(String maHD) {
         List<ChiTietHoaDon> list = new ArrayList<>();
+
         String sql = """
-                        SELECT
-                            cthd.*,
-                            m.tenMon,
-                            m.giaGoc,
-                            lm.maLoaiMon,
-                            lm.tenLoaiMon,
-                            ISNULL(pt.phanTramLoi, ptLoai.phanTramLoi) AS phanTramLoi
-                        FROM ChiTietHoaDon cthd
-                        JOIN Mon m ON cthd.maMon = m.maMon
-                        JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
-                        LEFT JOIN (
-                            SELECT p1.maMon, p1.phanTramLoi
-                            FROM PhanTramGiaBan p1
-                            WHERE p1.maPTGB = (
-                                SELECT TOP 1 p2.maPTGB
-                                FROM PhanTramGiaBan p2
-                                WHERE p2.maMon = p1.maMon
-                                ORDER BY p2.maPTGB DESC
-                            )
-                        ) pt ON pt.maMon = m.maMon
-                        LEFT JOIN (
-                            SELECT p3.maLoaiMon, p3.phanTramLoi
-                            FROM PhanTramGiaBan p3
-                            WHERE p3.maPTGB = (
-                                SELECT TOP 1 p4.maPTGB
-                                FROM PhanTramGiaBan p4
-                                WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
-                                ORDER BY p4.maPTGB DESC
-                            )
-                        ) ptLoai ON ptLoai.maLoaiMon = m.loaiMon
-                        WHERE cthd.maHD = ?;
-                """;
+            SELECT
+                cthd.maHD,
+                cthd.maMon,
+                cthd.soLuong,
+
+                m.tenMon, m.giaGoc, m.hinhAnh,
+                lm.maLoaiMon, lm.tenLoaiMon,
+
+                COALESCE(ptMon.phanTramLoi, ptLoai.phanTramLoi, 0) AS phanTramLoi
+
+            FROM ChiTietHoaDon cthd
+            JOIN Mon m ON cthd.maMon = m.maMon
+            JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
+
+            LEFT JOIN (
+                SELECT p1.maMon, p1.phanTramLoi
+                FROM PhanTramGiaBan p1
+                WHERE p1.ngayApDung = (
+                    SELECT MAX(p2.ngayApDung)
+                    FROM PhanTramGiaBan p2
+                    WHERE p2.maMon = p1.maMon
+                )
+            ) ptMon ON ptMon.maMon = m.maMon
+
+            LEFT JOIN (
+                SELECT p3.maLoaiMon, p3.phanTramLoi
+                FROM PhanTramGiaBan p3
+                WHERE p3.maMon IS NULL
+                  AND p3.ngayApDung = (
+                        SELECT MAX(p4.ngayApDung)
+                        FROM PhanTramGiaBan p4
+                        WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
+                )
+            ) ptLoai ON ptLoai.maLoaiMon = lm.maLoaiMon
+
+            WHERE cthd.maHD = ?
+        """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, maHD);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Mon m = new Mon();
-                    m.setMaMon(rs.getString("maMon"));
-                    m.setTenMon(rs.getString("tenMon"));
-                    m.setGiaGoc(rs.getDouble("giaGoc"));
+            ResultSet rs = ps.executeQuery();
 
-                    LoaiMon loai = new LoaiMon();
-                    loai.setMaLoaiMon(rs.getString("maLoaiMon"));
-                    loai.setTenLoaiMon(rs.getString("tenLoaiMon"));
-                    m.setLoaiMon(loai);
+            while (rs.next()) list.add(mapCTHDFull(rs));
 
-                    HoaDon hd = new HoaDon();
-                    hd.setMaHD(rs.getString("maHD"));
-
-                    ChiTietHoaDon cthd = new ChiTietHoaDon();
-                    cthd.setHoaDon(hd);
-                    cthd.setMon(m);
-                    cthd.setSoLuong(rs.getInt("soLuong"));
-
-                    int ptgb = rs.getInt("phanTramLoi");
-                    double thanhTien = m.getGiaGoc() * (1 + ptgb / 100.0) * cthd.getSoLuong();
-                    cthd.setThanhTien(thanhTien);
-
-                    list.add(cthd);
-                }
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return list;
     }
 
 
-    // ===== 1. LẤY DANH SÁCH CHI TIẾT THEO MÃ HÓA ĐƠN =====
+    // ============================================================================
+    // 2. GET BY MAHD – GIỮ NGHIỆP VỤ, NHƯNG JOIN ĐẦY ĐỦ (KHÔNG getByID)
+    // ============================================================================
     public static List<ChiTietHoaDon> getByMaHD(String maHD) {
-        List<ChiTietHoaDon> ds = new ArrayList<>();
-        String sql = "SELECT * FROM ChiTietHoaDon WHERE maHD = ?";
-
-        try (Connection conn = connectDB.getInstance().getNewConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, maHD);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    String maMon = rs.getString("maMon");
-                    int soLuong = rs.getInt("soLuong");
-                    // Lấy thông tin món từ MonDAO
-                    Mon mon = new MonDAO().findByID(maMon);
-
-                    // Lấy thông tin hóa đơn từ HoaDonDAO
-                    HoaDon hoaDon = HoaDonDAO.getByID(maHD);
-
-                    // Tạo đối tượng ChiTietHoaDon theo constructor của bạn
-                    ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
-
-                    ds.add(ct);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy chi tiết hóa đơn: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.err.println("Lỗi khác khi lấy chi tiết hóa đơn: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return ds;
+        return getAllByMaHD(maHD); // dùng JOIN version
     }
 
-    // ===== 2. THÊM MỘT CHI TIẾT HÓA ĐƠN =====
+
+    // ============================================================================
+    // 3. THÊM
+    // ============================================================================
     public boolean insert(ChiTietHoaDon ct) {
-        String sql = "INSERT INTO ChiTietHoaDon (maHD, maMon, soLuong ) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO ChiTietHoaDon (maHD, maMon, soLuong) VALUES (?, ?, ?)";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -136,13 +130,15 @@ public class ChiTietHDDAO {
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Lỗi khi thêm chi tiết hóa đơn: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Lỗi thêm chi tiết hóa đơn: " + e.getMessage());
             return false;
         }
     }
 
-    // ===== 3. XÓA CHI TIẾT HÓA ĐƠN =====
+
+    // ============================================================================
+    // 4. XÓA
+    // ============================================================================
     public boolean delete(String maHD, String maMon) {
         String sql = "DELETE FROM ChiTietHoaDon WHERE maHD = ? AND maMon = ?";
 
@@ -151,17 +147,18 @@ public class ChiTietHDDAO {
 
             ps.setString(1, maHD);
             ps.setString(2, maMon);
-
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Lỗi khi xóa chi tiết hóa đơn: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Lỗi xóa chi tiết hóa đơn: " + e.getMessage());
             return false;
         }
     }
 
-    // ===== 4. CẬP NHẬT CHI TIẾT HÓA ĐƠN =====
+
+    // ============================================================================
+    // 5. CẬP NHẬT
+    // ============================================================================
     public boolean update(ChiTietHoaDon ct) {
         String sql = "UPDATE ChiTietHoaDon SET soLuong = ? WHERE maHD = ? AND maMon = ?";
 
@@ -175,137 +172,131 @@ public class ChiTietHDDAO {
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Lỗi khi cập nhật chi tiết hóa đơn: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Lỗi cập nhật chi tiết hóa đơn: " + e.getMessage());
             return false;
         }
     }
 
-    // ===== 5. LẤY TỔNG TIỀN CỦA HÓA ĐƠN =====
-    public double getTongTienByMaHD(String maHD) {
-        String sql = "SELECT SUM(thanhTien) as tongTien FROM ChiTietHoaDon WHERE maHD = ?";
-        double tongTien = 0;
 
-        try (Connection conn = connectDB.getInstance().getNewConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, maHD);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    tongTien = rs.getDouble("tongTien");
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy tổng tiền hóa đơn: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return tongTien;
-    }
-
-    // ===== 6. LẤY TOÀN BỘ CHI TIẾT HÓA ĐƠN =====
+    // ============================================================================
+    // 6. LẤY TOÀN BỘ CHI TIẾT HÓA ĐƠN (JOIN FULL)
+    // ============================================================================
     public static List<ChiTietHoaDon> getAll() {
         List<ChiTietHoaDon> ds = new ArrayList<>();
-        String sql = "SELECT * FROM ChiTietHoaDon";
+
+        String sql = """
+            SELECT 
+                cthd.maHD, cthd.maMon, cthd.soLuong,
+
+                m.tenMon, m.giaGoc, m.hinhAnh,
+                lm.maLoaiMon, lm.tenLoaiMon,
+
+                COALESCE(ptMon.phanTramLoi, ptLoai.phanTramLoi, 0) AS phanTramLoi
+
+            FROM ChiTietHoaDon cthd
+            JOIN Mon m ON cthd.maMon = m.maMon
+            JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
+
+            LEFT JOIN (
+                SELECT p1.maMon, p1.phanTramLoi
+                FROM PhanTramGiaBan p1
+                WHERE p1.ngayApDung = (
+                    SELECT MAX(p2.ngayApDung)
+                    FROM PhanTramGiaBan p2
+                    WHERE p2.maMon = p1.maMon
+                )
+            ) ptMon ON ptMon.maMon = m.maMon
+
+            LEFT JOIN (
+                SELECT p3.maLoaiMon, p3.phanTramLoi
+                FROM PhanTramGiaBan p3
+                WHERE p3.maMon IS NULL
+                  AND p3.ngayApDung = (
+                      SELECT MAX(p4.ngayApDung)
+                      FROM PhanTramGiaBan p4
+                      WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
+                  )
+            ) ptLoai ON ptLoai.maLoaiMon = lm.maLoaiMon
+        """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-            // 🔹 Lấy dữ liệu phụ trước để giảm truy vấn lặp
-            List<Mon> dsMon = MonDAO.getAll();
-            List<HoaDon> dsHD = HoaDonDAO.getAll();
+            while (rs.next()) ds.add(mapCTHDFull(rs));
 
-            while (rs.next()) {
-                String maHD = rs.getString("maHD");
-                String maMon = rs.getString("maMon");
-                int soLuong = rs.getInt("soLuong");
-
-                // 🔹 Lấy thông tin từ cache (RAM), không query SQL
-                Mon mon = dsMon.stream()
-                        .filter(m -> m.getMaMon().equals(maMon))
-                        .findFirst()
-                        .orElse(null);
-
-                HoaDon hd = dsHD.stream()
-                        .filter(h -> h.getMaHD().equals(maHD))
-                        .findFirst()
-                        .orElse(null);
-
-                if (mon != null && hd != null) {
-                    ds.add(new ChiTietHoaDon(hd, mon, soLuong));
-                }
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi lấy danh sách chi tiết hóa đơn: " + e.getMessage());
-            e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Lỗi khác khi lấy danh sách chi tiết hóa đơn: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Lỗi getAll CTHD: " + e.getMessage());
         }
+
         return ds;
     }
 
 
+    // ============================================================================
+    // 7. THỐNG KÊ THEO THÁNG NĂM (NHẸ & CHUẨN)
+    // ============================================================================
     public static List<ChiTietHoaDon> getAllCTHDTheoThangNam(int nam, int thang) {
-        List<ChiTietHoaDon> dsct = new ArrayList<>();
+        List<ChiTietHoaDon> ds = new ArrayList<>();
 
         String sql = """
-                    SELECT
-                        m.maMon,
-                        m.tenMon,
-                        m.hinhAnh,
-                        m.soLuong as soLuongTon,
-                        SUM(cthd.soLuong) AS tongSoLuong
-                    FROM ChiTietHoaDon cthd
-                    JOIN HoaDon hd ON cthd.maHD = hd.maHD
-                    JOIN Mon m ON cthd.maMon = m.maMon
-                    WHERE YEAR(hd.tgLapHD) = ?
-                """;
+            SELECT 
+                m.maMon, m.tenMon, m.hinhAnh, m.soLuong AS soLuongTon,
+                SUM(cthd.soLuong) AS tongSoLuong
+            FROM ChiTietHoaDon cthd
+            JOIN HoaDon hd ON cthd.maHD = hd.maHD
+            JOIN Mon m ON cthd.maMon = m.maMon
+            WHERE YEAR(hd.tgLapHD) = ?
+        """;
 
-        if (thang != 0) { // 0 nghĩa tất cả tháng
-            sql += " AND MONTH(hd.tgLapHD) = ? ";
-        }
+        if (thang != 0) sql += " AND MONTH(hd.tgLapHD) = ? ";
 
-        sql += " GROUP BY m.maMon, m.soLuong, m.tenMon, m.hinhAnh ORDER BY tongSoLuong DESC";
+        sql += " GROUP BY m.maMon, m.tenMon, m.hinhAnh, m.soLuong ORDER BY tongSoLuong DESC";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, nam);
-            if (thang != 0) {
-                ps.setInt(2, thang);
-            }
+            if (thang != 0) ps.setInt(2, thang);
 
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
-                ChiTietHoaDon cthd = new ChiTietHoaDon();
                 Mon m = new Mon();
                 m.setMaMon(rs.getString("maMon"));
                 m.setTenMon(rs.getString("tenMon"));
                 m.setHinhAnh(rs.getString("hinhAnh"));
                 m.setSoLuong(rs.getInt("soLuongTon"));
-                cthd.setMon(m);
-                cthd.setSoLuong(rs.getInt("tongSoLuong")); // cheat tạm
-                dsct.add(cthd);
+
+                ChiTietHoaDon ct = new ChiTietHoaDon();
+                ct.setMon(m);
+                ct.setSoLuong(rs.getInt("tongSoLuong"));
+
+                ds.add(ct);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return dsct;
+        return ds;
     }
+
+
+    // ============================================================================
+    // 8. LẤY SỐ LƯỢNG BÁN THEO THÁNG NĂM (NHẸ)
+    // ============================================================================
     public static Map<String, Integer> getSoLuongTheoThangNam(int nam, int thang) {
         Map<String, Integer> map = new HashMap<>();
+
         String sql = """
-        SELECT m.maMon, SUM(cthd.soLuong) AS tongSoLuong
-        FROM ChiTietHoaDon cthd
-        JOIN HoaDon hd ON cthd.maHD = hd.maHD
-        JOIN Mon m ON cthd.maMon = m.maMon
-        WHERE YEAR(hd.tgLapHD) = ? AND MONTH(hd.tgLapHD) = ?
-        GROUP BY m.maMon
-    """;
+            SELECT m.maMon, SUM(cthd.soLuong) AS tongSoLuong
+            FROM ChiTietHoaDon cthd
+            JOIN HoaDon hd ON cthd.maHD = hd.maHD
+            JOIN Mon m ON cthd.maMon = m.maMon
+            WHERE YEAR(hd.tgLapHD) = ? AND MONTH(hd.tgLapHD) = ?
+            GROUP BY m.maMon
+        """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -314,12 +305,15 @@ public class ChiTietHDDAO {
             ps.setInt(2, thang);
 
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 map.put(rs.getString("maMon"), rs.getInt("tongSoLuong"));
             }
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
         return map;
     }
 

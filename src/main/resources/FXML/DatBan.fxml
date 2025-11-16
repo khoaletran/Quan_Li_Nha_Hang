@@ -236,7 +236,7 @@
                                                     <Image url="@../IMG/icon/StarWhite.png" />
                                                 </image>
                                             </ImageView>
-                                            <Label text="8-12" />
+                                            <Label text="12-20" />
                                         </children>
                                     </VBox>
                                     <VBox fx:id="tableVIP_02" layoutX="400.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" styleClass="table_items" VBox.vgrow="ALWAYS">
@@ -251,7 +251,7 @@
                                                     <Image url="@../IMG/icon/StarWhite.png" />
                                                 </image>
                                             </ImageView>
-                                            <Label text="&gt;12" />
+                                            <Label text="&gt;20-30" />
                                         </children>
                                     </VBox>
                                 </children>
