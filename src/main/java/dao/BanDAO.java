@@ -294,7 +294,4 @@ public class BanDAO {
 
         return list;
     }
-
-
-
 }

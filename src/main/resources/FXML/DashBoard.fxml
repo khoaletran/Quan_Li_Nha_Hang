@@ -63,9 +63,35 @@
                     </AnchorPane>
                     <ScrollPane prefHeight="200.0" prefWidth="343.0" styleClass="scroll-bar">
                         <content>
-                            <VBox alignment="CENTER" prefHeight="216.0" prefWidth="329.0" spacing="6" styleClass="box_not">
-                                <Label styleClass="alert-red" text="HD12082025001 - Đã quá giờ hẹn" />
-                                <Label styleClass="alert-green" text="HD12082025007 - Đã đến giờ hẹn" />
+                            <VBox fx:id="box_not" alignment="CENTER" prefHeight="216.0" prefWidth="329.0" spacing="6" styleClass="box_not">
+                                <!--                                <Label styleClass="alert-red" text="HD12082025001 - Đã quá giờ hẹn" />-->
+                                <!--                                <Label styleClass="alert-green" text="HD12082025007 - Đã đến giờ hẹn" />-->
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="notif-item" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+
+                                    <!-- ===== LEFT COLUMN ===== -->
+                                    <VBox spacing="4" styleClass="notif-left">
+                                        <children>
+                                            <Label styleClass="notif-sub" text="B01"></Label>
+                                            <Label styleClass="notif-sub" text="18:40"></Label>
+                                        </children>
+                                    </VBox>
+
+                                    <!-- ===== RIGHT COLUMN ===== -->
+                                    <VBox spacing="4">
+                                        <children>
+                                            <Label styleClass="notif-sub-right" text="Tên khách: Nguyễn Văn A" />
+                                            <Label styleClass="notif-sub-right" text="SĐT: 0901234567" />
+
+                                            <!-- Trạng thái -->
+                                            <Label styleClass="notif-status-yellow" text="Đã đến giờ hẹn" />
+                                            <!-- Nếu quá giờ thì dùng notif-status-red -->
+                                            <!-- <Label text="Đã quá giờ hẹn" styleClass="notif-status-red"/> -->
+                                        </children>
+                                    </VBox>
+
+                                </HBox>
+
+
                             </VBox>
                         </content>
                     </ScrollPane>

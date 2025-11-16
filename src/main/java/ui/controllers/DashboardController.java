@@ -1,15 +1,22 @@
 package ui.controllers;
 
 import dao.HoaDonDAO;
+import dao.MonDAO;
 import entity.HoaDon;
+import entity.Mon;
 import entity.NhanVien;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
@@ -28,6 +35,7 @@ import javafx.scene.control.Tooltip;
 
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,6 +54,7 @@ public class DashboardController {
     @FXML private Label lblNgayVaoLam;
     @FXML private ImageView avatarImage;
     @FXML private Circle avatarClip;
+    @FXML private VBox box_not;
 
     //thống kê
     @FXML private Label lblTongDonDangDoi;
@@ -115,6 +124,9 @@ public class DashboardController {
     public void setNhanVien(NhanVien nv) {
         this.nv = nv;
         hienThiThongTinNhanVien();
+
+        kiemTraThongBaoCheckIn();
+        batDongBoTimelineThongBao();
     }
 
     //hiển thị nhân viên
@@ -465,6 +477,150 @@ public class DashboardController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void batDongBoTimelineThongBao() {
+        Timeline timeline = new Timeline(
+                new KeyFrame(javafx.util.Duration.seconds(60), e -> kiemTraThongBaoCheckIn())
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+
+    private void kiemTraThongBaoCheckIn() {
+        if (box_not == null) return;
+        if(nv != null && nv.isQuanLi()){
+            MonDAO monAnDAO = new MonDAO();
+            box_not.getChildren().clear();
+
+            List<Mon> danhSachMon = monAnDAO.getAll();
+
+            for (Mon monAn : danhSachMon) {
+                int soLuong = monAn.getSoLuong();
+                if(soLuong == 0){
+                    box_not.getChildren().add(taoThongBaoMonAn("Món ăn đã hết",monAn,true));
+                }else if(soLuong <= 10){
+                    box_not.getChildren().add(taoThongBaoMonAn("Món ăn sắp hết",monAn,false));
+                }
+            }
+        }else{
+            HoaDonDAO hoaDonDAO = new HoaDonDAO();
+            box_not.getChildren().clear();
+            List<HoaDon> danhSachHoaDon = hoaDonDAO.getAllNgayHomNay();
+            LocalDateTime now = LocalDateTime.now();
+            danhSachHoaDon.sort(Comparator.comparing(HoaDon::getTgCheckIn).reversed());
+
+            for (HoaDon hd : danhSachHoaDon) {
+                LocalDateTime tgCheckIn = hd.getTgCheckIn();
+                if (tgCheckIn == null) continue;
+
+                // Trạng thái phải = 0
+                if (hd.getTrangthai() != 0) continue;
+
+                // Khoảng check-in ±15 phút
+                LocalDateTime checkInEarly = tgCheckIn.minusMinutes(15);
+                LocalDateTime checkInLate  = tgCheckIn.plusMinutes(15);
+
+                boolean denGio = false;
+                boolean quaGio = false;
+
+                if (!now.isBefore(checkInEarly) && !now.isAfter(checkInLate)) {
+                    // trong khoảng được check-in
+                    denGio = true;
+                } else if (now.isAfter(checkInLate) || now.isBefore(checkInEarly)) {
+                    // quá sớm hoặc quá trễ nhưng trạng thái vẫn 0
+                    quaGio = true;
+                }
+
+                if (denGio) {
+                    box_not.getChildren().add(taoThongBaoHoaDon(hd, true));
+                } else if (quaGio) {
+                    box_not.getChildren().add(taoThongBaoHoaDon(hd, false));
+                }
+            }
+        }
+    }
+
+    private Node taoThongBaoMonAn(String trangThaiMon, Mon mon, boolean hetMon) {
+
+        HBox box = new HBox();
+        box.getStyleClass().add("notif-item");
+        box.setSpacing(10);
+        box.setAlignment(Pos.CENTER_LEFT);
+
+        // LEFT
+        VBox left = new VBox();
+
+        left.setSpacing(4);
+
+        Label tonKho = new Label("Tồn kho: " + mon.getSoLuong());
+        tonKho.getStyleClass().addAll("notif-sub","notif-stock");
+
+        left.getChildren().addAll(tonKho);
+
+        // RIGHT
+        VBox right = new VBox();
+        right.setSpacing(2);
+
+        Label lbTenMon = new Label(mon.getTenMon());
+        lbTenMon.getStyleClass().add("notif-sub-right-02");
+
+        Label status = new Label(trangThaiMon);
+        status.getStyleClass().add(hetMon ? "notif-status-red" : "notif-status-yellow");
+        left.getStyleClass().addAll("notif-left",hetMon ? "notif-backgr-red" : "notif-backgr-yellow");
+        right.getChildren().addAll(lbTenMon, status);
+
+        box.getChildren().addAll(left, right);
+
+        return box;
+    }
+
+
+
+
+    private Node taoThongBaoHoaDon(HoaDon hd, boolean denGio) {
+        HBox box = new HBox();
+        box.getStyleClass().add("notif-item");
+        box.setSpacing(10);
+        box.setAlignment(Pos.CENTER_LEFT);
+
+        // ==== LEFT COLUMN ====
+        VBox left = new VBox();
+        left.setSpacing(4);
+
+        Label lbTenBan = new Label("Mã bàn: "+hd.getBan().getMaBan());
+        lbTenBan.getStyleClass().addAll("notif-sub");
+
+        String time = hd.getTgCheckIn() != null
+                ? hd.getTgCheckIn().toLocalTime().toString()
+                : "--:--";
+
+        Label lbCheckInTime = new Label("Thời gian: "+time);
+        lbCheckInTime.getStyleClass().addAll("notif-sub");
+
+        left.getChildren().addAll(lbTenBan, lbCheckInTime);
+
+        // ==== RIGHT COLUMN ====
+        VBox right = new VBox();
+        right.setSpacing(4);
+
+        Label tenKH = new Label("tên khách : " + hd.getKhachHang().getTenKhachHang());
+        tenKH.getStyleClass().add("notif-sub-right");
+
+        Label sdt = new Label("SĐT : " + hd.getKhachHang().getSdt());
+        sdt.getStyleClass().add("notif-sub-right");
+
+        Label status = new Label(denGio ? "Đã đến giờ hẹn" : "Đã quá giờ hẹn");
+        status.getStyleClass().add(denGio ? "notif-status-green" : "notif-status-red");
+        left.getStyleClass().addAll("notif-left",denGio ? "notif-backgr-green" : "notif-backgr-red");
+
+        right.getChildren().addAll(tenKH, sdt, status);
+
+        // Add left-right vào item
+        box.getChildren().addAll(left, right);
+
+        return box;
     }
 //    //nối qua thống kê
 //    @FXML private BorderPane rootPane; // nếu Dashboard.fxml có BorderPane chính
