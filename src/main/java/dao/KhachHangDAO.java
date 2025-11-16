@@ -12,19 +12,32 @@ public class KhachHangDAO {
     // ===== LẤY TOÀN BỘ DANH SÁCH KHÁCH HÀNG =====
     public static List<KhachHang> getAll() {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT * FROM KhachHang";
+
+        String sql = """
+        SELECT kh.maKH,
+               kh.maHang,
+               kh.tenKH,
+               kh.sdt,
+               kh.gioiTinh,
+               kh.diemTichLuy,
+               hkh.diemHang,
+               hkh.giamGia,
+               hkh.moTa
+        FROM KhachHang kh
+        JOIN HangKhachHang hkh ON kh.maHang = hkh.maHang
+        """;
 
         try (Statement st = connectDB.getConnection().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
-            List<HangKhachHang> dsHang = HangKhachDAO.getAll();
-
             while (rs.next()) {
-                String maHang = rs.getString("maHang");
-                HangKhachHang hang = dsHang.stream()
-                        .filter(h -> h.getMaHang().equals(maHang))
-                        .findFirst()
-                        .orElse(null);
+
+                HangKhachHang hang = new HangKhachHang(
+                        rs.getString("maHang"),
+                        rs.getString("moTa"),
+                        rs.getInt("giamGia"),
+                        rs.getInt("diemHang")
+                );
 
                 KhachHang kh = new KhachHang(
                         rs.getString("maKH"),
@@ -34,14 +47,17 @@ public class KhachHangDAO {
                         rs.getString("tenKH"),
                         hang
                 );
+
                 list.add(kh);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return list;
     }
+
 
     // ===== THÊM KHÁCH HÀNG MỚI =====
     public static boolean insert(KhachHang kh) {

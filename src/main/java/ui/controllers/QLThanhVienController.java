@@ -35,6 +35,7 @@ public class QLThanhVienController {
 
     private final KhachHangDAO khDAO = new KhachHangDAO();
     private final ToggleGroup genderGroup = new ToggleGroup();
+    private List<KhachHang> dsKhachHang;
 
     @FXML
     public void initialize() {
@@ -61,9 +62,9 @@ public class QLThanhVienController {
     // =========================
     private void loadNhanVienCards() {
         menuFlow.getChildren().clear();
-        List<KhachHang> ds = khDAO.getAll();
+        dsKhachHang = khDAO.getAll();
 
-        for (KhachHang kh : ds) {
+        for (KhachHang kh : dsKhachHang) {
             VBox card = taoTheKhachHang(kh);
             menuFlow.getChildren().add(card);
         }
@@ -140,18 +141,23 @@ public class QLThanhVienController {
     // =========================
     private void langNgheThayDoiMaKH() {
         lblMaNV.textProperty().addListener((obs, oldValue, newValue) -> {
-            boolean tonTai = KhachHangDAO.getAll()
-                    .stream()
-                    .anyMatch(nv -> nv.getMaKhachHang().equalsIgnoreCase(newValue.trim()));
+//            boolean tonTai = KhachHangDAO.getAll()
+//                    .stream()
+//                    .anyMatch(nv -> nv.getMaKhachHang().equalsIgnoreCase(newValue.trim()));
+//            btnXacNhan.setText(tonTai ? "Lưu Thay Đổi" : "Thêm Khách");
+            boolean tonTai = dsKhachHang.stream()
+                    .anyMatch(k -> k.getMaKhachHang().equalsIgnoreCase(newValue));
             btnXacNhan.setText(tonTai ? "Lưu Thay Đổi" : "Thêm Khách");
         });
     }
 
     private void xuLyXacNhan() {
         String maKH = lblMaNV.getText().trim();
-        boolean tonTai = KhachHangDAO.getAll()
-                .stream()
-                .anyMatch(nv -> nv.getMaKhachHang().equalsIgnoreCase(maKH));
+//        boolean tonTai = KhachHangDAO.getAll()
+//                .stream()
+//                .anyMatch(nv -> nv.getMaKhachHang().equalsIgnoreCase(maKH));
+        boolean tonTai = dsKhachHang.stream()
+                .anyMatch(k -> k.getMaKhachHang().equalsIgnoreCase(maKH));
 
         if (tonTai) capNhatNV(maKH);
         else themNV();

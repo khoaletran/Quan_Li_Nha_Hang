@@ -165,6 +165,7 @@
                 <Button fx:id="btnThem" style="-fx-background-color: #1CD446FF" styleClass="btn-action" text="Thêm" />
                 <Button fx:id="btnXoa" style="-fx-background-color: #ff383c" styleClass="btn-action" text="Xóa" />
                 <Button fx:id="btnSua" style="-fx-background-color: #0D6EFDFF" styleClass="btn-action" text="Sửa" />
+                <Button fx:id="btnInQR" style="-fx-background-color: #8356b1" styleClass="btn-action" text="IN QR" />
             </HBox>
         </VBox>
     </right>

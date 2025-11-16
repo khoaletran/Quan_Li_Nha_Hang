@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import dao.KhachHangDAO;
 import dao.KhuyenMaiDAO;
 import dao.MonDAO;
 import entity.KhuyenMai;
@@ -14,7 +15,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import ui.AlertCus;
+import ui.ConfirmCus;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +40,7 @@ public class KhuyenMaiController {
     @FXML private ComboBox<String> cbUudai, cbTrangThai, cbUuDaiTimKiem;
 
     // FXML - NÚT
-    @FXML private Button btnThem, btnSua, btnXoa, btnTimKiem, btnXoaTrang;
+    @FXML private Button btnThem, btnSua, btnXoa, btnTimKiem, btnXoaTrang,btnInQR;
 
     // BIẾN CHUNG
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -94,6 +100,8 @@ public class KhuyenMaiController {
         if (btnTimKiem != null) btnTimKiem.setOnAction(e -> xuLyTimKiem());
         if (btnXoaTrang != null) btnXoaTrang.setOnAction(e -> xoaTrangTimKiem());
         if (txtTimMon != null) txtTimMon.setOnKeyReleased(e -> timKiemMonTheoTen(txtTimMon.getText()));
+        if (btnInQR != null) btnInQR.setOnAction(e -> inAnhQR());
+
     }
 
     // ========================== DANH SÁCH KHUYẾN MÃI ==========================
@@ -201,24 +209,29 @@ public class KhuyenMaiController {
         try {
             KhuyenMai km = layThongTinTuForm();
             if (km == null) return;
-            boolean ok = kmDAO.insert(km);
-            if (ok) {
-                hienThongBao(Alert.AlertType.INFORMATION, "Thành công", "Đã thêm khuyến mãi.");
-                taiDanhSachKhuyenMai();
-                xoaTrangForm();
-            } else {
-                hienThongBao(Alert.AlertType.ERROR, "Thất bại", "Thêm khuyến mãi thất bại.");
-                txtMaKM.setText(tuSinhMaKM(KhuyenMaiDAO.maKMCuoi()));
+            boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận thêm khuyến mãi mới");
+            if (answer) {
+                boolean ok = kmDAO.insert(km);
+                if (ok) {
+                    selectedKM = km;
+                    QrCodeController.generateQRCodeKM(txtMaKM.getText().trim(),txtMaKM.getText().trim(),300);
+                    AlertCus.show("Thông báo","Đã thêm khuyến mãi");
+                    taiDanhSachKhuyenMai();
+                    xoaTrangForm();
+                } else {
+                    AlertCus.show("Thông báo","Thêm khuyến mãi thất bại");
+                    txtMaKM.setText(tuSinhMaKM(KhuyenMaiDAO.maKMCuoi()));
+                }
             }
         } catch (Exception ex) {
-            hienThongBao(Alert.AlertType.ERROR, "Lỗi", ex.getMessage());
+            AlertCus.show("Thông báo","Thêm khuyến mãi thất bại");
             ex.printStackTrace();
         }
     }
 
     private void xuLySua() {
         if (selectedKM == null) {
-            hienThongBao(Alert.AlertType.WARNING, "Chưa chọn", "Vui lòng chọn khuyến mãi cần sửa.");
+            AlertCus.show("Thông báo","Vui lòng chọn khuyến mãi cần sửa.");
             return;
         }
         try {
@@ -226,36 +239,36 @@ public class KhuyenMaiController {
             if (km == null) return;
             boolean ok = kmDAO.update(km);
             if (ok) {
-                hienThongBao(Alert.AlertType.INFORMATION, "Thành công", "Đã cập nhật khuyến mãi.");
+                AlertCus.show("Thông báo","Đã cập nhật khuyến mãi.");
                 taiDanhSachKhuyenMai();
                 xoaTrangForm();
             } else {
-                hienThongBao(Alert.AlertType.ERROR, "Thất bại", "Cập nhật thất bại.");
+                AlertCus.show("Thông báo","Cập nhật thất bại.");
             }
         } catch (Exception ex) {
-            hienThongBao(Alert.AlertType.ERROR, "Lỗi", ex.getMessage());
+            AlertCus.show("Thông báo","Lỗi");
             ex.printStackTrace();
         }
     }
 
     private void xuLyXoa() {
         if (selectedKM == null) {
-            hienThongBao(Alert.AlertType.WARNING, "Chưa chọn", "Vui lòng chọn khuyến mãi cần xóa.");
+            AlertCus.show("Thông báo","Vui lòng chọn khuyến mãi cần xóa");
             return;
         }
-        Alert xacNhan = new Alert(Alert.AlertType.CONFIRMATION);
-        xacNhan.setTitle("Xác nhận xóa");
-        xacNhan.setContentText("Bạn có chắc muốn xóa khuyến mãi " + selectedKM.getMaKM() + "?");
-        Optional<ButtonType> ketQua = xacNhan.showAndWait();
-        if (ketQua.isPresent() && ketQua.get() == ButtonType.OK) {
+
+        boolean answer = ConfirmCus.show("Xác nhận xóa",
+                "Bạn có chắc muốn xóa khuyến mãi " + selectedKM.getMaKM() + "?");
+
+        if (answer) {
             boolean ok = kmDAO.delete(selectedKM.getMaKM());
             if (ok) {
-                hienThongBao(Alert.AlertType.INFORMATION, "Đã xóa", "Xóa thành công.");
+                AlertCus.show("Thông báo","Xóa thành công");
                 selectedKM = null;
                 taiDanhSachKhuyenMai();
                 xoaTrangForm();
             } else {
-                hienThongBao(Alert.AlertType.ERROR, "Lỗi", "Xóa thất bại.");
+                AlertCus.show("Thông báo","Xóa thất bại");
             }
         }
     }
@@ -320,7 +333,7 @@ public class KhuyenMaiController {
         if (vboxCenterScroll == null) return;
         vboxCenterScroll.getChildren().clear();
         if (ketQua == null || ketQua.isEmpty()) {
-            hienThongBao(Alert.AlertType.INFORMATION, "Kết quả tìm kiếm", "Không tìm thấy khuyến mãi phù hợp.");
+            AlertCus.show("Thông báo","Không tìm thấy khuyến mãi phù hợp.");
             return;
         }
         for (KhuyenMai km : ketQua) vboxCenterScroll.getChildren().add(taoTheKhuyenMai(km));
@@ -398,11 +411,11 @@ public class KhuyenMaiController {
     private void chonMonChoKhuyenMai(Mon m) {
         if (m == null) return;
         if (monDaChon.contains(m)) {
-            hienThongBao(Alert.AlertType.INFORMATION, "Thông Báo", "Món đã được chọn cho khuyến mãi này!");
+            AlertCus.show("Thông báo","Món đã được chọn cho khuyến mãi này!");
             return;
         }
         monDaChon.add(m);
-        hienThongBao(Alert.AlertType.INFORMATION, "Thông Báo", "Đã thêm món " + m.getTenMon() + " vào khuyến mãi!");
+        AlertCus.show("Thông báo","Đã thêm món " + m.getTenMon() + " vào khuyến mãi!");
     }
 
     private void timKiemMonTheoTen(String keyword) {
@@ -442,21 +455,21 @@ public class KhuyenMaiController {
             boolean isHoaDon = "Hóa đơn".equalsIgnoreCase(uuDai);
 
             if (ma.isEmpty() || ten.isEmpty() || soStr.isEmpty() || bd == null || kt == null || phStr.isEmpty() || uuDai == null) {
-                hienThongBao(Alert.AlertType.WARNING, "Thiếu thông tin", "Vui lòng điền đầy đủ thông tin bắt buộc");
+               AlertCus.show("Thông báo","Vui lòng điền đầy đủ thông tin");
                 return null;
             }
             if (bd.isAfter(kt)) {
-                hienThongBao(Alert.AlertType.WARNING, "Ngày không hợp lệ", "Ngày bắt đầu phải trước ngày kết thúc");
+                AlertCus.show("Thông báo","Ngày bắt đầu phải trước ngày kết thúc");
                 return null;
             }
             int soLuong = Integer.parseInt(soStr);
             int phanTram = Integer.parseInt(phStr);
             return new KhuyenMai(ma, ten, soLuong, bd, kt, maThayThe, phanTram, isHoaDon);
         } catch (NumberFormatException e) {
-            hienThongBao(Alert.AlertType.ERROR, "Lỗi định dạng", "Số lượng và phần trăm phải là số nguyên");
+            AlertCus.show("Thông báo","Số lượng và phần trăm phải là số nguyên");
             return null;
         } catch (Exception ex) {
-            hienThongBao(Alert.AlertType.ERROR, "Lỗi dữ liệu", "Dữ liệu không hợp lệ: " + ex.getMessage());
+            AlertCus.show("Thông báo","Dữ liệu không hợp lệ: " + ex.getMessage());
             return null;
         }
     }
@@ -479,11 +492,31 @@ public class KhuyenMaiController {
         return String.format("KM%04d", so + 1);
     }
 
-    private void hienThongBao(Alert.AlertType loai, String tieuDe, String noiDung) {
-        Alert a = new Alert(loai);
-        a.setTitle(tieuDe);
-        a.setHeaderText(null);
-        a.setContentText(noiDung);
-        a.showAndWait();
+
+    private void inAnhQR() {
+        try {
+            String maQR = txtMaKM.getText().trim();
+            File file = new File("src/main/resources/IMG/qrcode/" + maQR + ".png");
+            if (!file.exists()) {
+                AlertCus.show("Lỗi", "Không tìm thấy file QR!");
+                return;
+            }
+            Image img = new Image(new FileInputStream(file));
+
+            ImageView imageView = new ImageView(img);
+            imageView.setFitWidth(300);
+            imageView.setPreserveRatio(true);
+
+            // Dialog xem trước khi in
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("In QR");
+            dialog.getDialogPane().setContent(imageView);
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+            Optional<ButtonType> result = dialog.showAndWait();
+        } catch (Exception e) {
+            AlertCus.show("Lỗi", "Không thể in ảnh QR!");
+            e.printStackTrace();
+        }
     }
 }
