@@ -16,14 +16,20 @@ public class MonDAO {
         Connection con = connectDB.getConnection();
         if (con == null) return ds;
 
-        String sql = "SELECT * FROM Mon";
+        String sql = """
+                select m.maMon, m.tenMon, m.moTa, m.hinhAnh, m.giaGoc, m.soLuong, lm.maLoaiMon, lm.tenLoaiMon, lm.moTa as moTaLoai
+                from Mon m join LoaiMon lm 
+                on m.loaiMon = lm.maLoaiMon
+                """;;
         try (Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
-            // 🔹 Load toàn bộ loại món 1 lần
-            List<LoaiMon> dsLoai = LoaiMonDAO.getAll();
-
             while (rs.next()) {
+                LoaiMon lm = new LoaiMon();
+                lm.setMaLoaiMon(rs.getString("maLoaiMon"));
+                lm.setMoTa(rs.getString("moTaLoai"));
+                lm.setTenLoaiMon(rs.getString("tenLoaiMon"));
+
                 Mon mon = new Mon();
                 mon.setMaMon(rs.getString("maMon"));
                 mon.setTenMon(rs.getString("tenMon"));
@@ -31,14 +37,7 @@ public class MonDAO {
                 mon.setHinhAnh(rs.getString("hinhAnh"));
                 mon.setGiaGoc(rs.getDouble("giaGoc"));
                 mon.setSoLuong(rs.getInt("soLuong"));
-
-                String maLoaiMon = rs.getString("loaiMon");
-                LoaiMon loai = dsLoai.stream()
-                        .filter(l -> l.getMaLoaiMon().equals(maLoaiMon))
-                        .findFirst()
-                        .orElse(null);
-                mon.setLoaiMon(loai);
-
+                mon.setLoaiMon(lm);
                 ds.add(mon);
             }
 
