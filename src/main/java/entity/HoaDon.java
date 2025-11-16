@@ -71,15 +71,17 @@ public class HoaDon {
 
     public LocalDateTime getTgCheckOut() { return tgCheckOut; }
     public void setTgCheckOut(LocalDateTime tgCheckOut) {
-        if (tgCheckOut== null) {
+        if (tgCheckOut == null) {
             this.tgCheckOut = null;
             return;
         }
-        if (this.tgCheckIn != null &&!tgCheckOut.isAfter(this.tgCheckIn)) {
-            throw new IllegalArgumentException("Thời gian check out phải sau thời gian check in");
+        if (this.tgCheckIn != null && !tgCheckOut.isAfter(this.tgCheckIn)) {
+            this.tgCheckOut = null;
+            return;
         }
         this.tgCheckOut = tgCheckOut;
     }
+
 
     public KhuyenMai getKhuyenMai() { return khuyenMai; }
     public void setKhuyenMai(KhuyenMai khuyenMai) { this.khuyenMai = khuyenMai; }
