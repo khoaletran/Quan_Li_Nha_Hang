@@ -10,111 +10,137 @@ import java.util.List;
 public class ThoiGianDoiBanDAO {
 
     // ==============================
-    // LẤY TOÀN BỘ DANH SÁCH THỜI GIAN ĐỢI BÀN
+    // MAP OBJECT
     // ==============================
-    public static ArrayList<ThoiGianDoiBan> getAll() {
-        ArrayList<ThoiGianDoiBan> ds = new ArrayList<>();
-        String sql = "SELECT maTGDB, loaiDatBan, thoiGian FROM ThoiGianDoiBan";
+    private static ThoiGianDoiBan map(ResultSet rs) throws SQLException {
+        return new ThoiGianDoiBan(
+                rs.getString("maTGDB"),
+                rs.getBoolean("loaiDatBan"),
+                rs.getInt("thoiGian")
+        );
+    }
 
-        try (Statement st = connectDB.getConnection().createStatement();
+    // ==============================
+    // GET ALL
+    // ==============================
+    public static List<ThoiGianDoiBan> getAll() {
+        List<ThoiGianDoiBan> ds = new ArrayList<>();
+        String sql = "SELECT * FROM ThoiGianDoiBan ORDER BY maTGDB";
+
+        try (Connection con = connectDB.getConnection();
+             Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
-            while (rs.next()) {
-                ThoiGianDoiBan tgdb = new ThoiGianDoiBan(
-                        rs.getString("maTGDB"),
-                        rs.getBoolean("loaiDatBan"),
-                        rs.getInt("thoiGian")
-                );
-                ds.add(tgdb);
-            }
+            while (rs.next()) ds.add(map(rs));
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("ThoiGianDoiBanDAO.getAll(): " + e.getMessage());
         }
+
         return ds;
     }
+
+    // ==============================
+    // GET LATEST (any loaiDatBan)
+    // ==============================
     public ThoiGianDoiBan getLatest() {
         String sql = "SELECT TOP 1 * FROM ThoiGianDoiBan ORDER BY maTGDB DESC";
-        ThoiGianDoiBan tgdb = null;
 
-        try (Statement st = connectDB.getConnection().createStatement();
+        try (Connection con = connectDB.getConnection();
+             Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
-            if (rs.next()) {
-                tgdb = new ThoiGianDoiBan(
-                        rs.getString("maTGDB"),
-                        rs.getBoolean("loaiDatBan"),
-                        rs.getInt("thoiGian")
-                );
-            }
+            if (rs.next()) return map(rs);
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("ThoiGianDoiBanDAO.getLatest(): " + e.getMessage());
         }
 
-        return tgdb;
-    }
-
-    public static ThoiGianDoiBan getLatestByLoai(boolean loaiDatBan) {
-        String sql = "SELECT TOP 1 * FROM ThoiGianDoiBan WHERE loaiDatBan=? ORDER BY maTGDB DESC";
-        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
-            ps.setBoolean(1, loaiDatBan);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return new ThoiGianDoiBan(
-                        rs.getString("maTGDB"),
-                        rs.getBoolean("loaiDatBan"),
-                        rs.getInt("thoiGian")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return null;
     }
 
+    // ==============================
+    // GET LATEST BY loaiDatBan
+    // ==============================
+    public static ThoiGianDoiBan getLatestByLoai(boolean loaiDatBan) {
+        String sql = """
+            SELECT TOP 1 * 
+            FROM ThoiGianDoiBan 
+            WHERE loaiDatBan = ? 
+            ORDER BY maTGDB DESC
+        """;
 
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setBoolean(1, loaiDatBan);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) return map(rs);
+
+        } catch (SQLException e) {
+            System.err.println("ThoiGianDoiBanDAO.getLatestByLoai(): " + e.getMessage());
+        }
+
+        return null;
+    }
 
     // ==============================
-    // THÊM MỚI THỜI GIAN ĐỢI BÀN
+    // INSERT
     // ==============================
     public boolean insert(ThoiGianDoiBan tgdb) {
-        String sql = "INSERT INTO ThoiGianDoiBan (maTGDB, loaiDatBan, thoiGian) VALUES (?, ?, ?)";
-        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+        String sql = "INSERT INTO ThoiGianDoiBan(maTGDB, loaiDatBan, thoiGian) VALUES (?, ?, ?)";
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setString(1, tgdb.getMaTGDB());
             ps.setBoolean(2, tgdb.isLoaiDatBan());
             ps.setInt(3, tgdb.getThoiGian());
+
             return ps.executeUpdate() > 0;
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("ThoiGianDoiBanDAO.insert(): " + e.getMessage());
             return false;
         }
     }
 
     // ==============================
-    // CẬP NHẬT THỜI GIAN ĐỢI BÀN
+    // UPDATE
     // ==============================
     public boolean update(ThoiGianDoiBan tgdb) {
         String sql = "UPDATE ThoiGianDoiBan SET loaiDatBan=?, thoiGian=? WHERE maTGDB=?";
-        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setBoolean(1, tgdb.isLoaiDatBan());
             ps.setInt(2, tgdb.getThoiGian());
             ps.setString(3, tgdb.getMaTGDB());
+
             return ps.executeUpdate() > 0;
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("ThoiGianDoiBanDAO.update(): " + e.getMessage());
             return false;
         }
     }
 
     // ==============================
-    // XOÁ THỜI GIAN ĐỢI BÀN
+    // DELETE
     // ==============================
     public boolean delete(String maTGDB) {
         String sql = "DELETE FROM ThoiGianDoiBan WHERE maTGDB=?";
-        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setString(1, maTGDB);
             return ps.executeUpdate() > 0;
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("ThoiGianDoiBanDAO.delete(): " + e.getMessage());
             return false;
         }
     }

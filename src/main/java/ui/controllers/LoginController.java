@@ -14,6 +14,7 @@ import javafx.util.Duration;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoginController {
 
@@ -88,7 +89,7 @@ public class LoginController {
     private void login() {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
-        ArrayList<NhanVien> listNV = NhanVienDAO.getAll();
+        List<NhanVien> listNV = NhanVienDAO.getAll();
         for (NhanVien nv : listNV) {
             if (nv.getMaNV().equals(username) && nv.getMatKhau().equals(password)) {
                 if(nv.isQuanLi()) {

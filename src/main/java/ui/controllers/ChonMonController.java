@@ -40,6 +40,11 @@ public class ChonMonController {
 
     private final Map<String, HBox> chiTietMap = new HashMap<>();
     private final Map<String, Integer> soLuongMap = new HashMap<>();
+    private List<Mon> danhSachMonCache = new ArrayList<>();
+    private static final Map<String, Image> imageCache = new HashMap<>();
+    private static final Image fallbackImage =
+            new Image(ChonMonController.class.getResourceAsStream("/IMG/food/restaurant.png"));
+
 
     private final MonDAO monDAO = new MonDAO();
     private final LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
@@ -162,9 +167,7 @@ public class ChonMonController {
         String tuKhoa = tfTimKiem.getText().trim().toLowerCase();
         LoaiMon loaiDuocChon = comboDanhMuc.getValue();
 
-        List<Mon> danhSach = monDAO.getAll();
-
-        for (Mon mon : danhSach) {
+        for (Mon mon : danhSachMonCache) {
             boolean hopTen = tuKhoa.isEmpty() || mon.getTenMon().toLowerCase().contains(tuKhoa);
             boolean hopLoai = (loaiDuocChon == null
                     || loaiDuocChon.getMaLoaiMon().equals("ALL")
@@ -175,6 +178,7 @@ public class ChonMonController {
             }
         }
     }
+
 
     @FXML
     private void quayVeDatBan() {
@@ -296,17 +300,32 @@ public class ChonMonController {
         });
     }
 
-
-
-
     private void loadDanhSachMon() {
         flowMonAn.getChildren().clear();
-        List<Mon> danhSach = monDAO.getAll();
-        System.out.println(danhSach.size());
 
-        for (Mon mon : danhSach) {
-            VBox card = taoCardMon(mon);
-            flowMonAn.getChildren().add(card);
+        danhSachMonCache = monDAO.getAll();
+        if (danhSachMonCache == null || danhSachMonCache.isEmpty()) {
+            System.out.println("KHÔNG CÓ MÓN TRONG DB!");
+            return;
+        }
+
+        for (Mon mon : danhSachMonCache) {
+            preloadImage(mon);
+            flowMonAn.getChildren().add(taoCardMon(mon));
+        }
+    }
+
+    private void preloadImage(Mon mon) {
+        String file = mon.getHinhAnh().replaceFirst("^/", "");
+        String path = "/IMG/food/" + file;
+
+        if (!imageCache.containsKey(path)) {
+            try {
+                Image img = new Image(getClass().getResourceAsStream(path), 150, 110, false, true);
+                imageCache.put(path, img);
+            } catch (Exception e) {
+                imageCache.put(path, fallbackImage);
+            }
         }
     }
 
@@ -316,12 +335,12 @@ public class ChonMonController {
         card.setSpacing(8);
         card.setAlignment(javafx.geometry.Pos.CENTER);
 
-        ImageView imageView = new ImageView();
-        try {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food" + mon.getHinhAnh())));
-        } catch (Exception e) {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
-        }
+        String file = mon.getHinhAnh().replaceFirst("^/", "");
+        String path = "/IMG/food/" + file;
+
+        Image img = imageCache.getOrDefault(path, fallbackImage);
+
+        ImageView imageView = new ImageView(img);
         imageView.setFitWidth(150);
         imageView.setFitHeight(110);
         imageView.getStyleClass().add("food-image");
@@ -494,17 +513,14 @@ public class ChonMonController {
         return row;
     }
 
-
-
     private void capNhatTongTien() {
         double tongTien = 0;
-        List<Mon> ds = monDAO.getAll();
 
         for (Map.Entry<String, Integer> entry : soLuongMap.entrySet()) {
             String maMon = entry.getKey();
             int soLuong = entry.getValue();
 
-            Mon mon = ds.stream()
+            Mon mon = danhSachMonCache.stream()
                     .filter(m -> m.getMaMon().equals(maMon))
                     .findFirst()
                     .orElse(null);
@@ -519,12 +535,8 @@ public class ChonMonController {
         }
 
         lbl_total.setText(formatCurrency(tongTien));
-
         tinhCoc();
     }
-
-
-
 
     private String formatCurrency(double amount) {
         Locale localeVN = new Locale("vi", "VN");
@@ -788,39 +800,29 @@ public class ChonMonController {
 
 
     private boolean themChiTietHoaDon(HoaDon hoaDon) {
-        if (hoaDon == null) {
-            System.out.println("Không có hóa đơn để thêm chi tiết!");
-            return false;
-        }
+        if (hoaDon == null) return false;
 
-        String maHD = hoaDon.getMaHD();
         ChiTietHDDAO dao = new ChiTietHDDAO();
-        List<Mon> dsMon = monDAO.getAll();
-
         boolean tatCaOK = true;
 
         for (Map.Entry<String, Integer> entry : soLuongMap.entrySet()) {
             String maMon = entry.getKey();
             int soLuong = entry.getValue();
 
-            Mon mon = dsMon.stream()
+            Mon mon = danhSachMonCache.stream()
                     .filter(m -> m.getMaMon().equals(maMon))
                     .findFirst()
                     .orElse(null);
 
             if (mon != null && soLuong > 0) {
-                double thanhTien = mon.getGiaBan() * soLuong;
                 ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
-
-                if (!dao.insert(ct)) {
-                    tatCaOK = false;
-                    System.err.println("Lỗi thêm chi tiết món: " + maMon);
-                }
+                if (!dao.insert(ct)) tatCaOK = false;
             }
         }
 
         return tatCaOK;
     }
+
 
     private KhachHang taoKHMoi() {
         try {
@@ -834,7 +836,7 @@ public class ChonMonController {
             KhachHang khMoi = new KhachHangDAO().taoKhachHangMoi(khachHang);
 
             if (khMoi != null) {
-                System.out.println("✅ Đã thêm khách hàng mới: " + khMoi.getTenKhachHang());
+                System.out.println("Đã thêm khách hàng mới: " + khMoi.getTenKhachHang());
                 return khMoi; // Trả về đối tượng khách hàng vừa tạo
             } else {
                 AlertCus.show("Lỗi hệ thống", "Không thể thêm khách hàng mới. Vui lòng thử lại!");
