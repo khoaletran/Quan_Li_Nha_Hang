@@ -188,7 +188,7 @@ public class DatBanController {
         boolean isToday = selectedTime.toLocalDate().isEqual(LocalDate.now());
         boolean hienWaitlist = isToday && !conBanTrongKV;
         if (btnWaitlist.isVisible() != hienWaitlist) {
-            btnWaitlist.setVisible(true); // luôn giữ visible để fade
+            btnWaitlist.setVisible(true);
             double start = hienWaitlist ? 0 : 1;
             double end = hienWaitlist ? 1 : 0;
 
