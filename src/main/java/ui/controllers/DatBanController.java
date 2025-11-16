@@ -176,7 +176,7 @@ public class DatBanController {
         capNhatHienThi(starIN_04, tableIN_04, "KV0002", "LB0004", 8, 12, dsHD);
 
         capNhatHienThi(starVIP_01, tableVIP_01, "KV0003", "LB0004", 8, 12, dsHD);
-        capNhatHienThi(starVIP_02, tableVIP_02, "KV0003", "LB0005", 12, 100, dsHD);
+        capNhatHienThi(starVIP_02, tableVIP_02, "KV0003", "LB0005", 12, 20, dsHD);
 
         String maKV = getSelectedMaKhuVuc();
         int finalSoLuong = soLuong;
