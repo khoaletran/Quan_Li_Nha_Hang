@@ -1,7 +1,6 @@
 package ui;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -14,7 +13,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-public class SplashApp extends Application{
+public class SplashApp extends Application {
     @Override
     public void start(Stage splashStage) throws Exception {
         // Hình logo
@@ -29,7 +28,7 @@ public class SplashApp extends Application{
         Label progressLabel = new Label("0%");
 
         VBox root = new VBox(20, logo, progressBar, progressLabel);
-        root.setStyle("-fx-background-color: white; -fx-padding: 30; -fx-alignment: center;");
+        root.setStyle("-fx-background-color: linear-gradient(to bottom, #FF8C42, #FFD166); -fx-alignment: center;");
 
         Scene scene = new Scene(root, 1000, 600);
         splashStage.initStyle(StageStyle.UNDECORATED);
@@ -47,7 +46,27 @@ public class SplashApp extends Application{
             timeline.getKeyFrames().add(kf);
         }
 
-        timeline.setOnFinished(e -> {
+        timeline.setOnFinished(e -> playEndEffect(splashStage, root, logo));
+        timeline.play();
+    }
+
+    // Hiệu ứng fade + scale
+    private void playEndEffect(Stage splashStage, VBox root, ImageView logo) {
+        // Fade root
+        FadeTransition fade = new FadeTransition(Duration.seconds(1), root);
+        fade.setFromValue(1.0);
+        fade.setToValue(0.0);
+
+        // Scale logo
+        ScaleTransition scale = new ScaleTransition(Duration.seconds(1), logo);
+        scale.setFromX(1.0);
+        scale.setFromY(1.0);
+        scale.setToX(1.5);
+        scale.setToY(1.5);
+
+        // Kết hợp
+        ParallelTransition pt = new ParallelTransition(fade, scale);
+        pt.setOnFinished(ev -> {
             splashStage.close();
             // Mở Login
             Platform.runLater(() -> {
@@ -61,7 +80,7 @@ public class SplashApp extends Application{
             });
         });
 
-        timeline.play();
+        pt.play();
     }
 
     public static void main(String[] args) {
