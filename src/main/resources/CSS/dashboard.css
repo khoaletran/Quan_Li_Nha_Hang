@@ -372,8 +372,8 @@
 }
 
 .notif-status-yellow {
-    -fx-background-color: #faeb9c;
-    -fx-text-fill: #7A5E00;
+    -fx-background-color: #eaddff;
+    -fx-text-fill: #2750A0;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-padding: 2 6;
@@ -391,10 +391,10 @@
 }
 
 .notif-backgr-green {
-    -fx-background-color: #4CAF50;
+    -fx-background-color: #2BAE66FF;
 }
 
 .notif-backgr-yellow {
-    -fx-background-color: #FFEB3B;
+    -fx-background-color: #89CFF0;
 }
 
