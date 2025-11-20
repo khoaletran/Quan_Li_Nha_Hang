@@ -252,6 +252,95 @@ public class HoaDonDAO {
         return ds;
     }
 
+    public static List<HoaDon> getAllToday() {
+        List<HoaDon> ds = new ArrayList<>();
+
+        String sql = """
+                SELECT hd.maHD, hd.maKH, hd.maKM, hd.maNV, hd.maBan, hd.maSK,
+                       hd.tgLapHD, hd.tgCheckin, hd.kieuDatBan, hd.moTa, hd.trangThai, hd.soLuong,
+                       kh.tenKH, kh.sdt, sk.tenSK, b.maKhuVuc, kv.tenKhuVuc
+                FROM HoaDon hd
+                JOIN KhachHang kh ON hd.maKH = kh.maKH
+                JOIN Ban b ON hd.maBan = b.maBan
+                JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
+                JOIN NhanVien nv ON hd.maNV = nv.maNV
+                LEFT JOIN KhuyenMai km ON km.maKM = hd.maKM
+                LEFT JOIN SuKien sk ON hd.maSK = sk.maSK
+                WHERE
+                (
+                   (hd.kieuDatBan = 1
+                    AND (hd.tgCheckin IS NULL OR
+                         (hd.tgCheckin >= CAST(GETDATE() AS DATE)
+                          AND hd.tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)))))
+                   OR
+                   (hd.kieuDatBan = 0
+                    AND (hd.tgLapHD IS NULL OR
+                         (hd.tgLapHD >= CAST(GETDATE() AS DATE)
+                          AND hd.tgLapHD < DATEADD(DAY, 1, CAST(GETDATE() AS DATE)))))
+                )""";
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                KhachHang kh = new KhachHang();
+                kh.setMaKhachHang(rs.getString("maKH"));
+                kh.setTenKhachHang(rs.getString("tenKH"));
+                kh.setSdt(rs.getString("sdt"));
+
+                NhanVien nv = new NhanVien();
+                nv.setMaNV(rs.getString("maNV"));
+
+                Ban ban = new Ban();
+                ban.setMaBan(rs.getString("maBan"));
+
+                KhuVuc kv = new KhuVuc();
+                kv.setMaKhuVuc(rs.getString("maKhuVuc"));
+                kv.setTenKhuVuc(rs.getString("tenKhuVuc"));
+                ban.setKhuVuc(kv);
+
+                KhuyenMai km = null;
+                if (rs.getString("maKM") != null) {
+                    km = new KhuyenMai();
+                    km.setMaKM(rs.getString("maKM"));
+                }
+
+                SuKien sk = null;
+                if (rs.getString("maSK") != null) {
+                    sk = new SuKien();
+                    sk.setMaSK(rs.getString("maSK"));
+                    sk.setTenSK(rs.getString("tenSK"));
+                }
+
+                HoaDon hd = new HoaDon();
+                hd.setMaHD(rs.getString("maHD"));
+                hd.setKhachHang(kh);
+                hd.setNhanVien(nv);
+                hd.setBan(ban);
+                hd.setKhuyenMai(km);
+                hd.setSuKien(sk);
+                hd.setTgLapHD(rs.getTimestamp("tgLapHD") != null
+                        ? rs.getTimestamp("tgLapHD").toLocalDateTime() : null);
+                hd.setTgCheckIn(rs.getTimestamp("tgCheckin") != null
+                        ? rs.getTimestamp("tgCheckin").toLocalDateTime() : null);
+                hd.setKieuDatBan(rs.getBoolean("kieuDatBan"));
+                hd.setTrangthai(rs.getInt("trangThai"));
+                hd.setSoLuong(rs.getInt("soLuong"));
+                hd.setMoTa(rs.getString("moTa"));
+
+                ds.add(hd);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách hóa đơn hôm nay: " + e.getMessage());
+        }
+
+        return ds;
+    }
+
+
+
 
 
     // =====================================================================

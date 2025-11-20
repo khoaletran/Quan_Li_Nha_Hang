@@ -580,7 +580,7 @@ public class DashboardController {
         }else{
             HoaDonDAO hoaDonDAO = new HoaDonDAO();
             box_not.getChildren().clear();
-            List<HoaDon> danhSachHoaDon = hoaDonDAO.getAllNgayHomNay();
+            List<HoaDon> danhSachHoaDon = hoaDonDAO.getAllToday();
             LocalDateTime now = LocalDateTime.now();
             danhSachHoaDon.sort(Comparator.comparing(HoaDon::getTgCheckIn).reversed());
 
@@ -588,30 +588,37 @@ public class DashboardController {
                 LocalDateTime tgCheckIn = hd.getTgCheckIn();
                 if (tgCheckIn == null) continue;
 
-                // Trạng thái phải = 0
-                if (hd.getTrangthai() != 0) continue;
+                if (hd.getTrangthai() != 0) continue; // chỉ lấy hóa đơn đang chờ
 
-                // Khoảng check-in ±15 phút
                 LocalDateTime checkInEarly = tgCheckIn.minusMinutes(15);
                 LocalDateTime checkInLate  = tgCheckIn.plusMinutes(15);
 
+                boolean chuaDenGio = false;
                 boolean denGio = false;
                 boolean quaGio = false;
 
-                if (!now.isBefore(checkInEarly) && !now.isAfter(checkInLate)) {
-                    // trong khoảng được check-in
+                // 1) Chưa đến giờ check-in (trước checkInEarly)
+                if (now.isBefore(checkInEarly)) {
+                    chuaDenGio = true;
+                }
+                // 2) Đúng giờ check-in
+                else if (!now.isBefore(checkInEarly) && !now.isAfter(checkInLate)) {
                     denGio = true;
-                } else if (now.isAfter(checkInLate) || now.isBefore(checkInEarly)) {
-                    // quá sớm hoặc quá trễ nhưng trạng thái vẫn 0
+                }
+                // 3) Quá giờ check-in
+                else if (now.isAfter(checkInLate)) {
                     quaGio = true;
                 }
 
-                if (denGio) {
-                    box_not.getChildren().add(taoThongBaoHoaDon(hd, true));
+                if (chuaDenGio) {
+                    box_not.getChildren().add(taoThongBaoHoaDon(hd, 0)); // 0 = chưa đến giờ
+                } else if (denGio) {
+                    box_not.getChildren().add(taoThongBaoHoaDon(hd, 1)); // 1 = đến giờ
                 } else if (quaGio) {
-                    box_not.getChildren().add(taoThongBaoHoaDon(hd, false));
+                    box_not.getChildren().add(taoThongBaoHoaDon(hd, 2)); // 2 = quá giờ
                 }
             }
+
         }
     }
 
@@ -649,16 +656,12 @@ public class DashboardController {
         return box;
     }
 
-
-
-
-    private Node taoThongBaoHoaDon(HoaDon hd, boolean denGio) {
+    private Node taoThongBaoHoaDon(HoaDon hd, int trangThai) {
         HBox box = new HBox();
         box.getStyleClass().add("notif-item");
         box.setSpacing(10);
         box.setAlignment(Pos.CENTER_LEFT);
 
-        // ==== LEFT COLUMN ====
         VBox left = new VBox();
         left.setSpacing(4);
 
@@ -674,27 +677,85 @@ public class DashboardController {
 
         left.getChildren().addAll(lbTenBan, lbCheckInTime);
 
-        // ==== RIGHT COLUMN ====
         VBox right = new VBox();
         right.setSpacing(4);
 
-        Label tenKH = new Label("tên khách : " + hd.getKhachHang().getTenKhachHang());
+        Label tenKH = new Label("Tên khách: " + hd.getKhachHang().getTenKhachHang());
         tenKH.getStyleClass().add("notif-sub-right");
 
-        Label sdt = new Label("SĐT : " + hd.getKhachHang().getSdt());
+        Label sdt = new Label("SĐT: " + hd.getKhachHang().getSdt());
         sdt.getStyleClass().add("notif-sub-right");
 
-        Label status = new Label(denGio ? "Đã đến giờ hẹn" : "Đã quá giờ hẹn");
-        status.getStyleClass().add(denGio ? "notif-status-green" : "notif-status-red");
-        left.getStyleClass().addAll("notif-left",denGio ? "notif-backgr-green" : "notif-backgr-red");
+        Label status = new Label();
+        switch (trangThai) {
+            case 0 -> {
+                status.setText("Chưa đến giờ check-in");
+                status.getStyleClass().add("notif-status-yellow");
+                left.getStyleClass().addAll("notif-left", "notif-backgr-yellow");
+            }
+            case 1 -> {
+                status.setText("Đã đến giờ hẹn");
+                status.getStyleClass().add("notif-status-green");
+                left.getStyleClass().addAll("notif-left", "notif-backgr-green");
+            }
+            case 2 -> {
+                status.setText("Đã quá giờ hẹn");
+                status.getStyleClass().add("notif-status-red");
+                left.getStyleClass().addAll("notif-left", "notif-backgr-red");
+            }
+        }
 
         right.getChildren().addAll(tenKH, sdt, status);
-
-        // Add left-right vào item
         box.getChildren().addAll(left, right);
 
         return box;
     }
+
+
+
+//    private Node taoThongBaoHoaDon(HoaDon hd, boolean denGio) {
+//        HBox box = new HBox();
+//        box.getStyleClass().add("notif-item");
+//        box.setSpacing(10);
+//        box.setAlignment(Pos.CENTER_LEFT);
+//
+//        // ==== LEFT COLUMN ====
+//        VBox left = new VBox();
+//        left.setSpacing(4);
+//
+//        Label lbTenBan = new Label("Mã bàn: "+hd.getBan().getMaBan());
+//        lbTenBan.getStyleClass().addAll("notif-sub");
+//
+//        String time = hd.getTgCheckIn() != null
+//                ? hd.getTgCheckIn().toLocalTime().toString()
+//                : "--:--";
+//
+//        Label lbCheckInTime = new Label("Thời gian: "+time);
+//        lbCheckInTime.getStyleClass().addAll("notif-sub");
+//
+//        left.getChildren().addAll(lbTenBan, lbCheckInTime);
+//
+//        // ==== RIGHT COLUMN ====
+//        VBox right = new VBox();
+//        right.setSpacing(4);
+//
+//        Label tenKH = new Label("tên khách : " + hd.getKhachHang().getTenKhachHang());
+//        tenKH.getStyleClass().add("notif-sub-right");
+//
+//        Label sdt = new Label("SĐT : " + hd.getKhachHang().getSdt());
+//        sdt.getStyleClass().add("notif-sub-right");
+//
+//        Label status = new Label(denGio ? "Đã đến giờ hẹn" : "Đã quá giờ hẹn");
+//        status.getStyleClass().add(denGio ? "notif-status-green" : "notif-status-red");
+//        left.getStyleClass().addAll("notif-left",denGio ? "notif-backgr-green" : "notif-backgr-red");
+//
+//        right.getChildren().addAll(tenKH, sdt, status);
+//
+//        // Add left-right vào item
+//        box.getChildren().addAll(left, right);
+//
+//        return box;
+//    }
 //    //nối qua thống kê
 //    @FXML private BorderPane rootPane; // nếu Dashboard.fxml có BorderPane chính
 //    // hoặc các control khác: @FXML private BarChart<?,?> barChart; ...
