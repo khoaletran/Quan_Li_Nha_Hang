@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -39,6 +40,8 @@ public class QLBanController {
     @FXML private StackPane modalLayer;
     @FXML private StackPane rootPane;
     @FXML private Rectangle modalBg;
+    @FXML private ComboBox comboModalLoaiBan,comboModalKhuVuc;
+    @FXML private TextField txtModalMaBan;
 
     private final BanDAO banDAO = new BanDAO();
     private final LoaiBanDAO loaiBanDAO = new LoaiBanDAO();
@@ -50,10 +53,12 @@ public class QLBanController {
         loadDanhMuc();
         loadKhuVuc();
 
+        comboModalLoaiBan.getItems().addAll("A", "B", "C", "D", "E");
+        comboModalKhuVuc.getItems().addAll("Indoor", "Outdoor", "VIP");
+
         comboDanhMuc.setOnAction(event -> filterBan());
         comboKhuVuc.setOnAction(event -> filterBan());
 
-        // Bind modalBg với rootPane
         modalBg.widthProperty().bind(rootPane.widthProperty());
         modalBg.heightProperty().bind(rootPane.heightProperty());
 
@@ -61,17 +66,13 @@ public class QLBanController {
         modalLayer.setVisible(false);
         modalLayer.setManaged(false);
 
-        // Khi nhấn nút + mở modal
         btnAddBan.setOnMouseClicked(e -> showModal());
-
-        // Khi nhấn Hủy trong modal
         btnModalCancel.setOnAction(e -> hideModal());
 
-        // Khi nhấn Lưu trong modal
-        btnModalSave.setOnAction(e -> {
-            // Xử lý lưu bàn ở đây
-            hideModal();
-        });
+        btnModalSave.setOnAction(e -> themBan());
+
+        comboModalKhuVuc.setOnAction(event -> sinhMaBanMoi());
+
     }
 
     // Load toàn bộ bàn
@@ -195,5 +196,116 @@ public class QLBanController {
         modalLayer.setVisible(false);
         modalLayer.setManaged(false);
     }
+
+    private void sinhMaBanMoi() {
+        Object selected = comboModalKhuVuc.getValue();
+        if (selected == null) return;
+
+        String khuVuc = selected.toString(); // ép kiểu sang String
+        String prefix = switch (khuVuc) {
+            case "Indoor" -> "BI";
+            case "Outdoor" -> "BO";
+            case "VIP" -> "BV";
+            default -> "B";
+        };
+
+        String maBanCuoi = BanDAO.getMaBanCuoiTheoKhuVuc(khuVuc);
+
+        int soMoi = 1;
+        if (maBanCuoi != null && maBanCuoi.startsWith(prefix)) {
+            try {
+                String numberPart = maBanCuoi.substring(2);
+                soMoi = Integer.parseInt(numberPart) + 1;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String maBanMoi = prefix + String.format("%04d", soMoi);
+        txtModalMaBan.setText(maBanMoi);
+    }
+
+    @FXML
+    private void themBan() {
+        try {
+            // Lấy mã bàn từ txtModalMaBan
+            String maBan = txtModalMaBan.getText();
+            if (maBan == null || maBan.isEmpty()) {
+                System.out.println("Mã bàn trống!");
+                return;
+            }
+
+            Object selected02 = comboModalLoaiBan.getValue();
+            if (selected02 == null) return;
+
+            String loaiBanChon = selected02.toString();
+            String maLoaiBan = switch (loaiBanChon) {
+                case "A" -> "LB0001";
+                case "B" -> "LB0002";
+                case "C" -> "LB0003";
+                case "D" -> "LB0004";
+                case "E" -> "LB0005";
+                default -> null;
+            };
+            String tenLoaiBan = switch (loaiBanChon) {
+                case "A" -> "Loại A";
+                case "B" -> "Loại B";
+                case "C" -> "Loại C";
+                case "D" -> "Loại D";
+                case "E" -> "Loại E";
+                default -> null;
+            };
+            int soLuong = switch (loaiBanChon) {
+                case "A" -> 2;
+                case "B" -> 4;
+                case "C" -> 8;
+                case "D" -> 12;
+                case "E" -> 20;
+                default -> 0;
+            };
+            if (maLoaiBan == null) return;
+
+            LoaiBan loaiBan = new LoaiBan();
+            loaiBan.setMaLoaiBan(maLoaiBan);
+            loaiBan.setTenLoaiBan(tenLoaiBan);
+            loaiBan.setSoLuong(soLuong);
+
+            Object selected = comboModalKhuVuc.getValue();
+            if (selected == null) return;
+
+            String khuVucChon = selected.toString();
+            String maKhuVuc = switch (khuVucChon) {
+                case "Outdoor" -> "KV0001";
+                case "Indoor" -> "KV0002";
+                case "VIP" -> "KV0003";
+                default -> null;
+            };
+            if (maKhuVuc == null) return;
+
+            KhuVuc kv = new KhuVuc();
+            kv.setMaKhuVuc(maKhuVuc);
+            kv.setTenKhuVuc(khuVucChon);
+
+            // Tạo đối tượng Ban mới, trạng thái mặc định là 0 (false)
+            Ban banMoi = new Ban();
+            banMoi.setMaBan(maBan);
+            banMoi.setLoaiBan(loaiBan);
+            banMoi.setKhuVuc(kv);
+            banMoi.setTrangThai(false);
+
+            // Gọi DAO insert
+            boolean success = banDAO.insert(banMoi, false);
+            if (success) {
+                System.out.println("Thêm bàn thành công: " + maBan);
+                loadAllBan(); // cập nhật giao diện
+                hideModal();  // ẩn modal
+            } else {
+                System.out.println("Thêm bàn thất bại!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

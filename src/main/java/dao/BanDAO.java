@@ -334,4 +334,25 @@ public class BanDAO {
             return prefix + "0001";
         }
     }
+
+    public static String getMaBanCuoiTheoKhuVuc(String khuVuc) {
+        String prefix = switch (khuVuc) {
+            case "Indoor" -> "BI";
+            case "Outdoor" -> "BO";
+            case "VIP" -> "BV";
+            default -> "B";
+        };
+        String sql = "SELECT TOP 1 maBan FROM Ban WHERE maBan LIKE ? ORDER BY maBan DESC";
+        try (PreparedStatement ps = connectDB.getConnection().prepareStatement(sql)) {
+            ps.setString(1, prefix + "%");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("maBan");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
