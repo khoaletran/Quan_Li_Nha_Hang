@@ -162,3 +162,24 @@
     -fx-pref-width: 0;
 }
 
+/*css cho modal*/
+
+#modalBox {
+    -fx-max-width: 400;
+    -fx-max-height: 400;
+}
+
+#modalLayer {
+    -fx-alignment: center; /* đảm bảo modalBox nằm giữa */
+}
+
+#modalBg {
+    -fx-view-order: 1;   /* nằm dưới */
+}
+
+#modalBox {
+    -fx-view-order: 0;   /* nằm trên */
+}
+
+
+

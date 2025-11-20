@@ -7,14 +7,23 @@ import entity.Ban;
 import entity.KhuVuc;
 import entity.LoaiBan;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.List;
 
 public class QLBanController {
@@ -22,9 +31,14 @@ public class QLBanController {
     @FXML private FlowPane flowPaneBan;
     @FXML private Label lblKhuVuc;
     @FXML private Label lblMaBan;
-    @FXML private Label lblSoLuong;
+    @FXML private Label lblSoLuong,btnAddBan;
+    @FXML private Button btnModalCancel,btnModalSave;
     @FXML private ComboBox<String> comboDanhMuc;
     @FXML private ComboBox<String> comboKhuVuc;
+    @FXML private VBox overlayModal;
+    @FXML private StackPane modalLayer;
+    @FXML private StackPane rootPane;
+    @FXML private Rectangle modalBg;
 
     private final BanDAO banDAO = new BanDAO();
     private final LoaiBanDAO loaiBanDAO = new LoaiBanDAO();
@@ -38,6 +52,26 @@ public class QLBanController {
 
         comboDanhMuc.setOnAction(event -> filterBan());
         comboKhuVuc.setOnAction(event -> filterBan());
+
+        // Bind modalBg với rootPane
+        modalBg.widthProperty().bind(rootPane.widthProperty());
+        modalBg.heightProperty().bind(rootPane.heightProperty());
+
+        // Ẩn modal lúc đầu
+        modalLayer.setVisible(false);
+        modalLayer.setManaged(false);
+
+        // Khi nhấn nút + mở modal
+        btnAddBan.setOnMouseClicked(e -> showModal());
+
+        // Khi nhấn Hủy trong modal
+        btnModalCancel.setOnAction(e -> hideModal());
+
+        // Khi nhấn Lưu trong modal
+        btnModalSave.setOnAction(e -> {
+            // Xử lý lưu bàn ở đây
+            hideModal();
+        });
     }
 
     // Load toàn bộ bàn
@@ -149,4 +183,17 @@ public class QLBanController {
             }
         }
     }
+
+    // Hiển thị modal
+    public void showModal() {
+        modalLayer.setVisible(true);
+        modalLayer.setManaged(true);
+    }
+
+    // Ẩn modal
+    public void hideModal() {
+        modalLayer.setVisible(false);
+        modalLayer.setManaged(false);
+    }
+
 }
