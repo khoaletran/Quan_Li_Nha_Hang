@@ -35,6 +35,7 @@ public class ChonMonController {
     @FXML private Button back, btndatban, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
     @FXML private TextField txtTienKhachDua, sdtKhach, tften, tfTimKiem;
     @FXML private TextField tf_ban, tftg, tfSLKhach, tfghichu;
+    @FXML private HBox paygroup, cocGr, conlaiGr;
 
     private ui.controllers.MainController_NV mainController;
 
@@ -53,7 +54,6 @@ public class ChonMonController {
     private NhanVien nhanVienHien;
     private LocalDateTime thoiGianDat;
     private int soLuongKhach;
-    private Runnable onPaymentConfirmed;
     private SuKien sk;
 
 
@@ -70,7 +70,6 @@ public class ChonMonController {
             locMonTheoTenVaLoai();
         });
         comboDanhMuc.setOnAction(e -> locMonTheoTenVaLoai());
-
 
         btndatban.setOnAction(e -> {
             // ===== Kiểm tra dữ liệu chung =====
@@ -97,6 +96,12 @@ public class ChonMonController {
             }
 
             // ===== Xử lý theo hình thức thanh toán =====
+            long phutCachNhau = java.time.Duration.between(LocalDateTime.now(), thoiGianDat).toMinutes();
+            boolean kieuDatBan = !(phutCachNhau >= 0 && phutCachNhau <= 15);
+            if (!kieuDatBan) {
+                datBan();
+                return;
+            }
             if (rdoTienMat.isSelected()) {
                 datBan();
             } else {
@@ -119,12 +124,6 @@ public class ChonMonController {
         sdtKhach.setOnKeyReleased(e -> timKhachHang());
     }
 
-
-    public void setOnPaymentConfirmed(Runnable callback) {
-        this.onPaymentConfirmed = callback;
-    }
-
-
     public void setMainController(ui.controllers.MainController_NV controller) {
         this.mainController = controller;
         setNhanVien(mainController.getNhanVien());
@@ -138,7 +137,7 @@ public class ChonMonController {
         this.thoiGianDat = thoiGianDat;
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm | dd/MM/yyyy ");
         tftg.setText(thoiGianDat.format(fmt));
-
+        hienThiKieuDatBan();
     }
 
     public void setSoLuongKhach(int soLuongKhach) {
@@ -178,7 +177,6 @@ public class ChonMonController {
             }
         }
     }
-
 
     @FXML
     private void quayVeDatBan() {
@@ -418,14 +416,12 @@ public class ChonMonController {
         taoGoiYTienKhach();
     }
 
-
     private void removeMonFromOrder(Mon mon) {
         String maMon = mon.getMaMon();
         HBox dong = chiTietMap.remove(maMon);
         soLuongMap.remove(maMon);
         if (dong != null) vboxChiTietDonHang.getChildren().remove(dong);
     }
-
 
     private void updateMonSoLuong(Mon mon, int soLuong) {
         String maMon = mon.getMaMon();
@@ -558,7 +554,6 @@ public class ChonMonController {
         }
     }
 
-
     private void xuLyHienThiTienMat() {
         paymentGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             boolean isTienMat = newToggle == rdoTienMat;
@@ -576,7 +571,6 @@ public class ChonMonController {
             }
         });
     }
-
 
     private void taoGoiYTienKhach() {
         double tongTien = parseCurrency(lblCoc.getText());;
@@ -650,8 +644,8 @@ public class ChonMonController {
         lblTienThua.setText(formatCurrency(tienThua));
     }
 
-
     private void tinhCoc(){
+
         Coc coc = CocDAO.getByKhuVucVaLoaiBan(banHienTai.getKhuVuc().getMaKhuVuc(),banHienTai.getLoaiBan().getMaLoaiBan());
         double tong = parseCurrency(lbl_total.getText().trim());
         double tienCoc = 0;
@@ -660,10 +654,21 @@ public class ChonMonController {
         } else{
             tienCoc = coc.getSoTienCoc();
         }
+
         lblCoc.setText(formatCurrency(tienCoc));
         lblConLai.setText(formatCurrency(tong-tienCoc));
     }
 
+    private void hienThiKieuDatBan(){
+
+        long phutCachNhau = java.time.Duration.between(LocalDateTime.now(), thoiGianDat).toMinutes();
+        boolean kieuDatBan = !(phutCachNhau >= 0 && phutCachNhau <= 15);
+        if (!kieuDatBan) {
+            cocGr.setVisible(false);
+            conlaiGr.setVisible(false);
+            paygroup.setVisible(false);
+        }
+    }
 
     private String tuSinhMaHD() {
         int hour = java.time.LocalTime.now().getHour();
@@ -682,8 +687,6 @@ public class ChonMonController {
 
         return String.format("HD%s%s%04d", ca, datePart, so + 1);
     }
-
-
 
     private HangKhachHang xetHang(int diemTichLuy) {
         List<HangKhachHang> list = new HangKhachDAO().getAll();
@@ -742,7 +745,6 @@ public class ChonMonController {
         mainController.setCenterContent("/FXML/DatBan.fxml");
     }
 
-
     private void datBanSauKhiXacNhan(String maHD) {
         System.out.println("Xác nhận thanh toán thành công → Tạo hóa đơn...");
 
@@ -797,8 +799,6 @@ public class ChonMonController {
         mainController.setCenterContent("/FXML/DatBan.fxml");
     }
 
-
-
     private boolean themChiTietHoaDon(HoaDon hoaDon) {
         if (hoaDon == null) return false;
 
@@ -822,7 +822,6 @@ public class ChonMonController {
 
         return tatCaOK;
     }
-
 
     private KhachHang taoKHMoi() {
         try {
@@ -853,7 +852,6 @@ public class ChonMonController {
             return null;
         }
     }
-
 
     private HoaDon taoHoaDon(boolean kdb, int trangthai) {
         if (banHienTai == null || nhanVienHien == null) {

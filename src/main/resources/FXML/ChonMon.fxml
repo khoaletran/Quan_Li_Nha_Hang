@@ -127,19 +127,19 @@
                           <Region HBox.hgrow="ALWAYS" />
                           <Label fx:id="lbl_total" styleClass="total-amount" text="0đ" />
                       </HBox>
-                      <HBox spacing="10">
+                      <HBox fx:id="cocGr" spacing="10">
                           <Label styleClass="deposit-label" text="Cọc:" />
                           <Region HBox.hgrow="ALWAYS" />
                           <Label fx:id="lblCoc" styleClass="deposit-amount" text="0đ" />
                       </HBox>
-                      <HBox spacing="10">
+                      <HBox fx:id="conlaiGr" spacing="10">
                           <Label styleClass="final-label" text="Còn lại:" />
                           <Region HBox.hgrow="ALWAYS" />
                           <Label fx:id="lblConLai" styleClass="final-amount" text="0đ" />
                       </HBox>
                   </VBox>
 
-                  <HBox alignment="CENTER_LEFT" spacing="15">
+                  <HBox alignment="CENTER_LEFT" spacing="15" fx:id="paygroup">
                    <Label prefHeight="15.0" prefWidth="79.0" style="-fx-font-weight: bold;" styleClass="bold-label" text="Thanh Toán:" />
                    <RadioButton fx:id="rdoChuyenKhoan" prefHeight="30.0" prefWidth="136.0" selected="true" text="Chuyển Khoản">
                        <toggleGroup>

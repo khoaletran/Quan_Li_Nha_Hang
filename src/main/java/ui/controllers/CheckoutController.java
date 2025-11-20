@@ -91,7 +91,7 @@ public class CheckoutController {
         double thue = tongTien * 0.1;
         double tongTT = hdHienTai.getTongTienSau();
         double coc = hdHienTai.getCoc();
-        double conLai = tongTT - coc ;
+        double conLai = hdHienTai.getTongTienSau() ;
 
         lblTongTien.setText(formatCurrency(tongTien));
         lblThue.setText(formatCurrency(thue));

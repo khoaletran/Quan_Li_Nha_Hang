@@ -145,6 +145,10 @@ public class HoaDon {
         String maLB = ban.getLoaiBan().getMaLoaiBan();
 
         Coc c = new CocDAO().getByKhuVucVaLoaiBan(maKV, maLB);
+        if(!isKieuDatBan()){
+            coc = 0;
+            return coc;
+        }
         if (c != null) {
             if (c.isLoaiCoc()) coc = getTongTienTruoc() * c.getPhanTramCoc() / 100;
             else coc = c.getSoTienCoc();
@@ -153,7 +157,11 @@ public class HoaDon {
     }
 
     public double getTongTienSau() {
-        tongTienSau = getTongTienTruoc() - getTongTienKhuyenMai() + getThue();
+        if (!kieuDatBan){
+            tongTienSau = getTongTienTruoc() - getTongTienKhuyenMai() + getThue();
+            return tongTienSau;
+        }
+        tongTienSau = getTongTienTruoc() - getTongTienKhuyenMai() + getThue() - getCoc();
         return tongTienSau;
     }
 
