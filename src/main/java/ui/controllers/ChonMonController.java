@@ -346,7 +346,7 @@ public class ChonMonController {
         Label lblTen = new Label(mon.getTenMon());
         lblTen.getStyleClass().add("menu-item-name");
 
-        Label lblGia = new Label(formatCurrency(mon.getGiaBan()));
+        Label lblGia = new Label(formatCurrency(mon.getGiaBan()) + " - SL: " + mon.getSoLuong());
         lblGia.getStyleClass().add("menu-item-price");
 
         Label lblSoLuong = new Label("0");
@@ -363,18 +363,30 @@ public class ChonMonController {
 
         // ===== SỰ KIỆN =====
         btnPlus.setOnAction(e -> {
-            int soLuong = Integer.parseInt(lblSoLuong.getText());
-            soLuong++;
-            lblSoLuong.setText(String.valueOf(soLuong));
+            int soLuongDaChon = Integer.parseInt(lblSoLuong.getText());
+            int tonKho = mon.getSoLuong();   // số lượng còn lại trong kho
 
-            if (soLuong == 1) {
+            // Không cho chọn vượt quá tồn kho
+            if (soLuongDaChon >= tonKho) {
+                AlertCus.show(
+                        "Không đủ số lượng",
+                        "Món \"" + mon.getTenMon() + "\" chỉ còn " + tonKho + " phần.\nKhông thể chọn thêm."
+                );
+                return;
+            }
+
+            soLuongDaChon++;
+            lblSoLuong.setText(String.valueOf(soLuongDaChon));
+
+            if (soLuongDaChon == 1) {
                 addMonToOrder(mon);
                 loadTT();
             } else {
-                updateMonSoLuong(mon, soLuong);
+                updateMonSoLuong(mon, soLuongDaChon);
                 loadTT();
             }
         });
+
 
         btnMinus.setOnAction(e -> {
             int soLuong = Integer.parseInt(lblSoLuong.getText());
@@ -817,6 +829,10 @@ public class ChonMonController {
             if (mon != null && soLuong > 0) {
                 ChiTietHoaDon ct = new ChiTietHoaDon(hoaDon, mon, soLuong);
                 if (!dao.insert(ct)) tatCaOK = false;
+                else {
+                    mon.setSoLuong(mon.getSoLuong() - soLuong);
+                    MonDAO.update(mon);
+                }
             }
         }
 

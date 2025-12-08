@@ -105,7 +105,7 @@ public class SidebarController_QL {
 
     // Làm sáng nút đang chọn
     private void setSelected(Button btn) {
-        btn.getStyleClass().add("selectead");
+        btn.getStyleClass().add("selected");
         currentSelected = btn;
     }
 
