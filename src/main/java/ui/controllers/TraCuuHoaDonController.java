@@ -25,6 +25,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ui.AlertCus;
 import ui.HoaDonIn;
 
 import java.lang.reflect.Method;
@@ -494,12 +495,12 @@ public class TraCuuHoaDonController {
             dsHoaDon.addAll(ketQua);
             hienThiDanhSachHoaDon();
 
-            if (ketQua.isEmpty()) hienThiThongBao("Không tìm thấy hóa đơn nào phù hợp với điều kiện tìm kiếm");
-            else hienThiThongBao("Tìm thấy " + ketQua.size() + " hóa đơn phù hợp");
+            if (ketQua.isEmpty()) AlertCus.show("Thông báo", "Không tìm thấy hóa đơn nào phù hợp với điều kiện tìm kiếm");
+            else AlertCus.show("Thông báo", "Tìm thấy " + ketQua.size() + " hóa đơn phù hợp");
 
         } catch (Exception e) {
             e.printStackTrace();
-            hienThiThongBaoLoi("Lỗi khi tìm kiếm hóa đơn: " + e.getMessage());
+            hienThiThongBaoLoi("Lỗi khi tìm kiếm hóa đơn: " + e.getMessage()); //chu y
         }
     }
 
@@ -518,11 +519,12 @@ public class TraCuuHoaDonController {
     @FXML
     private void inHoaDon() {
         if (hoaDonSelected == null) {
-            hienThiThongBao("Vui lòng chọn hóa đơn cần in");
+            AlertCus.show("Thông báo","Vui lòng chọn hóa đơn cần in");
             return;
         }
         try {
-            hienThiThongBao("Đang in hóa đơn: " + hoaDonSelected.getMaHD() + "\nChức năng in đang được phát triển...");
+            AlertCus.show("Thông báo","Đang in hóa đơn");
+           // hienThiThongBao("Đang in hóa đơn: " + hoaDonSelected.getMaHD() + "\nChức năng in đang được phát triển...");
         } catch (Exception e) {
             e.printStackTrace();
             hienThiThongBaoLoi("Lỗi khi in hóa đơn: " + e.getMessage());
