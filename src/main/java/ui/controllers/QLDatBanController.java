@@ -23,6 +23,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import ui.AlertCus;
+import ui.ConfirmCus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,12 +190,14 @@ public class QLDatBanController {
             chiTiet.setThanhTien(gia * (current - 1));
             AlertCus.show("Thông Báo", "Đã giảm 1 số lượng (" + chiTiet.getMon().getTenMon() + ").");
         } else {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Xác nhận xóa món");
-            confirm.setHeaderText("Bạn có chắc muốn xóa món này khỏi đơn hàng?");
-            confirm.setContentText("Món: " + (chiTiet.getMon() != null ? chiTiet.getMon().getTenMon() : ""));
-            Optional<ButtonType> res = confirm.showAndWait();
-            if (res.isPresent() && res.get() == ButtonType.OK) {
+//            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+//            confirm.setTitle("Xác nhận xóa món");
+//            confirm.setHeaderText("Bạn có chắc muốn xóa món này khỏi đơn hàng?");
+//            confirm.setContentText("Món: " + (chiTiet.getMon() != null ? chiTiet.getMon().getTenMon() : ""));
+//            Optional<ButtonType> res = confirm.showAndWait();
+             boolean answer = ConfirmCus.show("Xác nhận xóa món", "Bạn có chắc muốn xóa món "+chiTiet.getMon().getTenMon()+" khỏi đơn hàng?");
+             //res.isPresent() && res.get() == ButtonType.OK
+            if (answer) {
                 chiTietHoaDonData.remove(chiTiet);
                 AlertCus.show("Thông Báo", "Đã xóa món khỏi đơn hàng");
             }
@@ -490,13 +493,14 @@ public class QLDatBanController {
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Xác nhận hủy");
-        confirm.setHeaderText("Bạn có chắc chắn muốn hủy đặt bàn này?");
-        confirm.setContentText("Hóa đơn: " + hoaDonSelected.getMaHD());
-
-        Optional<ButtonType> res = confirm.showAndWait();
-        if (res.isPresent() && res.get() == ButtonType.OK) {
+//        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+//        confirm.setTitle("Xác nhận hủy");
+//        confirm.setHeaderText("Bạn có chắc chắn muốn hủy đặt bàn này?");
+//        confirm.setContentText("Hóa đơn: " + hoaDonSelected.getMaHD());
+//
+//        Optional<ButtonType> res = confirm.showAndWait(); res.isPresent() && res.get() == ButtonType.OK
+        boolean answer = ConfirmCus.show("Xác nhận hủy đơn", "Bạn có chắc muốn hủy đơn đặt bàn này?");
+        if (answer) {
             try {
                 System.out.println("Hủy đặt bàn: " + hoaDonSelected.getMaHD());
                 boolean ok = HoaDonDAO.delete(hoaDonSelected.getMaHD());
