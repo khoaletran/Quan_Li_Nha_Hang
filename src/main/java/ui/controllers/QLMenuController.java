@@ -63,7 +63,7 @@ public class QLMenuController {
         // TextField tìm kiếm realtime
         searchField.textProperty().addListener((obs, oldText, newText) -> filterMon());
 
-        // ===== THÊM PHÍM TẮT CTRL + F =====
+        // ===== THÊM PHÍM TẮT =====
         Platform.runLater(() -> addShortcuts(searchField.getScene()));
         Tooltip tipFind = new Tooltip("Tìm kiếm món ăn (Ctrl + F)");
         tipFind.getStyleClass().add("tooltip");
@@ -76,7 +76,7 @@ public class QLMenuController {
 
     private void addShortcuts(Scene scene) {
         KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
-        KeyCodeCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
         scene.getAccelerators().put(ctrlF, () -> {
             searchField.requestFocus();
             searchField.selectAll();  // tự bôi đen text để nhập mới
