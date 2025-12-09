@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class ChinhSachController {
     @FXML
@@ -154,7 +155,7 @@ public class ChinhSachController {
                 else rbTien.setSelected(true);
 
                 txtGiaTriCoc.setText(coc.isLoaiCoc() ? String.valueOf(coc.getPhanTramCoc())
-                        : String.valueOf(coc.getSoTienCoc()));
+                        : String.valueOf((long)coc.getSoTienCoc()));
             });
         }
     }
@@ -174,7 +175,8 @@ public class ChinhSachController {
         double giaTri;
 
         try {
-            giaTri = Double.parseDouble(txtGiaTriCoc.getText());
+            String giaTriStr= txtGiaTriCoc.getText().replace(".", "");
+            giaTri = Double.parseDouble(giaTriStr);
             if (giaTri < 0) {
                 AlertCus.show("Thông báo", "Giá trị cọc không được âm!");
                 return;
@@ -237,7 +239,13 @@ public class ChinhSachController {
                 newCoc.setSoTienCoc(giaTri);
                 newCoc.setPhanTramCoc(0);
             }
-
+            Coc existed = cocDAO.getByKhuVucVaLoaiBan(kv.getMaKhuVuc(), lb.getMaLoaiBan());
+            if (existed != null) {
+                AlertCus.show("Thông báo", 
+                    "Cọc cho Khu vực \"" + tenKhuVuc + "\" và Loại bàn \"" 
+                    + tenLoaiBan + "\" đã tồn tại!");
+                return;
+            }
             ok = cocDAO.insert(newCoc);
             if (!ok) {
                 AlertCus.show("Thông báo", "Thêm mới cọc thất bại!");
@@ -252,7 +260,42 @@ public class ChinhSachController {
         loadDanhSachCoc();
         xoaTrang();
     }
+    @FXML
+    private void xoaCoc() {
 
+    if (cocDangChon == null) {
+        AlertCus.show("Thông báo", "Không có cọc nào để xóa!");
+        return;
+    }
+
+    // ----- Hộp thoại xác nhận -----
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Xác nhận");
+    alert.setHeaderText("Bạn có chắc muốn xóa cọc này?");
+    alert.setContentText("Hành động này không thể hoàn tác.");
+
+    ButtonType yesBtn = new ButtonType("Xóa", ButtonBar.ButtonData.OK_DONE);
+    ButtonType noBtn = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+    alert.getButtonTypes().setAll(yesBtn, noBtn);
+
+    // Hiển thị & chờ người dùng chọn
+    Optional<ButtonType> result = alert.showAndWait();
+    if (result.isEmpty() || result.get() == noBtn) {
+        return; // Người dùng bấm Hủy
+    }
+
+    // ----- Thực hiện xóa -----
+    boolean ok = cocDAO.delete(cocDangChon.getMaCoc());
+
+    if (ok) {
+        AlertCus.show("Thông báo", "Xóa thành công!");
+        loadDanhSachCoc();
+        xoaTrang();
+    } else {
+        AlertCus.show("Thông báo", "Xóa thất bại!");
+    }
+}
 
     @FXML
     private void xoaTrang() {

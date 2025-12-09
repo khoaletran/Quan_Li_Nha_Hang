@@ -201,4 +201,22 @@ public class CocDAO {
 
         return null;
     }
+    // ==============================
+    // DELETE
+    // ==============================
+    public boolean delete(String maCoc) {
+        String sql = "DELETE FROM Coc WHERE maCoc = ?";
+
+        try (Connection con = connectDB.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maCoc);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

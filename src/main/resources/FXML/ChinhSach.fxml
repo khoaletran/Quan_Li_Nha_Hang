@@ -72,40 +72,86 @@
 
                             <!-- Nhập cọc -->
                             <GridPane hgap="10" prefHeight="174.0" prefWidth="681.0" styleClass="grid_pa" vgap="8">
-                                <columnConstraints>
-                                    <ColumnConstraints percentWidth="17.0" />
-                                    <ColumnConstraints percentWidth="33.0" />
-                                    <ColumnConstraints percentWidth="20.0" />
-                                    <ColumnConstraints percentWidth="30.0" />
-                                </columnConstraints>
 
-                                <Label text="Khu vực:" GridPane.columnIndex="0" />
-                                <ComboBox fx:id="cbKhuVuc" style="-fx-background-color: #f8f8f8; -fx-background-radius: 8;" styleClass="combo-box" GridPane.columnIndex="1" />
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="17.0" />
+                                <ColumnConstraints percentWidth="33.0" />
+                                <ColumnConstraints percentWidth="16.0" />
+                                <ColumnConstraints percentWidth="34.0" />
+                            </columnConstraints>
+
+                            <!-- Khu vực -->
+                            <Label text="Khu vực:" GridPane.columnIndex="0" />
+                            <ComboBox fx:id="cbKhuVuc"
+                                    prefHeight="25.0" prefWidth="92.0"
+                                    style="-fx-background-color: #f8f8f8; -fx-background-radius: 8;"
+                                    styleClass="combo-box"
+                                    GridPane.columnIndex="1" />
+
+                            <!-- Loại bàn -->
+                            <Label text="Loại bàn:" GridPane.columnIndex="2" />
+                            <ComboBox fx:id="cbLoaiBan"
+                                    prefHeight="25.0" prefWidth="116.0"
+                                    style="-fx-background-color: white; -fx-background-radius: 8;"
+                                    styleClass="combo-box"
+                                    GridPane.columnIndex="3" />
+
+                            <!-- Loại cọc -->
+                            <Label text="Loại cọc:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+                            <HBox alignment="CENTER_LEFT" spacing="12"
+                                GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <children>
+                                    <RadioButton fx:id="rbPhanTram" selected="true" text="Phần Trăm" />
+                                    <RadioButton fx:id="rbTien" text="Tiền" />
+                                </children>
+                            </HBox>
+
+                            <!-- Giá trị -->
+                            <Label text="Giá trị:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                            <TextField fx:id="txtGiaTriCoc"
+                                    styleClass="input-field"
+                                    GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                            <!-- Xóa trắng (Hàng 2, Cột 2) -->
+                            <Button fx:id="btnXoaTrang"
+                                    onAction="#xoaTrang"
+                                    prefHeight="30.0" prefWidth="140.0"
+                                    styleClass="btn-secondary"
+                                    text="Xóa trắng"
+                                    GridPane.columnIndex="2" GridPane.rowIndex="2" />
+
+                            <!-- HBox chứa Xóa + Thêm/Xác nhận (Hàng 2, Cột 3) -->
+                            <HBox spacing="15"
+                                alignment="CENTER_RIGHT"
+                                GridPane.columnIndex="3" GridPane.rowIndex="2">
+
+                                <children>
+
+                                    <Button fx:id="btnXoa"
+                                            onAction="#xoaCoc"
+                                            prefHeight="30.0" prefWidth="120.0"
+                                            styleClass="btn-danger"
+                                            text="Xóa" />
+
+                                    <Button fx:id="btnXacNhanCoc"
+                                            onAction="#xacNhan"
+                                            prefHeight="30.0" prefWidth="140.0"
+                                            styleClass="btn-primary"
+                                            text="Xác nhận" />
+
+                                </children>
+                            </HBox>
+
+                            <rowConstraints>
+                                <RowConstraints />
+                                <RowConstraints />
+                                <RowConstraints />
+                            </rowConstraints>
+
+                        </GridPane>
 
 
-                                <Label text="Loại bàn:" GridPane.columnIndex="2" />
-                                <ComboBox fx:id="cbLoaiBan" style="-fx-background-color: white; -fx-background-radius: 8;" styleClass="combo-box" GridPane.columnIndex="3" />
-                                <Label text="Loại cọc:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                <HBox alignment="CENTER_LEFT" spacing="12" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                    <children>
-                                        <RadioButton fx:id="rbPhanTram" selected="true" text="Phần Trăm" />
-                                        <RadioButton fx:id="rbTien" text="Tiền" />
-                                    </children>
-                                </HBox>
-
-                                <Label text="Giá trị:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                <TextField fx:id="txtGiaTriCoc" styleClass="input-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-
-                                <Button fx:id="btnXacNhanCoc" alignment="CENTER_RIGHT" onAction="#xacNhan" prefHeight="30.0" prefWidth="160.0" styleClass="btn-primary" text="Xác Nhận" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                <Button fx:id="btnXoaTrang" alignment="CENTER_RIGHT" onAction="#xoaTrang" prefHeight="30.0" prefWidth="160.0" styleClass="btn-secondary" text="Xóa trắng" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-
-
-                                <rowConstraints>
-                                    <RowConstraints />
-                                    <RowConstraints />
-                                    <RowConstraints />
-                                </rowConstraints>
-                            </GridPane>
 
                         </children>
                     </HBox>

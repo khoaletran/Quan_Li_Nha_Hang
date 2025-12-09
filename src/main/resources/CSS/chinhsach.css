@@ -83,7 +83,20 @@
 .btn-secondary:hover {
   -fx-background-color: #e0e0e0;
 }
+.btn-danger {
+  -fx-background-color: #e74c3c;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 10;
+  -fx-cursor: hand;
+  -fx-pref-height: 35;
+  -fx-pref-width: 100;
+  -fx-alignment: center;
+}
 
+.btn-danger:hover {
+  -fx-background-color: #c0392b;
+}
 /* Input */
 .input-field {
   -fx-background-color: #f8f8f8;
