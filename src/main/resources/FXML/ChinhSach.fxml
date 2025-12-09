@@ -37,12 +37,12 @@
                         <children>
                             <HBox alignment="CENTER" prefHeight="77.0" prefWidth="453.0" spacing="15" styleClass="time-card">
                                 <Label styleClass="txt-tt" text="Bàn Đặt Trước:" />
-                                <TextField fx:id="txtBanDatTruoc" styleClass="input-field" text="15" />
+                                <TextField fx:id="txtBanDatTruoc" onAction="#xacNhanBanDatTruoc" styleClass="input-field" text="15" />
                                 <Button fx:id="btnXacNhanBanDatTruoc" onAction="#xacNhanBanDatTruoc" styleClass="btn-primary" text="Xác Nhận" />
                             </HBox>
                             <HBox alignment="CENTER" prefWidth="420.0" spacing="15" styleClass="time-card">
                                 <Label styleClass="txt-tt" text="Bàn Đợi:" />
-                                <TextField fx:id="txtBanDoi" styleClass="input-field" text="5" />
+                                <TextField fx:id="txtBanDoi" onAction="#xacNhanBanDoi" styleClass="input-field" text="5" />
                                 <Button fx:id="btnXacNhanBanDoi" onAction="#xacNhanBanDoi" styleClass="btn-primary" text="Xác Nhận" />
                             </HBox>
                         </children>
@@ -124,7 +124,7 @@
                                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-bar">
                                     <Button styleClass="menu-btn" text="≡" />
                                     <TextField fx:id="txtSearch" prefHeight="32.0" prefWidth="142.0" promptText="Tìm món ăn" styleClass="search-field" HBox.hgrow="ALWAYS" />
-                                    <Button prefWidth="49.0" styleClass="search-btn" text="🔍" onAction="#search"/>
+                                    <Button prefWidth="49.0" styleClass="search-btn" text="🔍"/>
                                 </HBox>
 
                                 <!-- Danh sách khuyến mãi -->

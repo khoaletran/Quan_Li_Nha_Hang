@@ -39,7 +39,7 @@
                         <HBox alignment="CENTER_LEFT" prefWidth="572.0" spacing="15.0" styleClass="filter-group">
                             <HBox alignment="CENTER" prefHeight="37.0" prefWidth="250.0" spacing="8" styleClass="menu-search-box">
                                 <Label prefHeight="20.0" prefWidth="18.0" styleClass="search-icon" text="🔍" />
-                                <TextField promptText="Tìm món ăn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+                                <TextField fx:id="searchField" promptText="Tìm món ăn" styleClass="search-field" HBox.hgrow="ALWAYS" />
                             </HBox>
                             <ComboBox fx:id="comboThangMon" prefHeight="35.0" prefWidth="90.0" promptText="Tháng" />
 
@@ -56,7 +56,7 @@
                             <children>
                                 <ScrollPane fitToWidth="true" prefWidth="0.0" styleClass="center-scroll-pane">
                                     <content>
-                                        <VBox fx:id="vboxDishList" prefHeight="420.0" prefWidth="520.0" spacing="20.0" style="-fx-padding: 10;" styleClass="dish-list">
+                                        <VBox fx:id="vboxDishList" prefWidth="520.0" spacing="20.0" style="-fx-padding: 10;" styleClass="dish-list">
 
 
                                         </VBox>
