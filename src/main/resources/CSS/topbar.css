@@ -1,0 +1,82 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* TOP BAR thấp, đều */
+.top-bar {
+    -fx-background-color: white;
+    -fx-spacing: 12;
+    -fx-pref-height: 32;
+    -fx-max-height: 32;
+    -fx-min-height: 32;
+}
+
+/* Logo */
+.top-logo {
+    -fx-fit-height: 20;
+    -fx-fit-width: 20;
+    -fx-smooth: true;
+}
+
+/* User info */
+.top-username {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+.top-role {
+    -fx-font-size: 10px;
+    -fx-text-fill: #777;
+}
+
+/* Search */
+.search-box {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 3 10;
+    -fx-border-color: #E0E4EF;
+    -fx-border-radius: 16;
+}
+.search-icon {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6c7a89;
+}
+.search-field {
+    -fx-font-size: 11px;
+    -fx-prompt-text-fill: #B0B7C4;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Clock */
+.top-clock {
+    -fx-font-size: 11px;
+    -fx-text-fill: #E6763E;
+}
+
+/* Button */
+.top-action-btn {
+    -fx-background-color: #E6763E;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 14;
+    -fx-padding: 3 10;
+    -fx-cursor: hand;
+}
+.top-action-btn:hover {
+    -fx-background-color: #d4612b;
+}
+
+.win-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #555;
+    -fx-font-size: 10px;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.win-btn:hover {
+    -fx-background-color: #e6e6e6;
+}
+

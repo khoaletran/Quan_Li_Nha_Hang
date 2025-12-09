@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,23 +20,34 @@ public class MainController_NV {
     private NhanVien nhanVien;
     private LocalDateTime thoiGianVaoCa;
 
-
-
+    @FXML private ui.controllers.TopBarController topBarNvController;
 
     public SidebarController_NV getSidebarController() {
         return sidebar_NVController;
     }
 
+
     @FXML
     public void initialize() {
+        javafx.application.Platform.runLater(() -> {
+            Stage stage = (Stage) topBarNvController.getRoot().getScene().getWindow();
+            topBarNvController.bindStage(stage);
+            topBarNvController.setTitle("CrabKing - Nhân Viên");
+        });
+
+        // Nút action bên phải: Kết ca
+        topBarNvController.configureActionButton("Kết Ca",
+                () -> setCenterContent("/FXML/BanGiaoCa.fxml"));
+
         if (sidebar_NVController != null) {
             sidebar_NVController.setMainController(this);
         }
-
     }
+
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
+        topBarNvController.setUserInfo(nhanVien.getTenNV(),"Nhân Viên");
         loadDefaultView();
     }
 

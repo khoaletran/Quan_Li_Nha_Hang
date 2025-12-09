@@ -329,8 +329,11 @@ public class ChonMonController {
     private VBox taoCardMon(Mon mon){
         VBox card = new VBox();
         card.getStyleClass().add("menu-card");
-        card.setSpacing(8);
+        card.setSpacing(6);
         card.setAlignment(javafx.geometry.Pos.CENTER);
+        card.setPrefWidth(120);      // nhỏ hơn
+        card.setMaxWidth(120);
+        card.setPrefHeight(140);     // tùy, có thể bỏ nếu không cần
 
         String file = mon.getHinhAnh().replaceFirst("^/", "");
         String path = "/IMG/food/" + file;
@@ -338,15 +341,21 @@ public class ChonMonController {
         Image img = imageCache.getOrDefault(path, fallbackImage);
 
         ImageView imageView = new ImageView(img);
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(110);
+        imageView.setFitWidth(100);  // ↓ từ 150
+        imageView.setFitHeight(80);  // ↓ từ 110
         imageView.getStyleClass().add("food-image");
 
         Label lblTen = new Label(mon.getTenMon());
         lblTen.getStyleClass().add("menu-item-name");
+        lblTen.setWrapText(true);
+        lblTen.setMaxWidth(110);     // cho chữ xuống dòng trong card nhỏ
+        lblTen.setStyle("-fx-font-size: 11px;");
 
-        Label lblGia = new Label(formatCurrency(mon.getGiaBan()) + " - SL: " + mon.getSoLuong());
+        int tonKho = mon.getSoLuong();
+        Label lblGia = new Label(formatCurrency(mon.getGiaBan()) +
+                (tonKho > 0 ? " - SL: " + tonKho : " - HẾT"));
         lblGia.getStyleClass().add("menu-item-price");
+        lblGia.setStyle("-fx-font-size: 10px;");
 
         Label lblSoLuong = new Label("0");
         lblSoLuong.getStyleClass().add("qty-label");
@@ -359,18 +368,20 @@ public class ChonMonController {
 
         HBox soLuongBox = new HBox(btnMinus, lblSoLuong, btnPlus);
         soLuongBox.getStyleClass().add("quantity-controls");
+        soLuongBox.setSpacing(4);
 
-        // ===== SỰ KIỆN =====
+        if (tonKho <= 0) {
+            btnPlus.setDisable(true);
+        }
+
         btnPlus.setOnAction(e -> {
             int soLuongDaChon = Integer.parseInt(lblSoLuong.getText());
-            int tonKho = mon.getSoLuong();   // số lượng còn lại trong kho
-
-            // Không cho chọn vượt quá tồn kho
             if (soLuongDaChon >= tonKho) {
                 AlertCus.show(
                         "Không đủ số lượng",
                         "Món \"" + mon.getTenMon() + "\" chỉ còn " + tonKho + " phần.\nKhông thể chọn thêm."
                 );
+                btnPlus.setDisable(true);
                 return;
             }
 
@@ -379,13 +390,15 @@ public class ChonMonController {
 
             if (soLuongDaChon == 1) {
                 addMonToOrder(mon);
-                loadTT();
             } else {
                 updateMonSoLuong(mon, soLuongDaChon);
-                loadTT();
+            }
+            loadTT();
+
+            if (soLuongDaChon >= tonKho) {
+                btnPlus.setDisable(true);
             }
         });
-
 
         btnMinus.setOnAction(e -> {
             int soLuong = Integer.parseInt(lblSoLuong.getText());
@@ -396,11 +409,14 @@ public class ChonMonController {
                 if (soLuong == 0) {
                     removeMonFromOrder(mon);
                     capNhatSoLuongTrenMenu(mon, 0);
-                    loadTT();
-
                 } else {
                     updateMonSoLuong(mon, soLuong);
-                    loadTT();
+                    capNhatSoLuongTrenMenu(mon, soLuong);
+                }
+                loadTT();
+
+                if (soLuong < tonKho) {
+                    btnPlus.setDisable(false);
                 }
             }
         });
@@ -409,6 +425,8 @@ public class ChonMonController {
         card.setUserData(mon);
         return card;
     }
+
+
 
     private void addMonToOrder(Mon mon) {
         String maMon = mon.getMaMon();
@@ -957,21 +975,30 @@ public class ChonMonController {
             if (node instanceof VBox card) {
                 Mon monCard = (Mon) card.getUserData();
                 if (monCard != null && monCard.getMaMon().equals(mon.getMaMon())) {
+
+                    // cập nhật label số lượng đã chọn
                     for (javafx.scene.Node child : card.getChildren()) {
                         if (child instanceof HBox box) {
                             for (javafx.scene.Node subChild : box.getChildren()) {
                                 if (subChild instanceof Label label &&
                                         label.getStyleClass().contains("qty-label")) {
                                     label.setText(String.valueOf(soLuongMoi));
-                                    return;
                                 }
                             }
                         }
                     }
+
+                    // khóa/mở nút + theo tồn kho
+                    Button btnPlus = (Button) card.lookup(".qty-btn_plus");
+                    if (btnPlus != null) {
+                        int tonKho = mon.getSoLuong();
+                        btnPlus.setDisable(soLuongMoi >= tonKho || tonKho <= 0);
+                    }
+
+                    return;
                 }
             }
         }
     }
-
 
 }

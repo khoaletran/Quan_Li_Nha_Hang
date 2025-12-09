@@ -1,14 +1,8 @@
 package ui.controllers;
 
 import connectDB.connectDB;
-import dao.HoaDonDAO;
-import dao.KhachHangDAO;
-import dao.ChiTietHDDAO;
-import dao.MonDAO;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.ChiTietHoaDon;
-import entity.Mon;
+import dao.*;
+import entity.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -25,6 +19,8 @@ import javafx.collections.ObservableList;
 import ui.AlertCus;
 import ui.ConfirmCus;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +30,7 @@ import java.util.Locale;
 public class QLDatBanController {
 
     //danh sách
-    @FXML private VBox danhSachDatTruoc;
+    @FXML private VBox danhSachDatTruoc, vboxChiTietDonHang;
     @FXML private VBox danhSachDaNhan;
     @FXML private FlowPane foodList;
 
@@ -46,14 +42,6 @@ public class QLDatBanController {
     @FXML private TextField txtSoLuongKhach;
     @FXML private ComboBox<String> eventCombo;
 
-    //bảng đơn hàng
-    @FXML private TableView<ChiTietHoaDon> orderTable;
-    @FXML private TableColumn<ChiTietHoaDon, Integer> colSTT;
-    @FXML private TableColumn<ChiTietHoaDon, String> colSanPham;
-    @FXML private TableColumn<ChiTietHoaDon, Integer> colSoLuong;
-    @FXML private TableColumn<ChiTietHoaDon, Double> colGia;
-    @FXML private TableColumn<ChiTietHoaDon, Double> colTong;
-    @FXML private TableColumn<ChiTietHoaDon, Void> colXoa;
 
     //tìm kiếm
     @FXML private TextField searchField;
@@ -62,6 +50,16 @@ public class QLDatBanController {
     //nút
     @FXML private Button btnXacNhan;
     @FXML private Button btnHuyBan;
+
+    // center
+    @FXML private VBox paneDanhSach;   // VBox danh sách bàn
+    @FXML private VBox paneMenu;       // VBox menu món
+
+    @FXML private Button back;
+    @FXML private TextField tfTimKiem;
+    @FXML private ComboBox<LoaiMon> comboDanhMuc;
+    @FXML private FlowPane flowMonAn;
+    private final LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
 
     // BIẾN TOÀN CỤC
     private final HoaDonDAO hoaDonDAO = new HoaDonDAO();
@@ -74,6 +72,9 @@ public class QLDatBanController {
     private HoaDon hoaDonSelected = null;
     private ObservableList<ChiTietHoaDon> chiTietHoaDonData = FXCollections.observableArrayList();
 
+    // số lượng gốc khi load từ DB, khóa theo maMon
+    private final java.util.Map<String, Integer> soLuongGocMap = new java.util.HashMap<>();
+
     // danh sách món toàn bộ món để tìm kiếm/hiển thị
     private List<Mon> dsMonToanBo = new ArrayList<>();
 
@@ -84,7 +85,6 @@ public class QLDatBanController {
         System.out.println("QLDatBanController initialized");
 
         if (!ketNoiDatabase()) {
-//            hienThiThongBaoLoi("Không thể kết nối database. Vui lòng kiểm tra kết nối.");
             AlertCus.show("Thông Báo", "Không thể kết nối database.");
             return;
         }
@@ -93,15 +93,19 @@ public class QLDatBanController {
 
         khoiTaoComboBox();
         ganSuKienChoNut();
-        khoiTaoTableView();
         taiDanhSachDatTruoc();
         taiDanhSachDaNhan();
 
-        //tao chuc nang chon mon
-        khoiTaoChonMon();
+        khoiTaoChonMon();   // load ds món, combo loại, search
 
         resetForm();
+        showDanhSachMode();
+
+        if (back != null) {
+            back.setOnAction(e -> showDanhSachMode());
+        }
     }
+
 
     private boolean ketNoiDatabase() {
         try {
@@ -130,80 +134,6 @@ public class QLDatBanController {
             btnSearch.setOnAction(e -> timKiemMon());
             searchField.setOnAction(e -> timKiemMon()); // Enter -> tìm
         }
-    }
-
-    private void khoiTaoTableView() {
-        //tạo các column cho TableView
-        colSTT.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(chiTietHoaDonData.indexOf(cellData.getValue()) + 1).asObject());
-
-        colSanPham.setCellValueFactory(cellData -> {
-            Mon mon = cellData.getValue().getMon();
-            return new SimpleStringProperty(mon != null ? mon.getTenMon() : "Không xác định");
-        });
-
-        colSoLuong.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(cellData.getValue().getSoLuong()).asObject());
-
-        colGia.setCellValueFactory(cellData -> {
-            Mon mon = cellData.getValue().getMon();
-            return new SimpleDoubleProperty(mon != null ? mon.getGiaBanTaiLucLapHD(hoaDonSelected) : 0).asObject();
-        });
-
-        colTong.setCellValueFactory(cellData ->
-                new SimpleDoubleProperty(cellData.getValue().getThanhTien()).asObject());
-
-        // Column xóa - thêm nút xóa (giữ icon thùng rác)
-        colXoa.setCellFactory(param -> new TableCell<ChiTietHoaDon, Void>() {
-            private final Button btnXoa = new Button("🗑");
-
-            {
-                btnXoa.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-size: 10px;");
-                btnXoa.setOnAction(event -> {
-                    ChiTietHoaDon ct = getTableView().getItems().get(getIndex());
-                    xoaChiTietHoaDon(ct);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) setGraphic(null);
-                else setGraphic(btnXoa);
-            }
-        });
-
-        //gán dữ liệu cho TableView
-        orderTable.setItems(chiTietHoaDonData);
-    }
-
-     //hàm xử lý khi nhấn nút xóa sẽ giảm 1 số lượng nếu >1
-     //nếu số lượng =1 sẽ xóa hẳn
-
-    private void xoaChiTietHoaDon(ChiTietHoaDon chiTiet) {
-        if (chiTiet == null) return;
-
-        int current = chiTiet.getSoLuong();
-        if (current > 1) {
-            chiTiet.setSoLuong(current - 1);
-            double gia = chiTiet.getMon() != null ? chiTiet.getMon().getGiaBanTaiLucLapHD(hoaDonSelected) : 0;
-            chiTiet.setThanhTien(gia * (current - 1));
-            AlertCus.show("Thông Báo", "Đã giảm 1 số lượng (" + chiTiet.getMon().getTenMon() + ").");
-        } else {
-//            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-//            confirm.setTitle("Xác nhận xóa món");
-//            confirm.setHeaderText("Bạn có chắc muốn xóa món này khỏi đơn hàng?");
-//            confirm.setContentText("Món: " + (chiTiet.getMon() != null ? chiTiet.getMon().getTenMon() : ""));
-//            Optional<ButtonType> res = confirm.showAndWait();
-             boolean answer = ConfirmCus.show("Xác nhận xóa món", "Bạn có chắc muốn xóa món "+chiTiet.getMon().getTenMon()+" khỏi đơn hàng?");
-             //res.isPresent() && res.get() == ButtonType.OK
-            if (answer) {
-                chiTietHoaDonData.remove(chiTiet);
-                AlertCus.show("Thông Báo", "Đã xóa món khỏi đơn hàng");
-            }
-        }
-
-        capNhatBangDonHang(); // refresh TableView
     }
 
     //tải danh sách đặt trước / đã nhận
@@ -344,6 +274,8 @@ public class QLDatBanController {
 
             hoaDonSelected = hd;
             hienThiThongTinChiTiet(hd);
+
+            showMenuMode();
         });
 
         return card;
@@ -409,16 +341,24 @@ public class QLDatBanController {
 
     private void loadChiTietDonHang(String maHD) {
         chiTietHoaDonData.clear();
+        soLuongGocMap.clear();
+        vboxChiTietDonHang.getChildren().clear();
 
-        if (maHD == null || maHD.trim().isEmpty()) {
-            return;
-        }
+        if (maHD == null || maHD.trim().isEmpty()) return;
 
         try {
             List<ChiTietHoaDon> dsChiTiet = chiTietHDDAO.getByMaHD(maHD);
             if (dsChiTiet != null && !dsChiTiet.isEmpty()) {
-                chiTietHoaDonData.addAll(dsChiTiet);
-                System.out.println("Đã tải " + dsChiTiet.size() + " chi tiết hóa đơn");
+
+                for (ChiTietHoaDon ct : dsChiTiet) {
+                    chiTietHoaDonData.add(ct);
+                    if (ct.getMon() != null && ct.getMon().getMaMon() != null) {
+                        soLuongGocMap.put(ct.getMon().getMaMon(), ct.getSoLuong());
+                    }
+                }
+
+                capNhatUIChiTiet();
+                System.out.println("Đã tải " + chiTietHoaDonData.size() + " chi tiết hóa đơn");
             } else {
                 System.out.println("Không có chi tiết hóa đơn cho mã: " + maHD);
             }
@@ -427,6 +367,16 @@ public class QLDatBanController {
             e.printStackTrace();
         }
     }
+
+    private void capNhatUIChiTiet() {
+        vboxChiTietDonHang.getChildren().clear();
+        int stt = 1;
+        for (ChiTietHoaDon ct : chiTietHoaDonData) {
+            HBox row = taoDongChiTiet(ct, stt++);
+            vboxChiTietDonHang.getChildren().add(row);
+        }
+    }
+
 
     @FXML
 
@@ -520,10 +470,7 @@ public class QLDatBanController {
             }
         }
     }
-
-    // --- CHỌN MÓN / HIỂN THỊ MÓN ---
     private void khoiTaoChonMon() {
-        // load dsMon từ DAO
         try {
             dsMonToanBo = monDAO.getAll();
         } catch (Exception ex) {
@@ -531,9 +478,15 @@ public class QLDatBanController {
             ex.printStackTrace();
         }
 
-        // Hiển thị toàn bộ
         hienThiDanhSachMon(dsMonToanBo);
+
+        loadComboDanhMuc();
+        loadDanhSachMon();
+        if (tfTimKiem != null) {
+            tfTimKiem.textProperty().addListener((obs, oldV, newV) -> locMonTheoTenVaLoai());
+        }
     }
+
 
     private void hienThiDanhSachMon(List<Mon> danhSachMon) {
         if (foodList == null) return;
@@ -589,7 +542,6 @@ public class QLDatBanController {
 
         card.getChildren().addAll(imageWrapper, lblTen, lblGia);
 
-        // sự kiện: click vào toàn bộ card cũng thêm món; hoặc click nút +
         btnAdd.setOnAction(e -> themMonVaoDon(m));
         card.setOnMouseClicked(e -> themMonVaoDon(m));
 
@@ -603,7 +555,13 @@ public class QLDatBanController {
             return;
         }
 
-        // kiểm tra món đã có trong chiTietHoaDonData chưa
+        int tonKho = m.getSoLuong();
+        if (tonKho <= 0) {
+            AlertCus.show("Thông Báo",
+                    "Món \"" + m.getTenMon() + "\" đã hết hàng, không thể chọn.");
+            return;
+        }
+
         ChiTietHoaDon found = null;
         for (ChiTietHoaDon ct : chiTietHoaDonData) {
             if (ct.getMon() != null && m.getMaMon().equals(ct.getMon().getMaMon())) {
@@ -612,23 +570,31 @@ public class QLDatBanController {
             }
         }
 
-        if (found != null) {
-            // tăng số lượng, cập nhật thanhTien trên object UI
-            int sl = found.getSoLuong() + 1;
-            found.setSoLuong(sl);
-            double gia = found.getMon() != null ? found.getMon().getGiaBanTaiLucLapHD(hoaDonSelected) : 0;
-            found.setThanhTien(gia * sl);
+        int soLuongDaChon = (found != null) ? found.getSoLuong() : 0;
 
+        if (soLuongDaChon >= tonKho) {
+            AlertCus.show("Thông Báo",
+                    "Món \"" + m.getTenMon() + "\" chỉ còn " + tonKho + " phần.\nKhông thể chọn thêm.");
+            return;
+        }
+
+        if (found != null) {
+            int slMoi = soLuongDaChon + 1;      // chắc chắn <= tonKho
+            found.setSoLuong(slMoi);
+            double gia = found.getMon().getGiaBanTaiLucLapHD(hoaDonSelected);
+            found.setThanhTien(gia * slMoi);
             AlertCus.show("Thông Báo", "Đã tăng số lượng cho món " + m.getTenMon());
         } else {
-            // tạo ChiTietHoaDon mới và thêm vào ObservableList (UI)
             ChiTietHoaDon ct = new ChiTietHoaDon(hoaDonSelected, m, 1);
             chiTietHoaDonData.add(ct);
             AlertCus.show("Thông Báo", "Đã thêm món: " + m.getTenMon());
         }
 
-        capNhatBangDonHang(); // refresh TableView và tính tổng
+        capNhatBangDonHang();
+        capNhatUIChiTiet();
     }
+
+
 
 
     private void capNhatBangDonHang() {
@@ -638,8 +604,6 @@ public class QLDatBanController {
                 ct.setThanhTien(ct.getMon().getGiaBanTaiLucLapHD(hoaDonSelected) * ct.getSoLuong());
             }
         }
-
-        orderTable.refresh();
 
         // tính tổng và cập nhật vào HoaDon (nếu bạn lưu tongTienTruoc/tongTienSau)
         double tong = 0;
@@ -676,43 +640,307 @@ public class QLDatBanController {
         if (txtSoLuongKhach != null) txtSoLuongKhach.clear();
 
         chiTietHoaDonData.clear();
-        orderTable.refresh();
+        vboxChiTietDonHang.getChildren().clear();
 
         clearSelectedStyles(danhSachDatTruoc);
         clearSelectedStyles(danhSachDaNhan);
     }
 
-    private void hienThiThongBao(String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
+    private String formatCurrency(double amount) {
+        Locale localeVN = new Locale("vi", "VN");
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(localeVN);
+
+        DecimalFormat df = new DecimalFormat("#,###", symbols);
+
+        return df.format(amount) + " đ";
     }
 
-    private void hienThiThongBaoLoi(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Lỗi");
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
+    private HBox taoDongChiTiet(ChiTietHoaDon ct, int stt) {
+        Mon mon = ct.getMon();
+        int soLuong = ct.getSoLuong();
+
+        VBox vbox = new VBox(4);
+        vbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        HBox.setHgrow(vbox, javafx.scene.layout.Priority.ALWAYS);
+
+        // Tên món
+        Label lblTen = new Label(mon.getTenMon());
+        lblTen.getStyleClass().addAll("order-col", "product");
+        lblTen.setWrapText(true);
+        lblTen.setMaxWidth(Double.MAX_VALUE);
+        lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 13.5px; -fx-text-fill: #333;");
+
+        // Hàng dưới
+        HBox hboxInfo = new HBox(10);
+        hboxInfo.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        Label lblSoLuong = new Label(String.valueOf(soLuong));
+        lblSoLuong.getStyleClass().addAll("order-col", "quantity", "lblSoLuongCT");
+        lblSoLuong.setPrefWidth(30);
+        lblSoLuong.setAlignment(javafx.geometry.Pos.CENTER);
+
+        Label lblGia = new Label(formatCurrency(mon.getGiaBan()));
+        lblGia.getStyleClass().addAll("order-col", "price");
+        lblGia.setPrefWidth(70);
+        lblGia.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+
+        Label lblTongTien = new Label(formatCurrency(mon.getGiaBan() * soLuong));
+        lblTongTien.getStyleClass().addAll("order-col", "total", "lblTongTienCT");
+        lblTongTien.setPrefWidth(80);
+        lblTongTien.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button btnMinus1 = new Button("-1");
+        btnMinus1.getStyleClass().add("btn-minus");
+
+        Button btnDeleteAll = new Button("✕");
+        btnDeleteAll.getStyleClass().add("btn-delete");
+
+        // sự kiện
+        btnMinus1.setOnAction(e -> giamMotSoLuong(ct));
+        btnDeleteAll.setOnAction(e -> xoaToanBoMon(ct));
+
+        hboxInfo.getChildren().addAll(lblSoLuong, lblGia, lblTongTien, spacer, btnMinus1, btnDeleteAll);
+        vbox.getChildren().addAll(lblTen, hboxInfo);
+
+        HBox row = new HBox(vbox);
+        row.getStyleClass().add("order-row");
+        row.setSpacing(10);
+        row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        return row;
     }
-    //dùng khi load lại UI và DB
-    public void refreshData() {
-        try {
-            if (!ketNoiDatabase()) {
-                hienThiThongBaoLoi("Không thể kết nối database khi refresh");
-                return;
+
+    private void giamMotSoLuong(ChiTietHoaDon ct) {
+        if (ct == null) return;
+        if (ct.getMon() == null) return;
+
+        String maMon = ct.getMon().getMaMon();
+        int current = ct.getSoLuong();
+
+        int soLuongGoc = 0;
+        if (hoaDonSelected != null && hoaDonSelected.getTrangthai() == 1) {
+            soLuongGoc = soLuongGocMap.getOrDefault(maMon, 0);
+        }
+
+        // không cho giảm dưới số lượng gốc khi hóa đơn đã nhận
+        if (hoaDonSelected != null && hoaDonSelected.getTrangthai() == 1 && current <= soLuongGoc) {
+            AlertCus.show("Thông Báo", "Không thể giảm thêm. Đây là số lượng đã đặt trước.");
+            return;
+        }
+
+        if (current <= 1) {
+            // nếu là món mới (gốc = 0) thì cho xóa hẳn bằng -1
+            if (soLuongGoc == 0) {
+                chiTietHoaDonData.remove(ct);
+            } else {
+                ct.setSoLuong(soLuongGoc);
             }
-            taiDanhSachDatTruoc();
-            taiDanhSachDaNhan();
-            // reload món
-            khoiTaoChonMon();
+        } else {
+            ct.setSoLuong(current - 1);
+        }
+
+        double gia = ct.getMon().getGiaBanTaiLucLapHD(hoaDonSelected);
+        ct.setThanhTien(gia * ct.getSoLuong());
+
+        capNhatBangDonHang();
+        capNhatUIChiTiet();
+    }
+
+    private void xoaToanBoMon(ChiTietHoaDon ct) {
+        if (ct == null || ct.getMon() == null) return;
+
+        String maMon = ct.getMon().getMaMon();
+        int soLuongGoc = 0;
+        if (hoaDonSelected != null && hoaDonSelected.getTrangthai() == 1) {
+            soLuongGoc = soLuongGocMap.getOrDefault(maMon, 0);
+        }
+
+        // nếu là món đã có từ trước và hóa đơn đã nhận -> không cho xóa
+        if (hoaDonSelected != null && hoaDonSelected.getTrangthai() == 1 && soLuongGoc > 0) {
+            AlertCus.show("Thông Báo", "Không thể xóa món đã đặt trước, chỉ được xóa món mới thêm.");
+            return;
+        }
+
+        chiTietHoaDonData.remove(ct);
+        capNhatBangDonHang();
+        capNhatUIChiTiet();
+    }
+
+    private void showDanhSachMode() {
+        if (paneDanhSach != null && paneMenu != null) {
+            paneDanhSach.setVisible(true);
+            paneDanhSach.setManaged(true);
+
             resetForm();
-            hienThiThongBao("Đã làm mới dữ liệu");
-        } catch (Exception e) {
-            System.err.println("Lỗi khi refresh data: " + e.getMessage());
-            hienThiThongBao("Lỗi khi làm mới dữ liệu");
+
+            paneMenu.setVisible(false);
+            paneMenu.setManaged(false);
         }
     }
+
+    private void showMenuMode() {
+        if (paneDanhSach != null && paneMenu != null) {
+            paneDanhSach.setVisible(false);
+            paneDanhSach.setManaged(false);
+
+            paneMenu.setVisible(true);
+            paneMenu.setManaged(true);
+        }
+    }
+    // ====== MENU CENTER: COMBO LOẠI + SEARCH + CARD MÓN ======
+
+    private void loadComboDanhMuc() {
+        if (comboDanhMuc == null) return;
+
+        comboDanhMuc.getItems().clear();
+
+        // mục "Tất cả món"
+        LoaiMon tatCa = new LoaiMon("ALL", "Tất cả món", "Tat ca");
+        comboDanhMuc.getItems().add(tatCa);
+
+        try {
+            comboDanhMuc.getItems().addAll(loaiMonDAO.getAll());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        comboDanhMuc.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(LoaiMon item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getTenLoaiMon());
+                }
+            }
+        });
+
+        comboDanhMuc.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(LoaiMon item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Chọn loại món");
+                } else {
+                    setText(item.getTenLoaiMon());
+                }
+            }
+        });
+
+        comboDanhMuc.getSelectionModel().selectFirst();
+
+        comboDanhMuc.setOnAction(e -> locMonTheoTenVaLoai());
+    }
+
+    private void loadDanhSachMon() {
+        locMonTheoTenVaLoai(); // keyword rỗng + "ALL" ⇒ hiển thị tất cả
+    }
+
+    /**
+     * Lọc theo tên (tfTimKiem) + loại (comboDanhMuc) và vẽ card vào flowMonAn
+     */
+    private void locMonTheoTenVaLoai() {
+        if (flowMonAn == null) return;
+
+        String keyword = (tfTimKiem != null)
+                ? tfTimKiem.getText().trim().toLowerCase()
+                : "";
+
+        LoaiMon loaiChon = (comboDanhMuc != null)
+                ? comboDanhMuc.getSelectionModel().getSelectedItem()
+                : null;
+
+        List<Mon> ketQua = new ArrayList<>();
+        for (Mon m : dsMonToanBo) {
+            if (m == null) continue;
+
+            boolean matchText = keyword.isEmpty()
+                    || (m.getTenMon() != null && m.getTenMon().toLowerCase().contains(keyword));
+
+            boolean matchLoai = true;
+            if (loaiChon != null && !"ALL".equals(loaiChon.getMaLoaiMon())) {
+                LoaiMon loaiMon = m.getLoaiMon();
+                matchLoai = (loaiMon != null
+                        && loaiChon.getMaLoaiMon().equals(loaiMon.getMaLoaiMon()));
+            }
+
+            if (matchText && matchLoai) {
+                ketQua.add(m);
+            }
+        }
+
+        flowMonAn.getChildren().clear();
+        if (ketQua.isEmpty()) {
+            Label empty = new Label("Không có món phù hợp");
+            empty.setStyle("-fx-text-fill: #666; -fx-font-style: italic; -fx-padding: 20px;");
+            flowMonAn.getChildren().add(empty);
+            return;
+        }
+
+        for (Mon m : ketQua) {
+            flowMonAn.getChildren().add(taoCardMon(m));
+        }
+    }
+
+    /**
+     * Card món ở center: ảnh lớn + tên + giá + nút "+"
+     * Nhấn card hoặc "+" đều gọi themMonVaoDon(m)
+     */
+    private VBox taoCardMon(Mon m) {
+        VBox card = new VBox(8);
+        card.getStyleClass().add("menu-card");
+        card.setAlignment(javafx.geometry.Pos.CENTER);
+        card.setPrefWidth(160);
+        card.setPrefHeight(180);
+        card.setCursor(Cursor.HAND);
+
+        // ảnh
+        StackPane imageWrapper = new StackPane();
+        imageWrapper.setPrefSize(150, 110);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(150);
+        imageView.setFitHeight(110);
+        imageView.setPreserveRatio(true);
+
+        try {
+            String file = (m.getHinhAnh() != null ? m.getHinhAnh().replaceFirst("^/", "") : "restaurant.png");
+            String path = "/IMG/food/" + file;
+            Image img = new Image(getClass().getResourceAsStream(path));
+            imageView.setImage(img);
+        } catch (Exception e) {
+            try {
+                Image img = new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png"));
+                imageView.setImage(img);
+            } catch (Exception ignore) { }
+        }
+
+        imageWrapper.getChildren().add(imageView);
+
+        // nút "+"
+        Button btnAdd = new Button("+");
+        btnAdd.getStyleClass().add("add-icon");
+        StackPane.setAlignment(btnAdd, javafx.geometry.Pos.TOP_RIGHT);
+        imageWrapper.getChildren().add(btnAdd);
+
+        Label lblTen = new Label(m.getTenMon());
+        lblTen.getStyleClass().add("menu-item-name");
+        lblTen.setWrapText(true);
+
+        Label lblGia = new Label(  "SL: " + m.getSoLuong() + " - " + formatCurrency( m.getGiaBan() ));
+        lblGia.getStyleClass().add("menu-item-price");
+
+        card.getChildren().addAll(imageWrapper, lblTen, lblGia);
+
+        // sự kiện: giống chọn món cũ
+        btnAdd.setOnAction(e -> themMonVaoDon(m));
+        card.setOnMouseClicked(e -> themMonVaoDon(m));
+
+        return card;
+    }
+
 }

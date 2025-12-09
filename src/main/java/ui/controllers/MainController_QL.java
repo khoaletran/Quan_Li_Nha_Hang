@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class MainController_QL {
     @FXML private SidebarController_QL sidebar_QLController;
 
     private NhanVien nhanVien;
+    @FXML private ui.controllers.TopBarController topBarQlController;
 
     public SidebarController_QL getsidebar_QLController() {
         return sidebar_QLController ;
@@ -25,6 +27,17 @@ public class MainController_QL {
 
     @FXML
     public void initialize() {
+        javafx.application.Platform.runLater(() -> {
+            Stage stage = (Stage) topBarQlController
+                    .getRoot().getScene().getWindow();
+            topBarQlController.bindStage(stage);
+            topBarQlController.setTitle("CrabKing - Quản Lý");
+            topBarQlController.setUserInfo("Trần Thị B - Quản lý");
+        });
+
+        topBarQlController.configureActionButton("Đăng Xuất",
+                () -> ui.DangXuat.showDialog());
+
         if (sidebar_QLController != null) {
             sidebar_QLController.setMainController(this);
         }
@@ -32,7 +45,7 @@ public class MainController_QL {
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
-
+        topBarQlController.setUserInfo(nhanVien.getTenNV());
         setCenterContent("/FXML/DashBoard.fxml");
     }
 

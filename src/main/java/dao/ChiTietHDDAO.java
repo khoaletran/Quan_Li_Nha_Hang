@@ -56,37 +56,30 @@ public class ChiTietHDDAO {
                 cthd.maHD,
                 cthd.maMon,
                 cthd.soLuong,
-
+            
                 m.tenMon, m.giaGoc, m.hinhAnh,
                 lm.maLoaiMon, lm.tenLoaiMon,
-
+            
                 COALESCE(ptMon.phanTramLoi, ptLoai.phanTramLoi, 0) AS phanTramLoi
-
             FROM ChiTietHoaDon cthd
             JOIN Mon m ON cthd.maMon = m.maMon
             JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
-
-            LEFT JOIN (
-                SELECT p1.maMon, p1.phanTramLoi
+            
+            OUTER APPLY (
+                SELECT TOP 1 p1.phanTramLoi
                 FROM PhanTramGiaBan p1
-                WHERE p1.ngayApDung = (
-                    SELECT MAX(p2.ngayApDung)
-                    FROM PhanTramGiaBan p2
-                    WHERE p2.maMon = p1.maMon
-                )
-            ) ptMon ON ptMon.maMon = m.maMon
-
-            LEFT JOIN (
-                SELECT p3.maLoaiMon, p3.phanTramLoi
+                WHERE p1.maMon = m.maMon          -- theo món
+                ORDER BY p1.ngayApDung DESC       -- mới nhất
+            ) ptMon
+            
+            OUTER APPLY (
+                SELECT TOP 1 p3.phanTramLoi
                 FROM PhanTramGiaBan p3
-                WHERE p3.maMon IS NULL
-                  AND p3.ngayApDung = (
-                        SELECT MAX(p4.ngayApDung)
-                        FROM PhanTramGiaBan p4
-                        WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
-                )
-            ) ptLoai ON ptLoai.maLoaiMon = lm.maLoaiMon
-
+                WHERE p3.maLoaiMon = lm.maLoaiMon -- theo loại
+                  AND p3.maMon IS NULL
+                ORDER BY p3.ngayApDung DESC
+            ) ptLoai
+            
             WHERE cthd.maHD = ?
         """;
 
@@ -101,13 +94,12 @@ public class ChiTietHDDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return list;
     }
 
 
     // ============================================================================
-    // 2. GET BY MAHD – GIỮ NGHIỆP VỤ, NHƯNG JOIN ĐẦY ĐỦ (KHÔNG getByID)
+    // 2. GET BY MAHD
     // ============================================================================
     public static List<ChiTietHoaDon> getByMaHD(String maHD) {
         return getAllByMaHD(maHD); // dùng JOIN version

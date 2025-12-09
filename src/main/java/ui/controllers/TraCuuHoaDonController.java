@@ -202,6 +202,7 @@ public class TraCuuHoaDonController {
 
         card.setOnMouseClicked(e -> {
             System.out.println("Click vào hóa đơn: " + hd.getMaHD());
+            chiTietHoaDonData.clear();
             clearSelectedStyles();
             // style card được chọn
             card.setStyle("-fx-background-color: #007bff; -fx-border-color: #0056b3; -fx-border-radius: 8; -fx-background-radius: 8;");
@@ -346,16 +347,12 @@ public class TraCuuHoaDonController {
     }
 
     private void loadChiTietDonHang(String maHD) {
-        chiTietHoaDonData.clear();
+        vboxChiTietDonHang.getChildren().clear();
         if (maHD == null || maHD.trim().isEmpty()) return;
         try {
             List<ChiTietHoaDon> dsChiTiet = chiTietHDDAO.getByMaHD(maHD);
             if (dsChiTiet != null && !dsChiTiet.isEmpty()) {
-                chiTietHoaDonData.addAll(dsChiTiet);
-                System.out.println("Đã tải " + dsChiTiet.size() + " chi tiết hóa đơn");
                 for (ChiTietHoaDon ct : dsChiTiet) {
-                    System.out.println("   - " + (ct.getMon() != null ? ct.getMon().getTenMon() : "null") +
-                            " x " + ct.getSoLuong() + " = " + ct.getThanhTien());
                     HBox dong = taoDongChiTiet(ct.getMon(), ct.getSoLuong());
                     vboxChiTietDonHang.getChildren().add(dong);
                 }
@@ -513,22 +510,6 @@ public class TraCuuHoaDonController {
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
-    }
-
-    //Refresh
-    public void refreshData() {
-        try {
-            if (!ketNoiDatabase()) {
-                hienThiThongBaoLoi("Không thể kết nối database khi refresh");
-                return;
-            }
-            taiDanhSachHoaDon();
-            resetForm();
-            hienThiThongBao("Đã làm mới dữ liệu");
-        } catch (Exception e) {
-            System.err.println("Lỗi khi refresh data: " + e.getMessage());
-            hienThiThongBao("Lỗi khi làm mới dữ liệu");
-        }
     }
 
     private String formatCurrency(double amount) {

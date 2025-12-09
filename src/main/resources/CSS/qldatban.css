@@ -127,7 +127,7 @@
     -fx-border-color: #dcdcdc;
     -fx-border-radius: 8;
     -fx-padding: 4 10;
-    -fx-font-size: 13px;
+    -fx-font-size: 10px;
 }
 
 .event-combobox .list-cell {
@@ -366,4 +366,197 @@
     -fx-padding: 20;
     -fx-text-fill: #666;
     -fx-font-style: italic;
+}
+
+.order-header {
+    -fx-spacing: 15;
+    -fx-padding: 0 0 10 0;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 1 0;
+    -fx-font-weight: bold;
+
+}
+
+.order-header .order-col {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.order-col.product {
+    -fx-pref-width: 140px;
+    -fx-alignment: center-left;
+    -fx-wrap-text: true;
+}
+
+.order-col.quantity {
+    -fx-pref-width: 40px;
+    -fx-alignment: center;
+}
+
+.order-col.price {
+    -fx-pref-width: 80px;
+    -fx-alignment: center-right;
+}
+
+.order-col.total {
+    -fx-pref-width: 90px;
+    -fx-alignment: center-right;
+}
+
+.order-items {
+    -fx-max-height: 200px;
+    -fx-spacing: 0;
+}
+
+.order-item {
+    -fx-padding: 10;
+}
+
+.order-item .order-col {
+    -fx-font-size: 13px;
+    -fx-text-fill: #34495e;
+}
+
+.quick-btn {
+    -fx-background-color: #f1f1f1;
+    -fx-background-radius: 8;
+    -fx-alignment: center;
+}
+
+.total-section {
+    -fx-padding: 5 0 5 0;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1 0 0 0;
+}
+
+.total-row {
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+
+.total-label, .deposit-label, .final-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-pref-width: 70px;
+}
+
+.scrollp_od{
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 12;
+    -fx-background-insets: 0;
+    -fx-background-clip: padding-box;
+    -fx-padding: 10;
+    -fx-border-radius: 12;
+}
+
+.menu-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.menu-grid {
+    -fx-padding: 10 10 20 10;
+}
+
+/* Card món lớn ở center */
+.menu-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0.0, 0, 2);
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 16;
+    -fx-cursor: hand;
+}
+
+.menu-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 10, 0.0, 0, 3);
+    -fx-translate-y: -2;
+}
+
+/* ảnh món */
+.food-image {
+    -fx-background-radius: 12;
+}
+
+/* nút + góc trên phải */
+.add-icon {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50;
+    -fx-min-width: 24;
+    -fx-min-height: 24;
+    -fx-max-width: 24;
+    -fx-max-height: 24;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-border-color: white;
+    -fx-border-width: 1;
+    -fx-border-radius: 50;
+}
+
+.add-icon:hover {
+    -fx-background-color: #27ae60;
+}
+
+/* tên & giá món */
+.menu-item-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-text-alignment: center;
+}
+
+.menu-item-price {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+}
+
+/* nút -1 và X */
+
+.btn-minus,
+.btn-delete {
+    -fx-background-radius: 8;
+    -fx-min-width: 36;
+    -fx-min-height: 26;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+    -fx-border-radius: 8;
+}
+
+.btn-minus {
+    -fx-background-color: #dee2e6;
+    -fx-text-fill: #444;
+    -fx-border-color: transparent;
+}
+
+.btn-minus:hover {
+    -fx-background-color: #ced4da;
+}
+
+.btn-delete {
+    -fx-background-color: #ffc9c9;
+    -fx-text-fill: #c92a2a;
+    -fx-border-color: transparent;
+}
+
+.btn-delete:hover {
+    -fx-background-color: #ffa8a8;
+}
+.btn-back {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 18;
+    -fx-border-color: green;
+    -fx-border-radius: 18;
+    -fx-cursor: hand;
+}
+
+.btn-back:hover {
+    -fx-background-color: #f1f3f5;
+    -fx-text-fill: black;
 }

@@ -8,6 +8,9 @@
             prefWidth="1400" prefHeight="800"
             style="-fx-background-color: #D9D9D9;">
 
+    <top>
+        <fx:include source="TopBar.fxml" fx:id="topBarQl"/>
+    </top>
     <left>
         <fx:include source="sidebar_QL.fxml" fx:id="sidebar_QL" />
     </left>

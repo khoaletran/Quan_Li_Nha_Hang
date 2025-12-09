@@ -40,6 +40,7 @@ public class MainQL extends Application {
         Scene scene = new Scene(root, AppConstants.WINDOW_WIDTH, AppConstants.WINDOW_HEIGHT);
         stage.setTitle(AppConstants.APP_TITLE + " - Quản Lí");
         stage.getIcons().add(APP_LOGO);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();

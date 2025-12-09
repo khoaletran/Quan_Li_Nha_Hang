@@ -193,17 +193,6 @@
                </rowConstraints>
                 </GridPane>
 
-
-                <!-- Bảng sản phẩm -->
-                <!-- Thêm fx:id product_table và fx:id cho các TableColumn -->
-<!--                <TableView fx:id="product_table" prefHeight="150" styleClass="product-table">-->
-<!--                    <columns>-->
-<!--                        <TableColumn fx:id="colSanPham" maxWidth="70.0" prefWidth="70.0" text="Sản phẩm" />-->
-<!--                        <TableColumn fx:id="colSoLuong" maxWidth="60.0" prefWidth="60.0" text="Số Lượng" />-->
-<!--                        <TableColumn fx:id="colGia" maxWidth="75.0" prefWidth="75.0" text="Giá" />-->
-<!--                        <TableColumn fx:id="colTong" maxWidth="75.0" prefWidth="75.0" text="Tổng" />-->
-<!--                    </columns>-->
-<!--                </TableView>-->
                 <HBox style="-fx-alignment: center;" styleClass="order-header">
                     <Label styleClass="order-col product" text="Món Đã Chọn" textAlignment="RIGHT" />
                 </HBox>
@@ -219,7 +208,7 @@
                             <children>
 
                                 <!-- fx:id confirm_btn -->
-                                <Button fx:id="confirm_btn" prefWidth="110.0" styleClass="confirm-btn" text="In Hóa Đơn" />
+                                <Button fx:id="confirm_btn" minHeight="50.0" minWidth="110.0" styleClass="confirm-btn" text="In Hóa Đơn" />
                             </children>
                         </HBox>
                     </children>

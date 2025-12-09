@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import static ui.AppConstants.APP_LOGO;
+
+import javafx.stage.StageStyle;
 import ui.controllers.MainController_NV;
 import ui.controllers.SidebarController_NV;
 
@@ -40,6 +42,7 @@ public class MainNV extends Application {
         Scene scene = new Scene(root, AppConstants.WINDOW_WIDTH, AppConstants.WINDOW_HEIGHT);
         stage.setTitle(AppConstants.APP_TITLE + " - Nhân Viên");
         stage.getIcons().add(APP_LOGO);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();

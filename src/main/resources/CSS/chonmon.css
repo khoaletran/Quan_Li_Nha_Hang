@@ -141,8 +141,8 @@
 
 /* Nút tăng giảm chung */
 .qty-btn_minus,.qty-btn_plus {
-    -fx-pref-width: 36px;
-    -fx-pref-height: 36px;
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
     -fx-background-radius: 50%; /* tròn hẳn */
     -fx-border-radius: 50%;
     -fx-font-weight: bold;
