@@ -19,7 +19,7 @@ public class HoTroController implements Initializable {
 
     @FXML private TextField txtTimKiem;
     @FXML private VBox faqContainer;
-//    @FXML private FlowPane helpCardsContainer;
+
     @FXML private ScrollPane scrollPane;
     @FXML private GridPane helpCardsContainer;
 
@@ -41,22 +41,6 @@ public class HoTroController implements Initializable {
         helpCardsContainer.widthProperty().addListener((obs, oldWidth, newWidth) -> {
             capNhatDoRongCard(newWidth.doubleValue());
         });
-
-//        helpCardsContainer.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-//            double containerWidth = newWidth.doubleValue();
-//
-//            int cardsPerRow = 3; // ÉP 3 CARD MỖI HÀNG
-//
-//            double totalGap = helpCardsContainer.getHgap() * (cardsPerRow - 1);
-//
-//            double realWidth = (containerWidth - totalGap) / cardsPerRow;
-//
-//            for (Node node : helpCardsContainer.getChildren()) {
-//                if (node instanceof VBox card) {
-//                    card.setPrefWidth(realWidth);
-//                }
-//            }
-//        });
 
 
     }
