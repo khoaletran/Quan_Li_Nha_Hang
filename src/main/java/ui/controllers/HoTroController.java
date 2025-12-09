@@ -9,6 +9,8 @@ import javafx.scene.text.TextFlow;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 
+import javafx.scene.layout.GridPane;
+
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,8 +19,10 @@ public class HoTroController implements Initializable {
 
     @FXML private TextField txtTimKiem;
     @FXML private VBox faqContainer;
-    @FXML private FlowPane helpCardsContainer;
+//    @FXML private FlowPane helpCardsContainer;
     @FXML private ScrollPane scrollPane;
+    @FXML private GridPane helpCardsContainer;
+
 
     // Danh sách FAQ
     private List<FAQItem> faqList = new ArrayList<>();
@@ -32,7 +36,46 @@ public class HoTroController implements Initializable {
         hienThiHelpCards();
         setupTimKiem();
         setupScrollPaneStyle();
+
+        // Tự điều chỉnh kích thước card theo GridPane width
+        helpCardsContainer.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            capNhatDoRongCard(newWidth.doubleValue());
+        });
+
+//        helpCardsContainer.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+//            double containerWidth = newWidth.doubleValue();
+//
+//            int cardsPerRow = 3; // ÉP 3 CARD MỖI HÀNG
+//
+//            double totalGap = helpCardsContainer.getHgap() * (cardsPerRow - 1);
+//
+//            double realWidth = (containerWidth - totalGap) / cardsPerRow;
+//
+//            for (Node node : helpCardsContainer.getChildren()) {
+//                if (node instanceof VBox card) {
+//                    card.setPrefWidth(realWidth);
+//                }
+//            }
+//        });
+
+
     }
+    private void capNhatDoRongCard(double containerWidth) {
+
+        int columns = 3;
+        double hgap = helpCardsContainer.getHgap();
+
+        double totalGap = (columns - 1) * hgap;
+
+        double cardWidth = (containerWidth - totalGap) / columns - 5;
+
+        for (Node node : helpCardsContainer.getChildren()) {
+            if (node instanceof VBox card) {
+                card.setPrefWidth(cardWidth);
+            }
+        }
+    }
+
 
     private void khoiTaoDuLieuFAQ() {
         faqList.add(new FAQItem(
@@ -144,8 +187,23 @@ public class HoTroController implements Initializable {
 
     private void hienThiHelpCards() {
         helpCardsContainer.getChildren().clear();
+//        for (HelpCard card : helpCardList) {
+//            helpCardsContainer.getChildren().add(taoHelpCard(card));
+//        }
+        int columns = 3; // số card mỗi hàng
+        int row = 0;
+        int col = 0;
+
         for (HelpCard card : helpCardList) {
-            helpCardsContainer.getChildren().add(taoHelpCard(card));
+            VBox cardBox = taoHelpCard(card);
+
+            helpCardsContainer.add(cardBox, col, row);
+
+            col++;
+            if (col >= columns) {
+                col = 0;
+                row++;
+            }
         }
     }
 
@@ -191,6 +249,12 @@ public class HoTroController implements Initializable {
         VBox cardBox = new VBox();
         cardBox.setAlignment(javafx.geometry.Pos.CENTER);
         cardBox.setSpacing(15);
+
+        cardBox.setMinWidth(250);
+        cardBox.setPrefWidth(250);      // mỗi card cùng độ rộng
+        cardBox.setMaxWidth(Double.MAX_VALUE); // cho phép giãn khi FlowPane đủ chỗ
+
+
         cardBox.setPadding(new Insets(20));
         cardBox.setStyle(
                 "-fx-background-color: #ffffff; " +
@@ -300,24 +364,49 @@ public class HoTroController implements Initializable {
         }
     }
 
-    private void timKiemHelpCards(String keyword) {
-        helpCardsContainer.getChildren().clear();
+//    private void timKiemHelpCards(String keyword) {
+//        helpCardsContainer.getChildren().clear();
+//
+//        List<HelpCard> ketQua = helpCardList.stream()
+//                .filter(card -> card.getTitle().toLowerCase().contains(keyword) ||
+//                        card.getDescription().toLowerCase().contains(keyword) ||
+//                        card.getTag().toLowerCase().contains(keyword))
+//                .collect(Collectors.toList());
+//
+//        if (ketQua.isEmpty()) {
+//            // Giữ nguyên tất cả cards nếu không có kết quả
+//            hienThiHelpCards();
+//        } else {
+//            for (HelpCard card : ketQua) {
+//                helpCardsContainer.getChildren().add(taoHelpCard(card));
+//            }
+//        }
+//    }
+private void timKiemHelpCards(String keyword) {
+    helpCardsContainer.getChildren().clear();
 
-        List<HelpCard> ketQua = helpCardList.stream()
-                .filter(card -> card.getTitle().toLowerCase().contains(keyword) ||
-                        card.getDescription().toLowerCase().contains(keyword) ||
-                        card.getTag().toLowerCase().contains(keyword))
-                .collect(Collectors.toList());
+    List<HelpCard> ketQua = helpCardList.stream()
+            .filter(card -> card.getTitle().toLowerCase().contains(keyword)
+                    || card.getDescription().toLowerCase().contains(keyword)
+                    || card.getTag().toLowerCase().contains(keyword))
+            .collect(Collectors.toList());
 
-        if (ketQua.isEmpty()) {
-            // Giữ nguyên tất cả cards nếu không có kết quả
-            hienThiHelpCards();
-        } else {
-            for (HelpCard card : ketQua) {
-                helpCardsContainer.getChildren().add(taoHelpCard(card));
-            }
+    if (ketQua.isEmpty()) {
+        hienThiHelpCards();
+        return;
+    }
+
+    int col = 0, row = 0;
+    for (HelpCard card : ketQua) {
+        helpCardsContainer.add(taoHelpCard(card), col, row);
+        col++;
+        if (col >= 3) {
+            col = 0;
+            row++;
         }
     }
+}
+
 
     private void setupScrollPaneStyle() {
         // Tắt thanh scroll ngang

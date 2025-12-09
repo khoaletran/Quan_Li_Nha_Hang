@@ -36,11 +36,37 @@
                     </HBox>
 
                     <!-- QUICK ACCESS CARDS -->
+<!--                    <VBox spacing="15">-->
+<!--                        <Label text="🚀 Truy Cập Nhanh"-->
+<!--                               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />-->
+<!--                        <FlowPane fx:id="helpCardsContainer"-->
+<!--                                  hgap="15" vgap="15"-->
+<!--                                  style="-fx-padding: 10;"-->
+<!--                                  prefWrapLength="1200"-->
+<!--                                  maxWidth="Infinity"-->
+<!--                        />-->
+
+
+<!--                    </VBox>-->
                     <VBox spacing="15">
                         <Label text="🚀 Truy Cập Nhanh"
                                style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-                        <FlowPane fx:id="helpCardsContainer" hgap="15" vgap="15"
-                                  style="-fx-padding: 10;" />
+
+                        <!-- ĐỔI TỪ FlowPane → GridPane -->
+                        <GridPane fx:id="helpCardsContainer"
+                                  hgap="15" vgap="15"
+                                  style="-fx-padding: 10;"
+                                  maxWidth="Infinity">
+
+                            <!-- Đặt 3 cột cố định -->
+                            <columnConstraints>
+                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="33.33"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="33.33"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="33.33"/>
+                            </columnConstraints>
+
+                        </GridPane>
+
                     </VBox>
 
                     <!-- FAQ SECTION -->
