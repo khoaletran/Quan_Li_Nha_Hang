@@ -42,7 +42,7 @@
                         <!-- Ô tìm kiếm -->
                         <HBox alignment="CENTER_LEFT" spacing="8" styleClass="menu-search-box" HBox.hgrow="ALWAYS">
                             <Label styleClass="search-icon" text="🔍" />
-                            <TextField promptText="Tìm bàn" styleClass="search-field" HBox.hgrow="ALWAYS" />
+                            <TextField fx:id="searchField" promptText="Tìm bàn" styleClass="search-field" HBox.hgrow="ALWAYS" />
                         </HBox>
 
                         <!-- ComboBox chọn loại bàn -->

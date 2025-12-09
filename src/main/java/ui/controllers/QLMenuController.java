@@ -4,19 +4,26 @@ import dao.LoaiMonDAO;
 import dao.MonDAO;
 import entity.LoaiMon;
 import entity.Mon;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,20 +44,48 @@ public class QLMenuController {
     private ImageView imgMon;
     @FXML
     private Button btnXacNhan;
+    @FXML 
+    private Button btnAdd;
     @FXML
     private TextField searchField;
 
-    private final MonDAO monDAO = new MonDAO();
+    private List<Mon> dsMon = new ArrayList<>();
+    private List<LoaiMon> dsLoaiMon = new ArrayList<>();
     private File selectedFile;
 
     @FXML
     public void initialize() {
+        dsMon = MonDAO.getAll();
+        dsLoaiMon = LoaiMonDAO.getAll();
         loadComboDanhMuc();
         loadDanhSachMon(); // hiển thị tất cả
         cboLoaiMonFilter.setOnAction(e -> locMonTheoDanhMuc());
         // TextField tìm kiếm realtime
         searchField.textProperty().addListener((obs, oldText, newText) -> filterMon());
+
+        // ===== THÊM PHÍM TẮT =====
+        Platform.runLater(() -> addShortcuts(searchField.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm món ăn (Ctrl + F)");
+        tipFind.getStyleClass().add("tooltip");
+        Tooltip.install(searchField, tipFind);
+        Tooltip tipNew = new Tooltip("Thêm món ăn mới (Ctrl + N)");
+        tipNew.getStyleClass().add("tooltip");
+        Tooltip.install(btnAdd, tipNew);
     }
+
+
+    private void addShortcuts(Scene scene) {
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            searchField.requestFocus();
+            searchField.selectAll();  // tự bôi đen text để nhập mới
+        });
+        scene.getAccelerators().put(ctrlN, () -> {
+            addMon();
+        });
+    }
+
 
     // Hàm lọc món kết hợp tên + loại
     private void filterMon() {
@@ -59,7 +94,7 @@ public class QLMenuController {
 
         flowMonAn.getChildren().clear();
 
-        for (Mon mon : MonDAO.getAll()) {
+        for (Mon mon : dsMon) {
             boolean matchName = mon.getTenMon().toLowerCase().contains(keyword);
             boolean matchLoai = selectedLoai == null
                     || selectedLoai.equals("Tất cả")
@@ -76,7 +111,7 @@ public class QLMenuController {
         cboLoaiMon.getItems().clear();
 
         cboLoaiMonFilter.getItems().add("Tất cả"); // filter xem tất cả
-        for (LoaiMon lm : LoaiMonDAO.getAll()) {
+        for (LoaiMon lm : dsLoaiMon) {
             cboLoaiMonFilter.getItems().add(lm.getTenLoaiMon());
             cboLoaiMon.getItems().add(lm.getTenLoaiMon());
         }
@@ -86,8 +121,7 @@ public class QLMenuController {
 
     private void loadDanhSachMon() {
         flowMonAn.getChildren().clear();
-        List<Mon> danhSach = monDAO.getAll();
-        for (Mon mon : danhSach) {
+        for (Mon mon : dsMon) {
             flowMonAn.getChildren().add(taoCardMon(mon, null));
         }
     }
@@ -95,13 +129,14 @@ public class QLMenuController {
     private void locMonTheoDanhMuc() {
         String selectedLoai = cboLoaiMonFilter.getSelectionModel().getSelectedItem();
         flowMonAn.getChildren().clear();
+        searchField.setText("");
 
         if (selectedLoai == null || selectedLoai.equals("Tất cả")) {
             loadDanhSachMon();
             return;
         }
 
-        for (Mon mon : MonDAO.getAll()) {
+        for (Mon mon : dsMon) {
             if (mon.getLoaiMon() != null &&
                     selectedLoai.equals(mon.getLoaiMon().getTenLoaiMon())) {
                 flowMonAn.getChildren().add(taoCardMon(mon, null));

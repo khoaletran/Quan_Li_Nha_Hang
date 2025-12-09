@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoginController {
@@ -24,6 +23,7 @@ public class LoginController {
     @FXML private VBox resetPane;
     @FXML private Button closeBtn;
     @FXML private Button minimizeBtn;
+    @FXML private Button loginBtn;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField newPassField;
@@ -31,7 +31,10 @@ public class LoginController {
 
     private boolean DN = false;
     private NhanVien nhanvien;
-
+    
+    public TextField getUsernameField() {
+        return usernameField;
+    }
     // Hiệu ứng fade mượt
     private void switchPane(VBox hide, VBox show) {
         FadeTransition fadeOut = new FadeTransition(Duration.millis(250), hide);

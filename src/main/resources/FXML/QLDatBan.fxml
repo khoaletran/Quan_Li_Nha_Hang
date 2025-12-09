@@ -124,13 +124,13 @@
 
             <!-- Bảng đơn hàng -->
             <VBox spacing="10" styleClass="order-section">
-                <TableView fx:id="orderTable" prefHeight="201.0" prefWidth="373.0" styleClass="order-table">
+                <TableView fx:id="orderTable" prefHeight="280.0" prefWidth="430.0" styleClass="order-table">
                     <columns>
                         <TableColumn fx:id="colSTT" prefWidth="30" text="STT" />
-                        <TableColumn fx:id="colSanPham" prefWidth="90" text="Sản phẩm" />
-                        <TableColumn fx:id="colSoLuong" prefWidth="70" text="Số Lượng" />
-                        <TableColumn fx:id="colGia" prefWidth="70" text="Giá" />
-                        <TableColumn fx:id="colTong" prefWidth="70" text="Tổng" />
+                        <TableColumn fx:id="colSanPham" prefWidth="60" text="Sản phẩm" />
+                        <TableColumn fx:id="colSoLuong" prefWidth="60" text="Số Lượng" />
+                        <TableColumn fx:id="colGia" prefWidth="60" text="Giá" />
+                        <TableColumn fx:id="colTong" prefWidth="60" text="Tổng" />
                         <TableColumn fx:id="colXoa" prefWidth="30" text="Xóa" />
                     </columns>
                 </TableView>
