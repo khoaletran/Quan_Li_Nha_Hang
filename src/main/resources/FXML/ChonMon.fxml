@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800.0" prefWidth="1400.0" style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/chonmon.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.ChonMonController">
+<BorderPane prefHeight="800.0" prefWidth="1400.0" style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/chonmon.css, @../CSS/AppMD.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.ChonMonController">
 
     <!-- Nội dung chính -->
     <center>
@@ -70,7 +70,21 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <Label alignment="CENTER" prefHeight="54.0" prefWidth="351.0" styleClass="section-title" text="Thông Tin Đặt Bàn" textAlignment="CENTER" />
+            <Label minHeight="40.0" minWidth="350.0" styleClass="section-title" text="Thông Tin Đặt Bàn" textAlignment="CENTER" />
+         <HBox>
+            <children>
+               <HBox alignment="CENTER_LEFT" spacing="10">
+                  <children>
+                     <Label styleClass="info-label" text="Bàn:" />
+                      <Label fx:id="lblMaBan" style="-fx-text-fill: #E6763E; -fx-font-weight: bold" />
+                  </children>
+               </HBox>
+                   <HBox alignment="CENTER_LEFT" spacing="10.0">
+                       <Label styleClass="info-label" text="Số lượng khách:" />
+                       <Label fx:id="lblSoKhach" />
+                   </HBox>
+            </children>
+         </HBox>
 
             <VBox maxHeight="234.0" spacing="12" styleClass="customer-info">
                 <HBox alignment="CENTER_LEFT" spacing="10">
@@ -81,32 +95,22 @@
                     <Label styleClass="info-label" text="SĐT:" />
                     <TextField fx:id="sdtKhach" prefHeight="24.0" prefWidth="228.0" promptText="Nhập số điện thoại" styleClass="filter-tf" />
                 </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="55.0" spacing="10">
-               <children>
-                  <Label styleClass="info-label" text="Bàn:" />
-                  <TextField fx:id="tf_ban" prefHeight="24.0" prefWidth="228.0" promptText="Bàn" styleClass="filter-tf" />
-               </children>
-            </HBox>
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label styleClass="info-label" text="Số lượng khách:" />
-                    <TextField fx:id="tfSLKhach" prefHeight="24.0" prefWidth="228.0" promptText="Số người" styleClass="filter-tf" />
-                </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="134.0" spacing="10">
                <children>
                   <Label styleClass="info-label" text="Thời gian" />
                   <TextField fx:id="tftg" prefHeight="24.0" prefWidth="228.0" promptText="Thời gian" styleClass="filter-tf" />
                </children>
             </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="165.0" prefHeight="13.0" prefWidth="340.0" spacing="10">
+               <children>
+                  <Label styleClass="info-label" text="Đặt sự kiện:" />
+                  <ComboBox fx:id="comboSuKien" minWidth="220.0" prefHeight="28.0" prefWidth="229.0" promptText="Chọn Sự Kiện" styleClass="combo-boxSK" />
+               </children>
+            </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label styleClass="info-label" text="Ghi chú:" />
                     <TextField fx:id="tfghichu" prefHeight="24.0" prefWidth="228.0" promptText="Ghi chú đặc biệt" styleClass="filter-tf" />
                 </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="165.0" prefHeight="13.0" prefWidth="340.0" spacing="10">
-               <children>
-                  <Label styleClass="info-label" text="Đặt sự kiện:" />
-                  <ComboBox fx:id="comboSuKien" minWidth="220.0" prefHeight="24.0" prefWidth="220.0" promptText="Chọn Sự Kiện" styleClass="combo-boxSK" />
-               </children>
-            </HBox>
             </VBox>
               <VBox prefHeight="542.0" prefWidth="340.0" spacing="8.0" styleClass="order-details">
 
@@ -115,7 +119,7 @@
                       <Label styleClass="order-col product" text="Món Đã Chọn" textAlignment="RIGHT" />
                   </HBox>
 
-                <ScrollPane fx:id="scrollChiTiet" fitToHeight="true" fitToWidth="true" prefHeight="150.0" prefWidth="320.0" styleClass="scrollp_od">
+                <ScrollPane fx:id="scrollChiTiet" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="320.0" styleClass="scrollp_od">
                     <content>
                         <VBox fx:id="vboxChiTietDonHang" spacing="6" />
                     </content>
@@ -139,7 +143,7 @@
                       </HBox>
                   </VBox>
 
-                  <HBox alignment="CENTER_LEFT" spacing="15" fx:id="paygroup">
+                  <HBox fx:id="paygroup" alignment="CENTER_LEFT" spacing="15">
                    <Label prefHeight="15.0" prefWidth="79.0" style="-fx-font-weight: bold;" styleClass="bold-label" text="Thanh Toán:" />
                    <RadioButton fx:id="rdoChuyenKhoan" prefHeight="30.0" prefWidth="136.0" selected="true" text="Chuyển Khoản">
                        <toggleGroup>

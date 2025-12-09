@@ -74,16 +74,11 @@
 
     <!-- Cột phải -->
     <right>
-        <VBox prefWidth="350" spacing="15" styleClass="right-pane" VBox.vgrow="ALWAYS">
+        <VBox prefWidth="350" spacing="20.0" style="-fx-alignment: center;" styleClass="right-pane" VBox.vgrow="ALWAYS">
             <padding>
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
-
-            <AnchorPane>
-                <children>
-                    <Label prefHeight="39.0" prefWidth="356.0" styleClass="section-title" text="Thông Tin Đặt Bàn" AnchorPane.topAnchor="0" />
-                </children>
-            </AnchorPane>
+              <Label alignment="CENTER" minHeight="40.0" minWidth="350.0" styleClass="section-title" text="Thông Tin Đặt Bàn" />
 
             <GridPane hgap="10" vgap="6" VBox.vgrow="NEVER">
                 <columnConstraints>

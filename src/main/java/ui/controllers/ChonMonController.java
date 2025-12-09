@@ -29,7 +29,7 @@ public class ChonMonController {
     @FXML private ComboBox<LoaiMon> comboDanhMuc;
     @FXML private ComboBox<SuKien> comboSuKien;
     @FXML private VBox vboxChiTietDonHang, vboxTienMat;
-    @FXML private Label lbl_total, lblTienThua, lblCoc, lblConLai;
+    @FXML private Label lbl_total, lblTienThua, lblCoc, lblConLai, lblMaBan, lblSoKhach;
     @FXML private ToggleGroup paymentGroup;
     @FXML private RadioButton rdoTienMat, rdoChuyenKhoan;
     @FXML private Button back, btndatban, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6;
@@ -142,7 +142,7 @@ public class ChonMonController {
 
     public void setSoLuongKhach(int soLuongKhach) {
         this.soLuongKhach = soLuongKhach;
-        tfSLKhach.setText(String.valueOf(soLuongKhach));
+        lblSoKhach.setText(String.valueOf(soLuongKhach));
     }
 
     public void setSdtKhach(String sdt) {
@@ -155,8 +155,7 @@ public class ChonMonController {
 
     public void setThongTinBan(Ban ban) {
         this.banHienTai = ban;
-        tf_ban.setText(ban.getMaBan());
-        tf_ban.setEditable(false);
+        lblMaBan.setText(ban.getMaBan());
         System.out.println("Đang chọn bàn: " + ban);
     }
 
@@ -455,10 +454,14 @@ public class ChonMonController {
         VBox vbox = new VBox(4); // chứa tên và hàng thông tin
         vbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
+        HBox.setHgrow(vbox, javafx.scene.layout.Priority.ALWAYS);
+
         // ===== Tên món (nằm trên) =====
         Label lblTen = new Label(mon.getTenMon());
         lblTen.getStyleClass().addAll("order-col", "product");
-        lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 13.5px; -fx-text-fill: #333;");
+        lblTen.setWrapText(true);
+        lblTen.setMaxWidth(Double.MAX_VALUE);
+        lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #333;");
 
         // ===== Hàng dưới: SL – Giá – Tổng tiền – Nút =====
         HBox hboxInfo = new HBox(10);

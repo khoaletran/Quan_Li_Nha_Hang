@@ -68,10 +68,7 @@
     <right>
         <!-- Phần thông tin chi tiết và tìm kiếm món ăn -->
         <VBox prefHeight="800.0" prefWidth="435.0" spacing="20" styleClass="right">
-            <!-- Thông tin đặt bàn -->
-            <HBox styleClass="hbox-section-title">
-                <Label styleClass="section-title" text="Thông Tin Đặt Bàn" />
-            </HBox>
+             <Label minHeight="40.0" minWidth="350.0" styleClass="section-title" text="Thông Tin Đặt Bàn" />
             <VBox spacing="15" styleClass="booking-info-section">
                 <VBox spacing="10" styleClass="info-list">
                     <!-- Mã hóa đơn -->
@@ -157,7 +154,7 @@
                                         <Image url="@../IMG/avatar.png" />
                                     </image>
                                 </ImageView>
-                                <Button text="+" styleClass="add-icon" StackPane.alignment="TOP_RIGHT" />
+                                <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
                             </StackPane>
                             <Label styleClass="food-name" text="Mẫu món" />
                         </VBox>
@@ -170,7 +167,7 @@
                                         <Image url="@../IMG/avatar.png" />
                                     </image>
                                 </ImageView>
-                                <Button text="+" styleClass="add-icon" StackPane.alignment="TOP_RIGHT" />
+                                <Button styleClass="add-icon" text="+" StackPane.alignment="TOP_RIGHT" />
                             </StackPane>
                             <Label styleClass="food-name" text="Bánh mì" />
                         </VBox>

@@ -75,10 +75,10 @@ public class HoaDon {
             this.tgCheckOut = null;
             return;
         }
-        if (this.tgCheckIn != null && !tgCheckOut.isAfter(this.tgCheckIn)) {
-            this.tgCheckOut = null;
-            return;
+        if (this.tgCheckIn != null && tgCheckOut.isBefore(this.tgCheckIn)) {
+            throw new IllegalArgumentException("Thời gian ra phải sau hoặc bằng thời gian vào!");
         }
+
         this.tgCheckOut = tgCheckOut;
     }
 

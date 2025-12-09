@@ -191,7 +191,7 @@
     -fx-background-insets: 0;
 }
 
-.right-section{
+.right{
     -fx-background-color: white;
     -fx-background-radius: 32 0 0 32;
     -fx-border-radius: 32 0 0 32;
@@ -398,7 +398,7 @@
 .btn-action {
     -fx-background-radius: 25;
     -fx-padding: 8 25;
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-cursor: hand;

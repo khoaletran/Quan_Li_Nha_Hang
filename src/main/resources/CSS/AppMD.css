@@ -10,6 +10,16 @@
     -fx-max-width: 420px;
 }
 
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: #E6763E;
+    -fx-padding: 8;
+    -fx-background-radius: 8;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+
 /*Scroll Pane*/
 .scroll-bar:vertical {
     -fx-pref-width: 12px;

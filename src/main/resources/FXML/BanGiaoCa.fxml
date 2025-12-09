@@ -116,7 +116,7 @@
 
             <!-- Tiêu đề -->
             <VBox alignment="CENTER" prefHeight="55" styleClass="header-section">
-                <Label text="Báo Cáo Kết Ca" styleClass="title-label"/>
+                <Label minHeight="40.0" minWidth="350.0" styleClass="section-title" text="Báo Cáo Kết Ca" />
             </VBox>
 
             <!-- Form nội dung -->

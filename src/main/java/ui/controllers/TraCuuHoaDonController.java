@@ -28,18 +28,21 @@ import javafx.collections.ObservableList;
 import ui.HoaDonIn;
 
 import java.lang.reflect.Method;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class TraCuuHoaDonController {
 
     // FXML - danh sách hóa đơn
-    @FXML private VBox vbox_center_scroll;
+    @FXML private VBox vbox_center_scroll, vboxChiTietDonHang;
 
     // FXML - bộ lọc và tìm kiếm
     @FXML private TextField txtMaBan;
@@ -58,13 +61,6 @@ public class TraCuuHoaDonController {
     @FXML private TextField txtSuKien;
     @FXML private TextField txtKhuVuc;
     @FXML private TextArea txtMoTa;
-
-    // FXML - bảng chi tiết hóa đơn
-    @FXML private TableView<ChiTietHoaDon> product_table;
-    @FXML private TableColumn<ChiTietHoaDon, String> colSanPham;
-    @FXML private TableColumn<ChiTietHoaDon, String> colSoLuong;
-    @FXML private TableColumn<ChiTietHoaDon, String> colGia;
-    @FXML private TableColumn<ChiTietHoaDon, String> colTong;
 
     // FXML - nút in hóa đơn
     @FXML private Button confirm_btn;
@@ -92,7 +88,6 @@ public class TraCuuHoaDonController {
         khoiTaoComboBox();
         khoiTaoDatePicker();
         ganSuKienChoNut();
-        khoiTaoTableView();
         taiDanhSachHoaDon();
         resetForm();
     }
@@ -131,35 +126,6 @@ public class TraCuuHoaDonController {
         if (confirm_btn != null) confirm_btn.setOnAction(e -> HoaDonIn.previewHoaDon(hoaDonSelected));
     }
 
-    private void khoiTaoTableView() {
-        if (colSanPham != null) {
-            colSanPham.setCellValueFactory(cell -> {
-                Mon m = cell.getValue().getMon();
-                String ten = (m != null && m.getTenMon() != null) ? m.getTenMon() : "Không xác định";
-                return new javafx.beans.property.SimpleStringProperty(ten);
-            });
-        }
-
-        if (colSoLuong != null) {
-            colSoLuong.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(
-                    String.valueOf(cell.getValue().getSoLuong())));
-        }
-
-        if (colGia != null) {
-            colGia.setCellValueFactory(cell -> {
-                Mon m = cell.getValue().getMon();
-                double g = (m != null) ? m.getGiaBanTaiLucLapHD(hoaDonSelected) : 0;
-                return new javafx.beans.property.SimpleStringProperty(String.format("%,.0f VNĐ", g));
-            });
-        }
-
-        if (colTong != null) {
-            colTong.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(
-                    String.format("%,.0f VNĐ", cell.getValue().getThanhTien())));
-        }
-
-        if (product_table != null) product_table.setItems(chiTietHoaDonData);
-    }
 
     // TẢI & HIỂN THỊ DANH SÁCH HÓA ĐƠN
     private void taiDanhSachHoaDon() {
@@ -390,6 +356,8 @@ public class TraCuuHoaDonController {
                 for (ChiTietHoaDon ct : dsChiTiet) {
                     System.out.println("   - " + (ct.getMon() != null ? ct.getMon().getTenMon() : "null") +
                             " x " + ct.getSoLuong() + " = " + ct.getThanhTien());
+                    HBox dong = taoDongChiTiet(ct.getMon(), ct.getSoLuong());
+                    vboxChiTietDonHang.getChildren().add(dong);
                 }
             } else {
                 System.out.println("Không có chi tiết hóa đơn cho mã: " + maHD);
@@ -515,20 +483,6 @@ public class TraCuuHoaDonController {
         resetForm();
     }
 
-    @FXML
-    private void inHoaDon() {
-        if (hoaDonSelected == null) {
-            hienThiThongBao("Vui lòng chọn hóa đơn cần in");
-            return;
-        }
-        try {
-            hienThiThongBao("Đang in hóa đơn: " + hoaDonSelected.getMaHD() + "\nChức năng in đang được phát triển...");
-        } catch (Exception e) {
-            e.printStackTrace();
-            hienThiThongBaoLoi("Lỗi khi in hóa đơn: " + e.getMessage());
-        }
-    }
-
     private void resetForm() {
         hoaDonSelected = null;
         if (txtMaHoaDon != null) txtMaHoaDon.setText("");
@@ -575,5 +529,57 @@ public class TraCuuHoaDonController {
             System.err.println("Lỗi khi refresh data: " + e.getMessage());
             hienThiThongBao("Lỗi khi làm mới dữ liệu");
         }
+    }
+
+    private String formatCurrency(double amount) {
+        Locale localeVN = new Locale("vi", "VN");
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(localeVN);
+
+        DecimalFormat df = new DecimalFormat("#,###", symbols);
+
+        return df.format(amount) + " đ";
+    }
+
+    private HBox taoDongChiTiet(Mon mon, int soLuong) {
+        VBox vbox = new VBox(4); // chứa tên và hàng thông tin
+        vbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        HBox.setHgrow(vbox, javafx.scene.layout.Priority.ALWAYS);
+
+        // ===== Tên món (nằm trên) =====
+        Label lblTen = new Label(mon.getTenMon());
+        lblTen.getStyleClass().addAll("order-col", "product");
+        lblTen.setWrapText(true);
+        lblTen.setMaxWidth(Double.MAX_VALUE);
+        lblTen.setStyle("-fx-font-weight: bold; -fx-font-size: 13.5px; -fx-text-fill: #333;");
+
+        // ===== Hàng dưới: SL – Giá – Tổng tiền – Nút =====
+        HBox hboxInfo = new HBox(10);
+        hboxInfo.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        Label lblSoLuong = new Label(String.valueOf(soLuong));
+        lblSoLuong.getStyleClass().addAll("order-col", "quantity", "lblSoLuongCT");
+        lblSoLuong.setPrefWidth(30);
+        lblSoLuong.setAlignment(javafx.geometry.Pos.CENTER);
+
+        Label lblGia = new Label(formatCurrency(mon.getGiaBan()));
+        lblGia.getStyleClass().addAll("order-col", "price");
+        lblGia.setPrefWidth(70);
+        lblGia.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+
+        Label lblTongTien = new Label(formatCurrency(mon.getGiaBan() * soLuong));
+        lblTongTien.getStyleClass().addAll("order-col", "total", "lblTongTienCT");
+        lblTongTien.setPrefWidth(80);
+        lblTongTien.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+
+        hboxInfo.getChildren().addAll(lblSoLuong, lblGia, lblTongTien);
+        vbox.getChildren().addAll(lblTen, hboxInfo);
+
+        HBox row = new HBox(vbox);
+        row.getStyleClass().add("order-row");
+        row.setSpacing(10);
+        row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        return row;
     }
 }

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/qlmenu.css" xmlns="http://javafx.com/javafx/25"
+<BorderPane style="-fx-background-color: D9D9D9;" stylesheets="@../CSS/qlmenu.css, @../CSS/AppMD.css" xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.QLMenuController">
 
 
@@ -85,7 +85,7 @@
     <right>
         <VBox prefWidth="380" spacing="20" styleClass="dish-details-section" HBox.hgrow="ALWAYS">
             <!-- Tiêu đề -->
-            <Label prefHeight="64.0" prefWidth="300.0" styleClass="main-title" text="Thông Tin Món"/>
+            <Label minHeight="40.0" minWidth="350.0" styleClass="section-title" text="Thông Tin Món"/>
 
             <!-- Form thông tin -->
             <VBox prefHeight="652.0" prefWidth="480.0" spacing="15" styleClass="info-form-section">

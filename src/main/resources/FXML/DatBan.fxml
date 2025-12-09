@@ -272,7 +272,7 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <Label alignment="CENTER" prefHeight="54.0" prefWidth="351.0" styleClass="section-title" text="Thông Tin Đặt Bàn" textAlignment="CENTER" />
+            <Label minHeight="40.0" minWidth="350.0" styleClass="section-title" text="Thông Tin Đặt Bàn" textAlignment="CENTER" />
          <GridPane vgap="10.0">
            <columnConstraints>
              <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="119.0" />
