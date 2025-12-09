@@ -142,12 +142,12 @@ public class HoTroController implements Initializable {
         ));
 
         helpCardList.add(new HelpCard(
-                "📦", "Kho Hàng", "Quản lý nguyên liệu & tồn kho", "#f39c12",
+                "📦", "Hóa Đơn", "Quản lý hóa đơn", "#f39c12",
                 "kho"
         ));
 
         helpCardList.add(new HelpCard(
-                "💰", "Báo Cáo", "Xuất báo cáo doanh thu", "#16a085",
+                "💰", "Báo Cáo Thống Kê", "Xuất báo cáo doanh thu", "#16a085",
                 "baocao"
         ));
 
@@ -348,24 +348,6 @@ public class HoTroController implements Initializable {
         }
     }
 
-//    private void timKiemHelpCards(String keyword) {
-//        helpCardsContainer.getChildren().clear();
-//
-//        List<HelpCard> ketQua = helpCardList.stream()
-//                .filter(card -> card.getTitle().toLowerCase().contains(keyword) ||
-//                        card.getDescription().toLowerCase().contains(keyword) ||
-//                        card.getTag().toLowerCase().contains(keyword))
-//                .collect(Collectors.toList());
-//
-//        if (ketQua.isEmpty()) {
-//            // Giữ nguyên tất cả cards nếu không có kết quả
-//            hienThiHelpCards();
-//        } else {
-//            for (HelpCard card : ketQua) {
-//                helpCardsContainer.getChildren().add(taoHelpCard(card));
-//            }
-//        }
-//    }
 private void timKiemHelpCards(String keyword) {
     helpCardsContainer.getChildren().clear();
 
