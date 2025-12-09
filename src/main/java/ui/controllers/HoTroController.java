@@ -152,12 +152,12 @@ public class HoTroController implements Initializable {
         ));
 
         helpCardList.add(new HelpCard(
-                "⚙️", "Cài Đặt", "Cấu hình hệ thống", "#34495e",
+                "⚙️", "Tài khoản", "Vấn đề tài khoản", "#34495e",
                 "caidat"
         ));
 
         helpCardList.add(new HelpCard(
-                "📱", "Ứng Dụng", "Hướng dẫn dùng app mobile", "#1abc9c",
+                "📱", "Phím tắt", "Hướng dẫn dùng phím tắt", "#1abc9c",
                 "mobile"
         ));
     }
