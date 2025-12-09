@@ -115,7 +115,7 @@
                         </children>
                     </AnchorPane>
                 </VBox>
-
+                <!-- Thẻ 2: Khu Vuc -->
                 <VBox alignment="CENTER" maxWidth="320.0" minWidth="200.0" prefHeight="155.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
                     <AnchorPane prefHeight="66.0" prefWidth="260.0">
                         <children>
