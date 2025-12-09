@@ -78,7 +78,7 @@
                                   <VBox prefHeight="78.0" prefWidth="331.0">
                                       <children>
                                           <Label styleClass="labeltt" text="Mật khẩu" />
-                                          <PasswordField fx:id="passwordField" promptText="Nhập mật khẩu" styleClass="input-field" />
+                                          <PasswordField fx:id="passwordField" onAction="#login" promptText="Nhập mật khẩu" styleClass="input-field" />
                                       </children>
                                   </VBox>
                               </children>

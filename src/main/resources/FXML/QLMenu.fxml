@@ -64,7 +64,7 @@
                                   promptText="Chọn Loại Món"/>
 
                         <!-- Nút thêm mới -->
-                        <Button onAction="#addMon"
+                        <Button fx:id="btnAdd" onAction="#addMon"
                                 styleClass="menu-add-btn"
                                 text="+"/>
                     </HBox>

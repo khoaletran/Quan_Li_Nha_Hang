@@ -562,9 +562,7 @@ public class ChinhSachController {
         // Load danh sách cọc
         loadDanhSachCoc();
         loadThoiGianDoiBan();
-        for (Mon mon : MonDAO.getAll()) {
-            System.out.println(mon.toString());
-        }
+
         loadFoodList();
         setupLoaiMonEvent();
 

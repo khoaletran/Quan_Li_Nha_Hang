@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import ui.controllers.LoginController;
 
 import static ui.AppConstants.APP_LOGO;
 
@@ -13,7 +14,7 @@ public class Login extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Login.class.getResource("/FXML/Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
-
+        LoginController controller = fxmlLoader.getController();
         // Áp dụng CSS
         scene.getStylesheets().add(Login.class.getResource("/CSS/login.css").toExternalForm());
 
@@ -23,6 +24,8 @@ public class Login extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+        
+        controller.getUsernameField().requestFocus();
     }
 
     public static void main(String[] args) {
