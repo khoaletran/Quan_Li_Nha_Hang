@@ -6,26 +6,23 @@ import dao.LoaiBanDAO;
 import entity.Ban;
 import entity.KhuVuc;
 import entity.LoaiBan;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
-import java.awt.*;
 import java.util.List;
+import javafx.scene.Scene;
 
 public class QLBanController {
 
@@ -42,11 +39,12 @@ public class QLBanController {
     @FXML private Rectangle modalBg;
     @FXML private ComboBox comboModalLoaiBan,comboModalKhuVuc;
     @FXML private TextField txtModalMaBan;
+    @FXML private TextField searchField;
 
     private final BanDAO banDAO = new BanDAO();
     private final LoaiBanDAO loaiBanDAO = new LoaiBanDAO();
     private final KhuVucDAO khuVucDAO = new KhuVucDAO();
-
+    private List<Ban> dsBan;
     @FXML
     public void initialize() {
         loadAllBan();
@@ -58,7 +56,7 @@ public class QLBanController {
 
         comboDanhMuc.setOnAction(event -> filterBan());
         comboKhuVuc.setOnAction(event -> filterBan());
-
+        searchField.textProperty().addListener((obs, oldText, newText)-> filterBan());
         modalBg.widthProperty().bind(rootPane.widthProperty());
         modalBg.heightProperty().bind(rootPane.heightProperty());
 
@@ -72,13 +70,31 @@ public class QLBanController {
         btnModalSave.setOnAction(e -> themBan());
 
         comboModalKhuVuc.setOnAction(event -> sinhMaBanMoi());
+        Platform.runLater(() -> addShortcuts(searchField.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm bàn (Ctrl + F)");
+        tipFind.getStyleClass().add("tooltip");
+        Tooltip.install(searchField, tipFind);
+        Tooltip tipNew = new Tooltip("Thêm bàn mới  (Ctrl + N)");
+        tipNew.getStyleClass().add("tooltip");
+        Tooltip.install(btnAddBan, tipNew);
 
+    }
+
+    // Shortcut key
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            searchField.requestFocus();
+            searchField.selectAll();  // tự bôi đen text để nhập mới
+        });
+        scene.getAccelerators().put(ctrlN, () -> showModal());
     }
 
     // Load toàn bộ bàn
     private void loadAllBan() {
         flowPaneBan.getChildren().clear();
-        List<Ban> dsBan = banDAO.getAll();
+        dsBan = banDAO.getAll();
         for (Ban ban : dsBan) {
             VBox card = taoTheBan(ban);
             flowPaneBan.getChildren().add(card);
@@ -146,21 +162,26 @@ public class QLBanController {
         comboKhuVuc.setValue("Tất cả");
     }
 
+
     private void filterBan() {
+        String keyword = searchField.getText().toLowerCase().trim();
         String selectedLoaiBan = comboDanhMuc.getValue();
         String selectedKhuVuc = comboKhuVuc.getValue();
 
-        if ((selectedLoaiBan == null || selectedLoaiBan.equals("Tất cả")) &&
-                (selectedKhuVuc == null || selectedKhuVuc.equals("Tất cả"))) {
-            loadAllBan();
-            return;
-        }
-
         flowPaneBan.getChildren().clear();
-        List<Ban> dsBan = banDAO.getAll();
 
         for (Ban ban : dsBan) {
+
             boolean match = true;
+
+            // Lọc theo mã bàn (search)
+            if (keyword != null && !keyword.isEmpty()) {
+                boolean matchMa = ban.getMaBan() != null &&
+                        ban.getMaBan().toLowerCase().contains(keyword);
+                if (!matchMa) {
+                    match = false;
+                }
+            }
 
             // Lọc theo loại bàn
             if (selectedLoaiBan != null && !selectedLoaiBan.equals("Tất cả")) {
@@ -178,9 +199,9 @@ public class QLBanController {
                 }
             }
 
+            // Nếu tất cả điều kiện OK → add
             if (match) {
-                VBox card = taoTheBan(ban);
-                flowPaneBan.getChildren().add(card);
+                flowPaneBan.getChildren().add(taoTheBan(ban));
             }
         }
     }

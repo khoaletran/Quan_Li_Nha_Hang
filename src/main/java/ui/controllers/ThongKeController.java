@@ -82,8 +82,6 @@ public class ThongKeController {
         this.mainController = controller;
     }
 
-
-
     private void loadBieuDoBarChart(LocalDate ngayChon) {
         // Xác định tuần chứa ngày được chọn
         LocalDate ngayDauTuan = ngayChon.with(DayOfWeek.MONDAY);
@@ -196,7 +194,6 @@ public class ThongKeController {
             }
         });
     }
-
 
     private void loadThangNam() {
         int namHienTai = LocalDate.now().getYear();
@@ -362,7 +359,6 @@ public class ThongKeController {
         Integer thang = (thangStr != null && !thangStr.equals("Tất cả")) ? Integer.parseInt(thangStr) : null;
         Integer ngay = (ngayStr != null && !ngayStr.equals("Tất cả")) ? Integer.parseInt(ngayStr) : null;
 
-
         if (ngay != null) {
             lblTieuDeSoSanh.setText("DOANH THU So Với Ngày Trước");
         } else if (thang != null) {
@@ -516,8 +512,6 @@ public class ThongKeController {
         // Load lần đầu tiên
         loadBieuDoLineChart(datePicker.getValue());
 
-
-
         datePickerTuan.setValue(LocalDate.now());
         loadBieuDoBarChart(datePickerTuan.getValue());
 
@@ -528,7 +522,6 @@ public class ThongKeController {
 
         comboNamTK.setOnAction(e -> {
             isUpdating = true; // bắt đầu update programmatically
-
             comboThangTK.getSelectionModel().selectFirst();
             comboNgayTK.getSelectionModel().selectFirst();
             comboNgayTK.setDisable(true); // tắt ngày khi chưa chọn tháng
@@ -573,6 +566,5 @@ public class ThongKeController {
 
         comboNamMon.setOnAction(e -> loadMon());
     }
-
 
 }
