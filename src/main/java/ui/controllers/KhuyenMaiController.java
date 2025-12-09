@@ -1,18 +1,21 @@
 package ui.controllers;
-
-import dao.KhachHangDAO;
 import dao.KhuyenMaiDAO;
 import dao.MonDAO;
 import entity.KhuyenMai;
 import entity.Mon;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import ui.AlertCus;
@@ -20,12 +23,11 @@ import ui.ConfirmCus;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
+
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.Locale;
 
 public class KhuyenMaiController {
 
@@ -81,6 +83,19 @@ public class KhuyenMaiController {
             txtMaKM.setFocusTraversable(false);
             txtMaKM.setText(tuSinhMaKM(KhuyenMaiDAO.maKMCuoi()));
         }
+        Platform.runLater(() -> addShortcuts(txtTimKiem.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm Mã Khuyến Mãi (Ctrl + F)");
+        tipFind.getStyleClass().add("tooltip");
+        Tooltip.install(txtTimKiem, tipFind);
+
+    }
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, ()->{
+            txtTimKiem.requestFocus();
+            txtTimKiem.selectAll();
+        });
+        
     }
 
     // ========================== KHỞI TẠO ==========================
@@ -94,6 +109,7 @@ public class KhuyenMaiController {
     }
 
     private void ganSuKienChoNut() {
+        if(txtTimKiem!= null) txtTimKiem.setOnAction(e -> xuLyTimKiem());
         if (btnThem != null) btnThem.setOnAction(e -> xuLyThem());
         if (btnSua != null) btnSua.setOnAction(e -> xuLySua());
         if (btnXoa != null) btnXoa.setOnAction(e -> xuLyXoa());

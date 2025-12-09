@@ -43,6 +43,38 @@ public class SidebarController_QL {
         javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(55, 55, 55);
         avatarImage.setClip(clip);
     }
+    public void selectTab(int index) {
+        // Xóa highlight nút cũ
+        clearSelected();
+
+        // Chọn nút tương ứng
+        switch (index) {
+            case 1 -> setSelected(btnDashboard);
+            case 2 -> setSelected(btnQLMenu);
+            case 3 -> setSelected(btnQLBan);
+            case 4 -> setSelected(btnQLNhanVien);
+            case 5 -> setSelected(btnQLKhuyenMai);
+            case 6 -> setSelected(btnQLChinhSach);
+            case 7 -> setSelected(btnThongKe);
+            case 8 -> setSelected(btnHoTro);
+        }
+
+        // Load nội dung
+        openTab(index);
+    }
+
+    public void openTab(int index) {
+        switch (index) {
+            case 1 -> mainController.setCenterContent("/FXML/DashBoard.fxml");
+            case 2 -> mainController.setCenterContent("/FXML/QLMenu.fxml");
+            case 3 -> mainController.setCenterContent("/FXML/QLBan.fxml");
+            case 4 -> mainController.setCenterContent("/FXML/QLNhanVien.fxml");
+            case 5 -> mainController.setCenterContent("/FXML/KhuyenMai.fxml");
+            case 6 -> mainController.setCenterContent("/FXML/ChinhSach.fxml");
+            case 7 -> mainController.setCenterContent("/FXML/ThongKe.fxml");
+            case 8 -> mainController.setCenterContent("/FXML/HoTro.fxml");
+        }
+    }           
 
     public void setThongTinNhanVien(NhanVien nv) {
         lblTenNV.setText(nv.getTenNV());
