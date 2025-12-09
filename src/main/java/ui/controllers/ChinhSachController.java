@@ -2,42 +2,27 @@ package ui.controllers;
 
 import dao.*;
 import entity.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
+import ui.AlertCus;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
 public class ChinhSachController {
-    /**
-     * Sinh mã mới dạng PREFIX + 4 chữ số
-     *
-     * @param latestId mã mới nhất hiện có, ví dụ "TD0005", hoặc null nếu chưa có
-     * @param prefix   tiền tố, ví dụ "TD", "C"
-     * @return mã mới, ví dụ "TD0006"
-     */
-    private String generateID(String latestId, String prefix) {
-        if (latestId == null || latestId.isEmpty()) {
-            return prefix + "0001";
-        }
-        try {
-            int num = Integer.parseInt(latestId.substring(prefix.length())); // Lấy phần số
-            num += 1;
-            return prefix + String.format("%04d", num); // 4 chữ số, ví dụ "0006"
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            // fallback nếu dữ liệu trong DB bị sai
-            return prefix + "0001";
-        }
-    }
-
     @FXML
     private TextField txtBanDatTruoc;
     @FXML
@@ -97,15 +82,12 @@ public class ChinhSachController {
 
             // Thêm mới vào DB
             boolean ok = tgdbDAO.insert(tgdb);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Thông báo");
-            alert.setHeaderText(null);
-            alert.setContentText(ok ? "Đã thêm thời gian đợi bàn thành công!" : "Thêm thất bại!");
-            alert.showAndWait();
+            AlertCus.show("Thông báo", ok ? "Đã thêm thời gian đợi bàn thành công!" : "Thêm thất bại!");
+    
 
         } catch (NumberFormatException ex) {
-            showError("Vui lòng nhập số hợp lệ!");
+            AlertCus.show("Thông báo", "Vui lòng nhập số hợp lệ!");
+    
         } catch (IllegalArgumentException ex) {
             showError(ex.getMessage());
         }
@@ -184,7 +166,7 @@ public class ChinhSachController {
         String tenLoaiBan = cbLoaiBan.getValue();
 
         if (tenKhuVuc == null || tenLoaiBan == null) {
-            showError("Vui lòng chọn khu vực và loại bàn!");
+            AlertCus.show("Thông báo", "Vui lòng chọn khu vực và loại bàn!");
             return;
         }
 
@@ -194,15 +176,15 @@ public class ChinhSachController {
         try {
             giaTri = Double.parseDouble(txtGiaTriCoc.getText());
             if (giaTri < 0) {
-                showError("Giá trị cọc không được âm!");
+                AlertCus.show("Thông báo", "Giá trị cọc không được âm!");
                 return;
             }
             if (loaiCoc && giaTri > 100) {
-                showError("Phần trăm cọc không thể lớn hơn 100!");
+                AlertCus.show("Thông báo", "Phần trăm cọc không thể lớn hơn 100!");
                 return;
             }
         } catch (NumberFormatException e) {
-            showError("Giá trị cọc không hợp lệ!");
+            AlertCus.show("Thông báo", "Giá trị cọc không hợp lệ!");
             return;
         }
 
@@ -211,7 +193,7 @@ public class ChinhSachController {
         LoaiBan lb = loaiBanDAO.getByName(tenLoaiBan);
 
         if (kv == null || lb == null) {
-            showError("Khu vực hoặc loại bàn không tồn tại!");
+            AlertCus.show("Thông báo", "Khu vực hoặc loại bàn không tồn tại!");
             return;
         }
 
@@ -231,8 +213,11 @@ public class ChinhSachController {
 
             ok = cocDAO.update(cocDangChon);
             if (!ok) {
-                showError("Cập nhật cọc thất bại!");
+                AlertCus.show("Thông báo", "Cập nhật cọc thất bại!");
                 return;
+            }
+            else{
+                AlertCus.show("Thông báo", "Cập nhật cọc thành công!");
             }
         } else {
             // --- Thêm mới cọc ---
@@ -255,8 +240,11 @@ public class ChinhSachController {
 
             ok = cocDAO.insert(newCoc);
             if (!ok) {
-                showError("Thêm mới cọc thất bại!");
+                AlertCus.show("Thông báo", "Thêm mới cọc thất bại!");
                 return;
+            }
+            else{
+                AlertCus.show("Thông báo", "Thêm mới cọc thành công!");
             }
         }
 
@@ -315,14 +303,11 @@ public class ChinhSachController {
 
     private void loadFoodList() {
         foodList.getChildren().clear();
-        String maLoaiMon = LoaiMonDAO.getMaLoaiMonByTen("Món khai vị");
-        System.out.println(maLoaiMon);
         for (Mon mon : MonDAO.getAll()) {
             VBox card = createFoodCard(mon);
             foodList.getChildren().add(card);
         }
     }
-
 
     private VBox createFoodCard(Mon mon) {
         VBox vbox = new VBox(5);
@@ -345,13 +330,11 @@ public class ChinhSachController {
         imgView.setFitHeight(40);
         imgView.getStyleClass().add("food-image");
 
-        Button addBtn = new Button("+");
-        addBtn.getStyleClass().add("add-icon");
-        StackPane.setAlignment(addBtn, Pos.TOP_RIGHT);
-
-        stack.getChildren().addAll(imgView, addBtn);
+        stack.getChildren().addAll(imgView);
         vbox.getChildren().addAll(stack, new Label(mon.getTenMon()));
+
         // 🔹 Thêm sự kiện click
+        vbox.setCursor(javafx.scene.Cursor.HAND);
         vbox.setOnMouseClicked(e -> showMonDetails(mon));
         return vbox;
     }
@@ -374,27 +357,29 @@ public class ChinhSachController {
         txtTen.setText(mon.getTenMon());
 
         // Hiển thị giá gốc
-        txtGiaGoc.setText(String.valueOf(mon.getGiaGoc()));
+        txtGiaGoc.setText(String.valueOf((long) mon.getGiaGoc()));
 
         // Hiển thị phần trăm lời hiện tại
         int phanTram = mon.getPhanTramGiaBanHienTai();
         txtTangPhanTram.setText(String.valueOf(phanTram));
 
         // Hiển thị giá bán thực tế
-        txtGiaBan.setText(String.format("%.0f", mon.getGiaBan()));
+        txtGiaBan.setText(String.valueOf((long) mon.getGiaBan()));
+
 
         // Giá trị lời = giá bán - giá gốc
         double loi = mon.getGiaBan() - mon.getGiaGoc();
-        txtGiaTriLoi.setText(String.format("%.0f", loi));
+        txtGiaTriLoi.setText(String.valueOf((long) loi));
     }
 
-    @FXML
     private void search() {
         String keyword = txtSearch.getText().trim().toLowerCase(); // lấy từ khóa, loại khoảng trắng, chuyển thành thường
         foodList.getChildren().clear();
 
         for (Mon mon : MonDAO.getAll()) {
-            if (mon.getTenMon().toLowerCase().contains(keyword)) {
+            boolean matchName = mon.getTenMon().toLowerCase().contains(keyword);
+            boolean matchMa = mon.getMaMon().toLowerCase().contains(keyword);
+            if (matchMa || matchName) {
                 VBox card = createFoodCard(mon);
                 foodList.getChildren().add(card);
             }
@@ -444,7 +429,7 @@ public class ChinhSachController {
     private void xacNhanPhanTramLoi() {
         String phanTramText = txtTangPhanTram.getText().trim();
         if (phanTramText.isEmpty()) {
-            System.out.println("Chưa nhập phần trăm lời!");
+            AlertCus.show("Thông báo", "Chưa nhập phần trăm lời!");
             return;
         }
 
@@ -452,15 +437,18 @@ public class ChinhSachController {
         try {
             phanTram = Integer.parseInt(phanTramText);
             if (phanTram < 0) {
-                System.out.println("Phần trăm lời phải >= 0");
+                AlertCus.show("Thông báo", "Phần trăm lời phải >= 0");
                 return;
             }
         } catch (NumberFormatException e) {
-            System.out.println("Phần trăm lời không hợp lệ");
+            AlertCus.show("Thông báo", "Phần trăm lời không hợp lệ");
             return;
         }
 
         if (selectedMon != null) {
+            Mon.clearCachePTMon(selectedMon.getMaMon());
+            Mon.updateCachePTMon(selectedMon.getMaMon(), phanTram); 
+
             PhanTramGiaBan pt = new PhanTramGiaBan();
             PhanTramGiaBan latestPG = PhanTramGiaBanDAO.getLatest();
             String maPGFinal = generateID(latestPG != null ? latestPG.getMaPTGB() : null, "PG");
@@ -473,23 +461,23 @@ public class ChinhSachController {
 
             boolean ok = PhanTramGiaBanDAO.insert(pt);
             if (ok) {
-                System.out.println("Cập nhật % lời cho món " + selectedMon.getTenMon() + " thành công!");
-                showMonDetails(selectedMon); // refresh hiển thị
+                AlertCus.show("Thông báo", "Cập nhật % lời cho món " + selectedMon.getTenMon() + " thành công!");
             } else {
-                System.out.println("Cập nhật thất bại!");
+                AlertCus.show("Thông báo", "Cập nhật thất bại!");
             }
+            resetFields();
             return;
         }
 
         String tenLoai = cbLoaiMon.getSelectionModel().getSelectedItem();
         if (tenLoai == null || tenLoai.isEmpty()) {
-            System.out.println("Chưa chọn món hoặc loại món!");
+            AlertCus.show("Thông báo", "Chưa chọn món hoặc loại món!");
             return;
         }
 
         String maLoaiMon = LoaiMonDAO.getMaLoaiMonByTen(tenLoai);
         if (maLoaiMon == null) {
-            System.out.println("Không tìm thấy mã loại món");
+            AlertCus.show("Thông báo", "Không tìm thấy mã loại món");
             return;
         }
 
@@ -505,11 +493,12 @@ public class ChinhSachController {
 
         boolean ok = PhanTramGiaBanDAO.insert(pt);
         if (ok) {
-            System.out.println("Cập nhật % lời cho loại món " + tenLoai + " thành công!");
+            AlertCus.show("Thông báo", "Cập nhật % lời cho loại món " + tenLoai + " thành công!");
             txtTangPhanTram.setText(String.valueOf(phanTram));
         } else {
-            System.out.println("Cập nhật thất bại!");
+            AlertCus.show("Thông báo", "Cập nhật thất bại!");
         }
+        resetFields();
     }
 
 
@@ -544,7 +533,9 @@ public class ChinhSachController {
         groupCoc = new ToggleGroup();
         rbPhanTram.setToggleGroup(groupCoc);
         rbTien.setToggleGroup(groupCoc);
-
+        txtGiaGoc.setMouseTransparent(true);
+        txtGiaTriLoi.setMouseTransparent(true);
+        txtGiaBan.setMouseTransparent(true);
         // Load danh sách khu vực và loại bàn vào ComboBox
         cbKhuVuc.getItems().clear();
         for (KhuVuc kv : khuVucDAO.getAll()) {
@@ -565,8 +556,83 @@ public class ChinhSachController {
 
         loadFoodList();
         setupLoaiMonEvent();
+        
+        txtTangPhanTram.textProperty().addListener((obs, oldText, newText) -> updateGiaTriTuongUng());
+
+        addCurrencyFormat(txtGiaGoc, false);
+        addCurrencyFormat(txtGiaBan, false);
+        addCurrencyFormat(txtGiaTriLoi, false);
+        addCurrencyFormat(txtGiaTriCoc, true); 
+
+
+        txtSearch.textProperty().addListener((obs, oldText, newText)-> search());
+
+        Platform.runLater(()-> addShortcuts(txtSearch.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm Món ăn (Ctrl + F)");
+        tipFind.getStyleClass().add("tooltip");
+        Tooltip.install(txtSearch, tipFind);
 
     }
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            txtSearch.requestFocus();
+            txtSearch.selectAll();
+        });
+    }
+    private void updateGiaTriTuongUng(){
+        String tangPhanTram = txtTangPhanTram.getText().trim();
+        if(selectedMon==null|tangPhanTram==null|| tangPhanTram.isEmpty()) return;
+        double phanTramTang = Double.parseDouble(tangPhanTram);
+        double giaGoc = selectedMon.getGiaGoc();
+        double giaLoi = giaGoc * phanTramTang/100;
+        double giaBan = giaGoc + giaLoi;
+        txtGiaTriLoi.setText(String.valueOf((long) giaLoi));
+        txtGiaBan.setText(String.valueOf((long) giaBan));
+    } 
+    private void addCurrencyFormat(TextField tf, boolean skipIfPhanTram) {
+        DecimalFormat df = new DecimalFormat("#,###");
+        tf.textProperty().addListener((obs, oldText, newText) -> {
+            if ((skipIfPhanTram && rbPhanTram.isSelected()) || newText == null || newText.isEmpty()) return;
 
+            String numeric = newText.replaceAll("\\.", "");
+            if (numeric.isEmpty()) {
+                tf.setText("");
+                return;
+            }
+
+            try {
+                String formatted = df.format(Long.parseLong(numeric));
+                if (!formatted.equals(newText)) {
+                    tf.setText(formatted);
+                    tf.positionCaret(formatted.length());
+                }
+            } catch (NumberFormatException e) {
+                tf.setText(oldText);
+            }
+        });
+    }
+
+    /**
+     * Sinh mã mới dạng PREFIX + 4 chữ số
+     *
+     * @param latestId mã mới nhất hiện có, ví dụ "TD0005", hoặc null nếu chưa có
+     * @param prefix   tiền tố, ví dụ "TD", "C"
+     * @return mã mới, ví dụ "TD0006"
+     */
+    private String generateID(String latestId, String prefix) {
+        if (latestId == null || latestId.isEmpty()) {
+            return prefix + "0001";
+        }
+        try {
+            int num = Integer.parseInt(latestId.substring(prefix.length())); // Lấy phần số
+            num += 1;
+            return prefix + String.format("%04d", num); // 4 chữ số, ví dụ "0006"
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            // fallback nếu dữ liệu trong DB bị sai
+            return prefix + "0001";
+        }
+    }
 
 }

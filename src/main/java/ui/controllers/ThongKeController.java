@@ -7,26 +7,35 @@ import entity.HoaDon;
 
 import entity.Mon;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.io.InputStream;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -42,7 +51,8 @@ public class ThongKeController {
     private ComboBox<String> comboThangTK;
     @FXML
     private ComboBox<String> comboNamTK;
-
+    @FXML
+    private TextField searchField;
     @FXML
     private Label lblDoanhThu;
     @FXML
@@ -214,7 +224,8 @@ public class ThongKeController {
         String thangString = comboThangMon.getValue();
 
         int nam = Integer.parseInt(namString);
-        int thang = (thangString != null && !thangString.equals("Tất cả")) ? Integer.parseInt(thangString) : 0;
+        int thang = (thangString != null && !thangString.equals("Tất cả")) 
+        ? Integer.parseInt(thangString) : 0;
 
         // Tháng hiện tại
         LocalDate now = LocalDate.now();
@@ -265,7 +276,7 @@ public class ThongKeController {
             Label status = new Label();
 
             if (isThangHienTai) {
-                // 👉 Nếu là tháng hiện tại => dựa trên tồn kho
+                // Nếu là tháng hiện tại => dựa trên tồn kho
                 if (cthd.getSoLuong() >= 1000 && m.getSoLuong() < 100) {
                     status.setText("🔥 Bán rất chạy - Cần nhập hàng ngay");
                     status.getStyleClass().add("dish-status-green");
@@ -349,6 +360,55 @@ public class ThongKeController {
         return "Ít Người Mua";
     }
 
+    // Tìm kiếm món ăn
+    private void timKiemMonAn(){
+        String keyword = searchField.getText().trim().toLowerCase();
+        boolean found = false;
+
+        for (Node node : vboxDishList.getChildren()) {
+            if (node instanceof HBox hbox) {
+
+                VBox infoBox = (VBox) hbox.getChildren().get(1);
+                Label tenMon = (Label) infoBox.getChildren().get(0);
+                String ten = tenMon.getText().toLowerCase();
+
+                boolean match = ten.contains(keyword);
+
+                hbox.setVisible(match);
+                hbox.setManaged(match);
+
+                if (match)
+                    found = true;
+            }
+        }
+        removeNoResultLabel(); // xóa label cũ nếu có
+
+        if (!found) {
+            Label noResult = new Label("Không tìm thấy món ăn\nHoặc món ăn không có đơn bán");
+            noResult.setId("no-result");
+
+            noResult.setMaxWidth(Double.MAX_VALUE);         
+            noResult.setAlignment(Pos.CENTER);             
+            noResult.setStyle(
+                    "-fx-font-size: 16px;" +
+                    "-fx-text-fill: gray;" +
+                    "-fx-font-style: italic;" +           
+                    "-fx-text-alignment: center;"           
+            );
+
+            vboxDishList.setAlignment(Pos.CENTER);          
+            vboxDishList.getChildren().add(noResult);
+        } else {
+            vboxDishList.setAlignment(Pos.TOP_LEFT);
+        }
+
+    }
+    private void removeNoResultLabel() {
+        vboxDishList.getChildren().removeIf(node -> 
+            node instanceof Label && "no-result".equals(node.getId())
+        );
+    }
+
     private void loadDoanhThu() {
         String namStr = comboNamTK.getValue();
         String thangStr = comboThangTK.getValue();
@@ -404,7 +464,7 @@ public class ThongKeController {
 
         lblDoanhThuSoVoiXTruoc.setText(String.format("%,.0f VNĐ ", chenhlech));
 
-// Tùy chọn: đổi màu trực quan
+        // Tùy chọn: đổi màu trực quan
         if (chenhlech >= 0) {
             lblDoanhThuSoVoiXTruoc.setStyle("-fx-text-fill: green;");
             lblTiLe.setStyle("-fx-text-fill: green;");
@@ -412,14 +472,43 @@ public class ThongKeController {
             lblDoanhThuSoVoiXTruoc.setStyle("-fx-text-fill: red;");
             lblTiLe.setStyle("-fx-text-fill: red;");
         }
+        Tooltip.install(lblKhuVucIn, taoTooltipSoHoaDon(in, out, vip));
+        Tooltip.install(lblKhuVucOut, taoTooltipSoHoaDon(in, out, vip));
+        Tooltip.install(lblKhuVucVip, taoTooltipSoHoaDon(in, out, vip));
+
         lblDoanhThu.setText(String.format("%,.0f VNĐ", tong));
         lblTongHoaDon.setText(tongHoaDon + "");
         lblTiLe.setText(String.format("(%.1f%%)", tile));
         lblKhuVucIn.setText(String.format("IN: %.1f tr VNĐ (%d hd)", tongIn / 1_000_000.0, in));
         lblKhuVucOut.setText(String.format("OUT: %.1f tr VNĐ (%d hd)", tongOut / 1_000_000.0, out));
         lblKhuVucVip.setText(String.format("VIP: %.1f tr VNĐ (%d hd)", tongVip / 1_000_000.0, vip));
-
+        lblKhuVucIn.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #3498db;");   // Xanh dương
+        lblKhuVucOut.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #e67e22;"); // Cam
+        lblKhuVucVip.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #9b59b6;"); // Tím
     }
+    private Tooltip taoTooltipSoHoaDon(int in, int out, int vip) {
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
+                new PieChart.Data("Indoor (" + in + ")", in),
+                new PieChart.Data("Outdoor (" + out + ")", out),
+                new PieChart.Data("VIP (" + vip + ")", vip)
+        );
+
+        PieChart chart = new PieChart(data);
+        chart.setLegendVisible(false);
+        chart.setLabelsVisible(false);
+        chart.setPrefSize(160, 160);  // Kích thước tooltip
+        chart.applyCss(); 
+        chart.lookup(".data0.chart-pie").setStyle("-fx-pie-color: #3498db;"); // IN – xanh dương
+        chart.lookup(".data1.chart-pie").setStyle("-fx-pie-color: #e67e22;"); // OUT – cam
+        chart.lookup(".data2.chart-pie").setStyle("-fx-pie-color: #9b59b6;"); // VIP – tím
+
+        Tooltip tooltip = new Tooltip();
+        tooltip.setGraphic(chart);
+
+
+        return tooltip;
+    }
+
 
     private double tinhDoanhThu(Integer nam, Integer thang, Integer ngay, Map<HoaDon, Double> mapHoaDon) {
         double tong = 0;
@@ -498,7 +587,8 @@ public class ThongKeController {
 
         loadDoanhThu();
         loadMon();
-
+        
+        
         // Mặc định chọn ngày hôm nay
         datePicker.setValue(LocalDate.now());
 
@@ -563,8 +653,19 @@ public class ThongKeController {
         });
 
         comboThangMon.setOnAction(e -> loadMon());
-
         comboNamMon.setOnAction(e -> loadMon());
-    }
 
+        searchField.textProperty().addListener((obs, oldText, newText) -> timKiemMonAn());
+
+        Platform.runLater(() -> addShortcuts(searchField.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm món ăn (Ctrl + F)");
+        Tooltip.install(searchField, tipFind);
+    }
+    private void addShortcuts(Scene scene){
+        KeyCodeCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            searchField.requestFocus();
+            searchField.selectAll();
+        });
+    }
 }

@@ -234,7 +234,7 @@ public class ChiTietHDDAO {
 
 
     // ============================================================================
-    // 7. THỐNG KÊ THEO THÁNG NĂM (NHẸ & CHUẨN)
+    // 7. THỐNG KÊ THEO THÁNG NĂM 
     // ============================================================================
     public static List<ChiTietHoaDon> getAllCTHDTheoThangNam(int nam, int thang) {
         List<ChiTietHoaDon> ds = new ArrayList<>();
@@ -284,7 +284,7 @@ public class ChiTietHDDAO {
 
 
     // ============================================================================
-    // 8. LẤY SỐ LƯỢNG BÁN THEO THÁNG NĂM (NHẸ)
+    // 8. LẤY SỐ LƯỢNG BÁN THEO THÁNG NĂM
     // ============================================================================
     public static Map<String, Integer> getSoLuongTheoThangNam(int nam, int thang) {
         Map<String, Integer> map = new HashMap<>();

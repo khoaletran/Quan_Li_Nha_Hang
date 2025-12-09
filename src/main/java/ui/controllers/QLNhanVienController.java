@@ -1,20 +1,18 @@
 package ui.controllers;
 
-import dao.KhachHangDAO;
 import dao.NhanVienDAO;
 import entity.NhanVien;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import ui.AlertCus;
 import ui.ConfirmCus;
@@ -26,7 +24,7 @@ import java.util.List;
 public class QLNhanVienController {
 
     @FXML private FlowPane menuFlow;
-    @FXML private TextField txtTenNV, txtSDT, txtMatKhau;
+    @FXML private TextField txtTenNV, txtSDT, txtMatKhau, searchField;
     @FXML private DatePicker txtNgayVaoLam;
     @FXML private ComboBox<String> comboChucVu;
     @FXML private RadioButton rdoNam, rdoNu, rdoConLam, rdoNghiLam;
@@ -78,8 +76,41 @@ public class QLNhanVienController {
                 }
             }
         });
+        searchField.textProperty().addListener((obs, oldText, newText)->filterNhanVien());
+        Platform.runLater(() -> addShortcuts(searchField.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm nhân viên (Ctrl + F)");
+        tipFind.getStyleClass().add("tooltip");
+        Tooltip.install(searchField, tipFind);
+        Tooltip tipNew = new Tooltip("Thêm nhân viên mới (Ctrl + N)");
+        tipNew.getStyleClass().add("tooltip");
+        Tooltip.install(btnThemNV, tipNew);
+
+    }
+    
+    //Thêm shortcut
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            searchField.requestFocus();
+            searchField.selectAll();  // tự bôi đen text để nhập mới
+        });
+        scene.getAccelerators().put(ctrlN, () -> xoaTrangThongTin());
     }
 
+    private void filterNhanVien(){
+        String keyword = searchField.getText().toLowerCase();
+        List<NhanVien> ds = NhanVienDAO.getAll();
+        menuFlow.getChildren().clear();
+        for (NhanVien nv : ds) {
+        boolean matchMa = nv.getMaNV() != null && nv.getMaNV().toLowerCase().contains(keyword);
+        boolean matchTen = nv.getTenNV() != null && nv.getTenNV().toLowerCase().contains(keyword);
+        boolean matchSdt = nv.getSdt() != null && nv.getSdt().toLowerCase().contains(keyword);   
+        if (matchMa || matchTen || matchSdt) {
+            menuFlow.getChildren().add(taoTheNhanVien(nv)); 
+        }
+    }
+    }
     // =========================
     // DANH SÁCH NHÂN VIÊN
     // =========================
@@ -224,7 +255,7 @@ public class QLNhanVienController {
             xoaTrangThongTin();
         }
     }
-
+    
     // =========================
     // TẠO NHÂN VIÊN TỪ FORM
     // =========================
@@ -236,7 +267,7 @@ public class QLNhanVienController {
         boolean gioiTinh = rdoNam.isSelected();
         boolean trangThai = rdoConLam.isSelected();
         boolean quanLi = "Quản lý".equalsIgnoreCase(comboChucVu.getValue());
-        String matKhau = txtMatKhau.getText().isEmpty() ? "123" : txtMatKhau.getText();
+        String matKhau = txtMatKhau.getText().isEmpty() ? "Abcd123@" : txtMatKhau.getText();
 
         NhanVien nv = new NhanVien();
         nv.setMaNV(maNV);

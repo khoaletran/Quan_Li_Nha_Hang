@@ -86,7 +86,7 @@ public class PhanTramGiaBanDAO {
         String sql = """
             SELECT TOP 1 * FROM PhanTramGiaBan
             WHERE maMon = ?
-            ORDER BY ngayApDung DESC
+            ORDER BY ngayApDung DESC, maPTGB DESC
         """;
 
         try (Connection con = connectDB.getInstance().getNewConnection();
@@ -111,7 +111,7 @@ public class PhanTramGiaBanDAO {
         String sql = """
             SELECT TOP 1 * FROM PhanTramGiaBan
             WHERE maLoaiMon = ? AND maMon IS NULL
-            ORDER BY ngayApDung DESC
+            ORDER BY ngayApDung DESC, maPTGB DESC
         """;
 
         try (Connection con = connectDB.getInstance().getNewConnection();
