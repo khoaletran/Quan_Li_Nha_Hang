@@ -7,7 +7,10 @@ import entity.Mon;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,6 +22,8 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
+import ui.AlertCus;
+import ui.XacNhanXoa;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -26,6 +31,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class QLMenuController {
 
@@ -44,6 +50,7 @@ public class QLMenuController {
     private ImageView imgMon;
     @FXML
     private Button btnXacNhan;
+    // @FXML private Button btnXoa;
     @FXML 
     private Button btnAdd;
     @FXML
@@ -52,7 +59,7 @@ public class QLMenuController {
     private List<Mon> dsMon = new ArrayList<>();
     private List<LoaiMon> dsLoaiMon = new ArrayList<>();
     private File selectedFile;
-
+    DecimalFormat df = new DecimalFormat("#,###");
     @FXML
     public void initialize() {
         dsMon = MonDAO.getAll();
@@ -62,7 +69,25 @@ public class QLMenuController {
         cboLoaiMonFilter.setOnAction(e -> locMonTheoDanhMuc());
         // TextField tìm kiếm realtime
         searchField.textProperty().addListener((obs, oldText, newText) -> filterMon());
-
+        // btnXoa.setDisable(true);
+        txtGiaGoc.textProperty().addListener((obs, oldText, newText)->{
+            if( newText == null || newText.isEmpty()) return;
+            String numeric = newText.replaceAll("\\.", "");
+            if (numeric.isEmpty()) {
+                txtGiaGoc.setText("");
+                return;
+            }
+            try {
+                String formatted = df.format(Long.parseLong(numeric));
+                if (!formatted.equals(newText)) {
+                    txtGiaGoc.setText(formatted);
+                    txtGiaGoc.positionCaret(formatted.length());
+                }
+            } catch (NumberFormatException e) {
+                txtGiaGoc.setText(oldText);
+            }
+        });
+        
         // ===== THÊM PHÍM TẮT =====
         Platform.runLater(() -> addShortcuts(searchField.getScene()));
         Tooltip tipFind = new Tooltip("Tìm kiếm món ăn (Ctrl + F)");
@@ -120,6 +145,7 @@ public class QLMenuController {
     }
 
     private void loadDanhSachMon() {
+        dsMon = MonDAO.getAll(); 
         flowMonAn.getChildren().clear();
         for (Mon mon : dsMon) {
             flowMonAn.getChildren().add(taoCardMon(mon, null));
@@ -206,7 +232,10 @@ public class QLMenuController {
         card.getChildren().addAll(imagePane, infoBox);
 
         // ===== 6. Sự kiện click =====
-        card.setOnMouseClicked(e -> loadChiTietMon(mon));
+        card.setOnMouseClicked(e -> {
+            loadChiTietMon(mon);
+            // btnXoa.setDisable(false);;
+        });
 
         return card;
     }
@@ -216,7 +245,7 @@ public class QLMenuController {
         lblMaMon.setText(mon.getMaMon());
         txtTenMon.setText(mon.getTenMon());
         txtMoTa.setText(mon.getMoTa());
-        txtGiaGoc.setText(String.valueOf(mon.getGiaGoc()));
+        txtGiaGoc.setText(String.valueOf((long) mon.getGiaGoc()));
         txtSoLuong.setText(String.valueOf(mon.getSoLuong()));
 
         if (mon.getLoaiMon() != null) {
@@ -269,6 +298,9 @@ public class QLMenuController {
         resetFields();
         // Đổi text button thành "Thêm mới"
         btnXacNhan.setText("Thêm mới");
+
+        String newID = generateID(MonDAO.getLatestMaMon(), "MM");
+        lblMaMon.setText(newID);
     }
 
     private void resetFields() {
@@ -286,6 +318,8 @@ public class QLMenuController {
         }
 
         selectedFile = null;
+        // btnXoa.setDisable(true);
+
     }
 
     @FXML
@@ -294,6 +328,7 @@ public class QLMenuController {
         String tenMon = txtTenMon.getText().trim();
         String moTa = txtMoTa.getText().trim();
         String giaStr = txtGiaGoc.getText().trim();
+        giaStr = giaStr.replace(".", "");
         String soLuongStr = txtSoLuong.getText().trim();
 
         String maLoai = "";
@@ -308,7 +343,7 @@ public class QLMenuController {
             giaGoc = Double.parseDouble(giaStr);
             soLuong = Integer.parseInt(soLuongStr);
         } catch (NumberFormatException e) {
-            System.out.println("Giá hoặc số lượng không hợp lệ!");
+            AlertCus.show("Thông báo", "Giá hoặc số lượng không hợp lệ!");
             return;
         }
 
@@ -330,7 +365,7 @@ public class QLMenuController {
         }
 
         Mon mon = new Mon();
-        mon.setMaMon(maMon.isEmpty() ? generateID(MonDAO.getLatestMaMon(), "MN") : maMon);
+        mon.setMaMon(maMon.isEmpty() ? generateID(MonDAO.getLatestMaMon(), "MM") : maMon);
         mon.setTenMon(tenMon);
         mon.setMoTa(moTa);
         mon.setGiaGoc(giaGoc);
@@ -342,19 +377,20 @@ public class QLMenuController {
         if (btnXacNhan.getText().equals("Thêm mới")) {
             success = MonDAO.insert(mon);
             if (success) {
-                System.out.println("Thêm món mới thành công!");
+                AlertCus.show("Thông báo", "Thêm món mới thành công!");
                 // hiển thị ngay món mới trong FlowPane
                 flowMonAn.getChildren().add(taoCardMon(mon, selectedFile)); // dùng selectedFile để load ảnh
+                loadDanhSachMon();
             } else {
-                System.out.println("Thêm món thất bại!");
+                AlertCus.show("Thông báo", "Thêm món thất bại!");
             }
         } else {
             success = MonDAO.update(mon);
             if (success) {
-                System.out.println("Cập nhật món thành công!");
+                AlertCus.show("Thông báo", "Cập nhật món thành công!");
                 loadDanhSachMon(); // load lại danh sách để cập nhật
             } else {
-                System.out.println("Cập nhật thất bại!");
+                AlertCus.show("Thông báo", "Cập nhật thất bại!");
             }
         }
 
@@ -363,6 +399,33 @@ public class QLMenuController {
         selectedFile = null;
     }
 
+    // @FXML
+    // private void xoaMon() {
+    //     String maMon = lblMaMon.getText().trim();
+    //     if (maMon.isEmpty()) {
+    //         AlertCus.show("Thông báo", "Không có món nào để xóa!");
+    //         return;
+    //     }
+    //     String tenMon = txtTenMon.getText();
+    //     // === Hộp thoại xác nhận ===
+        
+    //     if(XacNhanXoa.hienHopThoaiXacNhan("Xác nhận xóa","Bạn có chắc chắn xóa " + tenMon)){
+    //         boolean success = MonDAO.delete(maMon);
+
+    //         if (success) {
+    //             AlertCus.show("Thông báo", "Xóa món " + tenMon + " thành công!");
+    //             dsMon = MonDAO.getAll();
+    //             loadDanhSachMon();
+    //         } else {
+    //             AlertCus.show("Thông báo", "Xóa món thất bại!");
+    //         }
+    //     }
+        
+
+    //     resetFields();
+    //     btnXacNhan.setText("Thêm mới");
+    //     btnXoa.setDisable(true);
+    // }
 
     private String generateID(String latestId, String prefix) {
         if (latestId == null || latestId.isEmpty()) {
@@ -380,13 +443,7 @@ public class QLMenuController {
     }
 
 
-    // ======== ĐỊNH DẠNG TIỀN ==========
-    private double parseCurrency(String text) {
-        if (text == null || text.isBlank()) return 0;
-        String clean = text.replaceAll("[^\\d]", "");
-        if (clean.isEmpty()) return 0;
-        return Double.parseDouble(clean);
-    }
+    
 
     private String formatCurrency(double amount) {
         Locale localeVN = new Locale("vi", "VN");

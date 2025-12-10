@@ -65,6 +65,16 @@ public class Mon {
 
         return 0;
     }
+    public static void updateCachePTMon(String maMon, int pt) {
+        CACHE_PT_MON.put(maMon, pt);
+    }
+
+    public static void clearCachePTMon(String maMon) {
+        CACHE_PT_MON.remove(maMon);
+    }
+
+
+
 
     public double getGiaBan() {
         int pt = getPhanTramGiaBanHienTai();

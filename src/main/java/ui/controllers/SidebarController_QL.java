@@ -1,23 +1,11 @@
 package ui.controllers;
 
 import entity.NhanVien;
-import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
-
-import javax.swing.*;
-import java.io.IOException;
 
 public class SidebarController_QL {
 
@@ -43,6 +31,38 @@ public class SidebarController_QL {
         javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(55, 55, 55);
         avatarImage.setClip(clip);
     }
+    public void selectTab(int index) {
+        // Xóa highlight nút cũ
+        clearSelected();
+
+        // Chọn nút tương ứng
+        switch (index) {
+            case 1 -> setSelected(btnDashboard);
+            case 2 -> setSelected(btnQLMenu);
+            case 3 -> setSelected(btnQLBan);
+            case 4 -> setSelected(btnQLNhanVien);
+            case 5 -> setSelected(btnQLKhuyenMai);
+            case 6 -> setSelected(btnQLChinhSach);
+            case 7 -> setSelected(btnThongKe);
+            case 8 -> setSelected(btnHoTro);
+        }
+
+        // Load nội dung
+        openTab(index);
+    }
+
+    public void openTab(int index) {
+        switch (index) {
+            case 1 -> mainController.setCenterContent("/FXML/DashBoard.fxml");
+            case 2 -> mainController.setCenterContent("/FXML/QLMenu.fxml");
+            case 3 -> mainController.setCenterContent("/FXML/QLBan.fxml");
+            case 4 -> mainController.setCenterContent("/FXML/QLNhanVien.fxml");
+            case 5 -> mainController.setCenterContent("/FXML/KhuyenMai.fxml");
+            case 6 -> mainController.setCenterContent("/FXML/ChinhSach.fxml");
+            case 7 -> mainController.setCenterContent("/FXML/ThongKe.fxml");
+            case 8 -> mainController.setCenterContent("/FXML/HoTroQL.fxml");
+        }
+    }           
 
     public void setThongTinNhanVien(NhanVien nv) {
         lblTenNV.setText(nv.getTenNV());
@@ -94,7 +114,7 @@ public class SidebarController_QL {
             mainController.setCenterContent("/FXML/ThongKe.fxml");
             setSelected(btnThongKe);
         } else if (source == btnHoTro) {
-            mainController.setCenterContent("/FXML/HoTro.fxml");
+            mainController.setCenterContent("/FXML/HoTroQL.fxml");
             setSelected(btnHoTro);
         } else if (source == btnDangXuat) {
             ui.DangXuat.showDialog();

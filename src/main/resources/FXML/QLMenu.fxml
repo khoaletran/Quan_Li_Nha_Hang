@@ -152,7 +152,8 @@
             <!-- Nút hành động -->
             <HBox spacing="10" styleClass="right-action-buttons">
                 <Button fx:id="btnXacNhan" onAction="#xacNhan" styleClass="confirm-btn" text="Xác Nhận"/>
-                <!-- <Button fx:id="btnXoa" styleClass="delete-btn" text="Xoá" /> -->
+            
+                <!-- <Button fx:id="btnXoa" onAction="#xoaMon" styleClass="delete-btn" text="Xoá" /> -->
             </HBox>
         </VBox>
     </right>
