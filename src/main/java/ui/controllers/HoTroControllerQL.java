@@ -466,7 +466,7 @@ public class HoTroControllerQL implements Initializable {
         String content = "";
         switch (card.getTag()) {
             case "dashboard":
-                content = "Dashboard cung cấp:\n\n" +
+                content = "Dashboard cung cấp:\n" +
                         "- Thông tin nhân viên đăng nhập\n" +
                         "- Thông báo các đơn đặt bàn, check in\n" +
                         "- Thống kê số đơn\n" +
@@ -476,7 +476,7 @@ public class HoTroControllerQL implements Initializable {
                         "- Biểu đồ lượng khách theo giờ\n";
                 break;
             case "khuyenmai":
-                content = "Quản lý khuyến mãi:\n\n" +
+                content = "Quản lý khuyến mãi:\n" +
                         "1. Trang hiện danh sách các khuyến mãi\n" +
                         "   - Có 3 loại khuyến mãi: Chưa tới hạn màu vàng, hết hạn màu đỏ và đang trong hạn màu xanh\n" +
                         "2. Thêm khuyến mãi\n" +
@@ -493,7 +493,7 @@ public class HoTroControllerQL implements Initializable {
                         "   - Bước 3: Nhấn nút xóa trắng để làm mới bộ lọc";
                 break;
             case "nhanvien":
-                content = "Quản lý nhân viên:\n\n" +
+                content = "Quản lý nhân viên:\n" +
                         "1. Trang hiển thị danh sách nhân viên\n" +
                         "2. Thêm nhân viên\n" +
                         "   - Bước 1: Nhấn nút dấu + cột bên góc phải trang\n" +
@@ -508,7 +508,7 @@ public class HoTroControllerQL implements Initializable {
                         "   - Bước 2: Nhấn nút tìm\n";
                 break;
             case "menu":
-                content = "Quản lý menu:\n\n" +
+                content = "Quản lý menu:\n" +
                         "1. Trang hiển thị danh sách món ăn\n" +
                         "2. Thêm món mới\n" +
                         "   - Bước 1: Nhấn nút dấu + cột bên góc phải trang\n" +
@@ -522,6 +522,53 @@ public class HoTroControllerQL implements Initializable {
                         "   - Bước 1: Nhập thông tin món cần tìm vào ô tìm kiếm ở trên\n" +
                         "   - Bước 2: Nhấn nút tìm\n" +
                         "   - Bước 3: Lọc các loại món ăn ở ô combobox trên thanh tìm kiếm\n";
+                break;
+            case "ban":
+                content = "Quản lý bàn:\n" +
+                        "1. Trang hiển thị danh sách các bàn của nhà hàng\n" +
+                        "2. Thêm bàn mới\n" +
+                        "   - Bước 1: Nhấn nút dấu + cột bên góc phải trang\n" +
+                        "   - Bước 2: Form thông tin sẽ hiện lên và nhập thông tin bàn vào form\n" +
+                        "   - Bước 3: Nhấn nút thêm hoặc hủy (nếu không muốn thêm nữa)\n" +
+                        "3. Tìm kiếm bàn\n" +
+                        "   - Bước 1: Nhập thông tin bàn cần tìm vào ô tìm kiếm ở trên\n" +
+                        "   - Bước 2: Nhấn nút tìm\n" +
+                        "   - Bước 3: Lọc các loại bàn hoặc khu vực ở ô combobox trên thanh tìm kiếm\n";
+                break;
+            case "chinhsach":
+                content = "Quản lý chính sách:\n" +
+                        "1. Cài đặt thời gian đợi bàn\n" +
+                        "   - Bước 1: Nhập thời gian bàn đặt trước hoặc bàn đợi\n" +
+                        "   - Bước 2: Nhấn xác nhận\n" +
+                        "2. Cập nhật tiền cọc\n" +
+                        "   - Bước 1: Chọn loại bàn và khu vực ở bên phải\n" +
+                        "   - Bước 2: Thông tin loại bàn đã chọn sẽ hiện trên form thông tin bên trái\n" +
+                        "   - Bước 3: Nhập các thông tin cần sửa và nhấn xác nhận nếu muốn sửa\n" +
+                        "   - Bước 4: Có thể nhấn nút xóa để xóa cọc\n" +
+                        "   - Bước 5: Có thể nhấn nút xóa trắng để xóa dữ liệu trong form\n" +
+                        "3. Cập nhật phần trăm lời cho món\n" +
+                        "   - Bước 1: Chọn món ăn ở bên phải\n" +
+                        "   - Bước 2: Thông tin món ăn đã chọn sẽ hiện trên form thông tin bên trái\n" +
+                        "   - Bước 3: Nhập các thông tin cần sửa và nhấn xác nhận nếu muốn sửa\n" +
+                        "   - Bước 4: Có thể nhấn nút xóa trắng để xóa dữ liệu trong form\n";
+                break;
+            case "thongke":
+                content = "Báo cáo thống kê:\n\n" +
+                        "1. Trang hiển thị danh sách món ăn ở góc trái trên\n" +
+                        "   - Bước 1: Hiển thị các món ăn và phân trăm bán ra so với tháng, năm trước\n" +
+                        "   - Bước 2: Có thể thay đổi thời gian để so sánh ở 2 combobox bên trên\n" +
+                        "   - Bước 3: Nhập thông tin để tìm món ăn ở ô tìm kiếm bên trên\n" +
+                        "   - Bước 4: Có thể nhấn nút reset để quay lại thời gian hiện tại và hiển thị tất cả món\n" +
+                        "2. Trang hiển thị thông tin thống kê đối với tổng hóa đơn, doanh thu, doanh thu so với tháng trước, khu vực\n" +
+                        "   - Bước 1: Có thể lọc thống kê theo ngày tháng năm ở các combobox bên trên\n" +
+                        "   - Bước 2: Có thể nhấn nút reset để quay lại ngày hiện tại\n" +
+                        "3. Phía dưới là 2 biểu đồ thống kê doanh thu theo giờ và số lượng đơn theo ngày\n" +
+                        "   - Bước 1: Có thể điều chỉnh thời gian của 2 biểu đồ bằng ô combobox ở trên\n";
+                break;
+            case "caidat":
+                content = "Vấn đề tài khoản:\n" +
+                        "1. Có thể thay đổi mật khẩu bằng cách nhấn nút đổi mật khẩu ở trang dashboard\n" +
+                        "2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi\n";
                 break;
             default:
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
