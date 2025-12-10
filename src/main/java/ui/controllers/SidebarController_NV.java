@@ -116,7 +116,7 @@ public class SidebarController_NV {
             setMainSelected(btnTraCuu);
 
         } else if (source == btnHoTro) {
-            mainController.setCenterContent("/FXML/HoTro.fxml");
+            mainController.setCenterContent("/FXML/HoTroNV.fxml");
             setMainSelected(btnHoTro);
 
         } else if (source == btnKetCa) {

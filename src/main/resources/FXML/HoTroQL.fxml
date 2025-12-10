@@ -9,7 +9,7 @@
             style="-fx-background-color: #f5f7fa;"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ui.controllers.HoTroController">
+            fx:controller="ui.controllers.HoTroControllerQL">
 
     <center>
         <ScrollPane fx:id="scrollPane" fitToWidth="true" style="-fx-background-color: transparent;">
@@ -125,9 +125,9 @@
                 </VBox>
             </content>
 
-<!--            <styleClass>-->
-<!--                <String fx:value="transparent-scroll" />-->
-<!--            </styleClass>-->
+            <!--            <styleClass>-->
+            <!--                <String fx:value="transparent-scroll" />-->
+            <!--            </styleClass>-->
         </ScrollPane>
     </center>
 

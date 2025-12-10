@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HoTroController implements Initializable {
+public class HoTroControllerNV implements Initializable {
 
     @FXML private TextField txtTimKiem;
     @FXML private VBox faqContainer;
