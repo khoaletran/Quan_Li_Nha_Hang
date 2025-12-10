@@ -82,15 +82,15 @@ public class HoTroControllerQL implements Initializable {
                         "• Nhấn vào trang thống kê để xem chi tiết"
         ));
 
-        faqList.add(new FAQItem( //nhan vien
-                "3. Xử lý thông báo hẹn giờ như thế nào?",
-                "🟢 Màu xanh: Đã đến giờ hẹn - Chuẩn bị bàn\n" +
-                        "🔴 Màu đỏ: Quá giờ hẹn - Liên hệ khách hàng\n" +
-                        "🟡 Màu vàng: Sắp đến giờ hẹn - Nhắc nhở"
-        ));
+//        faqList.add(new FAQItem( //nhan vien
+//                "3. Xử lý thông báo hẹn giờ như thế nào?",
+//                "🟢 Màu xanh: Đã đến giờ hẹn - Chuẩn bị bàn\n" +
+//                        "🔴 Màu đỏ: Quá giờ hẹn - Liên hệ khách hàng\n" +
+//                        "🟡 Màu vàng: Sắp đến giờ hẹn - Nhắc nhở"
+//        ));
 
         faqList.add(new FAQItem( //ca 2
-                "4. Cách đổi mật khẩu tài khoản?",
+                "3. Cách đổi mật khẩu tài khoản?",
                 "1. Từ Dashboard, nhấn nút 'Đổi Mật Khẩu'\n" +
                         "2. Nhập mật khẩu cũ\n" +
                         "3. Nhập mật khẩu mới\n" +
@@ -98,23 +98,23 @@ public class HoTroControllerQL implements Initializable {
         ));
 
         faqList.add(new FAQItem( //quan li
-                "5. Quản lý món ăn trong menu?",
+                "4. Quản lý món ăn trong menu?",
                 "• Thêm món: Vào trang Quản Lý Menu > Dấu + ở góc phải trên > Nhấn nút Thêm mới\n" +
                         "• Sửa món: Chọn món cần sửa và nhập thông tin thay đổi > Nhấn nút Xác nhận\n" +
                         "• Xóa món: Chọn món > Nhấn nút Xóa (chỉ khi không có đơn hàng)\n"
         ));
 
-        faqList.add(new FAQItem( //nhan vien
-                "6. Xử lý đơn đặt bàn và thanh toán?",
-                "1. Chọn bàn, nhập thông tin khách hàng và thêm món vào đơn\n" +
-                        "2. Xem tổng tiền và áp dụng khuyến mãi (nếu có)\n" +
-                        "3. Xác nhận đơn hàng\n" +
-                        "4. Chọn phương thức thanh toán (tiền mặt/Chuyển khoản)\n" +
-                        "5. In hóa đơn và hoàn tất"
-        ));
+//        faqList.add(new FAQItem( //nhan vien
+//                "6. Xử lý đơn đặt bàn và thanh toán?",
+//                "1. Chọn bàn, nhập thông tin khách hàng và thêm món vào đơn\n" +
+//                        "2. Xem tổng tiền và áp dụng khuyến mãi (nếu có)\n" +
+//                        "3. Xác nhận đơn hàng\n" +
+//                        "4. Chọn phương thức thanh toán (tiền mặt/Chuyển khoản)\n" +
+//                        "5. In hóa đơn và hoàn tất"
+//        ));
 
         faqList.add(new FAQItem( //quản lí
-                "7. Quản lý nhân viên và phân quyền?",
+                "5. Quản lý nhân viên và phân quyền?",
                 "Chỉ Quản lý có quyền:\n" +
                         "• Thêm/Sửa/Xóa nhân viên\n" +
                         "• Phân quyền truy cập\n" +
@@ -139,12 +139,17 @@ public class HoTroControllerQL implements Initializable {
         ));
 
         helpCardList.add(new HelpCard(
-                "🍽️", "Đặt Bàn", "Quy trình đặt bàn & phục vụ", "#e74c3c",
+                "🍽️", "Quản Lý Menu", "Quy trình thêm xóa sửa món", "#e74c3c",
                 "datban"
         ));
 
         helpCardList.add(new HelpCard(
-                "📦", "Hóa Đơn", "Quản lý hóa đơn", "#f39c12",
+                "🍽️", "Quản Lý Bàn", "Quy trình thêm xóa sửa bàn", "#e74c3c",
+                "datban"
+        ));
+
+        helpCardList.add(new HelpCard(
+                "📦", "Chính Sách", "Quản lý chính sách nhà hàng", "#f39c12",
                 "kho"
         ));
 
