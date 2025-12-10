@@ -19,9 +19,9 @@
                     <!-- HEADER -->
                     <VBox alignment="CENTER" spacing="10"
                           style="-fx-background-color: #ffffff; -fx-background-radius: 15; -fx-padding: 20;">
-                        <Label text="📚 Hướng Dẫn Sử Dụng Hệ Thống Cho Nhân Viên"
+                        <Label text="Hướng Dẫn Sử Dụng Hệ Thống Cho Nhân Viên"
                                style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-                        <Label text="Tài liệu hướng dẫn chi tiết các tính năng của hệ thống quản lý nhà hàng"
+                        <Label text="Tài liệu hướng dẫn chi tiết các tính năng của hệ thống quản lý nhà hàng Crabking"
                                style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" />
                     </VBox>
 
@@ -30,14 +30,14 @@
                         <TextField fx:id="txtTimKiem" promptText="Tìm kiếm hướng dẫn..."
                                    style="-fx-background-color: white; -fx-background-radius: 25; -fx-padding: 10 20; -fx-font-size: 14px; -fx-pref-width: 500;"
                                    styleClass="search-box" />
-                        <Button text="🔍 Tìm kiếm"
+                        <Button text="Tìm kiếm"
                                 style="-fx-background-color: #E6763E; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 10 20;"
                                 onAction="#onTimKiemClick" />
                     </HBox>
 
                     <!-- QUICK ACCESS CARDS -->
                     <VBox spacing="15">
-                        <Label text="🚀 Truy Cập Nhanh"
+                        <Label text="Truy Cập Nhanh"
                                style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
 
                         <!-- ĐỔI TỪ FlowPane → GridPane -->
@@ -60,7 +60,7 @@
                     <!-- FAQ SECTION -->
                     <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-background-radius: 15; -fx-padding: 20;">
                         <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="❓ Câu Hỏi Thường Gặp (FAQ)"
+                            <Label text="Các Câu Hỏi Thường Gặp (FAQ)"
                                    style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
                             <HBox spacing="5" style="-fx-padding: 0 0 0 20;">
                                 <Button text="Mở tất cả"
@@ -78,10 +78,10 @@
                     </VBox>
 
                     <!-- CONTACT SECTION -->
-                    <HBox spacing="20" style="-fx-background-color: #2c3e50; -fx-background-radius: 15; -fx-padding: 25;"
-                          alignment="CENTER">
-                        <VBox spacing="8" alignment="CENTER_LEFT" prefWidth="300">
-                            <Label text="📞 Liên Hệ Hỗ Trợ"
+                    <HBox spacing="10" style="-fx-background-color: #2c3e50; -fx-background-radius: 15; -fx-padding: 25;"
+                          alignment="CENTER_LEFT">
+                        <VBox spacing="8" alignment="CENTER_LEFT" prefWidth="350">
+                            <Label text="Liên Hệ Hỗ Trợ"
                                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
                             <Label text="Hotline: 1900 1234"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
@@ -89,14 +89,14 @@
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
                             <Label text="Giờ làm việc: 8:00 - 22:00 hàng ngày"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
-                            <Button text="Gọi ngay"
-                                    style="-fx-background-color: #E6763E; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 15; -fx-padding: 8 20; -fx-margin-top: 10;"
-                                    onAction="#onLienHeHotline" />
+<!--                            <Button text="Gọi ngay"-->
+<!--                                    style="-fx-background-color: #E6763E; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 15; -fx-padding: 8 20; -fx-margin-top: 10;"-->
+<!--                                    onAction="#onLienHeHotline" />-->
                         </VBox>
 
                         <Separator orientation="VERTICAL" style="-fx-background-color: #4a6572;" />
 
-                        <VBox spacing="8" alignment="CENTER_LEFT" prefWidth="300">
+                        <VBox spacing="10" alignment="CENTER_LEFT" prefWidth="350">
                             <Label text="💡 Mẹo Sử Dụng"
                                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
                             <Label text="• Lưu dữ liệu thường xuyên"
@@ -111,14 +111,24 @@
 
                         <Separator orientation="VERTICAL" style="-fx-background-color: #4a6572;" />
 
-                        <VBox spacing="10" alignment="CENTER">
-                            <Label text="📥 Tài Liệu"
+                        <VBox spacing="10" alignment="CENTER_LEFT">
+<!--                            <Label text="📥 Tài Liệu"-->
+<!--                                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />-->
+<!--                            <Button text="Tải PDF hướng dẫn"-->
+<!--                                    style="-fx-background-color: #E6763E; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 15; -fx-padding: 10 25;"-->
+<!--                                    onAction="#onTaiTaiLieuPDF" />-->
+<!--                            <Button text="Xem video hướng dẫn"-->
+<!--                                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 8 20; -fx-margin-top: 5;" />-->
+                            <Label text="💡 Thành viên phát triển"
                                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
-                            <Button text="Tải PDF hướng dẫn"
-                                    style="-fx-background-color: #E6763E; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 15; -fx-padding: 10 25;"
-                                    onAction="#onTaiTaiLieuPDF" />
-                            <Button text="Xem video hướng dẫn"
-                                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 8 20; -fx-margin-top: 5;" />
+                            <Label text="• Trần Lê Khoa"
+                                   style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
+                            <Label text="• Trần Quốc Nhã"
+                                   style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
+                            <Label text="• Đỗ Minh Quân"
+                                   style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
+                            <Label text="• Nguyễn Hà Nhật Khanh"
+                                   style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
                         </VBox>
                     </HBox>
 

@@ -66,16 +66,16 @@ public class HoTroControllerNV implements Initializable {
 
 
     private void khoiTaoDuLieuFAQ() {
-        faqList.add(new FAQItem( //quan li
-                "1. Làm thế nào để thêm khuyến mãi mới?",
-                "Bước 1: Truy cập trang Khuyến Mãi\n" +
-                        "Bước 2: Nhập thông tin khuyến mãi\n" +
-                        "Bước 3: Chọn ngày bắt đầu/kết thúc và phần trăm giảm giá\n" +
-                        "Bước 4: Nhấn nút THÊM'"
-        ));
+//        faqList.add(new FAQItem( //quan li
+//                "1. Làm thế nào để thêm khuyến mãi mới?",
+//                "Bước 1: Truy cập trang Khuyến Mãi\n" +
+//                        "Bước 2: Nhập thông tin khuyến mãi\n" +
+//                        "Bước 3: Chọn ngày bắt đầu/kết thúc và phần trăm giảm giá\n" +
+//                        "Bước 4: Nhấn nút THÊM'"
+//        ));
 
         faqList.add(new FAQItem( //ca 2
-                "2. Cách xem thống kê doanh thu?",
+                "1. Cách xem thống kê doanh thu?",
                 "• Dashboard hiển thị tự động doanh thu theo ngày\n" +
                         "• Biểu đồ cột: Top 5 món bán chạy\n" +
                         "• Biểu đồ đường: Lượng khách theo giờ\n" +
@@ -83,29 +83,29 @@ public class HoTroControllerNV implements Initializable {
         ));
 
         faqList.add(new FAQItem( //nhan vien
-                "3. Xử lý thông báo hẹn giờ như thế nào?",
+                "2. Xử lý thông báo hẹn giờ như thế nào?",
                 "🟢 Màu xanh: Đã đến giờ hẹn - Chuẩn bị bàn\n" +
                         "🔴 Màu đỏ: Quá giờ hẹn - Liên hệ khách hàng\n" +
                         "🟡 Màu vàng: Sắp đến giờ hẹn - Nhắc nhở"
         ));
 
         faqList.add(new FAQItem( //ca 2
-                "4. Cách đổi mật khẩu tài khoản?",
+                "3. Cách đổi mật khẩu tài khoản?",
                 "1. Từ Dashboard, nhấn nút 'Đổi Mật Khẩu'\n" +
                         "2. Nhập mật khẩu cũ\n" +
                         "3. Nhập mật khẩu mới\n" +
                         "4. Xác nhận mật khẩu mới và nhấn 'Lưu'"
         ));
 
-        faqList.add(new FAQItem( //quan li
-                "5. Quản lý món ăn trong menu?",
-                "• Thêm món: Vào trang Quản Lý Menu > Dấu + ở góc phải trên > Nhấn nút Thêm mới\n" +
-                        "• Sửa món: Chọn món cần sửa và nhập thông tin thay đổi > Nhấn nút Xác nhận\n" +
-                        "• Xóa món: Chọn món > Nhấn nút Xóa (chỉ khi không có đơn hàng)\n"
-        ));
+//        faqList.add(new FAQItem( //quan li
+//                "5. Quản lý món ăn trong menu?",
+//                "• Thêm món: Vào trang Quản Lý Menu > Dấu + ở góc phải trên > Nhấn nút Thêm mới\n" +
+//                        "• Sửa món: Chọn món cần sửa và nhập thông tin thay đổi > Nhấn nút Xác nhận\n" +
+//                        "• Xóa món: Chọn món > Nhấn nút Xóa (chỉ khi không có đơn hàng)\n"
+//        ));
 
         faqList.add(new FAQItem( //nhan vien
-                "6. Xử lý đơn đặt bàn và thanh toán?",
+                "4. Xử lý đơn đặt bàn và thanh toán?",
                 "1. Chọn bàn, nhập thông tin khách hàng và thêm món vào đơn\n" +
                         "2. Xem tổng tiền và áp dụng khuyến mãi (nếu có)\n" +
                         "3. Xác nhận đơn hàng\n" +
@@ -113,13 +113,13 @@ public class HoTroControllerNV implements Initializable {
                         "5. In hóa đơn và hoàn tất"
         ));
 
-        faqList.add(new FAQItem( //quản lí
-                "7. Quản lý nhân viên và phân quyền?",
-                "Chỉ Quản lý có quyền:\n" +
-                        "• Thêm/Sửa/Xóa nhân viên\n" +
-                        "• Phân quyền truy cập\n" +
-                        "• Xem báo cáo toàn hệ thống\n"
-        ));
+//        faqList.add(new FAQItem( //quản lí
+//                "7. Quản lý nhân viên và phân quyền?",
+//                "Chỉ Quản lý có quyền:\n" +
+//                        "• Thêm/Sửa/Xóa nhân viên\n" +
+//                        "• Phân quyền truy cập\n" +
+//                        "• Xem báo cáo toàn hệ thống\n"
+//        ));
     }
 
     private void khoiTaoDuLieuHelpCards() {
@@ -128,13 +128,13 @@ public class HoTroControllerNV implements Initializable {
                 "dashboard"
         ));
 
-        helpCardList.add(new HelpCard(
-                "🎯", "Khuyến Mãi", "Quản lý chương trình khuyến mãi", "#2ecc71",
-                "khuyenmai"
-        ));
+//        helpCardList.add(new HelpCard(
+//                "🎯", "Khuyến Mãi", "Quản lý chương trình khuyến mãi", "#2ecc71",
+//                "khuyenmai"
+//        ));
 
         helpCardList.add(new HelpCard(
-                "👥", "Quản Lý NV", "Quản lý nhân viên & phân quyền", "#9b59b6",
+                "👥", "Quản Lý Thành Viên", "Quản lý khách hàng là thành viên", "#9b59b6",
                 "nhanvien"
         ));
 
@@ -148,10 +148,10 @@ public class HoTroControllerNV implements Initializable {
                 "kho"
         ));
 
-        helpCardList.add(new HelpCard(
-                "💰", "Báo Cáo Thống Kê", "Xuất báo cáo doanh thu", "#16a085",
-                "baocao"
-        ));
+//        helpCardList.add(new HelpCard(
+//                "💰", "Báo Cáo Thống Kê", "Xuất báo cáo doanh thu", "#16a085",
+//                "baocao"
+//        ));
 
         helpCardList.add(new HelpCard(
                 "⚙️", "Tài khoản", "Vấn đề tài khoản", "#34495e",
