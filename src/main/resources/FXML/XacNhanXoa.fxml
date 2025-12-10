@@ -16,7 +16,7 @@
 
         <!-- Tiêu đề -->
         <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #E6763E;"
-               text="Xóa nhân viên này?" />
+               text="Bạn có chắc chắn xóa?" />
 
         <!-- Thông báo -->
         <Label fx:id="lblNoiDung"

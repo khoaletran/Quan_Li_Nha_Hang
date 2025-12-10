@@ -2,10 +2,15 @@ package ui.controllers;
 
 import dao.*;
 import entity.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -71,57 +76,83 @@ public class ChonMonController {
         });
         comboDanhMuc.setOnAction(e -> locMonTheoTenVaLoai());
 
-        btndatban.setOnAction(e -> {
-            // ===== Kiểm tra dữ liệu chung =====
-            if (banHienTai == null) {
-                AlertCus.show("Thiếu thông tin", "Chưa chọn bàn phục vụ!\nVui lòng chọn bàn trước khi đặt.");
-                return;
-            }
-            if (soLuongMap.isEmpty()) {
-                AlertCus.show("Thiếu thông tin", "Chưa chọn món ăn nào!\nVui lòng chọn ít nhất 1 món trước khi thanh toán.");
-                return;
-            }
-            if (soLuongKhach <= 0) {
-                AlertCus.show("Số lượng khách không hợp lệ", "Vui lòng nhập số lượng khách lớn hơn 0.");
-                return;
-            }
-            String sdt = sdtKhach.getText().trim();
-            if (sdt.isEmpty()) {
-                AlertCus.show("Thiếu thông tin", "Vui lòng nhập số điện thoại khách hàng trước khi đặt bàn.");
-                return;
-            }
-            if (!sdt.matches("^0[3-9]\\d{8}$")) {
-                AlertCus.show("Số điện thoại không hợp lệ", "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03–09.");
-                return;
-            }
-
-            // ===== Xử lý theo hình thức thanh toán =====
-            long phutCachNhau = java.time.Duration.between(LocalDateTime.now(), thoiGianDat).toMinutes();
-            boolean kieuDatBan = !(phutCachNhau >= 0 && phutCachNhau <= 15);
-            if (!kieuDatBan) {
-                datBan();
-                return;
-            }
-            if (rdoTienMat.isSelected()) {
-                datBan();
-            } else {
-                double tongTien = parseCurrency(lblCoc.getText().trim());
-                if (tongTien <= 0) {
-                    AlertCus.show("Tổng tiền không hợp lệ", "Không thể thanh toán hóa đơn có tổng tiền bằng 0.\nVui lòng kiểm tra lại món ăn đã chọn.");
-                    return;
-                }
-
-                String maHD = tuSinhMaHD();
-                QRThanhToan.hienThiQRPanel(tongTien, maHD, () -> {
-                    System.out.println("Thanh toán chuyển khoản thành công → Tạo hóa đơn...");
-                    datBanSauKhiXacNhan(maHD);
-                });
-            }
-        });
-
-
+        handleDatBan();
+        
 
         sdtKhach.setOnKeyReleased(e -> timKhachHang());
+        
+        Platform.runLater(() -> addShortcuts(tfTimKiem.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm món ăn (Ctrl + F)");
+        Tooltip.install(tfTimKiem, tipFind);
+        Tooltip tipFill = new Tooltip("Điền số điện thoại khách hàng (Ctrl + D)");
+        Tooltip.install(sdtKhach, tipFill);
+        Tooltip tipNew = new Tooltip("Đặt bàn (Ctrl + B)");
+        Tooltip.install(btndatban, tipNew);
+    }
+        
+    private void handleDatBan(){
+        btndatban.setOnAction(e -> thucHienDatBan());        
+    }
+    private void thucHienDatBan(){
+    // ===== Kiểm tra dữ liệu chung =====
+        if (banHienTai == null) {
+            AlertCus.show("Thiếu thông tin", "Chưa chọn bàn phục vụ!\nVui lòng chọn bàn trước khi đặt.");
+            return;
+        }
+        if (soLuongMap.isEmpty()) {
+            AlertCus.show("Thiếu thông tin", "Chưa chọn món ăn nào!\nVui lòng chọn ít nhất 1 món trước khi thanh toán.");
+            return;
+        }
+        if (soLuongKhach <= 0) {
+            AlertCus.show("Số lượng khách không hợp lệ", "Vui lòng nhập số lượng khách lớn hơn 0.");
+            return;
+        }
+        String sdt = sdtKhach.getText().trim();
+        if (sdt.isEmpty()) {
+            AlertCus.show("Thiếu thông tin", "Vui lòng nhập số điện thoại khách hàng trước khi đặt bàn.");
+            return;
+        }
+        if (!sdt.matches("^0[3-9]\\d{8}$")) {
+            AlertCus.show("Số điện thoại không hợp lệ", "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03–09.");
+            return;
+        }
+
+        // ===== Xử lý theo hình thức thanh toán =====
+        long phutCachNhau = java.time.Duration.between(LocalDateTime.now(), thoiGianDat).toMinutes();
+        boolean kieuDatBan = !(phutCachNhau >= 0 && phutCachNhau <= 15);
+        if (!kieuDatBan) {
+            datBan();
+            return;
+        }
+        if (rdoTienMat.isSelected()) {
+            datBan();
+        } else {
+            double tongTien = parseCurrency(lblCoc.getText().trim());
+            if (tongTien <= 0) {
+                AlertCus.show("Tổng tiền không hợp lệ", "Không thể thanh toán hóa đơn có tổng tiền bằng 0.\nVui lòng kiểm tra lại món ăn đã chọn.");
+                return;
+            }
+
+            String maHD = tuSinhMaHD();
+            QRThanhToan.hienThiQRPanel(tongTien, maHD, () -> {
+                System.out.println("Thanh toán chuyển khoản thành công → Tạo hóa đơn...");
+                datBanSauKhiXacNhan(maHD);
+            });
+        }
+    }
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            tfTimKiem.requestFocus();
+            tfTimKiem.selectAll();
+        });
+        KeyCombination ctrlD = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlD, () -> {
+            sdtKhach.requestFocus();
+            sdtKhach.selectAll();
+        });
+        KeyCombination ctrlB= new KeyCodeCombination(KeyCode.B, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlB, () -> thucHienDatBan());
     }
 
     public void setMainController(ui.controllers.MainController_NV controller) {

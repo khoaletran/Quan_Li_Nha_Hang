@@ -2,7 +2,21 @@
     -fx-font-family: "Segoe UI", sans-serif;
     -fx-background-color: #f5f5f5;
 }
-
+.tooltip {
+  -fx-font-family: "Segoe UI";
+  -fx-font-size: 12px;
+  -fx-text-fill: #333;
+  -fx-padding: 8px 12px;
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+  -fx-border-color: #cccccc;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+  -fx-pref-width: 200px;
+  -fx-wrap-text: true;
+  -fx-font-weight: normal;
+}
 /* ===== NỘI DUNG CHÍNH ===== */
 .main-content {
     -fx-background-color: #D9D9D9;
