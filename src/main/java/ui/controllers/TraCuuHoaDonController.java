@@ -18,11 +18,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import ui.AlertCus;
@@ -83,8 +88,6 @@ public class TraCuuHoaDonController {
 
     @FXML
     public void initialize() {
-        System.out.println("TraCuuHoaDonController initialized");
-
         if (!ketNoiDatabase()) {
             hienThiThongBaoLoi("Không thể kết nối database. Vui lòng kiểm tra kết nối.");
             return;
@@ -96,8 +99,31 @@ public class TraCuuHoaDonController {
         khoiTaoTableView();
         taiDanhSachHoaDon();
         resetForm();
-    }
 
+        Platform.runLater(() -> addShortcuts(txtSDT.getScene()));
+        Tooltip tipSdt = new Tooltip("Nhập Số điện thoại (Ctrl + D)");
+        Tooltip.install(txtSDT, tipSdt);
+        Tooltip tipFind = new Tooltip("Tìm kiếm nhanh (Ctrl + F)");
+        Tooltip.install(btnTimKiem, tipFind);
+        Tooltip tipClear = new Tooltip("Clear nhanh (Ctrl + L)");
+        Tooltip.install(btnXoaTrang, tipClear);
+        Tooltip tipPrint = new Tooltip("In nhanh hóa đơn(Ctrl + P)");
+        Tooltip.install(confirm_btn, tipPrint);
+        
+    }
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlD = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlD, () -> {
+            txtSDT.requestFocus();
+            txtSDT.selectAll();
+        });
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> timKiemHoaDon());
+        KeyCombination ctrlL = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlL, () -> xoaTrangBoLoc());
+        KeyCombination ctrlP = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlP, () -> HoaDonIn.previewHoaDon(hoaDonSelected));
+    }
     // KẾT NỐI DB
     private boolean ketNoiDatabase() {
         try {

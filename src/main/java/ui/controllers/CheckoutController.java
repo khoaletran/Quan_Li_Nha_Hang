@@ -6,9 +6,13 @@ import entity.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import ui.AlertCus;
 import ui.HoaDonIn;
@@ -43,7 +47,21 @@ public class CheckoutController {
 
         txtMaGG.setOnAction(e -> updateThanhTien());
 
+        Platform.runLater(() -> addShortcuts(searchField.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm hóa đơn (Ctrl + F)");
+        Tooltip.install(searchField, tipFind);
+        Tooltip tipCheck = new Tooltip("Check out khách hàng (Ctrl + B)");
+        Tooltip.install(btnThanhToan, tipCheck);
+    }
 
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            searchField.requestFocus();
+            searchField.selectAll();
+        });
+        KeyCombination ctrlB = new KeyCodeCombination(KeyCode.B, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlB, () -> xuLyThanhToan());
     }
 
     // ======== QUÉT MÃ QR GIẢM GIÁ ==========

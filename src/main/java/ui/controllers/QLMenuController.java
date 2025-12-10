@@ -23,6 +23,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import ui.AlertCus;
+import ui.XacNhanXoa;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -48,7 +49,8 @@ public class QLMenuController {
     @FXML
     private ImageView imgMon;
     @FXML
-    private Button btnXacNhan, btnXoa;
+    private Button btnXacNhan;
+    // @FXML private Button btnXoa;
     @FXML 
     private Button btnAdd;
     @FXML
@@ -67,7 +69,7 @@ public class QLMenuController {
         cboLoaiMonFilter.setOnAction(e -> locMonTheoDanhMuc());
         // TextField tìm kiếm realtime
         searchField.textProperty().addListener((obs, oldText, newText) -> filterMon());
-        btnXoa.setDisable(true);
+        // btnXoa.setDisable(true);
         txtGiaGoc.textProperty().addListener((obs, oldText, newText)->{
             if( newText == null || newText.isEmpty()) return;
             String numeric = newText.replaceAll("\\.", "");
@@ -232,7 +234,7 @@ public class QLMenuController {
         // ===== 6. Sự kiện click =====
         card.setOnMouseClicked(e -> {
             loadChiTietMon(mon);
-            btnXoa.setDisable(false);;
+            // btnXoa.setDisable(false);;
         });
 
         return card;
@@ -316,7 +318,7 @@ public class QLMenuController {
         }
 
         selectedFile = null;
-        btnXoa.setDisable(true);
+        // btnXoa.setDisable(true);
 
     }
 
@@ -397,46 +399,33 @@ public class QLMenuController {
         selectedFile = null;
     }
 
-    @FXML
-    private void xoaMon() {
-        String maMon = lblMaMon.getText().trim();
-        if (maMon.isEmpty()) {
-            AlertCus.show("Thông báo", "Không có món nào để xóa!");
-            return;
-        }
-        String tenMon = txtTenMon.getText();
-        // === Hộp thoại xác nhận ===
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Xác nhận");
-        alert.setHeaderText("Bạn có chắc muốn xóa món?");
-        alert.setContentText("Món: " + tenMon + "\nMã món: " + maMon);
+    // @FXML
+    // private void xoaMon() {
+    //     String maMon = lblMaMon.getText().trim();
+    //     if (maMon.isEmpty()) {
+    //         AlertCus.show("Thông báo", "Không có món nào để xóa!");
+    //         return;
+    //     }
+    //     String tenMon = txtTenMon.getText();
+    //     // === Hộp thoại xác nhận ===
+        
+    //     if(XacNhanXoa.hienHopThoaiXacNhan("Xác nhận xóa","Bạn có chắc chắn xóa " + tenMon)){
+    //         boolean success = MonDAO.delete(maMon);
 
-        // Tùy chọn nút
-        ButtonType okBtn = new ButtonType("Xóa", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelBtn = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(okBtn, cancelBtn);
+    //         if (success) {
+    //             AlertCus.show("Thông báo", "Xóa món " + tenMon + " thành công!");
+    //             dsMon = MonDAO.getAll();
+    //             loadDanhSachMon();
+    //         } else {
+    //             AlertCus.show("Thông báo", "Xóa món thất bại!");
+    //         }
+    //     }
+        
 
-        // Hiển thị và chờ người dùng chọn
-        Optional<ButtonType> result = alert.showAndWait();
-
-        // Nếu chọn Hủy → không xóa
-        if (result.isEmpty() || result.get() != okBtn) {
-            return;
-        }
-        boolean success = MonDAO.delete(maMon);
-
-        if (success) {
-            AlertCus.show("Thông báo", "Xóa món " + tenMon + " thành công!");
-            dsMon = MonDAO.getAll();
-            loadDanhSachMon();
-        } else {
-            AlertCus.show("Thông báo", "Xóa món thất bại!");
-        }
-
-        resetFields();
-        btnXacNhan.setText("Thêm mới");
-        btnXoa.setDisable(true);
-    }
+    //     resetFields();
+    //     btnXacNhan.setText("Thêm mới");
+    //     btnXoa.setDisable(true);
+    // }
 
     private String generateID(String latestId, String prefix) {
         if (latestId == null || latestId.isEmpty()) {

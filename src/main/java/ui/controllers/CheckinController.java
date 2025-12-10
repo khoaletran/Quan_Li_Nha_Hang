@@ -2,12 +2,17 @@ package ui.controllers;
 
 import dao.*;
 import entity.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 
@@ -31,7 +36,8 @@ public class CheckinController {
     private DatePicker dpThoiGian;
     @FXML
     private ComboBox<String> cboKhuVuc;
-
+    @FXML 
+    private Button btnCheckIn, btnXoaTrang;
     private List<HoaDon> dsHoaDon;
     
     private HBox lastSelected = null;
@@ -49,6 +55,24 @@ public class CheckinController {
         );
         autoRefresh.setCycleCount(javafx.animation.Animation.INDEFINITE);
         autoRefresh.play();
+        Platform.runLater(() -> addShortcuts(txtSDT.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm số điện thoại (Ctrl + F)");
+        Tooltip.install(txtSDT, tipFind);
+        Tooltip tipCheck = new Tooltip("Check in khách hàng (Ctrl + B)");
+        Tooltip.install(btnCheckIn, tipCheck);
+        Tooltip tipClear = new Tooltip("Clear thông tin (Ctrl + L)");
+        Tooltip.install(btnXoaTrang, tipClear);
+    }
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            txtSDT.requestFocus();
+            txtSDT.selectAll();
+        });
+        KeyCombination ctrlB = new KeyCodeCombination(KeyCode.B, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlB, () -> checkin());
+        KeyCombination ctrlL = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlL, () -> xoaTrang());
     }
     //a
     private void loadComboKhuVuc(){

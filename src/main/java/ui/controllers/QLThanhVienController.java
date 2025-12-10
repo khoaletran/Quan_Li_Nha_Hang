@@ -5,6 +5,7 @@ import dao.PhieuKetCaDAO;
 import entity.HangKhachHang;
 import entity.KhachHang;
 import entity.NhanVien;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -28,7 +32,7 @@ import java.util.List;
 public class QLThanhVienController {
 
     @FXML private FlowPane menuFlow;
-    @FXML private TextField txtTenNV, txtSDT, txtMatKhau,txtHangKH,txtDiemTL;
+    @FXML private TextField txtTenNV, txtSDT, txtMatKhau,txtHangKH,txtDiemTL, txtTimKiem;
     @FXML private RadioButton rdoNam, rdoNu;
     @FXML private Label lblMaNV;
     @FXML private Button btnThemNV, btnXacNhan, btnXoa;
@@ -55,6 +59,22 @@ public class QLThanhVienController {
         loadNhanVienCards();
 
         txtDiemTL.setEditable(false);
+        Platform.runLater(() -> addShortcuts(txtTimKiem.getScene()));
+        Tooltip tipFind = new Tooltip("Tìm kiếm thành viên (Ctrl + F)");
+
+        Tooltip.install(txtTimKiem, tipFind);
+        Tooltip tipNew = new Tooltip("Thêm thành viên mới (Ctrl + N)");
+        Tooltip.install(btnThemNV, tipNew);
+    }
+
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            txtTimKiem.requestFocus();
+            txtTimKiem.selectAll();
+        });
+        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlN, () -> xoaTrangThongTin());
     }
 
     // =========================

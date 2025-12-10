@@ -7,12 +7,17 @@ import dao.LoaiBanDAO;
 import entity.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import ui.ConfirmCus;
@@ -105,6 +110,18 @@ public class DatBanController {
         txtSoLuong.textProperty().addListener((obs, oldVal, newVal) -> locTheoRealTime());
         cboKhuVuc.setOnAction(e -> locTheoRealTime());
         btnWaitlist.setOnAction(e -> {themVaoWaitlist();});
+
+        Platform.runLater(() -> addShortcuts(noteField.getScene()));
+        Tooltip tipNew = new Tooltip("Nhập số lượng chỗ (Ctrl + D)");
+        Tooltip.install(noteField, tipNew);
+    }
+
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlD = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlD, () -> {
+            noteField.requestFocus();
+            noteField.selectAll();
+        });
     }
 
     private LocalTime getDefaultTimePlus5() {
