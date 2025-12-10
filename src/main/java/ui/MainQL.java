@@ -6,8 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import ui.controllers.MainController_NV;
+
 import ui.controllers.MainController_QL;
 import ui.controllers.SidebarController_QL;
 
