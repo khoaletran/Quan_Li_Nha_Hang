@@ -2,6 +2,8 @@ package ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -10,6 +12,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.*;
@@ -485,12 +489,14 @@ private void timKiemHelpCards(String keyword) {
                 break;
             default:
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
+
         }
 
-        alert.setContentText(content);
-        alert.setWidth(400);
-        alert.setHeight(300);
-        alert.showAndWait();
+//        alert.setContentText(content);
+//        alert.setWidth(400);
+//        alert.setHeight(300);
+//        alert.showAndWait();
+        showCustomDialog("Hướng dẫn: " + card.getTitle(), content);
     }
 
     // Inner classes for data model
@@ -559,4 +565,122 @@ private void timKiemHelpCards(String keyword) {
             }
         }
     }
+
+    private void showCustomDialog(String title, String content) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle(title);
+
+        VBox box = new VBox(20);
+        box.setPadding(new Insets(25));
+        box.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-background-radius: 15;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);"
+        );
+
+        Label lblTitle = new Label(title);
+        lblTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
+        Label lblContent = new Label(content);
+        lblContent.setWrapText(true);
+        lblContent.setStyle("-fx-font-size: 15px; -fx-text-fill: #34495e;");
+        lblContent.setMaxWidth(400);
+
+        Button btnClose = new Button("Đóng");
+        btnClose.setStyle(
+                "-fx-background-color: #3498db;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-radius: 18;" +
+                        "-fx-padding: 8 20;" +
+                        "-fx-font-size: 14px; -fx-font-weight: bold;"
+        );
+        btnClose.setOnAction(e -> dialog.close());
+
+        box.getChildren().addAll(lblTitle, lblContent, btnClose);
+        box.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(box);
+        dialog.setScene(scene);
+        dialog.setResizable(false);
+        dialog.show();
+    }
+
+
+//    // =======================
+//// Hộp thoại thông báo đẹp
+//// =======================
+//    private void hienThongBao(String tieuDe, String noiDung, String loai) {
+//        Alert alert;
+//
+//        switch (loai.toLowerCase()) {
+//            case "success":
+//                alert = new Alert(Alert.AlertType.INFORMATION);
+//                break;
+//            case "warning":
+//                alert = new Alert(Alert.AlertType.WARNING);
+//                break;
+//            case "error":
+//                alert = new Alert(Alert.AlertType.ERROR);
+//                break;
+//            default:
+//                alert = new Alert(Alert.AlertType.INFORMATION);
+//        }
+//
+//        DialogPane dialogPane = alert.getDialogPane();
+//
+//        // Style tổng thể
+//        dialogPane.setStyle(
+//                "-fx-background-color: #ffffff;" +
+//                        "-fx-border-radius: 15;" +
+//                        "-fx-background-radius: 15;" +
+//                        "-fx-padding: 20;"
+//        );
+//
+//        // Style nội dung text
+//        dialogPane.lookup(".header-panel").setStyle(
+//                "-fx-background-color: transparent;" +
+//                        "-fx-padding: 0 0 10 0;"
+//        );
+//
+//        dialogPane.lookup(".content.label").setStyle(
+//                "-fx-font-size: 14px;" +
+//                        "-fx-text-fill: #2c3e50;"
+//        );
+//
+//        // Style nút OK
+//        Button btnOk = (Button) dialogPane.lookupButton(ButtonType.OK);
+//        btnOk.setText("Đóng");
+//        btnOk.setStyle(
+//                "-fx-background-color: #3498db;" +
+//                        "-fx-background-radius: 20;" +
+//                        "-fx-text-fill: white;" +
+//                        "-fx-font-weight: bold;" +
+//                        "-fx-padding: 8 20;"
+//        );
+//
+//        btnOk.setOnMouseEntered(e -> btnOk.setStyle(
+//                "-fx-background-color: #2c3e50;" +
+//                        "-fx-background-radius: 20;" +
+//                        "-fx-text-fill: white;" +
+//                        "-fx-font-weight: bold;" +
+//                        "-fx-padding: 8 20;"
+//        ));
+//
+//        btnOk.setOnMouseExited(e -> btnOk.setStyle(
+//                "-fx-background-color: #3498db;" +
+//                        "-fx-background-radius: 20;" +
+//                        "-fx-text-fill: white;" +
+//                        "-fx-font-weight: bold;" +
+//                        "-fx-padding: 8 20;"
+//        ));
+//
+//        // Gán tiêu đề – nội dung
+//        alert.setTitle(tieuDe);
+//        alert.setHeaderText(tieuDe);
+//        alert.setContentText(noiDung);
+//
+//        alert.showAndWait();
+//    }
+
 }
