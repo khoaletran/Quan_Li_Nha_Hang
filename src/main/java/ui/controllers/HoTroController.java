@@ -62,61 +62,59 @@ public class HoTroController implements Initializable {
 
 
     private void khoiTaoDuLieuFAQ() {
-        faqList.add(new FAQItem(
+        faqList.add(new FAQItem( //quan li
                 "1. Làm thế nào để thêm khuyến mãi mới?",
                 "Bước 1: Truy cập trang Khuyến Mãi\n" +
-                        "Bước 2: Nhập thông tin mã KM, tên KM, số lượng\n" +
+                        "Bước 2: Nhập thông tin khuyến mãi\n" +
                         "Bước 3: Chọn ngày bắt đầu/kết thúc và phần trăm giảm giá\n" +
-                        "Bước 4: Chọn món áp dụng (nếu có) và nhấn 'Thêm'"
+                        "Bước 4: Nhấn nút THÊM'"
         ));
 
-        faqList.add(new FAQItem(
+        faqList.add(new FAQItem( //ca 2
                 "2. Cách xem thống kê doanh thu?",
                 "• Dashboard hiển thị tự động doanh thu theo ngày\n" +
                         "• Biểu đồ cột: Top 5 món bán chạy\n" +
                         "• Biểu đồ đường: Lượng khách theo giờ\n" +
-                        "• Nhấn vào biểu đồ để xem báo cáo chi tiết"
+                        "• Nhấn vào trang thống kê để xem chi tiết"
         ));
 
-        faqList.add(new FAQItem(
+        faqList.add(new FAQItem( //nhan vien
                 "3. Xử lý thông báo hẹn giờ như thế nào?",
                 "🟢 Màu xanh: Đã đến giờ hẹn - Chuẩn bị bàn\n" +
                         "🔴 Màu đỏ: Quá giờ hẹn - Liên hệ khách hàng\n" +
                         "🟡 Màu vàng: Sắp đến giờ hẹn - Nhắc nhở"
         ));
 
-        faqList.add(new FAQItem(
+        faqList.add(new FAQItem( //ca 2
                 "4. Cách đổi mật khẩu tài khoản?",
                 "1. Từ Dashboard, nhấn nút 'Đổi Mật Khẩu'\n" +
                         "2. Nhập mật khẩu cũ\n" +
-                        "3. Nhập mật khẩu mới (tối thiểu 8 ký tự)\n" +
+                        "3. Nhập mật khẩu mới\n" +
                         "4. Xác nhận mật khẩu mới và nhấn 'Lưu'"
         ));
 
-        faqList.add(new FAQItem(
+        faqList.add(new FAQItem( //quan li
                 "5. Quản lý món ăn trong menu?",
-                "• Thêm món: Vào menu Quản lý > Món ăn > Thêm mới\n" +
-                        "• Sửa món: Chọn món cần sửa > Nhấn nút Sửa\n" +
-                        "• Xóa món: Chọn món > Nhấn nút Xóa (chỉ khi không có đơn hàng)\n" +
-                        "• Cập nhật số lượng khi nhập kho mới"
+                "• Thêm món: Vào trang Quản Lý Menu > Dấu + ở góc phải trên > Nhấn nút Thêm mới\n" +
+                        "• Sửa món: Chọn món cần sửa và nhập thông tin thay đổi > Nhấn nút Xác nhận\n" +
+                        "• Xóa món: Chọn món > Nhấn nút Xóa (chỉ khi không có đơn hàng)\n"
         ));
 
-        faqList.add(new FAQItem(
-                "6. Xử lý đơn hàng và thanh toán?",
-                "1. Chọn bàn và thêm món vào đơn\n" +
+        faqList.add(new FAQItem( //nhan vien
+                "6. Xử lý đơn đặt bàn và thanh toán?",
+                "1. Chọn bàn, nhập thông tin khách hàng và thêm món vào đơn\n" +
                         "2. Xem tổng tiền và áp dụng khuyến mãi (nếu có)\n" +
                         "3. Xác nhận đơn hàng\n" +
                         "4. Chọn phương thức thanh toán (tiền mặt/Chuyển khoản)\n" +
                         "5. In hóa đơn và hoàn tất"
         ));
 
-        faqList.add(new FAQItem(
+        faqList.add(new FAQItem( //quản lí
                 "7. Quản lý nhân viên và phân quyền?",
                 "Chỉ Quản lý có quyền:\n" +
                         "• Thêm/Sửa/Xóa nhân viên\n" +
-                        "• Phân quyền truy cập module\n" +
-                        "• Xem báo cáo toàn hệ thống\n" +
-                        "• Quản lý lịch làm việc"
+                        "• Phân quyền truy cập\n" +
+                        "• Xem báo cáo toàn hệ thống\n"
         ));
     }
 
@@ -264,7 +262,8 @@ public class HoTroController implements Initializable {
                 "-fx-font-size: 14px; " +
                         "-fx-text-fill: #7f8c8d; " +
                         "-fx-wrap-text: true; " +
-                        "-fx-text-alignment: center;"
+                        "-fx-text-alignment: center;" +
+                        "-fx-alignment: center"
         );
 
         // Button
@@ -301,6 +300,32 @@ public class HoTroController implements Initializable {
                             "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3); " +
                             "-fx-translate-y: 0; " +
                             "-fx-cursor: hand;"
+            );
+        });
+        //nut
+
+
+        // Hover vào
+        String baseColor = card.getColor(); // màu gốc từ card
+        String hoverColor = "#2c3e50";      // màu hover bạn muốn
+        actionBtn.setOnMouseEntered(e -> {
+            actionBtn.setStyle(
+                    "-fx-background-color: " + hoverColor + ";" +
+                            "-fx-text-fill: white;" +
+                            "-fx-background-radius: 20;" +
+                            "-fx-padding: 8 20;" +
+                            "-fx-font-weight: bold;"
+            );
+        });
+
+// Hover ra
+        actionBtn.setOnMouseExited(e -> {
+            actionBtn.setStyle(
+                    "-fx-background-color: " + baseColor + ";" +
+                            "-fx-text-fill: white;" +
+                            "-fx-background-radius: 20;" +
+                            "-fx-padding: 8 20;" +
+                            "-fx-font-weight: bold;"
             );
         });
 

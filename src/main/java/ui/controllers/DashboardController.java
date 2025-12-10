@@ -351,12 +351,9 @@ public class DashboardController {
         barChart.getData().add(series);
 
         // dữ liệu biểu đồ hover
-
         // sau khi thêm dữ liệu vào barChart
-
 // gắn tooltip ngay sau khi dữ liệu đã được thêm
         attachBarTooltips();
-
     }
     private void hienThiBieuDoLuongKhachTheoGio() {
         List<HoaDon> danhSach = HoaDonDAO.getAll(); // cái này sẽ lấy hd trong ngày
@@ -370,7 +367,7 @@ public class DashboardController {
 
         for (HoaDon hd : danhSach) {
             if (hd == null || hd.getTgCheckIn() == null) continue;
-//            if (!hd.getTgCheckIn().toLocalDate().equals(java.time.LocalDate.now())) continue;
+//            if (!hd.getTgCheckIn().toLocalDate().equals(java.time.LocalDate.now())) continue; nay la ngay hien tai
 
             int gio = hd.getTgCheckIn().getHour();
             int soKhach = hd.getSoLuong();
@@ -403,13 +400,10 @@ public class DashboardController {
         // gắn tooltip cho các điểm line
         attachLinePointTooltips();
     }
-
     //hiển thị dữ liệu khi hover biểu đồ
-
     // Gắn tooltip cho BarChart (các cột)
     private void attachBarTooltips() {
         if (barChart == null) return;
-
         // Đảm bảo chạy trên JavaFX thread sau khi node được dựng xong
         Platform.runLater(() -> {
             for (XYChart.Series<String, Number> series : barChart.getData()) {
@@ -427,7 +421,7 @@ public class DashboardController {
     }
 
     private void installBarTooltip(XYChart.Data<String, Number> data) {
-        // debug: in ra thông tin để kiểm tra
+        // in ra thông tin để kiểm tra
         System.out.println("[DEBUG] installBarTooltip for: " + data.getXValue() + " = " + data.getYValue()
                 + " nodeExists=" + (data.getNode() != null));
 
@@ -493,7 +487,6 @@ public class DashboardController {
         });
     }
 
-    // Thay thế installLineTooltip hiện tại bằng version này
     private void installLineTooltip(XYChart.Data<String, Number> data, String seriesName) {
         System.out.println("[DEBUG] installLineTooltip for: " + seriesName + " - " + data.getXValue() + "=" + data.getYValue()
                 + " nodeExists=" + (data.getNode() != null));
@@ -528,9 +521,6 @@ public class DashboardController {
             });
         }
     }
-
-
-
 
     // ================= ĐỔI MẬT KHẨU =================
     @FXML
