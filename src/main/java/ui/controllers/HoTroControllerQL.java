@@ -140,22 +140,22 @@ public class HoTroControllerQL implements Initializable {
 
         helpCardList.add(new HelpCard(
                 "🍽️", "Quản Lý Menu", "Quy trình thêm xóa sửa món", "#e74c3c",
-                "datban"
+                "menu"
         ));
 
         helpCardList.add(new HelpCard(
                 "🍽️", "Quản Lý Bàn", "Quy trình thêm xóa sửa bàn", "#e74c3c",
-                "datban"
+                "ban"
         ));
 
         helpCardList.add(new HelpCard(
                 "📦", "Chính Sách", "Quản lý chính sách nhà hàng", "#f39c12",
-                "kho"
+                "chinhsach"
         ));
 
         helpCardList.add(new HelpCard(
                 "💰", "Báo Cáo Thống Kê", "Xuất báo cáo doanh thu", "#16a085",
-                "baocao"
+                "thongke"
         ));
 
         helpCardList.add(new HelpCard(
@@ -467,30 +467,61 @@ public class HoTroControllerQL implements Initializable {
         switch (card.getTag()) {
             case "dashboard":
                 content = "Dashboard cung cấp:\n\n" +
-                        "1. Thông tin nhân viên đăng nhập\n" +
-                        "2. Thống kê đơn hàng theo trạng thái\n" +
-                        "3. Thống kê khu vực\n" +
-                        "4. Doanh thu và số khách\n" +
-                        "5. Biểu đồ top 5 món bán chạy\n" +
-                        "6. Biểu đồ lượng khách theo giờ\n" +
-                        "7. Thông báo check-in và tồn kho";
+                        "- Thông tin nhân viên đăng nhập\n" +
+                        "- Thông báo các đơn đặt bàn, check in\n" +
+                        "- Thống kê số đơn\n" +
+                        "- Thống kê khu vực\n" +
+                        "- Thống kê doanh thu và số khách\n" +
+                        "- Biểu đồ top 5 món bán chạy\n" +
+                        "- Biểu đồ lượng khách theo giờ\n";
                 break;
             case "khuyenmai":
                 content = "Quản lý khuyến mãi:\n\n" +
-                        "1. Thêm khuyến mãi mới\n" +
-                        "2. Xem danh sách khuyến mãi\n" +
-                        "3. Lọc theo trạng thái và ưu đãi\n" +
-                        "4. Sửa/Xóa khuyến mãi\n" +
-                        "5. In mã QR cho khuyến mãi\n" +
-                        "6. Chọn món áp dụng khuyến mãi";
+                        "1. Trang hiện danh sách các khuyến mãi\n" +
+                        "   - Có 3 loại khuyến mãi: Chưa tới hạn màu vàng, hết hạn màu đỏ và đang trong hạn màu xanh\n" +
+                        "2. Thêm khuyến mãi\n" +
+                        "   - Bước 1: Nhập các thông tin khuyến mãi vào form bên phải\n" +
+                        "   - Bước 2: Nhấn nút thêm\n" +
+                        "3. Khi nhấn vào một khuyến mãi\n" +
+                        "   - Bước 1: Thông tin khuyến mãi sẽ hiển thị bên phải\n" +
+                        "   - Bước 2: Có thể nhập thông tin mới và nhấn nút sửa\n" +
+                        "   - Bước 3: Có thể nhấn nút xóa khuyến mãi\n" +
+                        "   - Bước 4: Có thể nhấn nút in QR cho khuyến mãi\n" +
+                        "4. Tìm kiếm khuyến mãi\n" +
+                        "   - Bước 1: Nhập thông tin khuyến mãi cần tìm ở bộ lọc bên dưới\n" +
+                        "   - Bước 2: Nhấn nút tìm kiếm\n" +
+                        "   - Bước 3: Nhấn nút xóa trắng để làm mới bộ lọc";
                 break;
             case "nhanvien":
                 content = "Quản lý nhân viên:\n\n" +
-                        "1. Chỉ quản lý có quyền truy cập\n" +
-                        "2. Thêm/Sửa/Xóa nhân viên\n" +
-                        "3. Phân quyền chức năng\n" +
-                        "4. Xem lịch sử làm việc\n" +
-                        "5. Quản lý tài khoản đăng nhập";
+                        "1. Trang hiển thị danh sách nhân viên\n" +
+                        "2. Thêm nhân viên\n" +
+                        "   - Bước 1: Nhấn nút dấu + cột bên góc phải trang\n" +
+                        "   - Bước 2: Nhập thông tin nhân viên vào form bên phải\n" +
+                        "   - Bước 3: Nhấn nút xác nhận\n" +
+                        "3. Khi nhấn vào một nhân viên\n" +
+                        "   - Bước 1: Nhập thông tin mới cần sửa vào formn\n" +
+                        "   - Bước 2: Nhấn nút lưu thay đổi\n" +
+                        "   - Bước 3: Có thể nhấn nút xóa nhân viên\n" +
+                        "4. Tìm kiếm nhân viên\n" +
+                        "   - Bước 1: Nhập thông tin nhân viên cần tìm vào ô tìm kiếm ở trên\n" +
+                        "   - Bước 2: Nhấn nút tìm\n";
+                break;
+            case "menu":
+                content = "Quản lý menu:\n\n" +
+                        "1. Trang hiển thị danh sách món ăn\n" +
+                        "2. Thêm món mới\n" +
+                        "   - Bước 1: Nhấn nút dấu + cột bên góc phải trang\n" +
+                        "   - Bước 2: Nhập thông tin món vào form bên phải\n" +
+                        "   - Bước 3: Nhấn nút thêm mới\n" +
+                        "3. Khi nhấn vào một món ăn\n" +
+                        "   - Bước 1: Nhập thông tin mới cần sửa vào formn\n" +
+                        "   - Bước 2: Nhấn nút lưu thay đổi\n" +
+                        "   - Bước 3: Có thể nhấn nút xóa món ăn\n" +
+                        "4. Tìm kiếm món ăn\n" +
+                        "   - Bước 1: Nhập thông tin món cần tìm vào ô tìm kiếm ở trên\n" +
+                        "   - Bước 2: Nhấn nút tìm\n" +
+                        "   - Bước 3: Lọc các loại món ăn ở ô combobox trên thanh tìm kiếm\n";
                 break;
             default:
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
