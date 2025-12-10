@@ -27,11 +27,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class BanGiaoCaController {
-    @FXML private VBox vboxHoaDon;
-    @FXML private TextField txtCaLam,txtTGVC,txtsLHD,txtSoTienMat,txtSoTienCK,txtTongTien;
-    @FXML private TextArea taMoTa;
-    @FXML private Label lblTienMat,lblCKhoan,lblsoHD,lblDThu;
-    @FXML private Button btnKetCa;
+    @FXML
+    private VBox vboxHoaDon;
+    @FXML
+    private TextField txtCaLam, txtTGVC, txtsLHD, txtSoTienMat, txtSoTienCK, txtTongTien;
+    @FXML
+    private TextArea taMoTa;
+    @FXML
+    private Label lblTienMat, lblCKhoan, lblsoHD, lblDThu;
+    @FXML
+    private Button btnKetCa;
 
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private NhanVien nhanVien;
@@ -148,27 +153,31 @@ public class BanGiaoCaController {
         PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
         String maPhieu = phieuKCDAO.generateNewMaPhieu();
 
+        if (isEmpty(txtsLHD, "Số hóa đơn không được để trống!")) return;
+        if (isEmpty(txtSoTienMat, "Số tiền mặt không được để trống!")) return;
+        if (isEmpty(txtSoTienCK, "Số tiền chuyển khoản không được để trống!")) return;
+        if (isEmpty(txtTongTien, "Tổng tiền không được để trống!")) return;
         if (!isNumeric(txtsLHD.getText())) {
-            AlertCus.show("Thông báo lỗi","Số hóa đơn phải là số!");
+            AlertCus.show("Thông báo lỗi", "Số hóa đơn phải là số!");
             return;
         }
         if (!isNumeric(txtSoTienMat.getText())) {
-            AlertCus.show("Thông báo lỗi","Số tiền mặt phải là số!");
+            AlertCus.show("Thông báo lỗi", "Số tiền mặt phải là số!");
             return;
         }
         if (!isNumeric(txtSoTienCK.getText())) {
-            AlertCus.show("Thông báo lỗi","Số tiền chuyển khoản phải là số!");
+            AlertCus.show("Thông báo lỗi", "Số tiền chuyển khoản phải là số!");
             return;
         }
         if (!isNumeric(txtTongTien.getText())) {
-            AlertCus.show("Thông báo lỗi","Số tổng tiền phải là số!");
+            AlertCus.show("Thông báo lỗi", "Số tổng tiền phải là số!");
             return;
         }
         boolean ca = txtCaLam.getText().equals("Ca sáng") ? false : true;
         int soHoaDon = Integer.parseInt(txtsLHD.getText());
         double tongTM = Double.parseDouble(txtSoTienMat.getText());
         double tongCK = Double.parseDouble(txtSoTienCK.getText());
-        double chenhLech = Double.parseDouble(txtTongTien.getText()) - (tongTM+tongCK);
+        double chenhLech = Double.parseDouble(txtTongTien.getText()) - (tongTM + tongCK);
 
         PhieuKetCa phieu = new PhieuKetCa(
                 maPhieu,
@@ -185,9 +194,9 @@ public class BanGiaoCaController {
         if (answer) {
             boolean success = new PhieuKetCaDAO().insert(phieu);
             if (success) {
-                AlertCus.show("Bàn giao ca","Đã lưu báo cáo kết ca!");
+                AlertCus.show("Bàn giao ca", "Đã lưu báo cáo kết ca!");
             } else {
-                AlertCus.show("Bàn giao ca","Lỗi lưu báo cáo kết ca!");
+                AlertCus.show("Bàn giao ca", "Lỗi lưu báo cáo kết ca!");
             }
         }
     }
@@ -201,4 +210,13 @@ public class BanGiaoCaController {
             return false;
         }
     }
+
+    private boolean isEmpty(TextField txt, String message) {
+        if (txt.getText().trim().isEmpty()) {
+            AlertCus.show("Thông báo lỗi", message);
+            return true;
+        }
+        return false;
+    }
 }
+

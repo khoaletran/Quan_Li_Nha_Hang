@@ -129,10 +129,10 @@ public class PhieuKetCaDAO {
         String max = getMaxMaPhieu();
 
         int next = 1;
-        if (max != null && max.startsWith("PK")) {
+        if (max != null && max.startsWith("MP")) {
             next = Integer.parseInt(max.substring(2)) + 1;
         }
 
-        return String.format("PK%04d", next);
+        return String.format("MP%04d", next);
     }
 }
