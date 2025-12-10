@@ -39,34 +39,21 @@ import java.util.List;
 
 public class QLBanController {
 
-    @FXML
-    private FlowPane flowPaneBan;
-    @FXML
-    private Label lblKhuVuc;
-    @FXML
-    private Label lblMaBan;
-    @FXML
-    private Label lblSoLuong, btnAddBan,lblSearchBtn;
-    @FXML
-    private Button btnModalCancel, btnModalSave;
-    @FXML
-    private ComboBox<String> comboDanhMuc;
-    @FXML
-    private ComboBox<String> comboKhuVuc;
-    @FXML
-    private VBox overlayModal;
-    @FXML
-    private StackPane modalLayer;
-    @FXML
-    private StackPane rootPane;
-    @FXML
-    private Rectangle modalBg;
-    @FXML
-    private ComboBox comboModalLoaiBan, comboModalKhuVuc;
-    @FXML
-    private TextField txtModalMaBan,txtSearchTop;
+    @FXML private FlowPane flowPaneBan;
+    @FXML private Label lblKhuVuc;
+    @FXML private Label lblMaBan;
+    @FXML private Label lblSoLuong, btnAddBan,lblSearchBtn,btnDeleteBan;
+    @FXML private Button btnModalCancel, btnModalSave;
+    @FXML private ComboBox<String> comboDanhMuc;
+    @FXML private ComboBox<String> comboKhuVuc;
+    @FXML private VBox overlayModal;
+    @FXML private StackPane modalLayer;
+    @FXML private StackPane rootPane;
+    @FXML private Rectangle modalBg;
+    @FXML private ComboBox comboModalLoaiBan, comboModalKhuVuc;
+    @FXML private TextField txtModalMaBan,txtSearchTop;
     private List<Ban> dsBan;
-
+    private boolean deleteMode = false;
     private final BanDAO banDAO = new BanDAO();
     private final LoaiBanDAO loaiBanDAO = new LoaiBanDAO();
     private final KhuVucDAO khuVucDAO = new KhuVucDAO();
@@ -111,6 +98,19 @@ public class QLBanController {
             timKiemBan(keyword);
         });
 
+        btnDeleteBan.setOnMouseClicked(e -> {
+            deleteMode = !deleteMode;
+
+            if (deleteMode) {
+                btnDeleteBan.setStyle("-fx-text-fill: black; -fx-font-weight: bold;-fx-background-color: #c8c7c7");
+//                AlertCus.show("Chế độ xóa", "ĐÃ bật chế độ xóa.\nHãy double click vào bàn để xóa!");
+            } else {
+                btnDeleteBan.setStyle("");
+//                AlertCus.show("Chế độ xóa", "ĐÃ tắt chế độ xóa.");
+            }
+        });
+
+
         txtSearchTop.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 lblSearchBtn.fireEvent(new MouseEvent(
@@ -142,7 +142,7 @@ public class QLBanController {
         card.getStyleClass().add("menu-item");
 
         card.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
+            if (deleteMode && event.getClickCount() == 2) {
                 xoaBan(ban);
             }
         });

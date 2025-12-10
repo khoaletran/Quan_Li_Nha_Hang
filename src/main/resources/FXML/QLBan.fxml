@@ -42,6 +42,7 @@
                             <ComboBox fx:id="comboKhuVuc" prefWidth="140" promptText="Khu vực" />
 
                             <!-- Nút thêm bàn -->
+                            <Label fx:id="btnDeleteBan" styleClass="menu-add-btn" text="-" />
                             <Label fx:id="btnAddBan" styleClass="menu-add-btn" text="+" />
                         </HBox>
 

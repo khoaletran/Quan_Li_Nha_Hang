@@ -59,6 +59,8 @@
     -fx-background-radius: 8;
     -fx-cursor: hand;
     -fx-font-weight: bold;
+    -fx-min-width: 40;
+    -fx-alignment: center;
 }
 
 .menu-add-btn:hover {
