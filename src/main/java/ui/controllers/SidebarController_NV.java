@@ -178,7 +178,7 @@ public class SidebarController_NV {
             }
             case 5 -> {
                 hideSubMenu();
-                mainController.setCenterContent("/FXML/HoTro.fxml");
+                mainController.setCenterContent("/FXML/HoTroNV.fxml");
                 setMainSelected(btnHoTro);
             }
             case 6 -> {
