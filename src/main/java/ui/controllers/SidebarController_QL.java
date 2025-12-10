@@ -60,7 +60,7 @@ public class SidebarController_QL {
             case 5 -> mainController.setCenterContent("/FXML/KhuyenMai.fxml");
             case 6 -> mainController.setCenterContent("/FXML/ChinhSach.fxml");
             case 7 -> mainController.setCenterContent("/FXML/ThongKe.fxml");
-            case 8 -> mainController.setCenterContent("/FXML/HoTro.fxml");
+            case 8 -> mainController.setCenterContent("/FXML/HoTroQL.fxml");
         }
     }           
 
@@ -114,7 +114,7 @@ public class SidebarController_QL {
             mainController.setCenterContent("/FXML/ThongKe.fxml");
             setSelected(btnThongKe);
         } else if (source == btnHoTro) {
-            mainController.setCenterContent("/FXML/HoTro.fxml");
+            mainController.setCenterContent("/FXML/HoTroQL.fxml");
             setSelected(btnHoTro);
         } else if (source == btnDangXuat) {
             ui.DangXuat.showDialog();

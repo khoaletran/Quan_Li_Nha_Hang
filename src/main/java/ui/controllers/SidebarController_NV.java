@@ -58,10 +58,68 @@ public class SidebarController_NV {
     // =================== TOGGLE / SHOW / HIDE SUBMENU ===================
     @FXML
     private void toggleSubMenu() {
-        if (isSubMenuVisible) hideSubMenu();
-        else {
-            showSubMenu();
-            setMainSelected(btnQuanLiDatBan);
+        boolean isVisible = subMenuDatBan.isVisible();
+        subMenuDatBan.setVisible(!isVisible);
+        subMenuDatBan.setManaged(!isVisible);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(200), subMenuDatBan);
+        ft.setFromValue(isVisible ? 1.0 : 0.0);
+        ft.setToValue(isVisible ? 0.0 : 1.0);
+        ft.play();
+
+        if (!isVisible) setMainSelected(btnQuanLiDatBan);
+    }
+
+    // Xử lý các nút
+    @FXML
+    private void handleMenuAction(javafx.event.ActionEvent event) {
+        if (mainController == null) return;
+        Object source = event.getSource();
+
+        boolean isSubItem = (source == btnDatBan || source == btnCheckIn || source == btnCheckOut || source == btnCapNhatDonBan);
+
+
+        if (!isSubItem && source != btnQuanLiDatBan && subMenuDatBan.isVisible()) {
+            hideSubMenu();
+            clearAllSelected();
+        }
+
+        // ===================== ĐIỀU HƯỚNG =====================
+        if (source == btnDashboard) {
+            mainController.setCenterContent("/FXML/DashBoard.fxml");
+            setMainSelected(btnDashboard);
+
+        } else if (source == btnDatBan) {
+            mainController.setCenterContent("/FXML/DatBan.fxml");
+            setSubSelected(btnDatBan, btnQuanLiDatBan);
+
+        } else if (source == btnCheckIn) {
+            mainController.setCenterContent("/FXML/CheckIn.fxml");
+            setSubSelected(btnCheckIn, btnQuanLiDatBan);
+
+        } else if (source == btnCheckOut) {
+            mainController.setCenterContent("/FXML/CheckOut.fxml");
+            setSubSelected(btnCheckOut, btnQuanLiDatBan);
+
+        } else if (source == btnCapNhatDonBan) {
+            mainController.setCenterContent("/FXML/QLDatBan.fxml");
+            setSubSelected(btnCapNhatDonBan, btnQuanLiDatBan);
+
+        } else if (source == btnQuanLiThanhVien) {
+            mainController.setCenterContent("/FXML/QLThanhVien.fxml");
+            setMainSelected(btnQuanLiThanhVien);
+
+        } else if (source == btnTraCuu) {
+            mainController.setCenterContent("/FXML/TraCuuHoaDon.fxml");
+            setMainSelected(btnTraCuu);
+
+        } else if (source == btnHoTro) {
+            mainController.setCenterContent("/FXML/HoTroNV.fxml");
+            setMainSelected(btnHoTro);
+
+        } else if (source == btnKetCa) {
+            mainController.setCenterContent("/FXML/BanGiaoCa.fxml");
+            setMainSelected(btnKetCa);
         }
     }
 
@@ -175,49 +233,4 @@ public class SidebarController_NV {
         currentSubSelected = null;
     }
 
-    // =================== XỬ LÝ CLICK CHUỘT ===================
-    @FXML
-    private void handleMenuAction(javafx.event.ActionEvent event) {
-        if (mainController == null) return;
-        Object source = event.getSource();
-
-        boolean isSubItem = (source == btnDatBan || source == btnCheckIn || source == btnCheckOut || source == btnCapNhatDonBan);
-
-        if (!isSubItem && source != btnQuanLiDatBan && subMenuDatBan.isVisible()) {
-            hideSubMenu();
-            clearAllSelected();
-        }
-
-        // Main + Sub
-        if (source == btnDashboard) {
-            mainController.setCenterContent("/FXML/DashBoard.fxml");
-            setMainSelected(btnDashboard);
-        } else if (source == btnQuanLiDatBan) {
-            toggleSubMenu();
-        } else if (source == btnDatBan) {
-            mainController.setCenterContent("/FXML/DatBan.fxml");
-            setSubSelected(btnDatBan, btnQuanLiDatBan);
-        } else if (source == btnCheckIn) {
-            mainController.setCenterContent("/FXML/CheckIn.fxml");
-            setSubSelected(btnCheckIn, btnQuanLiDatBan);
-        } else if (source == btnCheckOut) {
-            mainController.setCenterContent("/FXML/CheckOut.fxml");
-            setSubSelected(btnCheckOut, btnQuanLiDatBan);
-        } else if (source == btnCapNhatDonBan) {
-            mainController.setCenterContent("/FXML/QLDatBan.fxml");
-            setSubSelected(btnCapNhatDonBan, btnQuanLiDatBan);
-        } else if (source == btnQuanLiThanhVien) {
-            mainController.setCenterContent("/FXML/QLThanhVien.fxml");
-            setMainSelected(btnQuanLiThanhVien);
-        } else if (source == btnTraCuu) {
-            mainController.setCenterContent("/FXML/TraCuuHoaDon.fxml");
-            setMainSelected(btnTraCuu);
-        } else if (source == btnHoTro) {
-            mainController.setCenterContent("/FXML/HoTro.fxml");
-            setMainSelected(btnHoTro);
-        } else if (source == btnKetCa) {
-            mainController.setCenterContent("/FXML/BanGiaoCa.fxml");
-            setMainSelected(btnKetCa);
-        }
-    }
 }
