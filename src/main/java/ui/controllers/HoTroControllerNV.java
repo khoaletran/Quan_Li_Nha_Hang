@@ -135,7 +135,7 @@ public class HoTroControllerNV implements Initializable {
 
         helpCardList.add(new HelpCard(
                 "👥", "Quản Lý Thành Viên", "Quản lý khách hàng là thành viên", "#9b59b6",
-                "nhanvien"
+                "khachhang"
         ));
 
         helpCardList.add(new HelpCard(
@@ -145,7 +145,7 @@ public class HoTroControllerNV implements Initializable {
 
         helpCardList.add(new HelpCard(
                 "📦", "Hóa Đơn", "Quản lý hóa đơn", "#f39c12",
-                "kho"
+                "hoadon"
         ));
 
 //        helpCardList.add(new HelpCard(
@@ -462,30 +462,80 @@ private void timKiemHelpCards(String keyword) {
         switch (card.getTag()) {
             case "dashboard":
                 content = "Dashboard cung cấp:\n\n" +
-                        "1. Thông tin nhân viên đăng nhập\n" +
-                        "2. Thống kê đơn hàng theo trạng thái\n" +
-                        "3. Thống kê khu vực\n" +
-                        "4. Doanh thu và số khách\n" +
-                        "5. Biểu đồ top 5 món bán chạy\n" +
-                        "6. Biểu đồ lượng khách theo giờ\n" +
-                        "7. Thông báo check-in và tồn kho";
+                        "- Thông tin nhân viên đăng nhập\n" +
+                        "- Thông báo các đơn đặt bàn, check in\n" +
+                        "- Thống kê số đơn\n" +
+                        "- Thống kê khu vực\n" +
+                        "- Thống kê doanh thu và số khách\n" +
+                        "- Biểu đồ top 5 món bán chạy\n" +
+                        "- Biểu đồ lượng khách theo giờ\n";
                 break;
-            case "khuyenmai":
-                content = "Quản lý khuyến mãi:\n\n" +
-                        "1. Thêm khuyến mãi mới\n" +
-                        "2. Xem danh sách khuyến mãi\n" +
-                        "3. Lọc theo trạng thái và ưu đãi\n" +
-                        "4. Sửa/Xóa khuyến mãi\n" +
-                        "5. In mã QR cho khuyến mãi\n" +
-                        "6. Chọn món áp dụng khuyến mãi";
+//            case "khuyenmai":
+//                content = "Quản lý khuyến mãi:\n\n" +
+//                        "1. Thêm khuyến mãi mới\n" +
+//                        "2. Xem danh sách khuyến mãi\n" +
+//                        "3. Lọc theo trạng thái và ưu đãi\n" +
+//                        "4. Sửa/Xóa khuyến mãi\n" +
+//                        "5. In mã QR cho khuyến mãi\n" +
+//                        "6. Chọn món áp dụng khuyến mãi";
+//                break;
+            case "khachhang":
+                content = "Quản lý thành viên:\n\n" +
+                        "1. Tự động thêm khách hàng mới khi đặt bàn\n" +
+                        "2. Thêm khách hàng bằng tay:\n" +
+                        "   - Bước 1: Nhấn nút + bên góc phải trên màn hình\n" +
+                        "   - Bước 2: Nhập thông tin khách hàng\n" +
+                        "   - Bước 3: Nhấn thêm\n" +
+                        "3. Sửa khách hàng\n" +
+                        "   - Bước 1: Nhấn vào khách hàng cần sửa\n" +
+                        "   - Bước 2: Nhập thông tin mới vào form\n" +
+                        "   - Bước 3: Nhấn xác nhận\n" +
+                        "4. Tìm kiếm khách hàng\n" +
+                        "   - Bước 1: Nhập sdt hoặc mã khách hàng vào ô tìm kiếm\n" +
+                        "   - Bước 2: Nhấn tìm kiếm\n";
                 break;
-            case "nhanvien":
-                content = "Quản lý nhân viên:\n\n" +
-                        "1. Chỉ quản lý có quyền truy cập\n" +
-                        "2. Thêm/Sửa/Xóa nhân viên\n" +
-                        "3. Phân quyền chức năng\n" +
-                        "4. Xem lịch sử làm việc\n" +
-                        "5. Quản lý tài khoản đăng nhập";
+            case "datban":
+                content = "Quản lý đặt bàn:\n\n" +
+                        "1. Đặt bàn\n" +
+                        "   - Bước 1: Nhập số lượng người và chọn thời gian đặt bàn\n" +
+                        "   - Bước 2: Chọn loại bàn phù hợp\n" +
+                        "   - Bước 3: Hệ thống tự chuyển sang trang chọn món\n" +
+                        "   - Bước 4: Nhập thông tin khách hàng\n" +
+                        "   - Bước 5: Chọn món ăn và số lượng\n" +
+                        "   - Bước 6: Nhấn đặt bàn\n" +
+                        "2. Check In\n" +
+                        "   - Bước 1: Trang này hiển thị 2 danh sách đơn đặt trước và danh sách chờ\n" +
+                        "   - Bước 2: Chọn đơn cần check in, xem thông tin đơn ở from bên phải\n" +
+                        "   - Bước 3: Nhấn checkin\n" +
+                        "   - Bước 4: Nhập các thông tin cần lọc để tìm kiếm đơn ở bên dưới trang\n" +
+                        "3. Check Out\n" +
+                        "   - Bước 1: Trang hiển thị danh sách các hóa đơn chưa check out\n" +
+                        "   - Bước 2: Nhập thông tin tìm kiếm đơn vào ô tìm kiếm trên cùng\n" +
+                        "   - Bước 3: Chọn một đơn cầnc check out\n" +
+                        "   - Bước 4: Khi chọn đơn sẽ hiển thị danh sách các món ăn bên dưới và thông tin đơn hàng bên phải\n" +
+                        "   - Bước 5: Chọn phương thức thanh toán chuyển khoản hay tiền mặt\n" +
+                        "   - Bước 6: Thực hiện thanh toán và nhấn nút thanh toán\n" +
+                        "4. Cập nhật đơn bàn\n" +
+                        "   - Bước 1: Trang hiển thị danh sách các đơn đặt trước và đơn đã nhận\n" +
+                        "   - Bước 2: Chọn một đơn sẽ hiển thị thông tin đơn bên phải\n" +
+                        "   - Bước 3: Có thể thay đổi món ăn cho đơn, nhưng không thể xóa món của đơn đã nhận\n" +
+                        "   - Bước 4: Chỉ có thể hủy được đơn đặt trước";
+                break;
+            case "hoadon":
+                content = "Quản lý hóa đơn:\n" +
+                        "1. Trang hiển thị danh sách các hoá đơn:\n" +
+                        "   - Có 3 trạng thái: Đặt trước, đang phục vụ, đã thanh toán\n" +
+                        "2. Khi nhấn vào đơn sẽ hiển thị thông tin đơn đó bên phải\n" +
+                        "   - Bước 1: Nhấn nút in hóa đơn nếu muốn\n" +
+                        "3. Tìm kiếm hóa đơn\n" +
+                        "   - Bước 1: Nhập thông tin đơn cần tìm\n" +
+                        "   - Bước 2: Nhấn nút tìm kiếm\n" +
+                        "   - Bước 3: Có thể nhấn nút xóa trắng để nhập thông tin khác\n";
+                break;
+            case "caidat":
+                content = "Vấn đề tài khoản:\n" +
+                        "1. Có thể thay đổi mật khẩu bằng cách nhấn nút đổi mật khẩu ở trang dashboard\n" +
+                        "2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi\n";
                 break;
             default:
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
