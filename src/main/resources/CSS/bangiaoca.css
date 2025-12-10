@@ -5,25 +5,11 @@
     -fx-background-radius: 25;
     -fx-padding: 8 15;
     -fx-border-radius: 25;
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-background-insets: 0;
-    -fx-effect: none;
-    -fx-focus-traversable: false;
-    -fx-highlight-fill: transparent;
-    -fx-highlight-text-fill: black;
 }
+
 .search-field:focused {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
     -fx-border-color: transparent;
-    -fx-background-insets: 0;
     -fx-effect: none;
-    -fx-background-color: transparent;
-    -fx-highlight-fill: transparent;
-    -fx-highlight-text-fill: black;
 }
 
 .invoice-card {
@@ -153,22 +139,6 @@
     -fx-text-fill: #888;
 }
 
-.search-field {
-    -fx-background-color: transparent;
-    -fx-background-radius: 20;
-    -fx-border-color: transparent;
-    -fx-border-radius: 20 ;
-    -fx-padding: 5 12;
-    -fx-font-size: 13;
-    -fx-prompt-text-fill: #999;
-}
-
-.search-field:focused {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #ff9d7d;
-    -fx-effect: dropshadow(gaussian, rgba(255,77,77,0.15), 6, 0, 0, 0);
-}
-
 .scroll_order {
     -fx-background-color: #EFEFEF;
     -fx-background-radius: 12;
@@ -233,6 +203,28 @@
     -fx-pref-height: 0;
     -fx-pref-width: 0;
 }
+
+.summary-title-bar {
+    -fx-background-color: white;
+    -fx-padding: 8 15;
+    -fx-alignment: CENTER;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+}
+
+.summary-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.invoice-total {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+
+
 
 
 
