@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
@@ -34,7 +35,7 @@ public class MainController_QL {
             }
         });
     }
-    private void addKeyboardShortcuts(javafx.scene.Scene scene) {
+    private void addKeyboardShortcuts(Scene scene) {
     scene.setOnKeyPressed(event -> {
         switch (event.getCode()) {
             case DIGIT1 -> sidebar_QLController.selectTab(1);

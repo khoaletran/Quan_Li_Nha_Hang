@@ -4,8 +4,8 @@ import entity.NhanVien;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import java.io.IOException;
@@ -31,8 +31,35 @@ public class MainController_NV {
         if (sidebar_NVController != null) {
             sidebar_NVController.setMainController(this);
         }
-
+        mainContent.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                addKeyboardShortcuts(newScene);
+            }
+        });
     }
+
+    private void addKeyboardShortcuts(Scene scene) {
+    scene.setOnKeyPressed(event -> {
+
+        switch (event.getCode()) {
+
+            // MENU CHÍNH NV
+            case DIGIT1 -> sidebar_NVController.selectTab(1);
+            case DIGIT2 -> sidebar_NVController.selectTab(2);
+            case DIGIT3 -> sidebar_NVController.selectTab(3);
+            case DIGIT4 -> sidebar_NVController.selectTab(4);
+            case DIGIT5 -> sidebar_NVController.selectTab(5);
+            case DIGIT6 -> sidebar_NVController.selectTab(6);
+
+            // SUBMENU:
+            case F1 -> sidebar_NVController.selectTab(21); // Đặt bàn
+            case F2 -> sidebar_NVController.selectTab(22);
+            case F3 -> sidebar_NVController.selectTab(23);
+            case F4 -> sidebar_NVController.selectTab(24);
+        }
+    });
+}
+
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
