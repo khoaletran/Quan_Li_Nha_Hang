@@ -268,4 +268,40 @@ public class PhanTramGiaBanDAO {
         }
         return null;
     }
+    public static boolean existsTodayForMon(String maMon) {
+    String sql = """
+        SELECT 1 FROM PhanTramGiaBan
+        WHERE maMon = ? AND ngayApDung = CAST(GETDATE() AS DATE)
+    """;
+
+    try (Connection con = connectDB.getInstance().getNewConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, maMon);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();   // TRUE nếu đã tồn tại
+    } catch (SQLException e) {
+        System.err.println("existsTodayForMon(): " + e.getMessage());
+        return true; // để an toàn: nếu lỗi → chặn update
+    }
+}
+public static boolean existsTodayForLoaiMon(String maLoaiMon) {
+    String sql = """
+        SELECT 1 FROM PhanTramGiaBan
+        WHERE maLoaiMon = ? AND maMon IS NULL
+            AND ngayApDung = CAST(GETDATE() AS DATE)
+    """;
+
+    try (Connection con = connectDB.getInstance().getNewConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, maLoaiMon);
+        ResultSet rs = ps.executeQuery();
+        return rs.next(); 
+    } catch (SQLException e) {
+        System.err.println("existsTodayForLoaiMon(): " + e.getMessage());
+        return true;
+    }
+}
+
 }

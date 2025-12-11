@@ -29,7 +29,8 @@ public class ChiTietHDDAO {
         // ===== HÓA ĐƠN =====
         HoaDon hd = new HoaDon();
         hd.setMaHD(rs.getString("maHD"));
-
+        hd.setTgLapHD(rs.getTimestamp("tgLapHD") != null
+                        ? rs.getTimestamp("tgLapHD").toLocalDateTime() : null);
         // ===== CHI TIẾT HÓA ĐƠN =====
         ChiTietHoaDon ct = new ChiTietHoaDon();
         ct.setHoaDon(hd);
@@ -49,53 +50,65 @@ public class ChiTietHDDAO {
     // 1. GET ALL CHI TIẾT HÓA ĐƠN THEO MÃ HÓA ĐƠN (FULL JOIN)
     // ============================================================================
     public static List<ChiTietHoaDon> getAllByMaHD(String maHD) {
-        List<ChiTietHoaDon> list = new ArrayList<>();
+    List<ChiTietHoaDon> list = new ArrayList<>();
 
-        String sql = """
-            SELECT
-                cthd.maHD,
-                cthd.maMon,
-                cthd.soLuong,
-            
-                m.tenMon, m.giaGoc, m.hinhAnh,
-                lm.maLoaiMon, lm.tenLoaiMon,
-            
-                COALESCE(ptMon.phanTramLoi, ptLoai.phanTramLoi, 0) AS phanTramLoi
-            FROM ChiTietHoaDon cthd
-            JOIN Mon m ON cthd.maMon = m.maMon
-            JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
-            
-            OUTER APPLY (
-                SELECT TOP 1 p1.phanTramLoi
-                FROM PhanTramGiaBan p1
-                WHERE p1.maMon = m.maMon          -- theo món
-                ORDER BY p1.ngayApDung DESC       -- mới nhất
-            ) ptMon
-            
-            OUTER APPLY (
-                SELECT TOP 1 p3.phanTramLoi
-                FROM PhanTramGiaBan p3
-                WHERE p3.maLoaiMon = lm.maLoaiMon -- theo loại
-                  AND p3.maMon IS NULL
-                ORDER BY p3.ngayApDung DESC
-            ) ptLoai
-            
-            WHERE cthd.maHD = ?
-        """;
+    String sql = """
+        SELECT
+            cthd.maHD,
+            cthd.maMon,
+            cthd.soLuong,
+            hd.tgLapHD,
 
-        try (Connection conn = connectDB.getInstance().getNewConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            m.tenMon, m.giaGoc, m.hinhAnh,
+            lm.maLoaiMon, lm.tenLoaiMon,
 
-            ps.setString(1, maHD);
-            ResultSet rs = ps.executeQuery();
+            COALESCE(ptMon.phanTramLoi, ptLoai.phanTramLoi, 0) AS phanTramLoi
 
-            while (rs.next()) list.add(mapCTHDFull(rs));
+        FROM ChiTietHoaDon cthd
+        JOIN Mon m ON cthd.maMon = m.maMon
+        JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
+        JOIN HoaDon hd ON hd.maHD = cthd.maHD
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
+        -- ===============================
+        -- 1) Lấy PT theo Món tại thời điểm tgLapHD
+        -- ===============================
+        OUTER APPLY (
+            SELECT TOP 1 p1.phanTramLoi
+            FROM PhanTramGiaBan p1
+            WHERE p1.maMon = m.maMon
+              AND p1.ngayApDung <= hd.tgLapHD      -- <= thời điểm hóa đơn
+            ORDER BY p1.ngayApDung DESC           -- gần nhất
+        ) ptMon
+
+        -- ===============================
+        -- 2) Lấy PT theo Loại (fallback) tại tgLapHD
+        -- ===============================
+        OUTER APPLY (
+            SELECT TOP 1 p3.phanTramLoi
+            FROM PhanTramGiaBan p3
+            WHERE p3.maLoaiMon = lm.maLoaiMon
+              AND p3.maMon IS NULL
+              AND p3.ngayApDung <= hd.tgLapHD      -- <= thời điểm hóa đơn
+            ORDER BY p3.ngayApDung DESC
+        ) ptLoai
+
+        WHERE cthd.maHD = ?
+    """;
+
+    try (Connection conn = connectDB.getInstance().getNewConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, maHD);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) list.add(mapCTHDFull(rs));
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return list;
+}
+
 
 
     // ============================================================================
@@ -174,41 +187,46 @@ public class ChiTietHDDAO {
     // 6. LẤY TOÀN BỘ CHI TIẾT HÓA ĐƠN (JOIN FULL)
     // ============================================================================
     public static List<ChiTietHoaDon> getAll() {
-        List<ChiTietHoaDon> ds = new ArrayList<>();
+            List<ChiTietHoaDon> ds = new ArrayList<>();
 
-        String sql = """
-            SELECT 
-                cthd.maHD, cthd.maMon, cthd.soLuong,
+            String sql = """
+                SELECT 
+        cthd.maHD, cthd.maMon, cthd.soLuong, hd.tgLapHD,
 
-                m.tenMon, m.giaGoc, m.hinhAnh,
-                lm.maLoaiMon, lm.tenLoaiMon,
+        m.tenMon, m.giaGoc, m.hinhAnh,
+        lm.maLoaiMon, lm.tenLoaiMon,
 
-                COALESCE(ptMon.phanTramLoi, ptLoai.phanTramLoi, 0) AS phanTramLoi
+        COALESCE(ptMon.phanTramLoi, ptLoai.phanTramLoi, 0) AS phanTramLoi
 
-            FROM ChiTietHoaDon cthd
-            JOIN Mon m ON cthd.maMon = m.maMon
-            JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
+    FROM ChiTietHoaDon cthd
+    JOIN Mon m ON cthd.maMon = m.maMon
+    JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
+    JOIN HoaDon hd ON hd.maHD = cthd.maHD
 
-            LEFT JOIN (
-                SELECT p1.maMon, p1.phanTramLoi
-                FROM PhanTramGiaBan p1
-                WHERE p1.ngayApDung = (
-                    SELECT MAX(p2.ngayApDung)
-                    FROM PhanTramGiaBan p2
-                    WHERE p2.maMon = p1.maMon
-                )
-            ) ptMon ON ptMon.maMon = m.maMon
+    LEFT JOIN (
+        SELECT p1.maMon, p1.phanTramLoi, p1.ngayApDung
+        FROM PhanTramGiaBan p1
+    ) ptMon ON ptMon.maMon = m.maMon
+        AND ptMon.ngayApDung = (
+            SELECT MAX(p2.ngayApDung)
+            FROM PhanTramGiaBan p2
+            WHERE p2.maMon = m.maMon
+                AND p2.ngayApDung <= hd.tgLapHD
+        )
 
-            LEFT JOIN (
-                SELECT p3.maLoaiMon, p3.phanTramLoi
-                FROM PhanTramGiaBan p3
-                WHERE p3.maMon IS NULL
-                  AND p3.ngayApDung = (
-                      SELECT MAX(p4.ngayApDung)
-                      FROM PhanTramGiaBan p4
-                      WHERE p4.maLoaiMon = p3.maLoaiMon AND p4.maMon IS NULL
-                  )
-            ) ptLoai ON ptLoai.maLoaiMon = lm.maLoaiMon
+    LEFT JOIN (
+        SELECT p3.maLoaiMon, p3.phanTramLoi, p3.ngayApDung
+        FROM PhanTramGiaBan p3
+        WHERE p3.maMon IS NULL
+    ) ptLoai ON ptLoai.maLoaiMon = lm.maLoaiMon
+            AND ptLoai.ngayApDung = (
+                SELECT MAX(p4.ngayApDung)
+                FROM PhanTramGiaBan p4
+                WHERE p4.maLoaiMon = lm.maLoaiMon
+                AND p4.maMon IS NULL
+                AND p4.ngayApDung <= hd.tgLapHD
+            );
+
         """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();

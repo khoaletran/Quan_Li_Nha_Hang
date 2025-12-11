@@ -431,8 +431,13 @@ public class ChinhSachController {
     private void setupLoaiMonEvent() {
         cbLoaiMon.setOnAction(e -> {
             selectedMon = null;
+            
             String selectedLoai = cbLoaiMon.getSelectionModel().getSelectedItem();
-
+            if (selectedLoai == null) {
+                txtTangPhanTram.clear();
+                loadFoodList();   // DÙNG HÀM SẴN CÓ
+                return;
+            }
             // Ẩn các field giá gốc, giá bán, giá lời
             txtGiaGoc.setVisible(false);
             txtTen.setVisible(false);
@@ -468,80 +473,111 @@ public class ChinhSachController {
     }
 
     @FXML
-    private void xacNhanPhanTramLoi() {
-        String phanTramText = txtTangPhanTram.getText().trim();
-        if (phanTramText.isEmpty()) {
-            AlertCus.show("Thông báo", "Chưa nhập phần trăm lời!");
+private void xacNhanPhanTramLoi() {
+    String phanTramText = txtTangPhanTram.getText().trim();
+    if (phanTramText.isEmpty()) {
+        AlertCus.show("Thông báo", "Chưa nhập phần trăm lời!");
+        return;
+    }
+
+    int phanTram;
+    try {
+        phanTram = Integer.parseInt(phanTramText);
+        if (phanTram < 0) {
+            AlertCus.show("Thông báo", "Phần trăm lời phải >= 0");
             return;
         }
+    } catch (NumberFormatException e) {
+        AlertCus.show("Thông báo", "Phần trăm lời không hợp lệ");
+        return;
+    }
 
-        int phanTram;
-        try {
-            phanTram = Integer.parseInt(phanTramText);
-            if (phanTram < 0) {
-                AlertCus.show("Thông báo", "Phần trăm lời phải >= 0");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            AlertCus.show("Thông báo", "Phần trăm lời không hợp lệ");
-            return;
-        }
+    // =========================================================
+    // 1) CẬP NHẬT CHO MÓN
+    // =========================================================
+    if (selectedMon != null) {
 
-        if (selectedMon != null) {
-            Mon.clearCachePTMon(selectedMon.getMaMon());
-            Mon.updateCachePTMon(selectedMon.getMaMon(), phanTram); 
-
-            PhanTramGiaBan pt = new PhanTramGiaBan();
-            PhanTramGiaBan latestPG = PhanTramGiaBanDAO.getLatest();
-            String maPGFinal = generateID(latestPG != null ? latestPG.getMaPTGB() : null, "PG");
-
-            pt.setMaPTGB(maPGFinal);
-            pt.setMon(selectedMon);
-            pt.setLoaiMon(selectedMon.getLoaiMon());
-            pt.setPhanTramLoi(phanTram);
-            pt.setNgayApDung(LocalDate.now());
-
-            boolean ok = PhanTramGiaBanDAO.insert(pt);
-            if (ok) {
-                AlertCus.show("Thông báo", "Cập nhật % lời cho món " + selectedMon.getTenMon() + " thành công!");
-            } else {
-                AlertCus.show("Thông báo", "Cập nhật thất bại!");
-            }
+        // --- CHẶN CẬP NHẬT TRONG NGÀY ---
+        if (PhanTramGiaBanDAO.existsTodayForMon(selectedMon.getMaMon())) {
+            AlertCus.show("Thông báo", "Hôm nay đã cập nhật phần trăm lời cho món này rồi!");
             resetFields();
             return;
         }
 
-        String tenLoai = cbLoaiMon.getSelectionModel().getSelectedItem();
-        if (tenLoai == null || tenLoai.isEmpty()) {
-            AlertCus.show("Thông báo", "Chưa chọn món hoặc loại món!");
-            return;
-        }
-
-        String maLoaiMon = LoaiMonDAO.getMaLoaiMonByTen(tenLoai);
-        if (maLoaiMon == null) {
-            AlertCus.show("Thông báo", "Không tìm thấy mã loại món");
-            return;
-        }
-
-        PhanTramGiaBan pt = new PhanTramGiaBan();
         PhanTramGiaBan latestPG = PhanTramGiaBanDAO.getLatest();
         String maPGFinal = generateID(latestPG != null ? latestPG.getMaPTGB() : null, "PG");
 
+        PhanTramGiaBan pt = new PhanTramGiaBan();
         pt.setMaPTGB(maPGFinal);
-        pt.setLoaiMon(new LoaiMon(maLoaiMon));
-        pt.setMon(null);
+        pt.setMon(selectedMon);
+        pt.setLoaiMon(selectedMon.getLoaiMon());
         pt.setPhanTramLoi(phanTram);
         pt.setNgayApDung(LocalDate.now());
 
         boolean ok = PhanTramGiaBanDAO.insert(pt);
+
         if (ok) {
-            AlertCus.show("Thông báo", "Cập nhật % lời cho loại món " + tenLoai + " thành công!");
-            txtTangPhanTram.setText(String.valueOf(phanTram));
+            AlertCus.show("Thông báo", 
+                "Cập nhật % lời cho món " + selectedMon.getTenMon() + " thành công!");
+
+            // UPDATE CACHE ĐÚNG LOGIC
+            Mon.clearCachePTMon(selectedMon.getMaMon());
+            Mon.updateCachePTMon(selectedMon.getMaMon(), phanTram);
         } else {
             AlertCus.show("Thông báo", "Cập nhật thất bại!");
         }
+
         resetFields();
+        return;
     }
+
+    // =========================================================
+    // 2) CẬP NHẬT CHO LOẠI MÓN
+    // =========================================================
+    String tenLoai = cbLoaiMon.getSelectionModel().getSelectedItem();
+    if (tenLoai == null || tenLoai.isEmpty()) {
+        AlertCus.show("Thông báo", "Chưa chọn món hoặc loại món!");
+        return;
+    }
+
+    String maLoaiMon = LoaiMonDAO.getMaLoaiMonByTen(tenLoai);
+    if (maLoaiMon == null) {
+        AlertCus.show("Thông báo", "Không tìm thấy mã loại món");
+        return;
+    }
+
+    // --- CHẶN CẬP NHẬT TRONG NGÀY ---
+    if (PhanTramGiaBanDAO.existsTodayForLoaiMon(maLoaiMon)) {
+        AlertCus.show("Thông báo", "Hôm nay đã cập nhật phần trăm lời cho loại món này rồi!");
+        resetFields();
+        return;
+    }
+
+    PhanTramGiaBan latestPG = PhanTramGiaBanDAO.getLatest();
+    String maPGFinal = generateID(latestPG != null ? latestPG.getMaPTGB() : null, "PG");
+
+    PhanTramGiaBan pt = new PhanTramGiaBan();
+    pt.setMaPTGB(maPGFinal);
+    pt.setLoaiMon(new LoaiMon(maLoaiMon));
+    pt.setMon(null);
+    pt.setPhanTramLoi(phanTram);
+    pt.setNgayApDung(LocalDate.now());
+
+    boolean ok = PhanTramGiaBanDAO.insert(pt);
+
+    if (ok) {
+        AlertCus.show("Thông báo", 
+            "Cập nhật % lời cho loại món " + tenLoai + " thành công!");
+
+    
+
+    } else {
+        AlertCus.show("Thông báo", "Cập nhật thất bại!");
+    }
+
+    resetFields();
+}
+
 
 
     @FXML

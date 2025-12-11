@@ -42,29 +42,31 @@ public class Mon {
     // 1. PTGB HIỆN TẠI (không theo ngày)
     // =====================================================
     public int getPhanTramGiaBanHienTai() {
+    // 1. Ưu tiên cache món riêng (nếu có)
+    if (CACHE_PT_MON.containsKey(maMon))
+        return CACHE_PT_MON.get(maMon);
 
-        // Ưu tiên lấy từ cache
-        if (CACHE_PT_MON.containsKey(maMon))
-            return CACHE_PT_MON.get(maMon);
-
-        if (CACHE_PT_LOAIMON.containsKey(loaiMon.getMaLoaiMon()))
-            return CACHE_PT_LOAIMON.get(loaiMon.getMaLoaiMon());
-
-        // Không có → gọi DB 1 lần duy nhất
-        var ptMon = PhanTramGiaBanDAO.getLatestForMon(maMon);
-        if (ptMon != null) {
-            CACHE_PT_MON.put(maMon, ptMon.getPhanTramLoi());
-            return ptMon.getPhanTramLoi();
-        }
-
-        var ptLoai = PhanTramGiaBanDAO.getLatestForLoaiMon(loaiMon.getMaLoaiMon());
-        if (ptLoai != null) {
-            CACHE_PT_LOAIMON.put(loaiMon.getMaLoaiMon(), ptLoai.getPhanTramLoi());
-            return ptLoai.getPhanTramLoi();
-        }
-
-        return 0;
+    // 2. Chưa có cache món → query DB món riêng trước (QUAN TRỌNG NHẤT)
+    var ptMon = PhanTramGiaBanDAO.getLatestForMon(maMon);
+    if (ptMon != null) {
+        CACHE_PT_MON.put(maMon, ptMon.getPhanTramLoi());
+        return ptMon.getPhanTramLoi();
     }
+
+    // 3. Không có % riêng → mới kiểm tra cache loại
+    String maLoai = loaiMon.getMaLoaiMon();
+    if (CACHE_PT_LOAIMON.containsKey(maLoai))
+        return CACHE_PT_LOAIMON.get(maLoai);
+
+    // 4. Cuối cùng mới query DB loại
+    var ptLoai = PhanTramGiaBanDAO.getLatestForLoaiMon(maLoai);
+    if (ptLoai != null) {
+        CACHE_PT_LOAIMON.put(maLoai, ptLoai.getPhanTramLoi());
+        return ptLoai.getPhanTramLoi();
+    }
+
+    return 0;
+}
     public static void updateCachePTMon(String maMon, int pt) {
         CACHE_PT_MON.put(maMon, pt);
     }
