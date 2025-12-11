@@ -105,7 +105,7 @@ public class LoginController {
                         ui.MainQL mainQL = new ui.MainQL();
                         Stage stage = new Stage();
                         mainQL.setNhanVienDangNhap(nv);
-                        mainQL.start(stage);
+                        mainQL.show(stage);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -122,7 +122,7 @@ public class LoginController {
                         Stage stage = new Stage();
                         main.setNhanVienDangNhap(nv);
                         main.setThoiGianVaoCa(LocalDateTime.now());
-                        main.start(stage);
+                        main.show(stage);
 
                     } catch (Exception e) {
                         e.printStackTrace();

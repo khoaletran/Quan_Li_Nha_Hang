@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class SidebarController_QL {
 
@@ -117,7 +118,8 @@ public class SidebarController_QL {
             mainController.setCenterContent("/FXML/HoTroQL.fxml");
             setSelected(btnHoTro);
         } else if (source == btnDangXuat) {
-            ui.DangXuat.showDialog();
+            Stage stage = (Stage) btnDangXuat.getScene().getWindow();
+            ui.DangXuat.showDialog(stage);
         }
 
 

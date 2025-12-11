@@ -29,24 +29,32 @@ public class MainController_QL {
     @FXML
     public void initialize() {
         javafx.application.Platform.runLater(() -> {
+            // Lấy stage hiện tại từ top bar
             Stage stage = (Stage) topBarQlController
                     .getRoot().getScene().getWindow();
+
+            // Bind cho top bar (kéo, nút thu nhỏ/phóng to,...)
             topBarQlController.bindStage(stage);
             topBarQlController.setTitle("CrabKing Restaurant");
-        });
 
-        topBarQlController.configureActionButton("Đăng Xuất",
-                () -> ui.DangXuat.showDialog());
+            // CẤU HÌNH NÚT ĐĂNG XUẤT: truyền stage vào dialog
+            topBarQlController.configureActionButton("Đăng Xuất",
+                    () -> ui.DangXuat.showDialog(stage));
+        });
 
         if (sidebar_QLController != null) {
             sidebar_QLController.setMainController(this);
         }
+
         mainContent.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 addKeyboardShortcuts(newScene);
             }
         });
     }
+
+
+
     private void addKeyboardShortcuts(Scene scene) {
     scene.setOnKeyPressed(event -> {
         switch (event.getCode()) {
