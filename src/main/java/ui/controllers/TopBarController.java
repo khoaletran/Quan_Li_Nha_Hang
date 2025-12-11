@@ -72,10 +72,10 @@ public class TopBarController {
     }
 
     /** Version đầy đủ: tên + chức vụ */
-    public void setUserInfo(String name, String role) {
-        lblUserName.setText(name);
-        lblUserRole.setText(role);
-    }
+//    public void setUserInfo(String name, String role) {
+//        lblUserName.setText(name);
+//        lblUserRole.setText(role);
+//    }
 
     /** Gán text + logic cho nút action bên phải (Kết ca, Đăng xuất, …) */
     public void configureActionButton(String text, Runnable handler) {

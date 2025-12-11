@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,8 +20,7 @@ public class MainController_NV {
     private NhanVien nhanVien;
     private LocalDateTime thoiGianVaoCa;
 
-
-
+    @FXML private TopBarController topBarNVController;
 
     public SidebarController_NV getSidebarController() {
         return sidebar_NVController;
@@ -28,6 +28,16 @@ public class MainController_NV {
 
     @FXML
     public void initialize() {
+        javafx.application.Platform.runLater(() -> {
+            Stage stage = (Stage) topBarNVController
+                    .getRoot().getScene().getWindow();
+            topBarNVController.bindStage(stage);
+            topBarNVController.setTitle("CrabKing Restaurant");
+        });
+
+        topBarNVController.configureActionButton("Kết Ca",
+                () -> setCenterContent("/FXML/BanGiaoCa.fxml"));
+
         if (sidebar_NVController != null) {
             sidebar_NVController.setMainController(this);
         }
@@ -37,6 +47,7 @@ public class MainController_NV {
             }
         });
     }
+
 
     private void addKeyboardShortcuts(Scene scene) {
     scene.setOnKeyPressed(event -> {
@@ -63,6 +74,7 @@ public class MainController_NV {
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
+//        topBarNVController.setUserInfo(nhanVien.getTenNV(),"Nhân Viên");
         loadDefaultView();
     }
 

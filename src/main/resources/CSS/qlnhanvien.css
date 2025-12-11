@@ -155,7 +155,6 @@
 
 /* Form thông tin */
 .info-form-section {
-  -fx-background-color: white;
   -fx-background-radius: 15;
   -fx-padding: 25;
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 3, 0, 0, 1);
@@ -273,6 +272,12 @@
   -fx-background-radius: 5;
   -fx-pref-width: 8;
   -fx-pref-height: 8;
+}
+
+.right-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
 }
 
 /* Nút xác nhận */

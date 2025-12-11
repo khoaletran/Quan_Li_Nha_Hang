@@ -32,8 +32,7 @@ public class MainController_QL {
             Stage stage = (Stage) topBarQlController
                     .getRoot().getScene().getWindow();
             topBarQlController.bindStage(stage);
-            topBarQlController.setTitle("CrabKing - Quản Lý");
-            topBarQlController.setUserInfo("Trần Thị B - Quản lý");
+            topBarQlController.setTitle("CrabKing Restaurant");
         });
 
         topBarQlController.configureActionButton("Đăng Xuất",
@@ -66,7 +65,7 @@ public class MainController_QL {
 
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
-        topBarQlController.setUserInfo(nhanVien.getTenNV());
+//        topBarQlController.setUserInfo(nhanVien.getTenNV(),"Quản Lí");
         setCenterContent("/FXML/DashBoard.fxml");
     }
 
