@@ -32,8 +32,8 @@
                 <!-- Thanh tìm kiếm -->
                 <HBox alignment="CENTER_LEFT" spacing="8"
                       styleClass="menu-search-box">
-                    <Label text="🔍" styleClass="search-icon" />
-                    <TextField promptText="Tìm kiếm: bàn, số điện thoại, tên khách"
+                    <Label text="🔍" fx:id="searchIcon" styleClass="search-icon" />
+                    <TextField fx:id="searchField" promptText="Tìm kiếm: bàn, số điện thoại, tên khách"
                                styleClass="search-field"
                                HBox.hgrow="ALWAYS"/>
                 </HBox>
@@ -48,21 +48,25 @@
                                 <Insets top="10" right="10" bottom="10" left="10"/>
                             </padding>
 
-                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="invoice-card">
-                                <Circle radius="20" style="-fx-fill: #d8d8d8;"/>
-                                <VBox spacing="2">
-                                    <Label styleClass="invoice-id" text="HD000001"/>
-                                    <Label styleClass="invoice-phone" text="SDT: 098765432"/>
-                                </VBox>
-                            </HBox>
 
                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="invoice-card">
-                                <Circle radius="20" style="-fx-fill: #d8d8d8;"/>
-                                <VBox spacing="2">
-                                    <Label styleClass="invoice-id" text="HD000002"/>
-                                    <Label styleClass="invoice-phone" text="SDT: 0912345678"/>
-                                </VBox>
+                                <!-- BÊN TRÁI -->
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Circle radius="20" style="-fx-fill: #d8d8d8;" />
+                                    <VBox spacing="2">
+                                        <Label styleClass="invoice-id" text="HD000002"/>
+                                        <Label styleClass="invoice-phone" text="SDT: 0912345678"/>
+                                        <Label styleClass="invoice-name" text="Tên: Nguyễn Văn A"/>
+                                    </VBox>
+                                </HBox>
+
+                                <!-- ĐẨY NỘI DUNG BÊN PHẢI -->
+                                <Pane HBox.hgrow="ALWAYS" />
+
+                                <!-- BÊN PHẢI: Tổng tiền -->
+                                <Label styleClass="invoice-total" text="125.000đ" />
                             </HBox>
+
                         </VBox>
                     </content>
                 </ScrollPane>
@@ -73,34 +77,63 @@
                         AnchorPane.bottomAnchor="20.0"
                         AnchorPane.leftAnchor="20.0"
                         AnchorPane.rightAnchor="20.0"
-                        styleClass="anchorPane_LabelBaoCao">
-                <GridPane alignment="CENTER" hgap="40" vgap="20"
-                          AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0"
-                          AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="50"/>
-                        <ColumnConstraints percentWidth="50"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints/>
-                        <RowConstraints/>
-                    </rowConstraints>
-                    <children>
-                        <Label fx:id="lblTienMat" styleClass="summary-label"
-                               text="Tiền mặt: 1.230.000 VND"
-                               GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                        <Label fx:id="lblCKhoan" styleClass="summary-label"
-                               text="Chuyển khoản: 20.000 VND"
-                               GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <Label fx:id="lblsoHD" styleClass="summary-label"
-                               text="Số hóa đơn: 36"
-                               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                        <Label fx:id="lblDThu" styleClass="summary-label"
-                               text="Doanh thu: 1.250.000 VND"
-                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                    </children>
-                </GridPane>
+                        styleClass="anchorPane_LabelBaoCao"
+                        xmlns="http://javafx.com/javafx"
+                        xmlns:fx="http://javafx.com/fxml">
+
+                <children>
+
+                    <!-- TITLE FULL WIDTH -->
+                    <HBox styleClass="summary-title-bar"
+                          AnchorPane.topAnchor="0.0"
+                          AnchorPane.leftAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0"
+                          prefHeight="40">
+                        <children>
+                            <Label text="Tổng kết ca" styleClass="summary-title"/>
+                        </children>
+                    </HBox>
+
+                    <!-- GRIDPANE NỘI DUNG -->
+                    <GridPane alignment="CENTER" hgap="40" vgap="20"
+                              AnchorPane.topAnchor="50.0"
+                              AnchorPane.bottomAnchor="10.0"
+                              AnchorPane.leftAnchor="10.0"
+                              AnchorPane.rightAnchor="10.0">
+
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <rowConstraints>
+                            <RowConstraints/>
+                            <RowConstraints/>
+                        </rowConstraints>
+
+                        <children>
+                            <Label fx:id="lblTienMat" styleClass="summary-label"
+                                   text="Tiền mặt: 1.230.000 VND"
+                                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+
+                            <Label fx:id="lblCKhoan" styleClass="summary-label"
+                                   text="Chuyển khoản: 20.000 VND"
+                                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+                            <Label fx:id="lblsoHD" styleClass="summary-label"
+                                   text="Số hóa đơn: 36"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label fx:id="lblDThu" styleClass="summary-label"
+                                   text="Doanh thu: 1.250.000 VND"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        </children>
+                    </GridPane>
+
+                </children>
             </AnchorPane>
+
+
         </AnchorPane>
     </center>
 

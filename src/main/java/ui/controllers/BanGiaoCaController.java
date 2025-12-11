@@ -13,7 +13,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.geometry.Pos;
@@ -27,11 +31,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class BanGiaoCaController {
-    @FXML private VBox vboxHoaDon;
-    @FXML private TextField txtCaLam,txtTGVC,txtsLHD,txtSoTienMat,txtSoTienCK,txtTongTien;
-    @FXML private TextArea taMoTa;
-    @FXML private Label lblTienMat,lblCKhoan,lblsoHD,lblDThu;
-    @FXML private Button btnKetCa;
+    @FXML
+    private VBox vboxHoaDon;
+    @FXML
+    private TextField txtCaLam, txtTGVC, txtsLHD, txtSoTienMat, txtSoTienCK, txtTongTien,searchField;
+    @FXML
+    private TextArea taMoTa;
+    @FXML
+    private Label lblTienMat, lblCKhoan, lblsoHD, lblDThu,searchIcon;
+    @FXML
+    private Button btnKetCa;
 
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private NhanVien nhanVien;
@@ -42,6 +51,19 @@ public class BanGiaoCaController {
     public void initialize() {
         btnKetCa.setOnAction(e -> ketCa());
 
+        searchIcon.setOnMouseClicked(e -> timKiemHoaDon());
+
+        searchField.setOnAction(e -> timKiemHoaDon());
+
+        javafx.application.Platform.runLater(() -> {
+            searchField.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+                if (event.isControlDown() && event.getCode() == javafx.scene.input.KeyCode.F) {
+                    searchField.requestFocus();
+                    searchField.selectAll();
+                    event.consume();
+                }
+            });
+        });
     }
 
     public void initData(NhanVien nv) {
@@ -90,8 +112,27 @@ public class BanGiaoCaController {
                 tongTienMat += tienHoaDon; // Tiền mặt
             }
 
-            Circle circle = new Circle(20);
-            circle.setStyle("-fx-fill: #d8d8d8;");
+            String maBan = hd.getBan().getMaBan();
+            String prefix = maBan.substring(0, 2);
+
+            String imgPath = "/IMG/ban/IN.png";
+
+            switch (prefix) {
+                case "BV":
+                    imgPath = "/IMG/ban/vip.png";
+                    break;
+                case "BI":
+                    imgPath = "/IMG/ban/IN.png";
+                    break;
+                case "BO":
+                    imgPath = "/IMG/ban/out.png";
+                    break;
+            }
+            ImageView imgBan = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
+            imgBan.setFitWidth(60);
+            imgBan.setFitHeight(60);
+            imgBan.setPreserveRatio(true);
+
 
             Label lblMaHD = new Label(hd.getMaHD());
             lblMaHD.getStyleClass().add("invoice-id");
@@ -99,11 +140,32 @@ public class BanGiaoCaController {
             Label lblSDT = new Label("SDT: " + hd.getKhachHang().getSdt());
             lblSDT.getStyleClass().add("invoice-phone");
 
-            VBox boxThongTin = new VBox(2, lblMaHD, lblSDT);
+            Label lblTenKH = new Label("Tên: " + hd.getKhachHang().getTenKhachHang());
+            lblTenKH.getStyleClass().add("invoice-name");
 
-            HBox card = new HBox(10, circle, boxThongTin);
+            Label lblSoLuong = new Label("Số khách: " + hd.getSoLuong());
+            lblTenKH.getStyleClass().add("invoice-name");
+
+            VBox boxThongTin = new VBox(2, lblMaHD, lblSDT,lblTenKH,lblSoLuong);
+
+            Label lblTongTien = new Label(NumberFormat
+                    .getInstance(new Locale("vi", "VN"))
+                    .format(tienHoaDon) + " đ");
+            lblTongTien.getStyleClass().add("invoice-total");
+
+            HBox left = new HBox(10, imgBan, boxThongTin);
+            left.setAlignment(Pos.CENTER_LEFT);
+
+            Pane spacer = new Pane();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
+            HBox card = new HBox(10, left, spacer, lblTongTien);
             card.setAlignment(Pos.CENTER_LEFT);
             card.getStyleClass().add("invoice-card");
+
+//            HBox card = new HBox(10, imgBan, boxThongTin);
+//            card.setAlignment(Pos.CENTER_LEFT);
+//            card.getStyleClass().add("invoice-card");
             VBox.setMargin(card, new Insets(5, 0, 5, 0));
 
             vboxHoaDon.getChildren().add(card);
@@ -148,27 +210,31 @@ public class BanGiaoCaController {
         PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
         String maPhieu = phieuKCDAO.generateNewMaPhieu();
 
+        if (isEmpty(txtsLHD, "Số hóa đơn không được để trống!")) return;
+        if (isEmpty(txtSoTienMat, "Số tiền mặt không được để trống!")) return;
+        if (isEmpty(txtSoTienCK, "Số tiền chuyển khoản không được để trống!")) return;
+        if (isEmpty(txtTongTien, "Tổng tiền không được để trống!")) return;
         if (!isNumeric(txtsLHD.getText())) {
-            AlertCus.show("Thông báo lỗi","Số hóa đơn phải là số!");
+            AlertCus.show("Thông báo lỗi", "Số hóa đơn phải là số!");
             return;
         }
         if (!isNumeric(txtSoTienMat.getText())) {
-            AlertCus.show("Thông báo lỗi","Số tiền mặt phải là số!");
+            AlertCus.show("Thông báo lỗi", "Số tiền mặt phải là số!");
             return;
         }
         if (!isNumeric(txtSoTienCK.getText())) {
-            AlertCus.show("Thông báo lỗi","Số tiền chuyển khoản phải là số!");
+            AlertCus.show("Thông báo lỗi", "Số tiền chuyển khoản phải là số!");
             return;
         }
         if (!isNumeric(txtTongTien.getText())) {
-            AlertCus.show("Thông báo lỗi","Số tổng tiền phải là số!");
+            AlertCus.show("Thông báo lỗi", "Số tổng tiền phải là số!");
             return;
         }
         boolean ca = txtCaLam.getText().equals("Ca sáng") ? false : true;
         int soHoaDon = Integer.parseInt(txtsLHD.getText());
         double tongTM = Double.parseDouble(txtSoTienMat.getText());
         double tongCK = Double.parseDouble(txtSoTienCK.getText());
-        double chenhLech = Double.parseDouble(txtTongTien.getText()) - (tongTM+tongCK);
+        double chenhLech = Double.parseDouble(txtTongTien.getText()) - (tongTM + tongCK);
 
         PhieuKetCa phieu = new PhieuKetCa(
                 maPhieu,
@@ -185,9 +251,11 @@ public class BanGiaoCaController {
         if (answer) {
             boolean success = new PhieuKetCaDAO().insert(phieu);
             if (success) {
-                AlertCus.show("Bàn giao ca","Đã lưu báo cáo kết ca!");
+                AlertCus.show("Bàn giao ca", "Đã lưu báo cáo kết ca!");
+                javafx.application.Platform.exit();
+                System.exit(0);
             } else {
-                AlertCus.show("Bàn giao ca","Lỗi lưu báo cáo kết ca!");
+                AlertCus.show("Bàn giao ca", "Lỗi lưu báo cáo kết ca!");
             }
         }
     }
@@ -201,4 +269,118 @@ public class BanGiaoCaController {
             return false;
         }
     }
+
+    private boolean isEmpty(TextField txt, String message) {
+        if (txt.getText().trim().isEmpty()) {
+            AlertCus.show("Thông báo lỗi", message);
+            return true;
+        }
+        return false;
+    }
+
+    private void timKiemHoaDon() {
+        String keyword = searchField.getText().trim().toLowerCase();
+
+        vboxHoaDon.getChildren().clear();
+
+        if (keyword.isEmpty()) {
+            loadTatCaHoaDon();
+            return;
+        }
+
+        int slHoaDon = 0;
+        double tongTienMat = 0;
+        double tongTienCK = 0;
+
+        List<HoaDon> danhSach = hoaDonDAO.getTheoMaNV(nhanVien.getMaNV());
+
+        for (HoaDon hd : danhSach) {
+
+            LocalDateTime tgCheckout = hd.getTgCheckOut();
+            if (tgCheckout == null) continue;
+
+            if (!tgCheckout.toLocalDate().equals(thoiGianVaoCa.toLocalDate())) continue;
+            if (!tgCheckout.isAfter(thoiGianVaoCa)) continue;
+
+            String maHD = hd.getMaHD().toLowerCase();
+            String tenKH = hd.getKhachHang().getTenKhachHang().toLowerCase();
+            String sdt = hd.getKhachHang().getSdt().toLowerCase();
+
+            String soKhachStr = String.valueOf(hd.getSoLuong());
+
+            boolean match =
+                    maHD.startsWith(keyword) ||
+                            tenKH.startsWith(keyword) ||
+                            sdt.startsWith(keyword) ||
+                            soKhachStr.startsWith(keyword);
+
+            if (!match) continue;
+
+            double tienHoaDon = 0;
+            List<ChiTietHoaDon> dsCT = ChiTietHDDAO.getByMaHD(hd.getMaHD());
+            for (ChiTietHoaDon ct : dsCT) {
+                tienHoaDon += ct.getMon().getGiaGoc() * ct.getSoLuong();
+            }
+
+            if (hd.getKhuyenMai() != null) {
+                double giam = hd.getKhuyenMai().getPhanTRamGiamGia();
+                tienHoaDon = tienHoaDon * (1 - giam / 100.0);
+            }
+
+            tienHoaDon *= 1.1;
+
+            if (hd.isKieuThanhToan()) tongTienCK += tienHoaDon;
+            else tongTienMat += tienHoaDon;
+
+            String maBan = hd.getBan().getMaBan();
+            String prefix = maBan.substring(0, 2);
+            String imgPath = "/IMG/ban/IN.png";
+
+            switch (prefix) {
+                case "BV": imgPath = "/IMG/ban/vip.png"; break;
+                case "BI": imgPath = "/IMG/ban/IN.png"; break;
+                case "BO": imgPath = "/IMG/ban/out.png"; break;
+            }
+
+            ImageView imgBan = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
+            imgBan.setFitWidth(60);
+            imgBan.setFitHeight(60);
+
+            Label lblMaHD = new Label(hd.getMaHD());
+            Label lblSDT = new Label("SDT: " + hd.getKhachHang().getSdt());
+            Label lblTenKH = new Label("Tên: " + hd.getKhachHang().getTenKhachHang());
+            Label lblSoLuong = new Label("Số khách: " + hd.getSoLuong());
+            lblMaHD.getStyleClass().add("invoice-id");
+
+            VBox info = new VBox(2, lblMaHD, lblSDT, lblTenKH, lblSoLuong);
+            HBox left = new HBox(10, imgBan, info);
+            left.setAlignment(Pos.CENTER_LEFT);
+
+            Pane spacer = new Pane();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
+            Label lblTongTien = new Label(NumberFormat.getInstance(new Locale("vi", "VN"))
+                    .format(tienHoaDon) + " đ");
+            lblTongTien.getStyleClass().add("invoice-total");
+
+            HBox card = new HBox(10, left, spacer, lblTongTien);
+            card.setAlignment(Pos.CENTER_LEFT);
+            card.getStyleClass().add("invoice-card");
+            card.setPadding(new Insets(10));
+            VBox.setMargin(card, new Insets(5, 0, 5, 0));
+
+            vboxHoaDon.getChildren().add(card);
+
+
+            slHoaDon++;
+        }
+
+        NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+        lblsoHD.setText("Số hóa đơn: " + slHoaDon);
+        lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
+        lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
+        lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
+    }
+
 }
+

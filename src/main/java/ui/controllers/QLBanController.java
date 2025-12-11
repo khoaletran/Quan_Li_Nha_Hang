@@ -8,43 +8,56 @@ import entity.KhuVuc;
 import entity.LoaiBan;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import ui.AlertCus;
+import ui.ConfirmCus;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+
+import java.awt.*;
 import java.util.List;
-import javafx.scene.Scene;
 
 public class QLBanController {
 
     @FXML private FlowPane flowPaneBan;
     @FXML private Label lblKhuVuc;
     @FXML private Label lblMaBan;
-    @FXML private Label lblSoLuong,btnAddBan;
-    @FXML private Button btnModalCancel,btnModalSave;
+    @FXML private Label lblSoLuong, btnAddBan,lblSearchBtn,btnDeleteBan;
+    @FXML private Button btnModalCancel, btnModalSave;
     @FXML private ComboBox<String> comboDanhMuc;
     @FXML private ComboBox<String> comboKhuVuc;
     @FXML private VBox overlayModal;
     @FXML private StackPane modalLayer;
     @FXML private StackPane rootPane;
     @FXML private Rectangle modalBg;
-    @FXML private ComboBox comboModalLoaiBan,comboModalKhuVuc;
-    @FXML private TextField txtModalMaBan;
-    @FXML private TextField searchField;
-
+    @FXML private ComboBox comboModalLoaiBan, comboModalKhuVuc;
+    @FXML private TextField txtModalMaBan,txtSearchTop;
+    private List<Ban> dsBan;
+    private boolean deleteMode = false;
     private final BanDAO banDAO = new BanDAO();
     private final LoaiBanDAO loaiBanDAO = new LoaiBanDAO();
     private final KhuVucDAO khuVucDAO = new KhuVucDAO();
-    private List<Ban> dsBan;
+
     @FXML
     public void initialize() {
         loadAllBan();
@@ -56,7 +69,8 @@ public class QLBanController {
 
         comboDanhMuc.setOnAction(event -> filterBan());
         comboKhuVuc.setOnAction(event -> filterBan());
-        searchField.textProperty().addListener((obs, oldText, newText)-> filterBan());
+//        txtSearchTop.textProperty().addListener((obs, oldText, newText)-> filterBan());
+
         modalBg.widthProperty().bind(rootPane.widthProperty());
         modalBg.heightProperty().bind(rootPane.heightProperty());
 
@@ -70,31 +84,52 @@ public class QLBanController {
         btnModalSave.setOnAction(e -> themBan());
 
         comboModalKhuVuc.setOnAction(event -> sinhMaBanMoi());
-        Platform.runLater(() -> addShortcuts(searchField.getScene()));
+
+        Platform.runLater(() -> addShortcuts(txtSearchTop.getScene()));
         Tooltip tipFind = new Tooltip("Tìm kiếm bàn (Ctrl + F)");
         tipFind.getStyleClass().add("tooltip");
-        Tooltip.install(searchField, tipFind);
+        Tooltip.install(txtSearchTop, tipFind);
         Tooltip tipNew = new Tooltip("Thêm bàn mới  (Ctrl + N)");
         tipNew.getStyleClass().add("tooltip");
         Tooltip.install(btnAddBan, tipNew);
 
-    }
-
-    // Shortcut key
-    private void addShortcuts(Scene scene){
-        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
-        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
-        scene.getAccelerators().put(ctrlF, () -> {
-            searchField.requestFocus();
-            searchField.selectAll();  // tự bôi đen text để nhập mới
+        lblSearchBtn.setOnMouseClicked(e -> {
+            String keyword = txtSearchTop.getText().trim();
+            timKiemBan(keyword);
         });
-        scene.getAccelerators().put(ctrlN, () -> showModal());
+
+        btnDeleteBan.setOnMouseClicked(e -> {
+            deleteMode = !deleteMode;
+
+            if (deleteMode) {
+                btnDeleteBan.setStyle("-fx-text-fill: black; -fx-font-weight: bold;-fx-background-color: #c8c7c7");
+//                AlertCus.show("Chế độ xóa", "ĐÃ bật chế độ xóa.\nHãy double click vào bàn để xóa!");
+            } else {
+                btnDeleteBan.setStyle("");
+//                AlertCus.show("Chế độ xóa", "ĐÃ tắt chế độ xóa.");
+            }
+        });
+
+
+        txtSearchTop.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                lblSearchBtn.fireEvent(new MouseEvent(
+                        MouseEvent.MOUSE_CLICKED,
+                        0, 0, 0, 0,
+                        MouseButton.PRIMARY,
+                        1,
+                        false, false, false, false,
+                        true, false, false, true,
+                        false, false, null
+                ));
+            }
+        });
     }
 
     // Load toàn bộ bàn
     private void loadAllBan() {
         flowPaneBan.getChildren().clear();
-        dsBan = banDAO.getAll();
+         dsBan = banDAO.getAll();
         for (Ban ban : dsBan) {
             VBox card = taoTheBan(ban);
             flowPaneBan.getChildren().add(card);
@@ -105,6 +140,13 @@ public class QLBanController {
     private VBox taoTheBan(Ban ban) {
         VBox card = new VBox();
         card.getStyleClass().add("menu-item");
+
+        card.setOnMouseClicked(event -> {
+            if (deleteMode && event.getClickCount() == 2) {
+                xoaBan(ban);
+            }
+        });
+
 
         HBox infoBox = new HBox();
         infoBox.getStyleClass().add("item-info");
@@ -138,6 +180,16 @@ public class QLBanController {
         return card;
     }
 
+    private void addShortcuts(Scene scene){
+        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+        scene.getAccelerators().put(ctrlF, () -> {
+            txtSearchTop.requestFocus();
+            txtSearchTop.selectAll();  // tự bôi đen text để nhập mới
+        });
+        scene.getAccelerators().put(ctrlN, () -> showModal());
+    }
+
     private void loadDanhMuc() {
         comboDanhMuc.getItems().clear();
         comboDanhMuc.getItems().add("Tất cả");
@@ -162,26 +214,21 @@ public class QLBanController {
         comboKhuVuc.setValue("Tất cả");
     }
 
-
     private void filterBan() {
-        String keyword = searchField.getText().toLowerCase().trim();
         String selectedLoaiBan = comboDanhMuc.getValue();
         String selectedKhuVuc = comboKhuVuc.getValue();
 
+        if ((selectedLoaiBan == null || selectedLoaiBan.equals("Tất cả")) &&
+                (selectedKhuVuc == null || selectedKhuVuc.equals("Tất cả"))) {
+            loadAllBan();
+            return;
+        }
+
         flowPaneBan.getChildren().clear();
+        List<Ban> dsBan = banDAO.getAll();
 
         for (Ban ban : dsBan) {
-
             boolean match = true;
-
-            // Lọc theo mã bàn (search)
-            if (keyword != null && !keyword.isEmpty()) {
-                boolean matchMa = ban.getMaBan() != null &&
-                        ban.getMaBan().toLowerCase().contains(keyword);
-                if (!matchMa) {
-                    match = false;
-                }
-            }
 
             // Lọc theo loại bàn
             if (selectedLoaiBan != null && !selectedLoaiBan.equals("Tất cả")) {
@@ -199,9 +246,9 @@ public class QLBanController {
                 }
             }
 
-            // Nếu tất cả điều kiện OK → add
             if (match) {
-                flowPaneBan.getChildren().add(taoTheBan(ban));
+                VBox card = taoTheBan(ban);
+                flowPaneBan.getChildren().add(card);
             }
         }
     }
@@ -252,7 +299,7 @@ public class QLBanController {
             // Lấy mã bàn từ txtModalMaBan
             String maBan = txtModalMaBan.getText();
             if (maBan == null || maBan.isEmpty()) {
-                System.out.println("Mã bàn trống!");
+                AlertCus.show("Thông báo","Chưa chọn bàn và khu vực!");
                 return;
             }
 
@@ -317,16 +364,63 @@ public class QLBanController {
             // Gọi DAO insert
             boolean success = banDAO.insert(banMoi, false);
             if (success) {
-                System.out.println("Thêm bàn thành công: " + maBan);
-                loadAllBan(); // cập nhật giao diện
-                hideModal();  // ẩn modal
+                AlertCus.show("Thông báo","Thêm bàn thành công : " + maBan);
+                loadAllBan();
+                hideModal();
             } else {
-                System.out.println("Thêm bàn thất bại!");
+                AlertCus.show("Thông báo","Thêm bàn thất bại!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private void xoaBan(Ban ban) {
+        boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận xóa bàn : " + ban.getMaBan());
+        if (answer) {
+            boolean success = banDAO.delete(ban.getMaBan());
+            if (success) {
+                AlertCus.show("Thông báo", "Xóa bàn thành công : " + ban.getMaBan());
+                loadAllBan();
+                loadDanhMuc();
+                loadKhuVuc();
+            } else {
+                AlertCus.show("Thông báo", "Xóa bàn thất bại!");
+            }
+        }
+    }
+
+    private void timKiemBan(String keyword) {
+        keyword = keyword.toLowerCase();
+        flowPaneBan.getChildren().clear();
+
+        List<Ban> dsBan = banDAO.getAll();
+
+        if (keyword.isEmpty()) {
+            loadAllBan();
+            return;
+        }
+
+        for (Ban ban : dsBan) {
+
+            String maBan = ban.getMaBan().toLowerCase();
+            String loaiBan = ban.getLoaiBan().getTenLoaiBan().toLowerCase();
+            String khuVuc = ban.getKhuVuc().getTenKhuVuc().toLowerCase();
+
+            // Lấy ký hiệu loại bàn (A/B/C/D/E)
+            String kyHieuLoai = loaiBan.substring(loaiBan.length() - 1);
+
+            boolean match =
+                    maBan.contains(keyword)
+                            || loaiBan.contains(keyword)
+                            || kyHieuLoai.contains(keyword)
+                            || khuVuc.contains(keyword);
+
+            if (match) {
+                flowPaneBan.getChildren().add(taoTheBan(ban));
+            }
+        }
+    }
 
 }
+
