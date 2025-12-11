@@ -41,6 +41,7 @@ public class CheckoutController {
 
     @FXML
     public void initialize() {
+        System.out.println("Initializing CheckoutController");
         loadAllHoaDon();
         xuLyHienThiTienMat();
         btnThanhToan.setOnAction(e -> xuLyThanhToan());

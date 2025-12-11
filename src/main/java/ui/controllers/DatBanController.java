@@ -58,6 +58,7 @@ public class DatBanController {
 
     @FXML
     public void initialize() {
+        System.out.println("initialize DatBanController");
         LocalTime defaultTime = getDefaultTimePlus5();
 
         datePicker.setValue(LocalDate.now());

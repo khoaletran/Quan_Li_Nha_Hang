@@ -49,6 +49,9 @@ public class BanGiaoCaController {
 
     @FXML
     public void initialize() {
+
+        System.out.println("Initializing BanGiaoCaController");
+
         btnKetCa.setOnAction(e -> ketCa());
 
         searchIcon.setOnMouseClicked(e -> timKiemHoaDon());

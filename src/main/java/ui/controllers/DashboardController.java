@@ -74,6 +74,9 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
+
+        System.out.println("Initializing DashboardController");
+
         if (avatarImage != null && avatarClip != null) {
             avatarImage.setClip(avatarClip);
         }

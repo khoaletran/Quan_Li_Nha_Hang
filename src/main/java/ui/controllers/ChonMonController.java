@@ -64,6 +64,8 @@ public class ChonMonController {
 
     @FXML
     public void initialize() {
+        System.out.println("Initializing ChonMonController");
+
         loadComboDanhMuc();
         loadComboSuKien();
         loadDanhSachMon();

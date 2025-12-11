@@ -667,5 +667,36 @@ public class HoaDonDAO {
         return ds;
     }
 
+    // Lấy tất cả hóa đơn có trangThai = 0 (ví dụ: ĐẶT TRƯỚC)
+    public static List<HoaDon> getAllTrangThai(int trangThai) {
+        List<HoaDon> ds = new ArrayList<>();
+
+        String sql = SELECT_FULL + " WHERE hd.trangThai = ?";
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, trangThai);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ds.add(mapFullHoaDon(rs));
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Lỗi getAllTrangThai: " + e.getMessage());
+        }
+
+        return ds;
+    }
+
+    public static List<HoaDon> getAllDatTruoc() {
+        return getAllTrangThai(0);   // 0 = Đặt trước
+    }
+
+    public static List<HoaDon> getAllDaNhan() {
+        return getAllTrangThai(1);   // 1 = Đã nhận
+    }
+
 
 }
