@@ -250,7 +250,7 @@ public class PhanTramGiaBanDAO {
         String sql = """
             SELECT TOP 1 *
             FROM PhanTramGiaBan
-            WHERE maLoaiMon = ? AND ngayApDung <= ?
+            WHERE maLoaiMon = ? AND ngayApDung <= ? and maMon is null
             ORDER BY ngayApDung DESC
         """;
 
