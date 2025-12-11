@@ -379,7 +379,7 @@ public class TraCuuHoaDonController {
             List<ChiTietHoaDon> dsChiTiet = chiTietHDDAO.getByMaHD(maHD);
             if (dsChiTiet != null && !dsChiTiet.isEmpty()) {
                 for (ChiTietHoaDon ct : dsChiTiet) {
-                    HBox dong = taoDongChiTiet(ct.getMon(), ct.getSoLuong());
+                    HBox dong = taoDongChiTiet(ct);
                     vboxChiTietDonHang.getChildren().add(dong);
                 }
             } else {
@@ -547,14 +547,14 @@ public class TraCuuHoaDonController {
         return df.format(amount) + " đ";
     }
 
-    private HBox taoDongChiTiet(Mon mon, int soLuong) {
+    private HBox taoDongChiTiet(ChiTietHoaDon ct) {
         VBox vbox = new VBox(4); // chứa tên và hàng thông tin
         vbox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
         HBox.setHgrow(vbox, javafx.scene.layout.Priority.ALWAYS);
 
         // ===== Tên món (nằm trên) =====
-        Label lblTen = new Label(mon.getTenMon());
+        Label lblTen = new Label(ct.getMon().getTenMon());
         lblTen.getStyleClass().addAll("order-col", "product");
         lblTen.setWrapText(true);
         lblTen.setMaxWidth(Double.MAX_VALUE);
@@ -564,17 +564,17 @@ public class TraCuuHoaDonController {
         HBox hboxInfo = new HBox(10);
         hboxInfo.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
-        Label lblSoLuong = new Label(String.valueOf(soLuong));
+        Label lblSoLuong = new Label(String.valueOf(ct.getSoLuong()));
         lblSoLuong.getStyleClass().addAll("order-col", "quantity", "lblSoLuongCT");
         lblSoLuong.setPrefWidth(30);
         lblSoLuong.setAlignment(javafx.geometry.Pos.CENTER);
 
-        Label lblGia = new Label(formatCurrency(mon.getGiaBan()));
+        Label lblGia = new Label(formatCurrency(ct.getMon().getGiaBanTaiLucLapHD(hoaDonSelected)));
         lblGia.getStyleClass().addAll("order-col", "price");
         lblGia.setPrefWidth(70);
         lblGia.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 
-        Label lblTongTien = new Label(formatCurrency(mon.getGiaBan() * soLuong));
+        Label lblTongTien = new Label(formatCurrency(ct.getThanhTien()));
         lblTongTien.getStyleClass().addAll("order-col", "total", "lblTongTienCT");
         lblTongTien.setPrefWidth(80);
         lblTongTien.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
