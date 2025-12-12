@@ -2,6 +2,7 @@ package entity;
 
 import dao.PhanTramGiaBanDAO;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +91,7 @@ public class Mon {
     public int getPTGBTaiHD(HoaDon hd) {
         if (hd == null) return 0;
 
-        LocalDate ngayHD = hd.getTgLapHD().toLocalDate();
+        LocalDateTime ngayHD = hd.getTgLapHD();
 
         // KÍCH THƯỚC CACHE KEY theo ngày
         String keyMon = maMon + "|" + ngayHD;
@@ -100,16 +101,16 @@ public class Mon {
         if (CACHE_PT_MON_THEO_NGAY.containsKey(keyMon))
             return CACHE_PT_MON_THEO_NGAY.get(keyMon);
 
-        // Check cache loại món theo ngày
-        if (CACHE_PT_LOAIMON_THEO_NGAY.containsKey(keyLoai))
-            return CACHE_PT_LOAIMON_THEO_NGAY.get(keyLoai);
-
         // Không có → Query DB 1 lần duy nhất (tránh query lặp)
         var ptMon = PhanTramGiaBanDAO.getEffectiveForMonAtDate(maMon, ngayHD);
         if (ptMon != null) {
             CACHE_PT_MON_THEO_NGAY.put(keyMon, ptMon.getPhanTramLoi());
             return ptMon.getPhanTramLoi();
         }
+
+        // Check cache loại món theo ngày
+        if (CACHE_PT_LOAIMON_THEO_NGAY.containsKey(keyLoai))
+            return CACHE_PT_LOAIMON_THEO_NGAY.get(keyLoai);
 
         var ptLoai = PhanTramGiaBanDAO.getEffectiveForLoaiMonAtDate(loaiMon.getMaLoaiMon(), ngayHD);
         if (ptLoai != null) {

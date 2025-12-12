@@ -569,7 +569,7 @@ public class TraCuuHoaDonController {
         lblSoLuong.setPrefWidth(30);
         lblSoLuong.setAlignment(javafx.geometry.Pos.CENTER);
 
-        Label lblGia = new Label(formatCurrency(ct.getMon().getGiaBanTaiLucLapHD(hoaDonSelected)));
+        Label lblGia = new Label(formatCurrency(ct.getMon().getGiaBanTaiLucLapHD(ct.getHoaDon())));
         lblGia.getStyleClass().addAll("order-col", "price");
         lblGia.setPrefWidth(70);
         lblGia.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);

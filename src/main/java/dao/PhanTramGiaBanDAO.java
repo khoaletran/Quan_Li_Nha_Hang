@@ -7,6 +7,7 @@ import entity.LoaiMon;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -233,54 +234,55 @@ public class PhanTramGiaBanDAO {
     // ============================================
     // GET EFFECTIVE FOR MON (AT DATE)
     // ============================================
-    public static PhanTramGiaBan getEffectiveForMonAtDate(String maMon, LocalDate ngayHD) {
-        String sql = """
-            SELECT TOP 1 * 
-            FROM PhanTramGiaBan
-            WHERE maMon = ? AND ngayApDung <= ?
-            ORDER BY ngayApDung DESC
-        """;
+    public static PhanTramGiaBan getEffectiveForMonAtDate(String maMon, LocalDateTime ngayHD) {
+    String sql = """
+        SELECT TOP 1 * 
+        FROM PhanTramGiaBan
+        WHERE maMon = ? AND ngayApDung <= ?
+        ORDER BY ngayApDung DESC
+    """;
 
-        try (Connection con = connectDB.getInstance().getNewConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+    try (Connection con = connectDB.getInstance().getNewConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, maMon);
-            ps.setDate(2, Date.valueOf(ngayHD));
+        ps.setString(1, maMon);
+        ps.setTimestamp(2, Timestamp.valueOf(ngayHD));
 
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return map(rs);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) return map(rs);
 
-        } catch (Exception e) {
-            System.err.println("PTGB.getEffectiveForMonAtDate(): " + e.getMessage());
-        }
-        return null;
+    } catch (Exception e) {
+        System.err.println("PTGB.getEffectiveForMonAtDate(): " + e.getMessage());
     }
+    return null;
+}
 
-    // ============================================
-    // GET EFFECTIVE FOR LOAI MON (AT DATE)
-    // ============================================
-    public static PhanTramGiaBan getEffectiveForLoaiMonAtDate(String maLoaiMon, LocalDate ngayHD) {
-        String sql = """
-            SELECT TOP 1 *
-            FROM PhanTramGiaBan
-            WHERE maLoaiMon = ? AND ngayApDung <= ? and maMon is null
-            ORDER BY ngayApDung DESC
-        """;
+// ============================================
+// GET EFFECTIVE FOR LOAI MON (AT DATE)
+// ============================================
+public static PhanTramGiaBan getEffectiveForLoaiMonAtDate(String maLoaiMon, LocalDateTime ngayHD) {
+    String sql = """
+        SELECT TOP 1 *
+        FROM PhanTramGiaBan
+        WHERE maLoaiMon = ? AND ngayApDung <= ? AND maMon IS NULL
+        ORDER BY ngayApDung DESC
+    """;
 
-        try (Connection con = connectDB.getInstance().getNewConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+    try (Connection con = connectDB.getInstance().getNewConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, maLoaiMon);
-            ps.setDate(2, Date.valueOf(ngayHD));
+        ps.setString(1, maLoaiMon);
+        ps.setTimestamp(2, Timestamp.valueOf(ngayHD));
 
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return map(rs);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) return map(rs);
 
-        } catch (Exception e) {
-            System.err.println("PTGB.getEffectiveForLoaiMonAtDate(): " + e.getMessage());
-        }
-        return null;
+    } catch (Exception e) {
+        System.err.println("PTGB.getEffectiveForLoaiMonAtDate(): " + e.getMessage());
     }
+    return null;
+}
+
     public static boolean existsTodayForMon(String maMon) {
     String sql = """
         SELECT 1 FROM PhanTramGiaBan
