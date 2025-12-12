@@ -2,6 +2,9 @@ package ui.controllers;
 
 import dao.*;
 import entity.*;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -15,12 +18,18 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CheckinController {
+
+    // root của màn checkin (gán fx:id="root" trong FXML)
+    @FXML
+    private BorderPane root;
 
     @FXML
     private VBox vboxDatTruoc; // VBox cho danh sách bàn đặt trước
@@ -36,26 +45,58 @@ public class CheckinController {
     private DatePicker dpThoiGian;
     @FXML
     private ComboBox<String> cboKhuVuc;
-    @FXML 
+    @FXML
     private Button btnCheckIn, btnXoaTrang;
+
     private List<HoaDon> dsHoaDon;
-    
+
     private HBox lastSelected = null;
+
+    // ====== TIMELINE TỰ ĐỘNG VÀ COUNTDOWN ======
+    private static Timeline autoRefresh;     // CHỈ 1 timer cho tất cả controller
+    private static boolean autoRefreshStarted = false;
+    private final List<Timeline> countdownTimelines = new ArrayList<>();
+
+    // cache thời gian đợi bàn (phút)
+    private int thoiGianDatTruoc = 0; // kieuDatBan = 1
+    private int thoiGianCho = 0;      // kieuDatBan = 0
 
     @FXML
     public void initialize() {
+        System.out.println("Initializing CheckinController");
+
+        loadThoiGianDoiBan();
         loadDanhSach();
         loadComboKhuVuc();
         setupFilterEvents();
 
-        javafx.animation.Timeline autoRefresh = new javafx.animation.Timeline(
-                new javafx.animation.KeyFrame(javafx.util.Duration.seconds(30), e -> {
-                    autoAssignWaitlistToFreeTable();
-                })
-        );
-        autoRefresh.setCycleCount(javafx.animation.Animation.INDEFINITE);
-        autoRefresh.play();
-        Platform.runLater(() -> addShortcuts(txtSDT.getScene()));
+        // autoRefresh chỉ tạo 1 lần duy nhất
+        if (!autoRefreshStarted) {
+            autoRefresh = new Timeline(
+                    new KeyFrame(Duration.seconds(30), e -> autoAssignWaitlistToFreeTable())
+            );
+            autoRefresh.setCycleCount(Animation.INDEFINITE);
+            autoRefresh.play();
+            autoRefreshStarted = true;
+            System.out.println("autoRefresh started");
+        } else {
+            System.out.println("autoRefresh already running");
+        }
+
+        Platform.runLater(() -> {
+            if (txtSDT != null && txtSDT.getScene() != null) {
+                addShortcuts(txtSDT.getScene());
+            }
+
+            if (root != null) {
+                root.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                    if (newScene == null) {
+                        dispose();
+                    }
+                });
+            }
+        });
+
         Tooltip tipFind = new Tooltip("Tìm kiếm số điện thoại (Ctrl + F)");
         Tooltip.install(txtSDT, tipFind);
         Tooltip tipCheck = new Tooltip("Check in khách hàng (Ctrl + B)");
@@ -63,55 +104,82 @@ public class CheckinController {
         Tooltip tipClear = new Tooltip("Clear thông tin (Ctrl + L)");
         Tooltip.install(btnXoaTrang, tipClear);
     }
-    private void addShortcuts(Scene scene){
+
+
+    /**
+     * Dừng autoRefresh + tất cả countdown khi màn này bị remove.
+     * Gọi tự động qua listener sceneProperty ở trên.
+     */
+    private void dispose() {
+        System.out.println("CheckinController dispose() called");
+
+        clearCountdownTimelines();  // dừng tất cả countdown từng tạo cho màn hình này
+
+        // Nếu muốn dừng luôn autoRefresh khi không ở màn checkin nữa thì:
+        if (autoRefresh != null) {
+            autoRefresh.stop();
+            autoRefreshStarted = false;
+            System.out.println("autoRefresh stopped in dispose()");
+        }
+    }
+
+    private void addShortcuts(Scene scene) {
         KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
         scene.getAccelerators().put(ctrlF, () -> {
             txtSDT.requestFocus();
             txtSDT.selectAll();
         });
         KeyCombination ctrlB = new KeyCodeCombination(KeyCode.B, KeyCombination.CONTROL_DOWN);
-        scene.getAccelerators().put(ctrlB, () -> checkin());
+        scene.getAccelerators().put(ctrlB, this::checkin);
         KeyCombination ctrlL = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
-        scene.getAccelerators().put(ctrlL, () -> xoaTrang());
+        scene.getAccelerators().put(ctrlL, this::xoaTrang);
     }
-    //a
-    private void loadComboKhuVuc(){
-        cboKhuVuc.getItems().clear();
-        cboKhuVuc.getItems().add("Tất cả");
-        for(KhuVuc khuVuc: KhuVucDAO.getAll()){
-            cboKhuVuc.getItems().add(khuVuc.getTenKhuVuc());
-        }
-        cboKhuVuc.getSelectionModel().selectFirst();
-    }
-    private void  loadDanhSach() {
 
-        int thoiGianDatTruoc = 0; // cho kieuDatBan = 1
-        int thoiGianCho = 0;      // cho kieuDatBan = 0
+    // =====================================================================
+    //                     LOAD THỜI GIAN ĐỢI BÀN (CACHE)
+    // =====================================================================
+    private void loadThoiGianDoiBan() {
+        thoiGianDatTruoc = 0;
+        thoiGianCho = 0;
         try {
-            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(true); // đặt trước
+            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(true);   // đặt trước
             ThoiGianDoiBan tgCho = ThoiGianDoiBanDAO.getLatestByLoai(false);       // chờ
             if (tgDatTruoc != null) thoiGianDatTruoc = tgDatTruoc.getThoiGian();
             if (tgCho != null) thoiGianCho = tgCho.getThoiGian();
         } catch (Exception e) {
             System.err.println("Lỗi load thời gian đợi bàn: " + e.getMessage());
         }
+    }
 
+    private void loadComboKhuVuc() {
+        cboKhuVuc.getItems().clear();
+        cboKhuVuc.getItems().add("Tất cả");
+        for (KhuVuc khuVuc : KhuVucDAO.getAll()) {
+            cboKhuVuc.getItems().add(khuVuc.getTenKhuVuc());
+        }
+        cboKhuVuc.getSelectionModel().selectFirst();
+    }
 
-        dsHoaDon = HoaDonDAO.getAllNgayHomNay(); // đã tối ưu: chỉ set ID và tên, không gọi DAO phụ
+    // =====================================================================
+    //                          LOAD DANH SÁCH
+    // =====================================================================
+    private void loadDanhSach() {
+        // lấy danh sách hóa đơn hôm nay 1 lần
+        dsHoaDon = HoaDonDAO.getAllNgayHomNay();
 
+        // xóa UI + stop toàn bộ countdown cũ
+        clearBookingItems();
 
-        vboxDatTruoc.getChildren().clear();
-        vboxCho.getChildren().clear();
-
+        if (dsHoaDon == null) return;
 
         for (HoaDon hd : dsHoaDon) {
             if (hd.getTrangthai() != 0) continue; // chỉ lấy trạng thái 0
 
-            int thoiGian = (hd.isKieuDatBan() == true) ? thoiGianDatTruoc : thoiGianCho;
+            int thoiGian = hd.isKieuDatBan() ? thoiGianDatTruoc : thoiGianCho;
 
             HBox item = createBookingItem(hd, thoiGian);
 
-            if (hd.isKieuDatBan() == true) { // đặt trước
+            if (hd.isKieuDatBan()) { // đặt trước
                 vboxDatTruoc.getChildren().add(item);
             } else { // chờ
                 vboxCho.getChildren().add(item);
@@ -119,29 +187,45 @@ public class CheckinController {
         }
     }
 
+    /**
+     * Xóa toàn bộ HBox trong vbox + dừng countdown cũ.
+     */
+    private void clearBookingItems() {
+        vboxDatTruoc.getChildren().clear();
+        vboxCho.getChildren().clear();
+        clearCountdownTimelines();
+    }
 
-    private HBox createBookingItem(HoaDon hd, int thoiGianCho) {
+    private void clearCountdownTimelines() {
+        for (Timeline t : countdownTimelines) {
+            t.stop();
+        }
+        countdownTimelines.clear();
+    }
+
+    // =====================================================================
+    //                     TẠO ITEM ĐẶT BÀN + COUNTDOWN
+    // =====================================================================
+    private HBox createBookingItem(HoaDon hd, int thoiGianChoPhut) {
         HBox hbox = new HBox(10);
         hbox.getStyleClass().add("booking-item");
 
-        String imgPath = "/IMG/ban/IN"; // mặc định
-        if (hd.getBan() != null && hd.getBan().getMaBan() != null) {
+        String imgPath = "/IMG/ban/IN.png"; // mặc định
+        if (hd.getBan() != null && hd.getBan().getMaBan() != null && hd.getBan().getKhuVuc() != null) {
             String tenKhuVuc = hd.getBan().getKhuVuc().getTenKhuVuc();
-            if (tenKhuVuc.equals("Indoor")) imgPath = "/IMG/ban/IN.png";
-            else if (tenKhuVuc.equals("Outdoor")) imgPath = "/IMG/ban/out.png";
-            else if (tenKhuVuc.equals("VIP")) imgPath = "/IMG/ban/vip.png";
+            if ("Indoor".equals(tenKhuVuc)) imgPath = "/IMG/ban/IN.png";
+            else if ("Outdoor".equals(tenKhuVuc)) imgPath = "/IMG/ban/out.png";
+            else if ("VIP".equals(tenKhuVuc)) imgPath = "/IMG/ban/vip.png";
         }
         ImageView img = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
         img.setFitWidth(80);
         img.setFitHeight(70);
-
         img.setPreserveRatio(false);
 
         Rectangle clip = new Rectangle(93, 80);
-        clip.setArcWidth(15);   // bán kính bo góc ngang
-        clip.setArcHeight(15);  // bán kính bo góc dọc
+        clip.setArcWidth(15);
+        clip.setArcHeight(15);
         img.setClip(clip);
-
 
         HBox.setMargin(img, new Insets(10));
         img.getStyleClass().add("booking-image");
@@ -155,7 +239,6 @@ public class CheckinController {
         lblPhone.getStyleClass().add("booking-phone");
         info.getChildren().addAll(lblId, lblPhone);
 
-
         VBox dateBox = new VBox();
         dateBox.getStyleClass().add("booking-date");
         String timeStr = (hd.getTgCheckIn() != null)
@@ -164,26 +247,26 @@ public class CheckinController {
         Label lblDate = new Label(timeStr);
         dateBox.getChildren().add(lblDate);
 
-
         VBox remainingBox = new VBox();
         remainingBox.setStyle("-fx-alignment: CENTER;");
         remainingBox.getStyleClass().add("booking-remaining");
         Label lblRemaining = new Label();
         remainingBox.getChildren().add(lblRemaining);
 
-
-        if (hd.getTgCheckIn() != null) {
+        // COUNTDOWN
+        if (hd.getTgCheckIn() != null && thoiGianChoPhut > 0) {
             LocalDateTime checkInTime = hd.getTgCheckIn();
-            long totalSeconds = thoiGianCho * 60;
+            long totalSeconds = thoiGianChoPhut * 60L;
 
-            javafx.animation.Timeline timeline = new javafx.animation.Timeline(
-                    new javafx.animation.KeyFrame(javafx.util.Duration.seconds(1), e -> {
-                        LocalDateTime now = LocalDateTime.now();
+            Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.seconds(1), e -> {
+                        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
                         if (now.isBefore(checkInTime)) {
                             lblRemaining.setText("-- : -- : --");
                             remainingBox.setStyle("-fx-background-color: #00C8B3;");
                         } else {
-                            long secondsLeft = totalSeconds - Duration.between(checkInTime, now).getSeconds();
+                            long diff = ChronoUnit.SECONDS.between(checkInTime, now);
+                            long secondsLeft = totalSeconds - diff;
                             if (secondsLeft > 0) {
                                 long h = secondsLeft / 3600;
                                 long m = (secondsLeft % 3600) / 60;
@@ -194,13 +277,17 @@ public class CheckinController {
                                 lblRemaining.setText("00:00:00");
                                 remainingBox.setStyle("-fx-background-color: #FF3B30;");
                                 Ban banhethan = hd.getBan();
-                                BanDAO.update(banhethan, false);
+                                if (banhethan != null) {
+                                    BanDAO.update(banhethan, false);
+                                }
                             }
                         }
                     })
             );
-            timeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
+            timeline.setCycleCount(Animation.INDEFINITE);
             timeline.play();
+
+            countdownTimelines.add(timeline);
         } else {
             lblRemaining.setText("-");
         }
@@ -219,14 +306,15 @@ public class CheckinController {
         return hbox;
     }
 
-
-
     private void highlightSelected(HBox selected) {
         if (lastSelected != null) lastSelected.setStyle("");
         selected.setStyle("-fx-background-color: #FFE0B2; -fx-background-radius: 10;");
         lastSelected = selected;
     }
 
+    // =====================================================================
+    //                              CHECKIN
+    // =====================================================================
     @FXML
     private void checkin() {
         String maHD = lblMaHD.getText();
@@ -249,16 +337,18 @@ public class CheckinController {
 
         LocalDateTime now = LocalDateTime.now();
         ThoiGianDoiBan tg = ThoiGianDoiBanDAO.getLatestByLoai(hd.isKieuDatBan());
-        int thoiGianCho = (tg != null) ? tg.getThoiGian() : 0;
-        LocalDateTime tgChoPhep = tgDat.plusMinutes(thoiGianCho);
+        int thoiGianChoPhut = (tg != null) ? tg.getThoiGian() : 0;
+        LocalDateTime tgChoPhep = tgDat.plusMinutes(thoiGianChoPhut);
 
         if (now.isBefore(tgDat)) {
-            showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Chưa tới giờ check-in!\nGiờ đặt: " + tgDat.toLocalTime());
+            showAlert(Alert.AlertType.INFORMATION, "Thông báo",
+                    "Chưa tới giờ check-in!\nGiờ đặt: " + tgDat.toLocalTime());
             return;
         }
 
         if (now.isAfter(tgChoPhep)) {
-            showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
+            showAlert(Alert.AlertType.INFORMATION, "Thông báo",
+                    "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
             hd.setTrangthai(3);
             HoaDonDAO.update(hd);
             loadDanhSach();
@@ -270,7 +360,8 @@ public class CheckinController {
 
         boolean ok = HoaDonDAO.update(hd);
         if (ok) {
-            showAlert(Alert.AlertType.INFORMATION, "Thành công", "Check-in thành công cho hóa đơn " + maHD + "!");
+            showAlert(Alert.AlertType.INFORMATION, "Thành công",
+                    "Check-in thành công cho hóa đơn " + maHD + "!");
             loadDanhSach();
             clearThongTin();
         } else {
@@ -285,13 +376,12 @@ public class CheckinController {
         lblSoLuong.setText("");
         lblSuKien.setText("");
         lblKhuVuc.setText("");
-        // Chỉ xóa các node từ dòng thứ 2 (row >= 1)
+
+        // xóa các dòng detail (row >= 1)
         gridChiTietHD.getChildren().removeIf(node -> {
             Integer row = GridPane.getRowIndex(node);
             return row != null && row >= 1;
         });
-
-
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
@@ -311,7 +401,10 @@ public class CheckinController {
         lblKhuVuc.setText(hd.getBan().getKhuVuc() != null ? hd.getBan().getKhuVuc().getTenKhuVuc() : "-");
 
         List<ChiTietHoaDon> chiTietList = ChiTietHDDAO.getAllByMaHD(hd.getMaHD());
-        gridChiTietHD.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
+        gridChiTietHD.getChildren().removeIf(node -> {
+            Integer row = GridPane.getRowIndex(node);
+            return row != null && row > 0;
+        });
 
         int row = 1;
         for (ChiTietHoaDon cthd : chiTietList) {
@@ -328,10 +421,13 @@ public class CheckinController {
         }
     }
 
+    // =====================================================================
+    //                         FILTER DANH SÁCH
+    // =====================================================================
     private void setupFilterEvents() {
         clearThongTin();
         if (txtMaHD != null) addAutoSearch(txtMaHD);
-        if (cboKhuVuc != null) addAutoSearch(cboKhuVuc); // ComboBox
+        if (cboKhuVuc != null) addAutoSearch(cboKhuVuc);
         if (txtSDT != null) addAutoSearch(txtSDT);
         if (dpThoiGian != null) addAutoSearch(dpThoiGian);
     }
@@ -339,12 +435,13 @@ public class CheckinController {
     @FXML
     private void xoaTrang() {
         clearThongTin();
-        txtMaHD.clear();
-        txtSDT.clear();
-        dpThoiGian.setValue(null);
-        cboKhuVuc.getSelectionModel().selectFirst();
+        if (txtMaHD != null) txtMaHD.clear();
+        if (txtSDT != null) txtSDT.clear();
+        if (dpThoiGian != null) dpThoiGian.setValue(null);
+        if (cboKhuVuc != null) cboKhuVuc.getSelectionModel().selectFirst();
+        // load lại toàn bộ
+        loadDanhSach();
     }
-
 
     private void addAutoSearch(TextField field) {
         field.textProperty().addListener((obs, oldVal, newVal) -> filterDanhSach());
@@ -359,59 +456,57 @@ public class CheckinController {
     }
 
     private void filterDanhSach() {
+        if (dsHoaDon == null) return;
+
         String maHD = txtMaHD != null ? txtMaHD.getText().trim().toLowerCase() : "";
         String sdt = txtSDT != null ? txtSDT.getText().trim().toLowerCase() : "";
-        String ngay = dpThoiGian != null && dpThoiGian.getValue() != null
+        String ngay = (dpThoiGian != null && dpThoiGian.getValue() != null)
                 ? dpThoiGian.getValue().toString()
                 : "";
         Object khuVuc = cboKhuVuc != null ? cboKhuVuc.getValue() : null;
 
-        vboxDatTruoc.getChildren().clear();
-        vboxCho.getChildren().clear();
-
-        // Lấy thời gian đợi bàn 1 lần
-        int thoiGianDatTruoc = 0; // kieuDatBan = 1
-        int thoiGianCho = 0;      // kieuDatBan = 0
-        try {
-            ThoiGianDoiBan tgDatTruoc = ThoiGianDoiBanDAO.getLatestByLoai(true);
-            ThoiGianDoiBan tgCho = ThoiGianDoiBanDAO.getLatestByLoai(false);
-            if (tgDatTruoc != null) thoiGianDatTruoc = tgDatTruoc.getThoiGian();
-            if (tgCho != null) thoiGianCho = tgCho.getThoiGian();
-        } catch (Exception e) {
-            System.err.println("Lỗi load thời gian đợi bàn: " + e.getMessage());
-        }
+        // clear UI + stop countdown cũ
+        clearBookingItems();
 
         for (HoaDon hd : dsHoaDon) {
             if (hd.getTrangthai() != 0) continue;
 
             boolean match = true;
             if (!maHD.isEmpty() && !hd.getMaHD().toLowerCase().contains(maHD)) match = false;
-            if (!sdt.isEmpty() && (hd.getKhachHang() == null ||
-                    !hd.getKhachHang().getSdt().toLowerCase().contains(sdt))) match = false;
+            if (!sdt.isEmpty()) {
+                String phone = (hd.getKhachHang() != null && hd.getKhachHang().getSdt() != null)
+                        ? hd.getKhachHang().getSdt().toLowerCase()
+                        : "";
+                if (!phone.contains(sdt)) match = false;
+            }
             if (!ngay.isEmpty() && hd.getTgCheckIn() != null &&
                     !hd.getTgCheckIn().toLocalDate().toString().equals(ngay)) match = false;
-            if (hd.getBan() != null && khuVuc != null && !khuVuc.toString().equals("Tất cả")) {
-                String tenKhuVuc = hd.getBan().getKhuVuc() != null ? hd.getBan().getKhuVuc().getTenKhuVuc() : "";
+            if (hd.getBan() != null && khuVuc != null && !"Tất cả".equals(khuVuc.toString())) {
+                String tenKhuVuc = hd.getBan().getKhuVuc() != null
+                        ? hd.getBan().getKhuVuc().getTenKhuVuc()
+                        : "";
                 if (!khuVuc.toString().equals(tenKhuVuc)) match = false;
             }
 
             if (match) {
-                // Chọn thời gian đợi bàn theo loại
-                int thoiGian = (hd.isKieuDatBan()) ? thoiGianDatTruoc : thoiGianCho;
+                int thoiGian = hd.isKieuDatBan() ? thoiGianDatTruoc : thoiGianCho;
                 HBox item = createBookingItem(hd, thoiGian);
 
-                if (hd.isKieuDatBan()) { // đặt trước
+                if (hd.isKieuDatBan()) {
                     vboxDatTruoc.getChildren().add(item);
-                } else { // chờ
+                } else {
                     vboxCho.getChildren().add(item);
                 }
             }
         }
     }
 
+    // =====================================================================
+    //                 AUTO GÁN BÀN THẬT CHO HÓA ĐƠN CHỜ
+    // =====================================================================
     private void autoAssignWaitlistToFreeTable() {
         try {
-            // Lấy danh sách bàn trống thật
+            // Lấy danh sách bàn trống
             List<Ban> dsBanTrong = BanDAO.getAllTrong();
 
             // Lấy danh sách hóa đơn đang chờ
@@ -425,7 +520,6 @@ public class CheckinController {
                 int soLuongKhach = hdWait.getSoLuong();
                 String maKV = banCho.getKhuVuc().getMaKhuVuc();
 
-                // Tìm bàn thật cùng khu vực và đủ chỗ
                 Ban banPhuHop = dsBanTrong.stream()
                         .filter(b -> b.getKhuVuc().getMaKhuVuc().equals(maKV)
                                 && b.getLoaiBan().getSoLuong() >= soLuongKhach)
@@ -433,22 +527,18 @@ public class CheckinController {
                         .orElse(null);
 
                 if (banPhuHop != null) {
-                    // Cập nhật bàn mới cho hóa đơn
                     hdWait.setBan(banPhuHop);
-                    boolean okban = BanDAO.update(banPhuHop,true);
+                    BanDAO.update(banPhuHop, true);
                     hdWait.setTgCheckIn(LocalDateTime.now());
-                    hdWait.setTrangthai(0); // vẫn là chờ, không chuyển sang phục vụ
+                    hdWait.setTrangthai(0); // vẫn trạng thái chờ
 
-                    // Update hóa đơn sang bàn thật
                     boolean ok = HoaDonDAO.update(hdWait);
 
                     if (ok) {
-                        // Xóa bàn đợi (bàn tạm chờ) khỏi DB
                         boolean xoaBanTam = BanDAO.delete(banCho.getMaBan());
-                        System.out.println("💡 Đã gán bàn thật " + banPhuHop.getMaBan() +
+                        System.out.println("Đã gán bàn thật " + banPhuHop.getMaBan() +
                                 " cho hóa đơn chờ " + hdWait.getMaHD() +
-                                (xoaBanTam ? " và xóa bàn tạm " + banCho.getMaBan() + " " : "  KHÔNG XÓA ĐƯỢC bàn tạm"));
-
+                                (xoaBanTam ? " và xóa bàn tạm " + banCho.getMaBan() : " (KHÔNG XÓA ĐƯỢC bàn tạm)"));
                     } else {
                         System.err.println("Không thể cập nhật hóa đơn " + hdWait.getMaHD());
                     }
@@ -463,8 +553,5 @@ public class CheckinController {
             e.printStackTrace();
         }
     }
-
-
-
 
 }

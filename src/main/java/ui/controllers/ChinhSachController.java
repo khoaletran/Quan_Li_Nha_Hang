@@ -608,6 +608,7 @@ private void xacNhanPhanTramLoi() {
 
     @FXML
     public void initialize() {
+        System.out.println("Initializing ChinhSachController");
         // ToggleGroup
         groupCoc = new ToggleGroup();
         rbPhanTram.setToggleGroup(groupCoc);

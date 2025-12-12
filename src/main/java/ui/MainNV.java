@@ -14,7 +14,7 @@ import ui.controllers.SidebarController_NV;
 
 import java.time.LocalDateTime;
 
-public class MainNV extends Application {
+public class MainNV {
 
     private NhanVien nvDangNhap;
     private LocalDateTime thoiGianVaoCa;
@@ -27,8 +27,7 @@ public class MainNV extends Application {
         this.nvDangNhap = nv;
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    public void show(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/MainNhanVien.fxml"));
         BorderPane root = loader.load();
 

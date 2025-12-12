@@ -3,22 +3,42 @@ package ui.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import javafx.application.Platform;
 
 public class DangXuatController {
 
     @FXML private Button btnCancel;
     @FXML private Button btnConfirm;
 
+    private Stage dialogStage;
+    private Stage ownerStage;
+
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
+    }
+
+    public void setOwnerStage(Stage ownerStage) {
+        this.ownerStage = ownerStage;
+    }
+
     @FXML
     public void initialize() {
         btnCancel.setOnAction(e -> {
-            Stage stage = (Stage) btnCancel.getScene().getWindow();
-            stage.close();
+            if (dialogStage != null) {
+                dialogStage.close();
+            } else {
+                ((Stage) btnCancel.getScene().getWindow()).close();
+            }
         });
 
         btnConfirm.setOnAction(e -> {
-            Platform.exit();
+            // Đóng stage chính => nếu đây là stage cuối cùng, app tự thoát, KHÔNG cần Platform.exit()
+            if (ownerStage != null) {
+                ownerStage.close();
+            }
+            // Đóng dialog
+            if (dialogStage != null) {
+                dialogStage.close();
+            }
         });
     }
 }

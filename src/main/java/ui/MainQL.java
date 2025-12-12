@@ -13,7 +13,7 @@ import ui.controllers.SidebarController_QL;
 
 import static ui.AppConstants.APP_LOGO;
 
-public class MainQL extends Application {
+public class MainQL {
 
     private NhanVien nvDangNhap;
 
@@ -21,12 +21,8 @@ public class MainQL extends Application {
         this.nvDangNhap = nv;
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    public void show(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(Login.class.getResource("/FXML/MainQuanLi.fxml"));
         BorderPane root = loader.load();
 

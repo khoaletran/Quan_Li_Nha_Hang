@@ -1,37 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane prefHeight="600" prefWidth="1000"
+            stylesheets="@../CSS/splash.css"
             xmlns="http://javafx.com/javafx/24.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ui.controllers.SplashController"
-            style="-fx-background-color: linear-gradient(to bottom, #ff6600, #ff9900);"
-             stylesheets="/CSS/splash.css">
+            fx:controller="ui.controllers.SplashController">
 
-    <!-- Nội dung căn giữa -->
-    <VBox alignment="CENTER" spacing="20" layoutX="0" layoutY="0" prefWidth="1000" prefHeight="600">
+    <!-- nền xám ngoài cùng -->
+    <StackPane prefHeight="600" prefWidth="1000" styleClass="splash-root">
 
-        <!-- Logo -->
-        <ImageView fx:id="logoImage" fitWidth="300" fitHeight="300" preserveRatio="true">
-            <image>
-                <Image url="@../IMG/logo_1.png"/>
-            </image>
-        </ImageView>
+        <!-- khung giữa, canh con về TRÁI -->
+        <StackPane prefHeight="480" prefWidth="900"
+                   styleClass="splash-inner"
+                   alignment="CENTER_LEFT">
 
-        <!-- Tiêu đề -->
-        <Label text="CrabKing Restaurant"
-               style="-fx-font-size:28px; -fx-font-weight:bold; -fx-text-fill:white;" />
+            <!-- panel cam đậm: width = 0 ban đầu, ghim LEFT -->
+            <Rectangle fx:id="rightPanel"
+                       width="0"
+                       height="600"
+                       arcHeight="60" arcWidth="60"
+                       styleClass="splash-right"
+                       StackPane.alignment="CENTER_LEFT"/>
 
-        <!-- Progress bar -->
-        <ProgressBar fx:id="progressBar" prefWidth="500" prefHeight="20"
-                     style="-fx-accent: #4CAF50; -fx-background-radius:10;"/>
-    </VBox>
+            <HBox alignment="CENTER_LEFT"
+                  prefHeight="480" prefWidth="900" spacing="0">
 
+                <!-- LEFT: card logo + progress -->
+                <VBox alignment="CENTER" prefHeight="480" prefWidth="450"
+                      spacing="20" styleClass="left-pane">
+                    <children>
+
+                        <!-- logo -->
+                        <ImageView fitHeight="450.0" fitWidth="670.0" preserveRatio="true">
+                            <image>
+                                <Image url="@../IMG/logo_1.png" />
+                            </image>
+                        </ImageView>
+
+                        <!-- Thanh load -->
+                        <StackPane alignment="CENTER_LEFT"
+                                   prefHeight="24" prefWidth="400"
+                                   style="-fx-alignment: center;">
+                            <children>
+                                <!-- nền trắng -->
+                                <Rectangle arcHeight="12" arcWidth="12" height="16"
+                                           styleClass="progress-bg" width="400" />
+
+                                <!-- thanh xanh: width 0 -> 400 -->
+                                <Rectangle fx:id="progressFill"
+                                           arcHeight="12" arcWidth="12"
+                                           height="16" width="0"
+                                           styleClass="progress-fill" />
+                            </children>
+                        </StackPane>
+
+                        <Label styleClass="splash-caption"
+                               text="Đang khởi động hệ thống..." />
+
+                    </children>
+                </VBox>
+            </HBox>
+        </StackPane>
+    </StackPane>
 </AnchorPane>
-
