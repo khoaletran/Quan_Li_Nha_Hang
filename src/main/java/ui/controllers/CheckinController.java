@@ -317,7 +317,7 @@ public class CheckinController {
         for (ChiTietHoaDon cthd : chiTietList) {
             Label lblMon = new Label(cthd.getMon().getTenMon());
             Label lblSL = new Label(String.valueOf(cthd.getSoLuong()));
-            Label lblGia = new Label(String.format("%,.0fđ", cthd.getMon().getGiaBan()));
+            Label lblGia = new Label(String.format("%,.0fđ", cthd.getMon().getGiaBanTaiLucLapHD(hd)));
             Label lblTong = new Label(String.format("%,.0fđ", cthd.getThanhTien()));
 
             gridChiTietHD.add(lblMon, 0, row);

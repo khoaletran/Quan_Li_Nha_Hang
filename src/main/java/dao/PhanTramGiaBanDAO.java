@@ -32,7 +32,10 @@ public class PhanTramGiaBanDAO {
         return new PhanTramGiaBan(
                 rs.getString("maPTGB"),
                 rs.getInt("phanTramLoi"),
-                rs.getDate("ngayApDung").toLocalDate(),
+                rs.getTimestamp("ngayApDung") != null
+        ? rs.getTimestamp("ngayApDung").toLocalDateTime()
+        : null
+,
                 loaiMon,
                 mon
         );
@@ -164,7 +167,12 @@ public class PhanTramGiaBanDAO {
             ps.setString(2, pt.getLoaiMon() != null ? pt.getLoaiMon().getMaLoaiMon() : null);
             ps.setString(3, pt.getMon() != null ? pt.getMon().getMaMon() : null);
             ps.setInt(4, pt.getPhanTramLoi());
-            ps.setDate(5, Date.valueOf(pt.getNgayApDung()));
+            ps.setTimestamp(5, 
+        pt.getNgayApDung() != null 
+                ? Timestamp.valueOf(pt.getNgayApDung()) 
+                : null
+);
+
 
             return ps.executeUpdate() > 0;
 
@@ -188,7 +196,12 @@ public class PhanTramGiaBanDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, pt.getPhanTramLoi());
-            ps.setDate(2, Date.valueOf(pt.getNgayApDung()));
+           ps.setTimestamp(2, 
+        pt.getNgayApDung() != null 
+                ? Timestamp.valueOf(pt.getNgayApDung()) 
+                : null
+);
+
             ps.setString(3, pt.getMaPTGB());
 
             return ps.executeUpdate() > 0;

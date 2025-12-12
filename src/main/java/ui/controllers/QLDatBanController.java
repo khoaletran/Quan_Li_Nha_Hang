@@ -679,12 +679,12 @@ public class QLDatBanController {
         lblSoLuong.setPrefWidth(30);
         lblSoLuong.setAlignment(javafx.geometry.Pos.CENTER);
 
-        Label lblGia = new Label(formatCurrency(mon.getGiaBan()));
+        Label lblGia = new Label(formatCurrency(mon.getGiaBanTaiLucLapHD(ct.getHoaDon())));
         lblGia.getStyleClass().addAll("order-col", "price");
         lblGia.setPrefWidth(70);
         lblGia.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 
-        Label lblTongTien = new Label(formatCurrency(mon.getGiaBan() * soLuong));
+        Label lblTongTien = new Label(formatCurrency(ct.getThanhTien()));
         lblTongTien.getStyleClass().addAll("order-col", "total", "lblTongTienCT");
         lblTongTien.setPrefWidth(80);
         lblTongTien.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);

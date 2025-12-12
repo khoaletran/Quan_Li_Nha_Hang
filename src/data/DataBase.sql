@@ -287,3 +287,6 @@ GO
 ALTER TABLE KhuyenMai
     DROP CONSTRAINT chk_ngayPhatHanh_KM;
 GO
+go
+ALTER TABLE PhanTramGiaBan
+ALTER COLUMN ngayApDung SMALLDATETIME;

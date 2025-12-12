@@ -1,14 +1,11 @@
 package entity;
 
-import entity.LoaiMon;
-import entity.Mon;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PhanTramGiaBan {
     private String maPTGB;
     private int phanTramLoi;       // % lời (int)
-    private LocalDate ngayApDung;
+    private LocalDateTime ngayApDung;
     private LoaiMon loaiMon;       // nếu != null → áp dụng cho loại món
     private Mon mon;           // Hoặc áp dụng riêng cho món
 
@@ -16,7 +13,7 @@ public class PhanTramGiaBan {
 
     }
 
-    public PhanTramGiaBan(String maPTGB, int phanTramLoi, LocalDate ngayApDung, LoaiMon loaiMon, Mon mon) {
+    public PhanTramGiaBan(String maPTGB, int phanTramLoi, LocalDateTime ngayApDung, LoaiMon loaiMon, Mon mon) {
         this.maPTGB = maPTGB;
         this.phanTramLoi = phanTramLoi;
         this.ngayApDung = ngayApDung;
@@ -46,11 +43,11 @@ public class PhanTramGiaBan {
         this.phanTramLoi = phanTramLoi;
     }
 
-    public LocalDate getNgayApDung() {
+    public LocalDateTime getNgayApDung() {
         return ngayApDung;
     }
 
-    public void setNgayApDung(LocalDate ngayApDung) {
+    public void setNgayApDung(LocalDateTime ngayApDung) {
         if(ngayApDung == null){
             throw new IllegalArgumentException("Ngày áp dụng không được rỗng");
         }
