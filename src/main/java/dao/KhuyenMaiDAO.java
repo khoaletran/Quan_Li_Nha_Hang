@@ -174,4 +174,64 @@ public class KhuyenMaiDAO {
 
         return null;
     }
+    // ==============================
+    // GET BY CODE (maKM hoặc maThayThe)
+    // ==============================
+    public static KhuyenMai getByCode(String code) {
+        String sql = "SELECT TOP 1 * FROM KhuyenMai WHERE maKM = ? OR maThayThe = ?";
+
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, code);
+            ps.setString(2, code);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return map(rs);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("KhuyenMaiDAO.getByCode(): " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    // ==============================
+    // GIẢM SỐ LƯỢNG ATOMIC (soLuong > 0 mới giảm)
+    // ==============================
+    public static boolean giamSoLuongAtomic(String maKM) {
+        String sql = "UPDATE KhuyenMai SET soLuong = soLuong - 1 WHERE maKM = ? AND soLuong > 0";
+
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maKM);
+            return ps.executeUpdate() > 0; // >0 nghĩa là giảm được
+
+        } catch (SQLException e) {
+            System.err.println("KhuyenMaiDAO.giamSoLuongAtomic(): " + e.getMessage());
+            return false;
+        }
+    }
+    // ==============================
+    // TĂNG SỐ LƯỢNG ATOMIC
+    // ==============================
+    public static boolean tangSoLuongAtomic(String maKM) {
+        String sql = "UPDATE KhuyenMai SET soLuong = soLuong + 1 WHERE maKM = ?";
+
+        try (Connection conn = connectDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maKM);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("KhuyenMaiDAO.tangSoLuongAtomic(): " + e.getMessage());
+            return false;
+        }
+    }
+
+
+
 }

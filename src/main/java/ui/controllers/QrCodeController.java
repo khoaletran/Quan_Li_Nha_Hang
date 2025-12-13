@@ -90,9 +90,13 @@ public class QrCodeController {
 
     public static String scanQRCodeWithPreview() {
         AtomicBoolean running = new AtomicBoolean(true);
-        String resultText = null;
         Webcam webcam = Webcam.getDefault();
+        if (webcam == null) return null;
+
+        String[] resultText = { null };
+
         webcam.setViewSize(new java.awt.Dimension(640, 480));
+        webcam.open();
 
         JFrame window = new JFrame("Camera - Quét mã QR");
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -100,50 +104,57 @@ public class QrCodeController {
 
         WebcamPanel panel = new WebcamPanel(webcam);
         panel.setMirrored(true);
+        panel.setFPSDisplayed(true);
+        panel.start();
         window.add(panel);
-        window.setVisible(true);
-        window.setLocationRelativeTo(null);
 
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
 
         window.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                running.set(false); // báo cho thread dừng
-                webcam.close();
-                window.dispose();
+                running.set(false);
             }
         });
 
         try {
+            MultiFormatReader reader = new MultiFormatReader();
+
             while (running.get()) {
                 BufferedImage image = webcam.getImage();
                 if (image == null) continue;
 
-                LuminanceSource source = new BufferedImageLuminanceSource(image);
-                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                Result result = null;
+                BinaryBitmap bitmap = new BinaryBitmap(
+                        new HybridBinarizer(new BufferedImageLuminanceSource(image))
+                );
 
                 try {
-                    result = new MultiFormatReader().decode(bitmap);
-                } catch (NotFoundException e) {
-                    // không tìm thấy mã thì bỏ qua
+                    Result result = reader.decode(bitmap);
+                    if (result != null) {
+                        resultText[0] = result.getText();
+                        break;
+                    }
+                } catch (NotFoundException ignore) {
+                } finally {
+                    reader.reset();
                 }
 
-                if (result != null) {
-                    resultText = result.getText();
-                    break;
-                }
-
-                Thread.sleep(200);
+                Thread.sleep(150);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (webcam.isOpen()) webcam.close();
+            running.set(false);
+
+            try { panel.stop(); } catch (Exception ignore) {}
+            try { if (webcam.isOpen()) webcam.close(); } catch (Exception ignore) {}
+
             window.dispose();
         }
 
-        return resultText;
+        return resultText[0];
     }
+
 
 }

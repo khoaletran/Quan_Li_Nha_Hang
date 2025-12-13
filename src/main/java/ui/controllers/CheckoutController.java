@@ -18,6 +18,7 @@ import ui.AlertCus;
 import ui.HoaDonIn;
 import ui.QRThanhToan;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.text.DecimalFormat;
@@ -46,7 +47,7 @@ public class CheckoutController {
         xuLyHienThiTienMat();
         btnThanhToan.setOnAction(e -> xuLyThanhToan());
 
-        txtMaGG.setOnAction(e -> updateThanhTien());
+        txtMaGG.textProperty().addListener((obs, oldV, newV) -> updateThanhTien());
 
         Platform.runLater(() -> addShortcuts(searchField.getScene()));
         Tooltip tipFind = new Tooltip("Tìm kiếm hóa đơn (Ctrl + F)");
@@ -66,51 +67,49 @@ public class CheckoutController {
     }
 
     // ======== QUÉT MÃ QR GIẢM GIÁ ==========
+    private boolean dangQuetQR = false;
+
     @FXML
     private void handleCameraButton() {
+        if (dangQuetQR) return;
+        dangQuetQR = true;
+
         new Thread(() -> {
             String maQR = QrCodeController.scanQRCodeWithPreview();
-
-            if (maQR != null) {
-                javafx.application.Platform.runLater(() -> {
+            Platform.runLater(() -> {
+                dangQuetQR = false;
+                if (maQR != null) {
                     txtMaGG.setText(maQR);
                     updateThanhTien();
-                });
-            } else {
-                javafx.application.Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Không nhận được mã");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Không quét được mã QR. Vui lòng thử lại!");
-                    alert.showAndWait();
-                });
-            }
+                }
+            });
         }).start();
     }
 
     // ======== TÍNH TOÁN GIẢM GIÁ & TỔNG TIỀN ==========
     private void updateThanhTien() {
-        if (lblmaHD.getText().isEmpty()) return;
+        if (hdHienTai == null || lblmaHD.getText().isEmpty()) return;
 
-        String maGiamG = txtMaGG.getText().trim();
-        if (!maGiamG.isEmpty()) {
-            for (KhuyenMai km : listKM) {
-                if( maGiamG.equals(km.getMaKM()) || maGiamG.equals(km.getMaThayThe()) ){
-                    hdHienTai.setKhuyenMai(km);
-                    break;
-                }
-            }
+        String code = txtMaGG.getText().trim();
+
+        KhuyenMai found = null;
+        if (!code.isEmpty()) {
+            found = KhuyenMaiDAO.getByCode(code);
+            if (!isKmConHieuLuc(found)) found = null;
         }
+        hdHienTai.setKhuyenMai(found);
 
         lblGiamGia.setText(formatCurrency(hdHienTai.getTongTienKhuyenMai()));
-        lblGiamGia1.setText("( Voucher: " + formatCurrency(hdHienTai.getTienMaKM()) +"| Voucher Hạng: "+ formatCurrency(hdHienTai.getTienHangKM()) +")");
+        lblGiamGia1.setText("( Voucher: " + formatCurrency(hdHienTai.getTienMaKM())
+                + " | Voucher Hạng: " + formatCurrency(hdHienTai.getTienHangKM()) + " )");
+
         if (rdoTienMat.isSelected()) taoGoiYTienKhach();
 
         double tongTien = hdHienTai.getTongTienTruoc();
         double thue = tongTien * 0.1;
         double tongTT = hdHienTai.getTongTienSau();
         double coc = hdHienTai.getCoc();
-        double conLai = hdHienTai.getTongTienSau() ;
+        double conLai = hdHienTai.getTongTienSau();
 
         lblTongTien.setText(formatCurrency(tongTien));
         lblThue.setText(formatCurrency(thue));
@@ -118,6 +117,7 @@ public class CheckoutController {
         lblCoc.setText(formatCurrency(coc));
         lblConLai.setText(formatCurrency(conLai));
     }
+
 
 
 
@@ -316,11 +316,32 @@ public class CheckoutController {
                 AlertCus.show("Thiếu tiền", "Số tiền khách đưa chưa đủ để thanh toán!");
                 return;
             }
+            KhuyenMai km = hdHienTai.getKhuyenMai();
+            if (km != null) {
+                KhuyenMai fresh = KhuyenMaiDAO.getByID(km.getMaKM());
+                if (!isKmConHieuLuc(fresh)) {
+                    AlertCus.show("Voucher không hợp lệ", "Voucher đã hết hạn / chưa tới ngày / hoặc hết số lượng.");
+                    return;
+                }
+                // giữ slot trước
+                boolean ok = KhuyenMaiDAO.giamSoLuongAtomic(fresh.getMaKM());
+                if (!ok) {
+                    AlertCus.show("Voucher hết lượt", "Voucher vừa hết số lượng, không thể áp dụng.");
+                    return;
+                }
+                hdHienTai.setKhuyenMai(fresh);
+            }
 
-            // cập nhật hóa đơn
             hdHienTai.setTrangthai(2);
-            hdHienTai.setTgCheckOut(java.time.LocalDateTime.now());
-            HoaDonDAO.update(hdHienTai);
+            hdHienTai.setTgCheckOut(LocalDateTime.now());
+            boolean okUpdate = HoaDonDAO.update(hdHienTai);
+            if (!okUpdate) {
+                if (hdHienTai.getKhuyenMai() != null) {
+                    KhuyenMaiDAO.tangSoLuongAtomic(hdHienTai.getKhuyenMai().getMaKM());
+                }
+                AlertCus.show("Lỗi", "Không thể cập nhật hóa đơn. Vui lòng thử lại.");
+                return;
+            }
 
             // cộng điểm tích lũy
             congDiemTichLuy(kh, hdHienTai.getTongTienTruoc());
@@ -342,14 +363,51 @@ public class CheckoutController {
         }
 
         QRThanhToan.hienThiQRPanel(tongConLai, hdHienTai.getMaHD(), () -> {
+
+            // 1) Validate + giữ slot voucher (không đụng UI ở đây nếu callback không phải FX thread)
+            KhuyenMai km = hdHienTai.getKhuyenMai();
+            if (km != null) {
+                KhuyenMai fresh = KhuyenMaiDAO.getByID(km.getMaKM());
+                if (!isKmConHieuLuc(fresh)) {
+                    Platform.runLater(() ->
+                            AlertCus.show("Voucher không hợp lệ", "Voucher đã hết hạn / chưa tới ngày / hoặc hết số lượng.")
+                    );
+                    return;
+                }
+
+                boolean ok = KhuyenMaiDAO.giamSoLuongAtomic(fresh.getMaKM());
+                if (!ok) {
+                    Platform.runLater(() ->
+                            AlertCus.show("Voucher hết lượt", "Voucher vừa hết số lượng, không thể áp dụng.")
+                    );
+                    return;
+                }
+
+                hdHienTai.setKhuyenMai(fresh);
+            }
+
+            // 2) Chốt hóa đơn sau khi giữ slot OK
             hdHienTai.setTrangthai(2);
-            hdHienTai.setTgCheckOut(java.time.LocalDateTime.now());
-            HoaDonDAO.update(hdHienTai);
+            hdHienTai.setTgCheckOut(LocalDateTime.now());
+
+            boolean updated = HoaDonDAO.update(hdHienTai);
+            if (!updated) {
+                if (hdHienTai.getKhuyenMai() != null) {
+                    KhuyenMaiDAO.tangSoLuongAtomic(
+                            hdHienTai.getKhuyenMai().getMaKM()
+                    );
+                }
+
+                Platform.runLater(() ->
+                        AlertCus.show("Lỗi", "Không thể cập nhật hóa đơn. Vui lòng thử lại.")
+                );
+                return;
+            }
 
             congDiemTichLuy(kh, hdHienTai.getTongTienTruoc());
             BanDAO.update(hdHienTai.getBan(), false);
 
-            javafx.application.Platform.runLater(() -> {
+            Platform.runLater(() -> {
                 AlertCus.show("Thanh toán thành công",
                         "Khách đã chuyển khoản đủ " + formatCurrency(tongConLai) +
                                 "\nHóa đơn " + hdHienTai.getMaHD() + " đã hoàn tất.");
@@ -360,6 +418,7 @@ public class CheckoutController {
                 vboxMenu.getChildren().clear();
             });
         });
+
     }
 
 
@@ -369,6 +428,33 @@ public class CheckoutController {
         khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() + diem);
         KhachHangDAO.update(khachHang);
     }
+
+    private void giamSLMaKM(String maKM){
+        if (maKM == null || maKM.isBlank()) return;
+        KhuyenMai km = KhuyenMaiDAO.getByID(maKM);
+        if (km == null) return;
+        if (km.getSoLuong() <= 0) return;
+        km.setSoLuong(km.getSoLuong() - 1);
+        KhuyenMaiDAO.update(km);
+    }
+
+    private boolean isKmConHieuLuc(KhuyenMai km) {
+        if (km == null) return false;
+
+        if (km.getSoLuong() <= 0) return false;
+
+        java.time.LocalDate today = java.time.LocalDate.now();
+
+        java.time.LocalDate start = km.getNgayPhatHanh(); // LocalDate
+        java.time.LocalDate end   = km.getNgayKetThuc();  // LocalDate
+
+        if (start != null && today.isBefore(start)) return false; // chưa phát hành
+        if (end != null && today.isAfter(end)) return false;      // hết hạn
+
+        return true;
+    }
+
+
 
     private void clearCheckoutInfo() {
         hdHienTai = null;
