@@ -56,19 +56,19 @@ public class MainController_QL {
 
 
     private void addKeyboardShortcuts(Scene scene) {
-    scene.setOnKeyPressed(event -> {
-        switch (event.getCode()) {
-            case DIGIT1 -> sidebar_QLController.selectTab(1);
-            case DIGIT2 -> sidebar_QLController.selectTab(2);
-            case DIGIT3 -> sidebar_QLController.selectTab(3);
-            case DIGIT4 -> sidebar_QLController.selectTab(4);
-            case DIGIT5 -> sidebar_QLController.selectTab(5);
-            case DIGIT6 -> sidebar_QLController.selectTab(6);
-            case DIGIT7 -> sidebar_QLController.selectTab(7);
-            case DIGIT8 -> sidebar_QLController.selectTab(8);
-        }
-    });
-}
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case DIGIT1 -> sidebar_QLController.selectTab(1);
+                case DIGIT2 -> sidebar_QLController.selectTab(2);
+                case DIGIT3 -> sidebar_QLController.selectTab(3);
+                case DIGIT4 -> sidebar_QLController.selectTab(4);
+                case DIGIT5 -> sidebar_QLController.selectTab(5);
+                case DIGIT6 -> sidebar_QLController.selectTab(6);
+                case DIGIT7 -> sidebar_QLController.selectTab(7);
+                case DIGIT8 -> sidebar_QLController.selectTab(8);
+            }
+        });
+    }
 
 
     public void setNhanVien(NhanVien nhanVien) {
@@ -111,7 +111,7 @@ public class MainController_QL {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-            sidebar_QLController.selectTab(3); 
+            sidebar_QLController.selectTab(3);
             // Lấy controller của QLMenu
             QLMenuController controller = loader.getController();
             if (mon != null) {
@@ -119,6 +119,36 @@ public class MainController_QL {
             }
 
             mainContent.getChildren().setAll(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openQLMenuWithMon(Mon mon) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/FXML/QLMenu.fxml")
+            );
+
+            Parent root = loader.load();
+
+            QLMenuController controller = loader.getController();
+            controller.setSelectedMon(mon);
+            controller.setMainController(this);
+
+            if (mon != null) {
+                controller.setSearchKeyword(mon.getTenMon());
+            }
+
+            sidebar_QLController.selectTab(2);
+
+            mainContent.getChildren().setAll(root);
+
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(300), root);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+            fadeIn.play();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

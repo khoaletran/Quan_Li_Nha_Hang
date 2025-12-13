@@ -9,7 +9,8 @@
             style="-fx-background-color: #f5f7fa;"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ui.controllers.HoTroControllerNV">
+            fx:controller="ui.controllers.HoTroControllerNV"
+            stylesheets="@../CSS/hotronv.css">
 
     <center>
         <ScrollPane fx:id="scrollPane" fitToWidth="true" style="-fx-background-color: transparent;">
@@ -78,7 +79,7 @@
                     </VBox>
 
                     <!-- CONTACT SECTION -->
-                    <HBox spacing="10" style="-fx-background-color: #2c3e50; -fx-background-radius: 15; -fx-padding: 25;"
+                    <HBox spacing="10" style="-fx-background-color: #e86535; -fx-background-radius: 15; -fx-padding: 25;"
                           alignment="CENTER_LEFT">
                         <VBox spacing="8" alignment="CENTER_LEFT" prefWidth="350">
                             <Label text="Liên Hệ Hỗ Trợ"

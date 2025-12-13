@@ -29,7 +29,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ui.AlertCus;
 import ui.ConfirmCus;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -85,7 +84,11 @@ public class QLBanController {
 
         comboModalKhuVuc.setOnAction(event -> sinhMaBanMoi());
 
-        Platform.runLater(() -> addShortcuts(txtSearchTop.getScene()));
+        txtSearchTop.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                addShortcuts(newScene);
+            }
+        });
         Tooltip tipFind = new Tooltip("Tìm kiếm bàn (Ctrl + F)");
         tipFind.getStyleClass().add("tooltip");
         Tooltip.install(txtSearchTop, tipFind);

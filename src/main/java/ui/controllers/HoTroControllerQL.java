@@ -165,7 +165,7 @@ public class HoTroControllerQL implements Initializable {
 
         helpCardList.add(new HelpCard(
                 "📱", "Phím tắt", "Hướng dẫn dùng phím tắt", "#1abc9c",
-                "mobile"
+                "phimtat"
         ));
     }
 
@@ -198,43 +198,76 @@ public class HoTroControllerQL implements Initializable {
         }
     }
 
-    private TitledPane taoTitledPaneFAQ(FAQItem faq) {
-        TitledPane pane = new TitledPane();
-        pane.setText(faq.getQuestion());
-        pane.setExpanded(false);
-        pane.setAnimated(true);
+//    private TitledPane taoTitledPaneFAQ(FAQItem faq) {
+//        TitledPane pane = new TitledPane();
+//        pane.setText(faq.getQuestion());
+//        pane.setExpanded(false);
+//        pane.setAnimated(true);
+//
+//        // Style cho title
+//        pane.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-border-color: #dfe6e9;");
+//
+//        // Content
+//        VBox content = new VBox();
+//        content.setPadding(new Insets(15));
+//        content.setSpacing(10);
+//
+//        TextFlow textFlow = new TextFlow();
+//        String[] lines = faq.getAnswer().split("\n");
+//        for (String line : lines) {
+//            Text text = new Text(line + "\n");
+//            text.setStyle("-fx-font-size: 14px; -fx-fill: #2c3e50;");
+//            textFlow.getChildren().add(text);
+//        }
+//
+//        content.getChildren().add(textFlow);
+//        pane.setContent(content);
+//
+//        // Thêm icon indicator
+//        pane.setGraphic(new Label("▶"));
+//        pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
+//            if (newVal) {
+//                pane.setGraphic(new Label("▼"));
+//            } else {
+//                pane.setGraphic(new Label("▶"));
+//            }
+//        });
+//
+//        return pane;
+//    }
+private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
+    TitledPane pane = new TitledPane();
+    pane.setText(faq.getQuestion());
+    pane.setExpanded(false);
+    pane.setAnimated(true);
 
-        // Style cho title
-        pane.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-border-color: #dfe6e9;");
+    pane.getStyleClass().add("faq-pane");
 
-        // Content
-        VBox content = new VBox();
-        content.setPadding(new Insets(15));
-        content.setSpacing(10);
+    // Content
+    VBox content = new VBox(10);
+    content.setPadding(new Insets(15));
 
-        TextFlow textFlow = new TextFlow();
-        String[] lines = faq.getAnswer().split("\n");
-        for (String line : lines) {
-            Text text = new Text(line + "\n");
-            text.setStyle("-fx-font-size: 14px; -fx-fill: #2c3e50;");
-            textFlow.getChildren().add(text);
-        }
-
-        content.getChildren().add(textFlow);
-        pane.setContent(content);
-
-        // Thêm icon indicator
-        pane.setGraphic(new Label("▶"));
-        pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                pane.setGraphic(new Label("▼"));
-            } else {
-                pane.setGraphic(new Label("▶"));
-            }
-        });
-
-        return pane;
+    TextFlow textFlow = new TextFlow();
+    for (String line : faq.getAnswer().split("\n")) {
+        Text text = new Text(line + "\n");
+        text.getStyleClass().add("faq-text");
+        textFlow.getChildren().add(text);
     }
+
+    content.getChildren().add(textFlow);
+    pane.setContent(content);
+
+    // Icon mở / đóng
+    Label arrow = new Label("▶");
+    arrow.getStyleClass().add("faq-arrow");
+    pane.setGraphic(arrow);
+
+    pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
+        arrow.setText(newVal ? "▼" : "▶");
+    });
+
+    return pane;
+}
 
     private VBox taoHelpCard(HelpCard card) {
         VBox cardBox = new VBox();
@@ -570,6 +603,39 @@ public class HoTroControllerQL implements Initializable {
                         "1. Có thể thay đổi mật khẩu bằng cách nhấn nút đổi mật khẩu ở trang dashboard\n" +
                         "2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi\n";
                 break;
+            case "phimtat":
+                content = "Chính sách:\n" +
+                        "- Ctrl F: tìm kiếm món ăn\n" +
+                        "\n" +
+                        "Khuyến Mãi\n" +
+                        "- Ctrl F: Tìm kiếm khuyến mãi\n" +
+                        "\n" +
+                        "QL Bàn:\n" +
+                        "- Ctrl F: Tìm kiếm bàn\n" +
+                        "- Ctrl N: Thêm bàn mới\n" +
+                        "\n" +
+                        "QL Menu:\n" +
+                        "- Ctrl F: Tìm kiếm món ăn\n" +
+                        "- Ctrl N: Thêm món mới\n" +
+                        "\n" +
+                        "QL Nhân Viên:\n" +
+                        "- Ctrl F: Tìm kiếm nhân viên\n" +
+                        "- Ctrl N: Thêm nhân viên mới\n" +
+                        "\n" +
+                        "Thống kê:\n" +
+                        "- Ctrl F: Tìm món ăn\n" +
+                        "\n" +
+                        "Chuyển Trang QL:\n" +
+                        "Phím 1: Dashboard\n" +
+                        "Phím 2: QL Menu\n" +
+                        "Phím 3: QL Bàn\n" +
+                        "Phím 4: QL Nhân viên\n" +
+                        "Phím 5: Khuyến mãi\n" +
+                        "Phím 6: Chính sách\n" +
+                        "Phím 7: Thống kê\n" +
+                        "Phím 8: Hỗ trợ\n" +
+                        "\n";
+                break;
             default:
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
 
@@ -648,46 +714,135 @@ public class HoTroControllerQL implements Initializable {
             }
         }
     }
-
     private void showCustomDialog(String title, String content) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle(title);
 
-        VBox box = new VBox(20);
-        box.setPadding(new Insets(25));
-        box.setStyle(
+        // ===== Root VBox =====
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(25));
+        root.setAlignment(Pos.CENTER);
+        root.setStyle(
                 "-fx-background-color: white;" +
                         "-fx-background-radius: 15;" +
                         "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);"
         );
 
+        // ===== Title =====
         Label lblTitle = new Label(title);
-        lblTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        lblTitle.setStyle(
+                "-fx-font-size: 22px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #2c3e50;"
+        );
 
+        // ===== Content =====
         Label lblContent = new Label(content);
         lblContent.setWrapText(true);
-        lblContent.setStyle("-fx-font-size: 15px; -fx-text-fill: #34495e;");
-        lblContent.setMaxWidth(400);
+        lblContent.setStyle(
+                "-fx-font-size: 15px;" +
+                        "-fx-text-fill: #34495e;"
+        );
+        lblContent.setMaxWidth(450);
 
+        // ===== ScrollPane cho nội dung =====
+        ScrollPane scrollPane = new ScrollPane(lblContent);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefViewportHeight(300);   // ⭐ chiều cao cố định
+        scrollPane.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-border-color: #dcdcdc;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;"
+        );
+
+        // Ẩn nền viewport
+//        scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;");
+
+        // ===== Button Đóng =====
         Button btnClose = new Button("Đóng");
         btnClose.setStyle(
                 "-fx-background-color: #3498db;" +
                         "-fx-text-fill: white;" +
                         "-fx-background-radius: 18;" +
-                        "-fx-padding: 8 20;" +
-                        "-fx-font-size: 14px; -fx-font-weight: bold;"
+                        "-fx-padding: 8 25;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-font-weight: bold;"
         );
         btnClose.setOnAction(e -> dialog.close());
 
-        box.getChildren().addAll(lblTitle, lblContent, btnClose);
-        box.setAlignment(Pos.CENTER);
+        // Hover cho nút
+        btnClose.setOnMouseEntered(e ->
+                btnClose.setStyle(
+                        "-fx-background-color: #2c3e50;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-padding: 8 25;" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-weight: bold;"
+                )
+        );
 
-        Scene scene = new Scene(box);
+        btnClose.setOnMouseExited(e ->
+                btnClose.setStyle(
+                        "-fx-background-color: #3498db;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-padding: 8 25;" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-weight: bold;"
+                )
+        );
+
+        // ===== Add vào root =====
+        root.getChildren().addAll(lblTitle, scrollPane, btnClose);
+
+        Scene scene = new Scene(root, 520, 450); // ⭐ size cố định, đẹp
         dialog.setScene(scene);
         dialog.setResizable(false);
-        dialog.show();
+        dialog.showAndWait();
     }
+
+//    private void showCustomDialog(String title, String content) {
+//        Stage dialog = new Stage();
+//        dialog.initModality(Modality.APPLICATION_MODAL);
+//        dialog.setTitle(title);
+//
+//        VBox box = new VBox(20);
+//        box.setPadding(new Insets(25));
+//        box.setStyle(
+//                "-fx-background-color: white;" +
+//                        "-fx-background-radius: 15;" +
+//                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);"
+//        );
+//
+//        Label lblTitle = new Label(title);
+//        lblTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+//
+//        Label lblContent = new Label(content);
+//        lblContent.setWrapText(true);
+//        lblContent.setStyle("-fx-font-size: 15px; -fx-text-fill: #34495e;");
+//        lblContent.setMaxWidth(400);
+//
+//        Button btnClose = new Button("Đóng");
+//        btnClose.setStyle(
+//                "-fx-background-color: #3498db;" +
+//                        "-fx-text-fill: white;" +
+//                        "-fx-background-radius: 18;" +
+//                        "-fx-padding: 8 20;" +
+//                        "-fx-font-size: 14px; -fx-font-weight: bold;"
+//        );
+//        btnClose.setOnAction(e -> dialog.close());
+//
+//        box.getChildren().addAll(lblTitle, lblContent, btnClose);
+//        box.setAlignment(Pos.CENTER);
+//
+//        Scene scene = new Scene(box);
+//        dialog.setScene(scene);
+//        dialog.setResizable(false);
+//        dialog.show();
+//    }
 
 
 //    // =======================

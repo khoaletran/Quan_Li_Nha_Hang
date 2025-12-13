@@ -71,6 +71,8 @@ public class DashboardController {
     @FXML private LineChart<String, Number> lineChart;
 
     private NhanVien nv;
+    private MainController_NV mainControllerNV;
+    private MainController_QL mainController;
 
     @FXML
     public void initialize() {
@@ -111,9 +113,11 @@ public class DashboardController {
     //Nhân viên
     public void setMainController(Object controller) {
         if (controller instanceof MainController_NV nvCtrl) {
+            this.mainControllerNV = nvCtrl;
             this.nv = nvCtrl.getNhanVien();
         } else if (controller instanceof MainController_QL qlCtrl) {
             this.nv = qlCtrl.getNhanVien();
+            this.mainController = qlCtrl;
         }
 
         if (nv == null) {
@@ -158,95 +162,6 @@ public class DashboardController {
             avatarImage.setImage(new Image(getClass().getResourceAsStream("/IMG/avatar.png")));
         }
     }
-
-    //thống kê
-//    private void taiThongKeDashboard() {
-//        try {
-//            List<HoaDon> danhSach = HoaDonDAO.getAll(); //cái này mai mốt sửa lại lấy hóa đơn trong ngày
-//
-//            if (danhSach == null || danhSach.isEmpty()) {
-//                lblTongDonDangDoi.setText("0");
-//                lblTongDonDaNhan.setText("0");
-//                lblTongDonDaThanhToan.setText("0");
-//                lblDoanhThu.setText("0đ");
-//                lblSoKhach.setText("0");
-//                lblIn.setText("0");
-//                lblOut.setText("0");
-//                lblVip.setText("0");
-//                return;
-//            }
-//
-//            //trạng thái
-//            int donCho = 0;      // trạng thái = 0
-//            int donDangDung = 0; // trạng thái = 1
-//            int donHoanThanh = 0;// trạng thái = 2
-//
-//            //Khu vuc
-//            int in =0;
-//            int out =0;
-//            int vip =0;
-//
-//            int tongKhachHang = 0;
-//            double tongDoanhThu = 0;
-//
-//            for (HoaDon hd : danhSach) {
-//                if (hd == null) continue;
-//
-//                //Đếm theo trạng thái
-//                int tt = hd.getTrangthai();
-//                if (tt == 0) {
-//                    donCho++;
-//                }
-//                else if (tt == 1) {
-//                    donDangDung++;
-//                }
-//                else if (tt == 2) {
-//                    donHoanThanh++;
-//                }
-//                //Đếm theo khu vực
-//                String maKV = hd.getBan().getKhuVuc().getMaKhuVuc();
-//                if(maKV.equals("KV0001")){
-//                    in++;
-//                }
-//                else if(maKV.equals("KV0002")){
-//                    out++;
-//                }
-//                else if(maKV.equals("KV0003")){
-//                    vip++;
-//                }
-//                //tổng khách hàng với doanh thu
-//                tongKhachHang+=hd.getSoLuong();
-//                tongDoanhThu+=hd.getTongTienSau();
-//            }
-//
-//            //hiển thị
-//            lblTongDonDangDoi.setText(String.valueOf("Số đơn đang đợi: "+donCho));
-//            lblTongDonDaNhan.setText(String.valueOf("Số đơn đang dùng: "+donDangDung));
-//            lblTongDonDaThanhToan.setText(String.valueOf("Số đơn đã thanh toán: "+donHoanThanh));
-//            lblIn.setText(String.valueOf("Khu vực In: "+in));
-//            lblOut.setText(String.valueOf("Khu vực Out: "+out));
-//            lblVip.setText(String.valueOf("Khu vực Vip: "+vip));
-//            lblDoanhThu.setText(String.format("%,.0f đ", tongDoanhThu));
-//            lblSoKhach.setText(String.valueOf(tongKhachHang));
-//
-//
-//            //In ra log cho dễ kiểm tra (hoặc có thể hiển thị lên UI)
-////            System.out.println("Đơn chờ: " + donCho);
-////            System.out.println("Đơn đang dùng: " + donDangDung);
-////            System.out.println("Đơn hoàn thành: " + donHoanThanh);
-//
-//        } catch (Exception e) {
-//            System.err.println("[DashboardController] Lỗi tải thống kê: " + e.getMessage());
-//            lblTongDonDangDoi.setText("-");
-//            lblTongDonDaNhan.setText("-");
-//            lblTongDonDaThanhToan.setText("-");
-//            lblDoanhThu.setText("-");
-//            lblSoKhach.setText("-");
-//            lblIn.setText("-");
-//            lblOut.setText("-");
-//            lblVip.setText("-");
-//        }
-//    }
     private void taiThongKeDashboard() {
         try {
             Map<HoaDon, Double> danhSach = HoaDonDAO.getAllForThongKe(); // Lấy dữ liệu đã tính sẵn từ DB
@@ -645,7 +560,16 @@ public class DashboardController {
         right.getChildren().addAll(lbTenMon, status);
 
         box.getChildren().addAll(left, right);
+        box.setOnMouseClicked(e -> {
+            System.out.println("CLICK MON: " + mon.getMaMon());
 
+            if (mainController == null) {
+                System.out.println("mainController_QL = NULL");
+                return;
+            }
+
+            mainController.openQLMenuWithMon(mon);
+        });
         return box;
     }
 
@@ -701,83 +625,17 @@ public class DashboardController {
         right.getChildren().addAll(tenKH, sdt, status);
         box.getChildren().addAll(left, right);
 
+        box.setOnMouseClicked(e -> {
+            if (mainControllerNV == null) return;
+
+            String maHD = hd.getMaHD();
+
+            mainControllerNV.setCenterContent("/FXML/CheckIn.fxml", controller -> {
+                if (controller instanceof CheckinController checkinCtrl) {
+                    checkinCtrl.selectHoaDonByMaHD(maHD);
+                }
+            });
+        });
         return box;
     }
-
-
-
-//    private Node taoThongBaoHoaDon(HoaDon hd, boolean denGio) {
-//        HBox box = new HBox();
-//        box.getStyleClass().add("notif-item");
-//        box.setSpacing(10);
-//        box.setAlignment(Pos.CENTER_LEFT);
-//
-//        // ==== LEFT COLUMN ====
-//        VBox left = new VBox();
-//        left.setSpacing(4);
-//
-//        Label lbTenBan = new Label("Mã bàn: "+hd.getBan().getMaBan());
-//        lbTenBan.getStyleClass().addAll("notif-sub");
-//
-//        String time = hd.getTgCheckIn() != null
-//                ? hd.getTgCheckIn().toLocalTime().toString()
-//                : "--:--";
-//
-//        Label lbCheckInTime = new Label("Thời gian: "+time);
-//        lbCheckInTime.getStyleClass().addAll("notif-sub");
-//
-//        left.getChildren().addAll(lbTenBan, lbCheckInTime);
-//
-//        // ==== RIGHT COLUMN ====
-//        VBox right = new VBox();
-//        right.setSpacing(4);
-//
-//        Label tenKH = new Label("tên khách : " + hd.getKhachHang().getTenKhachHang());
-//        tenKH.getStyleClass().add("notif-sub-right");
-//
-//        Label sdt = new Label("SĐT : " + hd.getKhachHang().getSdt());
-//        sdt.getStyleClass().add("notif-sub-right");
-//
-//        Label status = new Label(denGio ? "Đã đến giờ hẹn" : "Đã quá giờ hẹn");
-//        status.getStyleClass().add(denGio ? "notif-status-green" : "notif-status-red");
-//        left.getStyleClass().addAll("notif-left",denGio ? "notif-backgr-green" : "notif-backgr-red");
-//
-//        right.getChildren().addAll(tenKH, sdt, status);
-//
-//        // Add left-right vào item
-//        box.getChildren().addAll(left, right);
-//
-//        return box;
-//    }
-//    //nối qua thống kê
-//    @FXML private BorderPane rootPane; // nếu Dashboard.fxml có BorderPane chính
-//    // hoặc các control khác: @FXML private BarChart<?,?> barChart; ...
-//
-//    @FXML
-//    private void openThongKe(MouseEvent event) {
-//        try {
-//            // Load FXML Thống kê
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/ThongKe.fxml"));
-//            Parent thongKeRoot = loader.load();
-//
-//            // Nếu bạn có một main BorderPane ở cấp cao hơn với fx:id="mainRoot",
-//            // tìm nó qua scene lookup (phổ biến khi Dashboard nằm trong mainRoot center)
-//            Node mainRootNode = rootPane.getScene().lookup("#mainRoot");
-//            if (mainRootNode instanceof BorderPane) {
-//                BorderPane mainRoot = (BorderPane) mainRootNode;
-//                mainRoot.setCenter(thongKeRoot);
-//            } else {
-//                // fallback: thay root của scene (ít khuyến nghị nếu bạn có header/menu)
-//                rootPane.getScene().setRoot(thongKeRoot);
-//            }
-//
-//            // Nếu cần truyền dữ liệu vào ThongKeController:
-//            // ThongKeController tk = loader.getController();
-//            // tk.initData(someFilterOrModel);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            // TODO: show Alert thông báo lỗi load FXML
-//        }
-//    }
 }
