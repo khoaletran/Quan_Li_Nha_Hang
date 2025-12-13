@@ -681,46 +681,135 @@ public class HoTroControllerQL implements Initializable {
             }
         }
     }
-
     private void showCustomDialog(String title, String content) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle(title);
 
-        VBox box = new VBox(20);
-        box.setPadding(new Insets(25));
-        box.setStyle(
+        // ===== Root VBox =====
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(25));
+        root.setAlignment(Pos.CENTER);
+        root.setStyle(
                 "-fx-background-color: white;" +
                         "-fx-background-radius: 15;" +
                         "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);"
         );
 
+        // ===== Title =====
         Label lblTitle = new Label(title);
-        lblTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        lblTitle.setStyle(
+                "-fx-font-size: 22px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #2c3e50;"
+        );
 
+        // ===== Content =====
         Label lblContent = new Label(content);
         lblContent.setWrapText(true);
-        lblContent.setStyle("-fx-font-size: 15px; -fx-text-fill: #34495e;");
-        lblContent.setMaxWidth(400);
+        lblContent.setStyle(
+                "-fx-font-size: 15px;" +
+                        "-fx-text-fill: #34495e;"
+        );
+        lblContent.setMaxWidth(450);
 
+        // ===== ScrollPane cho nội dung =====
+        ScrollPane scrollPane = new ScrollPane(lblContent);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefViewportHeight(300);   // ⭐ chiều cao cố định
+        scrollPane.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-border-color: #dcdcdc;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;"
+        );
+
+        // Ẩn nền viewport
+//        scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;");
+
+        // ===== Button Đóng =====
         Button btnClose = new Button("Đóng");
         btnClose.setStyle(
                 "-fx-background-color: #3498db;" +
                         "-fx-text-fill: white;" +
                         "-fx-background-radius: 18;" +
-                        "-fx-padding: 8 20;" +
-                        "-fx-font-size: 14px; -fx-font-weight: bold;"
+                        "-fx-padding: 8 25;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-font-weight: bold;"
         );
         btnClose.setOnAction(e -> dialog.close());
 
-        box.getChildren().addAll(lblTitle, lblContent, btnClose);
-        box.setAlignment(Pos.CENTER);
+        // Hover cho nút
+        btnClose.setOnMouseEntered(e ->
+                btnClose.setStyle(
+                        "-fx-background-color: #2c3e50;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-padding: 8 25;" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-weight: bold;"
+                )
+        );
 
-        Scene scene = new Scene(box);
+        btnClose.setOnMouseExited(e ->
+                btnClose.setStyle(
+                        "-fx-background-color: #3498db;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-padding: 8 25;" +
+                                "-fx-font-size: 14px;" +
+                                "-fx-font-weight: bold;"
+                )
+        );
+
+        // ===== Add vào root =====
+        root.getChildren().addAll(lblTitle, scrollPane, btnClose);
+
+        Scene scene = new Scene(root, 520, 450); // ⭐ size cố định, đẹp
         dialog.setScene(scene);
         dialog.setResizable(false);
-        dialog.show();
+        dialog.showAndWait();
     }
+
+//    private void showCustomDialog(String title, String content) {
+//        Stage dialog = new Stage();
+//        dialog.initModality(Modality.APPLICATION_MODAL);
+//        dialog.setTitle(title);
+//
+//        VBox box = new VBox(20);
+//        box.setPadding(new Insets(25));
+//        box.setStyle(
+//                "-fx-background-color: white;" +
+//                        "-fx-background-radius: 15;" +
+//                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);"
+//        );
+//
+//        Label lblTitle = new Label(title);
+//        lblTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+//
+//        Label lblContent = new Label(content);
+//        lblContent.setWrapText(true);
+//        lblContent.setStyle("-fx-font-size: 15px; -fx-text-fill: #34495e;");
+//        lblContent.setMaxWidth(400);
+//
+//        Button btnClose = new Button("Đóng");
+//        btnClose.setStyle(
+//                "-fx-background-color: #3498db;" +
+//                        "-fx-text-fill: white;" +
+//                        "-fx-background-radius: 18;" +
+//                        "-fx-padding: 8 20;" +
+//                        "-fx-font-size: 14px; -fx-font-weight: bold;"
+//        );
+//        btnClose.setOnAction(e -> dialog.close());
+//
+//        box.getChildren().addAll(lblTitle, lblContent, btnClose);
+//        box.setAlignment(Pos.CENTER);
+//
+//        Scene scene = new Scene(box);
+//        dialog.setScene(scene);
+//        dialog.setResizable(false);
+//        dialog.show();
+//    }
 
 
 //    // =======================
