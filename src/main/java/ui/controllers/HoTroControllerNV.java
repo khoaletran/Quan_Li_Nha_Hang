@@ -160,7 +160,7 @@ public class HoTroControllerNV implements Initializable {
 
         helpCardList.add(new HelpCard(
                 "📱", "Phím tắt", "Hướng dẫn dùng phím tắt", "#1abc9c",
-                "mobile"
+                "phimtat"
         ));
     }
 
@@ -536,6 +536,46 @@ private void timKiemHelpCards(String keyword) {
                 content = "Vấn đề tài khoản:\n" +
                         "1. Có thể thay đổi mật khẩu bằng cách nhấn nút đổi mật khẩu ở trang dashboard\n" +
                         "2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi\n";
+                break;
+            case "phimtat":
+                content = "Check in:\n" +
+                        "- Ctrl F : tìm số điện thoại\n" +
+                        "- Ctrl B: Check in\n" +
+                        "- Ctrl L: Clear thông tin\n" +
+                        "\n" +
+                        "Check out:\n" +
+                        "- Ctrl F: tìm kiếm hóa đơn\n" +
+                        "- Ctrl B: check out\n" +
+                        "\n" +
+                        "Chọn món:\n" +
+                        "- Ctrl F: Tìm kiếm món ăn\n" +
+                        "- Ctrl D: Điền sđt khách hàng\n" +
+                        "- Ctrl B: Đặt bàn\n" +
+                        "\n" +
+                        "Đặt bàn:\n" +
+                        "- Ctrl D: Nhập số lượng chỗ\n" +
+                        "\n" +
+                        "QL Thành Viên:\n" +
+                        "- Ctrl F: Tìm kiếm thành viên\n" +
+                        "- Ctrl N: Thêm thành viên mới\n" +
+                        "\n" +
+                        "Tra cứu hóa đơn:\n" +
+                        "- Ctrl D: Nhập số điện thoại\n" +
+                        "- Ctrl F: Tìm kiếm\n" +
+                        "- Ctrl L: Xóa trắng\n" +
+                        "- Ctrl P: In hóa đơn\n" +
+                        "\n" +
+                        "Chuyển Trang NV:\n" +
+                        "Phím 1: Dashboard\n" +
+                        "Phím 2: \n" +
+                        "Phím 3: QL thành viên\n" +
+                        "Phím 4: Tra cứu hóa đơn\n" +
+                        "Phím 5: Hỗ trợ\n" +
+                        "Phím 6: Bàn giao ca\n" +
+                        "Phím F1: Đặt bàn\n" +
+                        "Phím F2: Check in\n" +
+                        "Phím F3: Check out\n" +
+                        "Phím F4: QL Đặt bàn\n";
                 break;
             default:
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
