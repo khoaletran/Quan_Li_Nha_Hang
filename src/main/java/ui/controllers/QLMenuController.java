@@ -51,13 +51,18 @@ public class QLMenuController {
     @FXML
     private Button btnXacNhan;
     // @FXML private Button btnXoa;
-    @FXML 
+    @FXML
     private Button btnAdd;
     @FXML
     private TextField searchField;
+    private MainController_QL mainController;
+    private boolean isProgrammaticChange = false;
+
+
 
     private List<Mon> dsMon = new ArrayList<>();
     private List<LoaiMon> dsLoaiMon = new ArrayList<>();
+    private Mon monDuocChonTuDashboard;
     private File selectedFile;
     DecimalFormat df = new DecimalFormat("#,###");
     @FXML
@@ -70,47 +75,90 @@ public class QLMenuController {
         // TextField tìm kiếm realtime
         searchField.textProperty().addListener((obs, oldText, newText) -> filterMon());
         // btnXoa.setDisable(true);
-        txtGiaGoc.textProperty().addListener((obs, oldText, newText)->{
-            if( newText == null || newText.isEmpty()) return;
+        txtGiaGoc.textProperty().addListener((obs, oldText, newText) -> {
+            if (isProgrammaticChange) return;
+            if (newText == null || newText.isEmpty()) return;
+
             String numeric = newText.replaceAll("\\.", "");
             if (numeric.isEmpty()) {
+                isProgrammaticChange = true;
                 txtGiaGoc.setText("");
+                isProgrammaticChange = false;
                 return;
             }
+
             try {
                 String formatted = df.format(Long.parseLong(numeric));
                 if (!formatted.equals(newText)) {
+                    isProgrammaticChange = true;
                     txtGiaGoc.setText(formatted);
                     txtGiaGoc.positionCaret(formatted.length());
+                    isProgrammaticChange = false;
                 }
             } catch (NumberFormatException e) {
+                isProgrammaticChange = true;
                 txtGiaGoc.setText(oldText);
+                isProgrammaticChange = false;
             }
         });
-        
+
+
         // ===== THÊM PHÍM TẮT =====
-        Platform.runLater(() -> addShortcuts(searchField.getScene()));
+        addShortcuts();
         Tooltip tipFind = new Tooltip("Tìm kiếm món ăn (Ctrl + F)");
         tipFind.getStyleClass().add("tooltip");
         Tooltip.install(searchField, tipFind);
         Tooltip tipNew = new Tooltip("Thêm món ăn mới (Ctrl + N)");
         tipNew.getStyleClass().add("tooltip");
         Tooltip.install(btnAdd, tipNew);
+
+        Platform.runLater(() -> {
+            if (monDuocChonTuDashboard != null) {
+                loadChiTietMon(monDuocChonTuDashboard);
+            }
+        });
+
     }
 
 
-    private void addShortcuts(Scene scene) {
-        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
-        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
-        scene.getAccelerators().put(ctrlF, () -> {
-            searchField.requestFocus();
-            searchField.selectAll();  // tự bôi đen text để nhập mới
-        });
-        scene.getAccelerators().put(ctrlN, () -> {
-            addMon();
+//    private void addShortcuts(Scene scene) {
+//        KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+//        KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+//        scene.getAccelerators().put(ctrlF, () -> {
+//            searchField.requestFocus();
+//            searchField.selectAll();  // tự bôi đen text để nhập mới
+//        });
+//        scene.getAccelerators().put(ctrlN, () -> {
+//            addMon();
+//        });
+//    }
+
+    private void addShortcuts() {
+        searchField.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene == null) return;
+
+            KeyCombination ctrlF =
+                    new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
+            KeyCombination ctrlN =
+                    new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+
+            newScene.getAccelerators().put(ctrlF, () -> {
+                searchField.requestFocus();
+                searchField.selectAll();
+            });
+
+            newScene.getAccelerators().put(ctrlN, this::addMon);
         });
     }
 
+
+    public void setMainController(MainController_QL mainController) {
+        this.mainController = mainController;
+    }
+
+    public void setSelectedMon(Mon mon) {
+        this.monDuocChonTuDashboard = mon;
+    }
 
     // Hàm lọc món kết hợp tên + loại
     private void filterMon() {
@@ -145,7 +193,7 @@ public class QLMenuController {
     }
 
     private void loadDanhSachMon() {
-        dsMon = MonDAO.getAll(); 
+        dsMon = MonDAO.getAll();
         flowMonAn.getChildren().clear();
         for (Mon mon : dsMon) {
             flowMonAn.getChildren().add(taoCardMon(mon, null));
@@ -174,13 +222,14 @@ public class QLMenuController {
         // ===== 1. Card chính =====
         VBox card = new VBox();
         card.getStyleClass().add("menu-item");
-        card.setPrefSize(250, 250);  // cố định chiều ngang và cao
+        card.setUserData(mon);
+        card.setPrefSize(250, 250);
         card.setMaxSize(250, 250);
         card.setMinSize(250, 250);
 
         // ===== 2. Khung hình cố định =====
         StackPane imagePane = new StackPane();
-        imagePane.setPrefSize(180, 180); // khung hình cố định
+        imagePane.setPrefSize(180, 180);
 
         ImageView imageView = new ImageView();
         imageView.setPreserveRatio(true);
@@ -233,8 +282,7 @@ public class QLMenuController {
 
         // ===== 6. Sự kiện click =====
         card.setOnMouseClicked(e -> {
-            loadChiTietMon(mon);
-            // btnXoa.setDisable(false);;
+            Platform.runLater(() -> loadChiTietMon(mon));
         });
 
         return card;
@@ -242,11 +290,15 @@ public class QLMenuController {
 
 
     private void loadChiTietMon(Mon mon) {
+        isProgrammaticChange = true;
+
         lblMaMon.setText(mon.getMaMon());
         txtTenMon.setText(mon.getTenMon());
         txtMoTa.setText(mon.getMoTa());
-        txtGiaGoc.setText(String.valueOf((long) mon.getGiaGoc()));
+        txtGiaGoc.setText(df.format((long) mon.getGiaGoc()));
         txtSoLuong.setText(String.valueOf(mon.getSoLuong()));
+
+        isProgrammaticChange = false;
 
         if (mon.getLoaiMon() != null) {
             cboLoaiMon.getSelectionModel().select(mon.getLoaiMon().getTenLoaiMon());
@@ -254,19 +306,6 @@ public class QLMenuController {
             cboLoaiMon.getSelectionModel().clearSelection();
         }
 
-        try {
-            File localFile = new File("src/main/resources/IMG/food/" + mon.getHinhAnh());
-            if (localFile.exists()) {
-                imgMon.setImage(new Image(localFile.toURI().toString()));
-            } else {
-                imgMon.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
-            }
-        } catch (Exception e) {
-            imgMon.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
-        }
-
-
-        // Khi load chi tiết món thì button sẽ đổi text
         btnXacNhan.setText("Xác nhận");
     }
 
@@ -408,7 +447,7 @@ public class QLMenuController {
     //     }
     //     String tenMon = txtTenMon.getText();
     //     // === Hộp thoại xác nhận ===
-        
+
     //     if(XacNhanXoa.hienHopThoaiXacNhan("Xác nhận xóa","Bạn có chắc chắn xóa " + tenMon)){
     //         boolean success = MonDAO.delete(maMon);
 
@@ -420,7 +459,7 @@ public class QLMenuController {
     //             AlertCus.show("Thông báo", "Xóa món thất bại!");
     //         }
     //     }
-        
+
 
     //     resetFields();
     //     btnXacNhan.setText("Thêm mới");
@@ -443,7 +482,7 @@ public class QLMenuController {
     }
 
 
-    
+
 
     private String formatCurrency(double amount) {
         Locale localeVN = new Locale("vi", "VN");
@@ -460,5 +499,22 @@ public class QLMenuController {
         filterMon();                        // lọc danh sách theo keyword
     }
 
+    public void selectMonByMaMon(String maMon) {
+        Platform.runLater(() -> {
+            if (maMon == null || maMon.isBlank()) return;
+
+            for (javafx.scene.Node node : flowMonAn.getChildren()) {
+                if (node instanceof VBox card) {
+                    Object data = card.getUserData();
+                    if (data instanceof Mon mon && maMon.equals(mon.getMaMon())) {
+                        loadChiTietMon(mon);
+//                        highlightCard(card);
+                        card.requestFocus();
+                        return;
+                    }
+                }
+            }
+        });
+    }
 
 }

@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -209,6 +210,7 @@ public class CheckinController {
     private HBox createBookingItem(HoaDon hd, int thoiGianChoPhut) {
         HBox hbox = new HBox(10);
         hbox.getStyleClass().add("booking-item");
+        hbox.setUserData(hd);
 
         String imgPath = "/IMG/ban/IN.png"; // mặc định
         if (hd.getBan() != null && hd.getBan().getMaBan() != null && hd.getBan().getKhuVuc() != null) {
@@ -554,4 +556,31 @@ public class CheckinController {
         }
     }
 
+    public void selectHoaDonByMaHD(String maHD) {
+        Platform.runLater(() -> {
+            if (dsHoaDon == null || dsHoaDon.isEmpty()) return;
+
+            for (Node node : vboxDatTruoc.getChildren()) {
+                if (node instanceof HBox hbox) {
+                    HoaDon hd = (HoaDon) hbox.getUserData();
+                    if (hd != null && hd.getMaHD().equals(maHD)) {
+                        loadThongTinHoaDon(hd);
+                        highlightSelected(hbox);
+                        return;
+                    }
+                }
+            }
+
+            for (Node node : vboxCho.getChildren()) {
+                if (node instanceof HBox hbox) {
+                    HoaDon hd = (HoaDon) hbox.getUserData();
+                    if (hd != null && hd.getMaHD().equals(maHD)) {
+                        loadThongTinHoaDon(hd);
+                        highlightSelected(hbox);
+                        return;
+                    }
+                }
+            }
+        });
+    }
 }
