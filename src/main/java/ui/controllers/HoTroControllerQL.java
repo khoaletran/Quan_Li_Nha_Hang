@@ -165,7 +165,7 @@ public class HoTroControllerQL implements Initializable {
 
         helpCardList.add(new HelpCard(
                 "📱", "Phím tắt", "Hướng dẫn dùng phím tắt", "#1abc9c",
-                "mobile"
+                "phimtat"
         ));
     }
 
@@ -569,6 +569,39 @@ public class HoTroControllerQL implements Initializable {
                 content = "Vấn đề tài khoản:\n" +
                         "1. Có thể thay đổi mật khẩu bằng cách nhấn nút đổi mật khẩu ở trang dashboard\n" +
                         "2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi\n";
+                break;
+            case "phimtat":
+                content = "Chính sách:\n" +
+                        "- Ctrl F: tìm kiếm món ăn\n" +
+                        "\n" +
+                        "Khuyến Mãi\n" +
+                        "- Ctrl F: Tìm kiếm khuyến mãi\n" +
+                        "\n" +
+                        "QL Bàn:\n" +
+                        "- Ctrl F: Tìm kiếm bàn\n" +
+                        "- Ctrl N: Thêm bàn mới\n" +
+                        "\n" +
+                        "QL Menu:\n" +
+                        "- Ctrl F: Tìm kiếm món ăn\n" +
+                        "- Ctrl N: Thêm món mới\n" +
+                        "\n" +
+                        "QL Nhân Viên:\n" +
+                        "- Ctrl F: Tìm kiếm nhân viên\n" +
+                        "- Ctrl N: Thêm nhân viên mới\n" +
+                        "\n" +
+                        "Thống kê:\n" +
+                        "- Ctrl F: Tìm món ăn\n" +
+                        "\n" +
+                        "Chuyển Trang QL:\n" +
+                        "Phím 1: Dashboard\n" +
+                        "Phím 2: QL Menu\n" +
+                        "Phím 3: QL Bàn\n" +
+                        "Phím 4: QL Nhân viên\n" +
+                        "Phím 5: Khuyến mãi\n" +
+                        "Phím 6: Chính sách\n" +
+                        "Phím 7: Thống kê\n" +
+                        "Phím 8: Hỗ trợ\n" +
+                        "\n";
                 break;
             default:
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
