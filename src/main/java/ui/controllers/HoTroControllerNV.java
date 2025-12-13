@@ -193,43 +193,77 @@ public class HoTroControllerNV implements Initializable {
         }
     }
 
-    private TitledPane taoTitledPaneFAQ(FAQItem faq) {
-        TitledPane pane = new TitledPane();
-        pane.setText(faq.getQuestion());
-        pane.setExpanded(false);
-        pane.setAnimated(true);
+//    private TitledPane taoTitledPaneFAQ(FAQItem faq) {
+//        TitledPane pane = new TitledPane();
+//        pane.setText(faq.getQuestion());
+//        pane.setExpanded(false);
+//        pane.setAnimated(true);
+//
+//        // Style cho title
+//        pane.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-border-color: #dfe6e9;");
+//
+//        // Content
+//        VBox content = new VBox();
+//        content.setPadding(new Insets(15));
+//        content.setSpacing(10);
+//
+//        TextFlow textFlow = new TextFlow();
+//        String[] lines = faq.getAnswer().split("\n");
+//        for (String line : lines) {
+//            Text text = new Text(line + "\n");
+//            text.setStyle("-fx-font-size: 14px; -fx-fill: #2c3e50;");
+//            textFlow.getChildren().add(text);
+//        }
+//
+//        content.getChildren().add(textFlow);
+//        pane.setContent(content);
+//
+//        // Thêm icon indicator
+//        pane.setGraphic(new Label("▶"));
+//        pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
+//            if (newVal) {
+//                pane.setGraphic(new Label("▼"));
+//            } else {
+//                pane.setGraphic(new Label("▶"));
+//            }
+//        });
+//
+//        return pane;
+//    }
+private TitledPane taoTitledPaneFAQ(FAQItem faq) {
+    TitledPane pane = new TitledPane();
+    pane.setText(faq.getQuestion());
+    pane.setExpanded(false);
+    pane.setAnimated(true);
 
-        // Style cho title
-        pane.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-border-color: #dfe6e9;");
+    pane.getStyleClass().add("faq-pane");
 
-        // Content
-        VBox content = new VBox();
-        content.setPadding(new Insets(15));
-        content.setSpacing(10);
+    // Content
+    VBox content = new VBox(10);
+    content.setPadding(new Insets(15));
 
-        TextFlow textFlow = new TextFlow();
-        String[] lines = faq.getAnswer().split("\n");
-        for (String line : lines) {
-            Text text = new Text(line + "\n");
-            text.setStyle("-fx-font-size: 14px; -fx-fill: #2c3e50;");
-            textFlow.getChildren().add(text);
-        }
-
-        content.getChildren().add(textFlow);
-        pane.setContent(content);
-
-        // Thêm icon indicator
-        pane.setGraphic(new Label("▶"));
-        pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                pane.setGraphic(new Label("▼"));
-            } else {
-                pane.setGraphic(new Label("▶"));
-            }
-        });
-
-        return pane;
+    TextFlow textFlow = new TextFlow();
+    for (String line : faq.getAnswer().split("\n")) {
+        Text text = new Text(line + "\n");
+        text.getStyleClass().add("faq-text");
+        textFlow.getChildren().add(text);
     }
+
+    content.getChildren().add(textFlow);
+    pane.setContent(content);
+
+    // Icon mở / đóng
+    Label arrow = new Label("▶");
+    arrow.getStyleClass().add("faq-arrow");
+    pane.setGraphic(arrow);
+
+    pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
+        arrow.setText(newVal ? "▼" : "▶");
+    });
+
+    return pane;
+}
+
 
     private VBox taoHelpCard(HelpCard card) {
         VBox cardBox = new VBox();
