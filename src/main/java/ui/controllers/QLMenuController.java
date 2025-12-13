@@ -305,7 +305,16 @@ public class QLMenuController {
         } else {
             cboLoaiMon.getSelectionModel().clearSelection();
         }
-
+try {
+            File localFile = new File("src/main/resources/IMG/food/" + mon.getHinhAnh());
+            if (localFile.exists()) {
+                imgMon.setImage(new Image(localFile.toURI().toString()));
+            } else {
+                imgMon.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
+            }
+        } catch (Exception e) {
+            imgMon.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
+        }
         btnXacNhan.setText("Xác nhận");
     }
 

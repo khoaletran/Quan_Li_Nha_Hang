@@ -276,26 +276,32 @@ public class ThongKeController {
             Label status = new Label();
 
             if (isThangHienTai) {
-                // Nếu là tháng hiện tại => dựa trên tồn kho
-                if (cthd.getSoLuong() >= 1000 && m.getSoLuong() < 100) {
+                // Nếu là tháng hiện tại => dựa trên tồn kho + số lượng bán
+                if (cthd.getSoLuong() >= 300 && m.getSoLuong() < 30) {
                     status.setText("🔥 Bán rất chạy - Cần nhập hàng ngay");
                     status.getStyleClass().add("dish-status-green");
-                } else if (cthd.getSoLuong() >= 500 && m.getSoLuong() < 50) {
+
+                } else if (cthd.getSoLuong() >= 150 && m.getSoLuong() < 20) {
                     status.setText("⚠️ Cần nhập hàng gấp");
-                            status.getStyleClass().add("dish-status-orange");
-                } else if (cthd.getSoLuong() >= 100 && m.getSoLuong() < 100) {
+                    status.getStyleClass().add("dish-status-orange");
+
+                } else if (cthd.getSoLuong() >= 80 && m.getSoLuong() < 30) {
                     status.setText("Nên nhập thêm hàng");
                     status.getStyleClass().add("dish-status-yellow");
+
                 } else if (cthd.getSoLuong() >= 50) {
                     status.setText("Bán ổn định");
                     status.getStyleClass().add("dish-status-green");
-                } else if (cthd.getSoLuong() < 50 && m.getSoLuong() > 100) {
+
+                } else if (cthd.getSoLuong() < 50 && m.getSoLuong() > 80) {
                     status.setText("🛒 Cần khuyến mãi hoặc giảm giá");
                     status.getStyleClass().add("dish-status-yellow");
+
                 } else {
                     status.setText("Ít bán");
                     status.getStyleClass().add("dish-status-red");
                 }
+
             } else {
                 // Nếu là tháng trước => đánh giá theo mức bán
                 String text = trangThaiTheoSoLuong(cthd.getSoLuong());
@@ -353,11 +359,11 @@ public class ThongKeController {
     }
 
     private String trangThaiTheoSoLuong(int sl) {
-        if (sl >= 1000) return "🔥 Best Seller";
-        if (sl >= 500) return "Bán Rất Chạy";
-        if (sl >= 200) return "Bán Ổn Định";
-        if (sl >= 50) return "Cần Có Khuyến Mãi Hoặc Giảm Giá";
-        return "Ít Người Mua";
+        if (sl >= 300) return "🔥 Best Seller";              // ~10 món/ngày
+        if (sl >= 150) return "Bán Rất Chạy";                // ~5 món/ngày
+        if (sl >= 80)  return "Bán Ổn Định";                 // ~2–3 món/ngày
+        if (sl >= 30)  return "Cần Có Khuyến Mãi Hoặc Giảm Giá";
+        return "Ít Người Mua";                               // < 1 món/ngày
     }
 
     // Tìm kiếm món ăn
