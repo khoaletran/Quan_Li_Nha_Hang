@@ -33,7 +33,7 @@ public class CheckoutController {
     @FXML private TextField txtMaGG, txtTienKhachDua, searchField;
     @FXML private VBox vboxHoaDon, vboxMenu, vboxTienMat;
     @FXML private Button btnSearch, btnCamera, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6, btnThanhToan;
-    @FXML private Label lblmaHD, lbltenKH, lblsdtKH, lblSoLuong, lblsuKien, lblKhuVuc, lblTongTien, lblGiamGia, lblThue, lblTongTT, lblTienThua, lblCoc, lblConLai;
+    @FXML private Label lblmaHD, lbltenKH, lblsdtKH, lblsuKien, lblKhuVuc, lblTongTien, lblGiamGia, lblThue, lblTongTT, lblTienThua, lblCoc, lblConLai;
 
     private HoaDon hdHienTai;
 
@@ -102,7 +102,7 @@ public class CheckoutController {
             }
         }
 
-        lblGiamGia.setText(formatCurrency(hdHienTai.getTongTienKhuyenMai()));
+        lblGiamGia.setText(formatCurrency(hdHienTai.getTongTienKhuyenMai()) + "( Voucher: " + hdHienTai.getTienMaKM() +" Voucher Hạng: "+ hdHienTai.getTienHangKM() +")");
 
         if (rdoTienMat.isSelected()) taoGoiYTienKhach();
 

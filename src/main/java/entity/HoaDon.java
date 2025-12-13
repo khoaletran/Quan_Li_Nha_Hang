@@ -121,6 +121,18 @@ public class HoaDon {
         return tongTienTruoc;
     }
 
+    public double getTienMaKM(){
+        if (khuyenMai != null)
+            return khuyenMai.getPhanTRamGiamGia()/100;
+        return 0;
+    }
+
+    public double getTienHangKM() {
+        if (khachHang != null && khachHang.getHangKhachHang() != null)
+            return khachHang.getHangKhachHang().getGiamGia()/ 100;
+        return 0;
+    }
+
     public double getTongTienKhuyenMai() {
         double giamKH = 0;
         double giamKM = 0;
