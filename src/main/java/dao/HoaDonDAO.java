@@ -14,6 +14,15 @@ public class HoaDonDAO {
     // =====================================================================
     private static HoaDon mapFullHoaDon(ResultSet rs) throws SQLException {
 
+        // ===== HẠNG KHÁCH =====
+        HangKhachHang hang = null;
+        if (rs.getString("maHang") != null) {
+            hang = new HangKhachHang();
+            hang.setMaHang(rs.getString("maHang"));
+            hang.setDiemHang(rs.getInt("diemHang"));
+            hang.setGiamGia(rs.getInt("giamGiaHang"));
+            hang.setMoTa(rs.getString("moTaHang"));
+        }
         // ===== KHÁCH HÀNG =====
         KhachHang kh = null;
         if (rs.getString("maKH") != null) {
@@ -23,6 +32,7 @@ public class HoaDonDAO {
             kh.setSdt(rs.getString("sdtKH"));
             kh.setGioiTinh(rs.getBoolean("gioiTinhKH"));
             kh.setDiemTichLuy(rs.getInt("diemTichLuy"));
+            kh.setHangKhachHang(hang);
         }
 
         // ===== NHÂN VIÊN =====
@@ -102,8 +112,12 @@ public class HoaDonDAO {
     //                      SELECT FULL – DÙNG CHUNG
     // =====================================================================
     private static final String SELECT_FULL = """
-        SELECT hd.*,
+        
+            SELECT hd.*,
                kh.tenKH, kh.sdt AS sdtKH, kh.gioiTinh AS gioiTinhKH, kh.diemTichLuy,
+               kh.maHang,
+               hh.diemHang, hh.giamGia AS giamGiaHang, hh.moTa AS moTaHang,
+        
                nv.tenNV, nv.sdt AS sdtNV,
                b.trangThai AS trangThaiBan, b.maKhuVuc, b.maLoaiBan,
                kv.tenKhuVuc,
@@ -112,12 +126,14 @@ public class HoaDonDAO {
                sk.tenSK, sk.gia AS giaSK
         FROM HoaDon hd
         LEFT JOIN KhachHang kh ON hd.maKH = kh.maKH
+        LEFT JOIN HangKhachHang hh ON kh.maHang = hh.maHang
         LEFT JOIN NhanVien nv ON hd.maNV = nv.maNV
         LEFT JOIN Ban b ON hd.maBan = b.maBan
         LEFT JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
         LEFT JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
         LEFT JOIN KhuyenMai km ON hd.maKM = km.maKM
-        LEFT JOIN SuKien sk ON hd.maSK = sk.maSK
+        LEFT JOIN SuKien sk ON hd.maSK = sk.maSK;
+        
         """;
 
 

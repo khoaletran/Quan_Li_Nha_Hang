@@ -906,7 +906,7 @@ public class ChonMonController {
 
             if (khMoi != null) {
                 System.out.println("Đã thêm khách hàng mới: " + khMoi.getTenKhachHang());
-                return khMoi; // Trả về đối tượng khách hàng vừa tạo
+                return khMoi;
             } else {
                 AlertCus.show("Lỗi hệ thống", "Không thể thêm khách hàng mới. Vui lòng thử lại!");
                 return null;
@@ -957,15 +957,12 @@ public class ChonMonController {
         hd.setNhanVien(nhanVienHien);
         hd.setBan(banHienTai);
         hd.setTgLapHD(LocalDateTime.now());
-        // Nếu là bàn đợi → chưa check-in
         if (banHienTai.getMaBan().startsWith("W")) {
             hd.setTgCheckIn(null);
         }
-        // Nếu là bàn đã đặt trước (đến sau) → thời gian checkin theo lịch đặt
         else if (trangthai == 0 && thoiGianDat != null) {
             hd.setTgCheckIn(thoiGianDat);
         }
-        // Nếu khách vào ngay → checkin thời điểm hiện tại
         else {
             hd.setTgCheckIn(LocalDateTime.now());
         }

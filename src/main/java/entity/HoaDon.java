@@ -123,13 +123,13 @@ public class HoaDon {
 
     public double getTienMaKM(){
         if (khuyenMai != null)
-            return khuyenMai.getPhanTRamGiamGia()/100;
+            return (khuyenMai.getPhanTRamGiamGia() / 100.0) * getTongTienTruoc();
         return 0;
     }
 
     public double getTienHangKM() {
         if (khachHang != null && khachHang.getHangKhachHang() != null)
-            return khachHang.getHangKhachHang().getGiamGia()/ 100;
+            return (khachHang.getHangKhachHang().getGiamGia() / 100.0) * getTongTienTruoc();
         return 0;
     }
 

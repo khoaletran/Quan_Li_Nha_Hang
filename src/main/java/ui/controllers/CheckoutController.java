@@ -33,7 +33,7 @@ public class CheckoutController {
     @FXML private TextField txtMaGG, txtTienKhachDua, searchField;
     @FXML private VBox vboxHoaDon, vboxMenu, vboxTienMat;
     @FXML private Button btnSearch, btnCamera, btnGoiY1, btnGoiY2, btnGoiY3, btnGoiY4, btnGoiY5, btnGoiY6, btnThanhToan;
-    @FXML private Label lblmaHD, lbltenKH, lblsdtKH, lblsuKien, lblKhuVuc, lblTongTien, lblGiamGia, lblThue, lblTongTT, lblTienThua, lblCoc, lblConLai;
+    @FXML private Label lblmaHD, lbltenKH, lblsdtKH, lblsuKien, lblKhuVuc, lblTongTien, lblGiamGia, lblGiamGia1, lblThue, lblTongTT, lblTienThua, lblCoc, lblConLai;
 
     private HoaDon hdHienTai;
 
@@ -102,8 +102,8 @@ public class CheckoutController {
             }
         }
 
-        lblGiamGia.setText(formatCurrency(hdHienTai.getTongTienKhuyenMai()) + "( Voucher: " + hdHienTai.getTienMaKM() +" Voucher Hạng: "+ hdHienTai.getTienHangKM() +")");
-
+        lblGiamGia.setText(formatCurrency(hdHienTai.getTongTienKhuyenMai()));
+        lblGiamGia1.setText("( Voucher: " + formatCurrency(hdHienTai.getTienMaKM()) +"| Voucher Hạng: "+ formatCurrency(hdHienTai.getTienHangKM()) +")");
         if (rdoTienMat.isSelected()) taoGoiYTienKhach();
 
         double tongTien = hdHienTai.getTongTienTruoc();
@@ -168,6 +168,7 @@ public class CheckoutController {
             // 🔹 Sự kiện click
             hbox.setOnMouseClicked(e -> {
                 hdHienTai = hd;
+                txtMaGG.clear();
                 lblmaHD.setText(hd.getMaHD());
                 lbltenKH.setText(tenKH);
                 lblsdtKH.setText(sdtKH);
@@ -334,7 +335,8 @@ public class CheckoutController {
                             "\nTiền thừa: " + formatCurrency(tienThua));
 
             HoaDonIn.previewHoaDon(hdHienTai);
-            loadAllHoaDon(); // làm mới danh sách
+            loadAllHoaDon();
+            clearCheckoutInfo();
             vboxMenu.getChildren().clear();
             return;
         }
@@ -354,6 +356,7 @@ public class CheckoutController {
 
                 HoaDonIn.previewHoaDon(hdHienTai);
                 loadAllHoaDon();
+                clearCheckoutInfo();
                 vboxMenu.getChildren().clear();
             });
         });
@@ -365,6 +368,29 @@ public class CheckoutController {
         if (khachHang == null) return;
         khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() + diem);
         KhachHangDAO.update(khachHang);
+    }
+
+    private void clearCheckoutInfo() {
+        hdHienTai = null;
+
+        lblmaHD.setText("");
+        lbltenKH.setText("");
+        lblsdtKH.setText("");
+        lblsuKien.setText("");
+        lblKhuVuc.setText("");
+
+        lblTongTien.setText("0 đ");
+        lblGiamGia.setText("0 đ");
+        lblThue.setText("0 đ");
+        lblTongTT.setText("0 đ");
+        lblCoc.setText("0 đ");
+        lblConLai.setText("0 đ");
+        lblTienThua.setText("0 đ");
+
+        txtMaGG.clear();
+        txtTienKhachDua.clear();
+
+        vboxMenu.getChildren().clear();
     }
 
 }

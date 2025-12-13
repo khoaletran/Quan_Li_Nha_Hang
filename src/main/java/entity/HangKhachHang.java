@@ -19,6 +19,10 @@ public class HangKhachHang {
         setGiamGia(giamGia);
     }
 
+    public HangKhachHang() {
+
+    }
+
     public String getMaHang() {
         return maHang;
     }

@@ -127,15 +127,17 @@
                 <Label fx:id="lblTongTien" styleClass="bold-label" text="0 đ" GridPane.columnIndex="3" />
                 <Label text="Chiết Khấu:" GridPane.rowIndex="2" />
                 <Label fx:id="lblGiamGia" styleClass="red-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                <Label text="Thuế (10%):" GridPane.rowIndex="3" />
-                <Label fx:id="lblThue" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                <Label text="Tổng Tiền Sau Thuế" GridPane.rowIndex="4" />
-                <Label fx:id="lblTongTT" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                <Label text="Tiền Đã Cọc:" GridPane.rowIndex="5" />
-                <Label fx:id="lblCoc" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                <Label text="Tổng Thanh Toán:" GridPane.rowIndex="6" />
-                <Label fx:id="lblConLai" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                <Label fx:id="lblGiamGia1" layoutX="361.0" layoutY="35.0" styleClass="red-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                <Label text="Thuế (10%):" GridPane.rowIndex="4" />
+                <Label fx:id="lblThue" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                <Label text="Tổng Tiền Sau Thuế" GridPane.rowIndex="5" />
+                <Label fx:id="lblTongTT" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                <Label text="Tiền Đã Cọc:" GridPane.rowIndex="6" />
+                <Label fx:id="lblCoc" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                <Label text="Tổng Thanh Toán:" GridPane.rowIndex="7" />
+                <Label fx:id="lblConLai" styleClass="red-bold-label" text="0 đ" GridPane.columnIndex="3" GridPane.rowIndex="7" />
             <rowConstraints>
+               <RowConstraints />
                <RowConstraints />
                <RowConstraints />
                <RowConstraints />

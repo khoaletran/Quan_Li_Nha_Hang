@@ -284,6 +284,30 @@ CREATE TABLE PhieuKetCa
 
 );
 GO
+
+--Trigger
+CREATE TRIGGER trg_UpdateHangKhachHang
+    ON KhachHang
+    AFTER UPDATE
+    AS
+BEGIN
+    SET NOCOUNT ON;
+    IF UPDATE(diemTichLuy)
+        BEGIN
+            UPDATE KH
+            SET maHang = HH.maHang
+            FROM KhachHang KH
+                     JOIN inserted i ON KH.maKH = i.maKH
+                     CROSS APPLY (
+                SELECT TOP 1 maHang
+                FROM HangKhachHang
+                WHERE diemHang <= i.diemTichLuy
+                ORDER BY diemHang DESC
+            ) HH;
+        END
+END;
+
+
 ALTER TABLE KhuyenMai
     DROP CONSTRAINT chk_ngayPhatHanh_KM;
 GO
