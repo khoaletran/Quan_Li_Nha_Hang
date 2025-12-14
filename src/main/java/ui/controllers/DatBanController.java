@@ -193,39 +193,38 @@ public class DatBanController {
         capNhatHienThi(starIN_03, tableIN_03, "KV0002", "LB0003", 5, 8, dsHD);
         capNhatHienThi(starIN_04, tableIN_04, "KV0002", "LB0004", 8, 12, dsHD);
 
-        capNhatHienThi(starVIP_01, tableVIP_01, "KV0003", "LB0004", 12, 20, dsHD);
-        capNhatHienThi(starVIP_02, tableVIP_02, "KV0003", "LB0005", 20, 30, dsHD);
+        capNhatHienThi(starVIP_01, tableVIP_01, "KV0003", "LB0004", 8, 12, dsHD);
+        capNhatHienThi(starVIP_02, tableVIP_02, "KV0003", "LB0005", 13, 25, dsHD);
 
         String maKV = getSelectedMaKhuVuc();
         int finalSoLuong = soLuong;
 
-        // Kiểm tra bàn trống ngay lập tức
-        boolean conBanTrongKV = BanDAO.conBanTrongTheoKhuVuc(maKV, finalSoLuong);
-
-        // Cập nhật trạng thái nút Waitlist ngay lập tức
         boolean isToday = selectedTime.toLocalDate().isEqual(LocalDate.now());
-        boolean hienWaitlist = isToday && !conBanTrongKV;
-        if (btnWaitlist.isVisible() != hienWaitlist) {
-            btnWaitlist.setVisible(true);
-            double start = hienWaitlist ? 0 : 1;
-            double end = hienWaitlist ? 1 : 0;
 
-            Timeline fade = new Timeline(
-                    new KeyFrame(Duration.ZERO,
-                            new javafx.animation.KeyValue(btnWaitlist.opacityProperty(), start)),
-                    new KeyFrame(Duration.millis(100),
-                            new javafx.animation.KeyValue(btnWaitlist.opacityProperty(), end))
-            );
-            fade.setOnFinished(ev -> {
-                btnWaitlist.setVisible(hienWaitlist);
-                btnWaitlist.setDisable(!hienWaitlist);
-            });
-            fade.play();
+        int maxSucChuaKV = BanDAO.getMaxSucChuaTheoKhuVuc(maKV);
+        if (finalSoLuong > maxSucChuaKV) {
+            setWaitlistVisible(false);
+            System.out.println("Vượt sức chứa KV (" + maxSucChuaKV + ") => tắt waitlist");
+            return;
         }
 
-        System.out.println("Khu vực: " + maKV + " | SL khách: " + soLuong + " | Còn bàn trống: " + conBanTrongKV);
+        boolean hienWaitlist = false;
+        boolean conBanTrongKV = true; // default để log không lỗi
 
+        if (isToday && finalSoLuong > 0) {
+            conBanTrongKV = BanDAO.conBanTrongTheoKhuVuc(maKV, finalSoLuong, selectedTime);
+            hienWaitlist = !conBanTrongKV; // hết bàn phù hợp => hiện waitlist
+        } else {
+            hienWaitlist = false; // không phải hôm nay hoặc SL không hợp lệ => không hiện
+        }
 
+        setWaitlistVisible(hienWaitlist);
+
+        System.out.println("Khu vực: " + maKV
+                + " | SL khách: " + finalSoLuong
+                + " | Selected: " + selectedTime
+                + " | Còn bàn trống: " + conBanTrongKV
+                + " | Waitlist: " + hienWaitlist);
 
     }
 
@@ -243,7 +242,9 @@ public class DatBanController {
         }
     }
 
-    private void capNhatHienThi(ImageView star, VBox table, String maKV, String maLB, int minKhach, int maxKhach, List<HoaDon> dsHD) {
+    private void capNhatHienThi(ImageView star, VBox table, String maKV, String maLB,
+                                int minKhach, int maxKhach, List<HoaDon> dsHD) {
+
         int soLuong;
         try { soLuong = Integer.parseInt(noteField.getText()); }
         catch (NumberFormatException e) { soLuong = 0; }
@@ -251,29 +252,26 @@ public class DatBanController {
         LocalDate date = datePicker.getValue();
         int hour = hourSpinner.getValue();
         int minute = minuteSpinner.getValue();
+
+        if (date == null || soLuong <= 0) {  // FIX
+            tatBan(star, table);
+            return;
+        }
+
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime selected = LocalDateTime.of(date, LocalTime.of(hour, minute));
 
-        Ban ban = BanDAO.getBanTheoLoaiVaKV(maKV, maLB);
-
-        if (soLuong <= 0 || ban == null || selected.isBefore(now)) {
+        if (selected.isBefore(now)) {        // FIX
             tatBan(star, table);
             return;
         }
 
-        // 1. Bàn đang được dùng tại thời điểm selected
-        if (HoaDonDAO.banDuocSuDungLuc(ban.getMaBan(), selected)) {
+        boolean conBanTrongNhom = BanDAO.conBanTrongTheoLoaiVaKV(maKV, maLB, soLuong, selected);
+        if (!conBanTrongNhom) {
             tatBan(star, table);
             return;
         }
 
-        // 2. Có khách đặt đúng giờ selected mà chưa checkout
-        if (HoaDonDAO.biDatChuaCheckout(ban.getMaBan(), selected)) {
-            tatBan(star, table);
-            return;
-        }
-
-        // --- Tối thiểu giờ đặt trước (chỉ dùng nếu cùng ngày)
         boolean cungNgay = selected.toLocalDate().equals(now.toLocalDate());
         long phut = java.time.Duration.between(now, selected).toMinutes();
         boolean anLien = phut >= 0 && phut <= 15;
@@ -289,13 +287,10 @@ public class DatBanController {
             return;
         }
 
-        // Nếu hợp lệ
-        if (soLuong >= minKhach && soLuong <= maxKhach) {
-            moBanSaoSang(star, table);
-        } else {
-            moBanSaoTrang(star, table);
-        }
+        if (soLuong >= minKhach && soLuong <= maxKhach) moBanSaoSang(star, table);
+        else moBanSaoTrang(star, table);
     }
+
 
 
     private void tatBan(ImageView star, VBox table) {
@@ -358,9 +353,8 @@ public class DatBanController {
         int minute = minuteSpinner.getValue();
         LocalDateTime selected = LocalDateTime.of(date, LocalTime.of(hour, minute));
 
-        Ban ban = BanDAO.getBanTheoLoaiVaKV(maKV, maLB);
+        Ban ban = BanDAO.getMotBanTrongTheoLoaiVaKV(maKV, maLB, soLuong, selected);
         if (ban == null) return;
-
         chonBan(ban, soLuong, date, hour, minute);
     }
 
@@ -469,6 +463,41 @@ public class DatBanController {
         }
 
         return "KV0001";
+    }
+
+    private Timeline waitlistFade;
+
+    private void setWaitlistVisible(boolean hienWaitlist) {
+
+        if (btnWaitlist.isVisible() == hienWaitlist
+                && btnWaitlist.isDisable() == !hienWaitlist) {
+            return;
+        }
+
+        if (waitlistFade != null) {
+            waitlistFade.stop();
+        }
+
+        btnWaitlist.setVisible(true);
+
+        double startOpacity = hienWaitlist ? 0.0 : 1.0;
+        double endOpacity   = hienWaitlist ? 1.0 : 0.0;
+
+        btnWaitlist.setOpacity(startOpacity);
+
+        waitlistFade = new Timeline(
+                new KeyFrame(Duration.millis(120),
+                        new javafx.animation.KeyValue(
+                                btnWaitlist.opacityProperty(), endOpacity))
+        );
+
+        waitlistFade.setOnFinished(e -> {
+            btnWaitlist.setVisible(hienWaitlist);
+            btnWaitlist.setDisable(!hienWaitlist);
+            btnWaitlist.setOpacity(hienWaitlist ? 1.0 : 0.0);
+        });
+
+        waitlistFade.play();
     }
 
 

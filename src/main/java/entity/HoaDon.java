@@ -59,14 +59,9 @@ public class HoaDon {
 
     public LocalDateTime getTgCheckIn() { return tgCheckIn; }
     public void setTgCheckIn(LocalDateTime tgCheckIn) {
-        if (tgCheckIn == null) {
-            this.tgCheckIn = null;
-            return;
-        }
-        if (tgLapHD == null || tgCheckOut == null || tgCheckIn.isAfter(tgLapHD)) {
+        if (tgLapHD == null || tgCheckOut == null || tgCheckIn.isAfter(tgLapHD) || tgCheckIn.isBefore(tgLapHD)) {
             this.tgCheckIn = tgCheckIn;
         }
-
     }
 
     public LocalDateTime getTgCheckOut() { return tgCheckOut; }
