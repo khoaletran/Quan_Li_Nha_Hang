@@ -18,6 +18,9 @@ import ui.ConfirmCus;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -385,7 +388,6 @@ public class QLDatBanController {
                 }
             }
 
-            // cập nhật / insert các món còn lại trên UI
             boolean allOk = true;
             for (ChiTietHoaDon ct : chiTietHoaDonData) {
                 boolean ok = chiTietHDDAO.update(ct);
@@ -406,7 +408,6 @@ public class QLDatBanController {
         }
     }
 
-    @FXML
     private void huyDatBan() {
         if (hoaDonSelected == null) {
             AlertCus.show("Thông Báo", "Vui lòng chọn hóa đơn cần hủy");
@@ -417,25 +418,82 @@ public class QLDatBanController {
             return;
         }
 
-        boolean answer = ConfirmCus.show("Xác nhận hủy đơn", "Bạn có chắc muốn hủy đơn đặt bàn này?");
-        if (answer) {
-            try {
-                System.out.println("Hủy đặt bàn: " + hoaDonSelected.getMaHD());
-                boolean ok = HoaDonDAO.delete(hoaDonSelected.getMaHD());
-                if (ok) {
-                    AlertCus.show("Thông Báo", "Hủy đặt bàn thành công");
-                    dsDatTruoc.remove(hoaDonSelected);
-                    dsDaNhan.remove(hoaDonSelected);
-                    hienThiDanhSachDatTruoc();
-                    hienThiDanhSachDaNhan();
-                    resetForm();
-                } else {
-                    AlertCus.show("Thông Báo", "Hủy thất bại");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                AlertCus.show("Thông Báo", "Lỗi hệ thống: " + e.getMessage());
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tgCheckin = hoaDonSelected.getTgCheckIn(); // đúng getter của đại ca
+
+        if (tgCheckin == null) {
+            AlertCus.show("Thông Báo", "Hóa đơn chưa có tgCheckin.");
+            return;
+        }
+
+        if (!now.isBefore(tgCheckin)) {
+            AlertCus.show("Thông Báo", "Đã tới/qua tgCheckin. Không áp chính sách hủy này.");
+            return;
+        }
+
+        long diffMinutes = java.time.Duration.between(now, tgCheckin).toMinutes(); // còn bao nhiêu phút
+        int phanTram;
+        if (diffMinutes < 12 * 60L) phanTram = 0;          // <12h: mất
+        else if (diffMinutes < 18 * 60L) phanTram = 50;    // <18h: 50%
+        else if (diffMinutes < 24 * 60L) phanTram = 70;    // <24h: 70%
+        else phanTram = 100;                               // >=24h: 100%
+
+        long diffHoursShow = diffMinutes / 60;
+
+        boolean answer = ConfirmCus.show(
+                "Xác nhận hủy đơn",
+                "Bạn có chắc muốn hủy đơn đặt bàn này?\n" +
+                        "Còn trước tgCheckin: " + diffHoursShow + " giờ\n" +
+                        "Voucher quy đổi: " + phanTram + "% (1 lần dùng)"
+        );
+        if (!answer) return;
+
+        try {
+            hoaDonSelected.setTrangthai(3);
+            boolean ok = HoaDonDAO.update(hoaDonSelected);
+            if (!ok) {
+                AlertCus.show("Thông Báo", "Hủy thất bại");
+                return;
             }
+
+            // 2) tạo voucher nếu có %
+            if (phanTram > 0) {
+                double tienCoc = hoaDonSelected.getCoc();
+                double tienVoucherRaw = tienCoc * phanTram / 100.0;
+
+                int tienVoucher = (int) (Math.floor(tienVoucherRaw / 10) * 10);
+
+                boolean okV = KhuyenMaiDAO.insertVoucherHuyDatBan(
+                        hoaDonSelected.getMaHD(),
+                        tienVoucher,
+                        LocalDate.now().plusDays(30)
+                );
+
+                if (!okV) {
+                    AlertCus.show("Thông Báo",
+                            "Hủy đặt bàn thành công.\n" +
+                                    "Nhưng tạo voucher thất bại (lỗi DB hoặc trùng mã).");
+                } else {
+                    AlertCus.show("Thông Báo",
+                            "Hủy đặt bàn thành công.\n" +
+                                    "Đã tạo voucher 1 lần dùng (" + phanTram + "%), hạn 30 ngày.\n" +
+                                    "Tên voucher = mã HĐ: " + hoaDonSelected.getMaHD());
+                }
+            } else {
+                AlertCus.show("Thông Báo",
+                        "Hủy đặt bàn thành công.\n" +
+                                "Hủy sát giờ (<12h) nên không có voucher.");
+            }
+
+            dsDatTruoc.remove(hoaDonSelected);
+            dsDaNhan.remove(hoaDonSelected);
+            hienThiDanhSachDatTruoc();
+            hienThiDanhSachDaNhan();
+            resetForm();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertCus.show("Thông Báo", "Lỗi hệ thống: " + e.getMessage());
         }
     }
 

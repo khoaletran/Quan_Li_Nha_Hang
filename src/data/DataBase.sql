@@ -187,7 +187,6 @@ CREATE TABLE KhuyenMai
     uuDai           BIT,
     CONSTRAINT chk_maKM_KM CHECK (maKM LIKE 'KM[0-9][0-9][0-9][0-9]'),
     CONSTRAINT chk_soLuong_KM CHECK (soLuong >= 0),
-    CONSTRAINT chk_phanTramGiamGia_KM CHECK (phanTramGiamGia BETWEEN 0 AND 100),
     CONSTRAINT chk_ngayPhatHanh_KM CHECK (ngayPhatHanh >= CAST(GETDATE() AS DATE)),
     CONSTRAINT chk_ngayKetThuc_KM CHECK (ngayKetThuc > ngayPhatHanh),
     CONSTRAINT chk_uuDai_KM CHECK (uuDai IN (0, 1))
@@ -314,3 +313,6 @@ GO
 go
 ALTER TABLE PhanTramGiaBan
 ALTER COLUMN ngayApDung SMALLDATETIME;
+
+ALTER TABLE KhuyenMai
+    DROP CONSTRAINT chk_phanTramGiamGia_KM;

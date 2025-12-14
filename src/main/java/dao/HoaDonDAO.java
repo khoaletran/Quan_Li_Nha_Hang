@@ -132,8 +132,7 @@ public class HoaDonDAO {
         LEFT JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
         LEFT JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
         LEFT JOIN KhuyenMai km ON hd.maKM = km.maKM
-        LEFT JOIN SuKien sk ON hd.maSK = sk.maSK;
-        
+        LEFT JOIN SuKien sk ON hd.maSK = sk.maSK
         """;
 
 
@@ -687,7 +686,7 @@ public class HoaDonDAO {
     public static List<HoaDon> getAllTrangThai(int trangThai) {
         List<HoaDon> ds = new ArrayList<>();
 
-        String sql = SELECT_FULL + " WHERE hd.trangThai = ?";
+        String sql = SELECT_FULL + " WHERE hd.trangThai = ? AND hd.tgCheckin > GETDATE()";
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

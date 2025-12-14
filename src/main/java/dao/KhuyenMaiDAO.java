@@ -174,6 +174,19 @@ public class KhuyenMaiDAO {
 
         return null;
     }
+    public static String taoMaKMTiepTheo() {
+        String maCuoi = maKMCuoi(); // ví dụ KM0012
+        int soMoi = 1;
+
+        if (maCuoi != null && maCuoi.startsWith("KM")) {
+            try {
+                soMoi = Integer.parseInt(maCuoi.substring(2)) + 1;
+            } catch (NumberFormatException ignored) {}
+        }
+
+        return String.format("KM%04d", soMoi); // KM0001
+    }
+
     // ==============================
     // GET BY CODE (maKM hoặc maThayThe)
     // ==============================
@@ -228,6 +241,39 @@ public class KhuyenMaiDAO {
 
         } catch (SQLException e) {
             System.err.println("KhuyenMaiDAO.tangSoLuongAtomic(): " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean insertVoucherHuyDatBan(
+            String maHDHuy,
+            int phanTramGiamGia,
+            LocalDate ngayHetHan
+    ) {
+        String maKM = taoMaKMTiepTheo();
+
+        String sql = """
+        INSERT INTO KhuyenMai(
+            maKM, tenKM, soLuong,
+            ngayPhatHanh, ngayKetThuc,
+            maThayThe, phanTramGiamGia, uuDai
+        )
+        VALUES (?, ?, 1, ?, ?, NULL, ?, 1)
+    """;
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maKM);
+            ps.setString(2, maHDHuy);
+            ps.setDate(3, Date.valueOf(LocalDate.now()));
+            ps.setDate(4, Date.valueOf(ngayHetHan));
+            ps.setInt(5, phanTramGiamGia);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("insertVoucherHuyDatBan(): " + e.getMessage());
             return false;
         }
     }
