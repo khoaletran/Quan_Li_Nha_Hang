@@ -79,9 +79,9 @@ public class KhuyenMaiController {
 
     // ========================== KHỞI TẠO ==========================
     private void khoiTaoComboBox() {
-        if (cbUudai != null) cbUudai.getItems().setAll("Tiền", "Phần Trăm");
+        if (cbUudai != null) cbUudai.getItems().setAll("Phần Trăm", "Tiền Mặt");
         if (cbUuDaiTimKiem != null) {
-            cbUuDaiTimKiem.getItems().setAll("Tất cả", "Tiền", "Phần Trăm");
+            cbUuDaiTimKiem.getItems().setAll("Tất cả", "Phần Trăm", "Tiền Mặt");
             cbUuDaiTimKiem.setValue("Tất cả");
         }
         if (cbTrangThai != null) cbTrangThai.getItems().setAll("Tất cả", "Đang hoạt động", "Hết hạn", "Chưa bắt đầu");
@@ -188,7 +188,7 @@ public class KhuyenMaiController {
         dpNgayKetThuc.setValue(km.getNgayKetThuc());
         txtMaThayThe.setText(km.getMaThayThe());
         txtPhanTram.setText(String.valueOf(km.getPhanTRamGiamGia()));
-        if (cbUudai != null) cbUudai.setValue(km.isUuDai() ? "Hóa đơn" : "Món ăn");
+        if (cbUudai != null) cbUudai.setValue(km.isUuDai() ? "Tiền Mặt" : "Phần Trăm");
     }
 
     private void danhDauTheDuocChon(HBox theDuocChon) {
@@ -319,8 +319,8 @@ public class KhuyenMaiController {
 
     private boolean kiemTraUuDai(KhuyenMai km, String uuDai) {
         if (uuDai == null || uuDai.equals("Tất cả")) return true;
-        boolean isHoaDon = km.isUuDai();
-        return uuDai.equals("Phần Trăm") ? isHoaDon : !isHoaDon;
+        boolean loaiThanhToan = km.isUuDai();
+        return uuDai.equals("Tiền Mặt") ? loaiThanhToan : !loaiThanhToan;
     }
 
     private void hienThiKetQuaTimKiem(List<KhuyenMai> ketQua) {
@@ -352,7 +352,7 @@ public class KhuyenMaiController {
             String maThayThe = txtMaThayThe.getText().trim();
             String phStr = txtPhanTram.getText().replace("%", "").trim();
             String uuDai = cbUudai != null ? cbUudai.getValue() : null;
-            boolean isHoaDon = "Hóa đơn".equalsIgnoreCase(uuDai);
+            boolean loaiThanhToan = "Phần Trăm".equalsIgnoreCase(uuDai);
 
             if (ma.isEmpty() || ten.isEmpty() || soStr.isEmpty() || bd == null || kt == null || phStr.isEmpty() || uuDai == null) {
                AlertCus.show("Thông báo","Vui lòng điền đầy đủ thông tin");
@@ -364,7 +364,7 @@ public class KhuyenMaiController {
             }
             int soLuong = Integer.parseInt(soStr);
             int phanTram = Integer.parseInt(phStr);
-            return new KhuyenMai(ma, ten, soLuong, bd, kt, maThayThe, phanTram, isHoaDon);
+            return new KhuyenMai(ma, ten, soLuong, bd, kt, maThayThe, phanTram, loaiThanhToan);
         } catch (NumberFormatException e) {
             AlertCus.show("Thông báo","Số lượng và phần trăm phải là số nguyên");
             return null;
