@@ -43,6 +43,9 @@ public class QLDatBanController {
     //tìm kiếm
     @FXML private TextField searchField;
     @FXML private Button btnSearch;
+    @FXML
+    private DatePicker dpNgay;
+    @FXML private ComboBox<Integer> cbGio;
 
     //nút
     @FXML private Button btnXacNhan;
@@ -101,6 +104,8 @@ public class QLDatBanController {
         if (back != null) {
             back.setOnAction(e -> showDanhSachMode());
         }
+        initDatePicker();
+        initComboGio();
     }
 
     private void khoiTaoComboBox() {
@@ -110,6 +115,137 @@ public class QLDatBanController {
             eventCombo.setValue(null);
         }
     }
+    //tao combobox loc
+//    private void initComboNgay() {
+//        cbNgay.getItems().clear();
+//
+//        // Ví dụ: cho chọn từ hôm nay lùi về 7 ngày trước
+//        LocalDate today = LocalDate.now();
+//        for (int i = 0; i <= 7; i++) {
+//            cbNgay.getItems().add(today.minusDays(i));
+//        }
+//
+//        cbNgay.setPromptText("Chọn ngày");
+//
+//        cbNgay.setOnAction(e -> locTheoNgayGio());
+//    }
+    private void initDatePicker() {
+        dpNgay.setValue(LocalDate.now());
+
+        dpNgay.setOnAction(e -> locTheoNgayGio());
+    }
+
+    private void initComboGio() {
+        cbGio.getItems().clear();
+
+        for (int h = 0; h <= 23; h++) {
+            cbGio.getItems().add(h);
+        }
+
+        cbGio.setPromptText("Giờ");
+
+        // Có thể bỏ nếu không muốn mặc định
+        cbGio.getSelectionModel().selectFirst();
+
+        cbGio.setOnAction(e -> locTheoNgayGio());
+    }
+//    private void locTheoNgayGio() {
+//
+//        LocalDate ngay = cbNgay.getValue();
+//        Integer gio = cbGio.getValue();
+//
+//        if (ngay == null || gio == null) return;
+//
+//        LocalDateTime start = ngay.atTime(gio, 0, 0);
+//        LocalDateTime end   = ngay.atTime(gio, 59, 59);
+//
+//        danhSachDatTruoc.getChildren().clear();
+//
+//        for (HoaDon hd : dsDatTruoc) {
+//            LocalDateTime tg = hd.getTgLapHD();
+//
+//            if (tg != null && !tg.isBefore(start) && !tg.isAfter(end)) {
+//                danhSachDatTruoc.getChildren().add(taoCardHoaDon(hd));
+//            }
+//        }
+//    }
+//private void locTheoNgayGio() {
+//
+//    LocalDate ngay = dpNgay.getValue();
+//    Integer gio = cbGio.getValue();
+//
+//    if (ngay == null) return;
+//
+//    LocalDateTime start;
+//    LocalDateTime end;
+//
+//    if (gio == null) {
+//        // lọc toàn bộ ngày
+//        start = ngay.atStartOfDay();
+//        end   = ngay.atTime(23, 59, 59);
+//    } else {
+//        // lọc theo giờ
+//        start = ngay.atTime(gio, 0, 0);
+//        end   = ngay.atTime(gio, 59, 59);
+//    }
+//
+//    danhSachDatTruoc.getChildren().clear();
+//
+//    for (HoaDon hd : dsDatTruoc) {
+//        LocalDateTime tg = hd.getTgLapHD();
+//
+//        if (tg != null && !tg.isBefore(start) && !tg.isAfter(end)) {
+//            danhSachDatTruoc.getChildren().add(taoCardHoaDon(hd));
+//        }
+//    }
+//}
+
+
+    private void locTheoNgayGio() {
+
+        LocalDate ngay = dpNgay.getValue();
+        Integer gio = cbGio.getValue();
+
+        // chưa chọn ngày thì không lọc
+        if (ngay == null) {
+            hienThiDanhSachDatTruoc();
+            hienThiDanhSachDaNhan();
+            return;
+        }
+
+        LocalDateTime start;
+        LocalDateTime end;
+
+        if (gio == null) {
+            // ===== CHỈ CHỌN NGÀY =====
+            start = ngay.atStartOfDay();          // 00:00:00
+            end   = ngay.atTime(23, 59, 59);      // 23:59:59
+        } else {
+            // ===== CHỌN NGÀY + GIỜ =====
+            start = ngay.atTime(gio, 0, 0);
+            end   = ngay.atTime(gio, 59, 59);
+        }
+
+        // ===== LỌC ĐẶT TRƯỚC =====
+        danhSachDatTruoc.getChildren().clear();
+        for (HoaDon hd : dsDatTruoc) {
+            LocalDateTime tg = hd.getTgLapHD();
+            if (tg != null && !tg.isBefore(start) && !tg.isAfter(end)) {
+                danhSachDatTruoc.getChildren().add(taoCardHoaDon(hd));
+            }
+        }
+
+        // ===== LỌC ĐÃ NHẬN =====
+        danhSachDaNhan.getChildren().clear();
+        for (HoaDon hd : dsDaNhan) {
+            LocalDateTime tg = hd.getTgLapHD();
+            if (tg != null && !tg.isBefore(start) && !tg.isAfter(end)) {
+                danhSachDaNhan.getChildren().add(taoCardHoaDon(hd));
+            }
+        }
+    }
+
+
 
     private void ganSuKienChoNut() {
         if (btnXacNhan != null) btnXacNhan.setOnAction(e -> xacNhanDatBan());
