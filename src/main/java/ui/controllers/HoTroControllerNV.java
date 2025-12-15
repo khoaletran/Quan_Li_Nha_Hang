@@ -66,15 +66,8 @@ public class HoTroControllerNV implements Initializable {
 
 
     private void khoiTaoDuLieuFAQ() {
-//        faqList.add(new FAQItem( //quan li
-//                "1. Làm thế nào để thêm khuyến mãi mới?",
-//                "Bước 1: Truy cập trang Khuyến Mãi\n" +
-//                        "Bước 2: Nhập thông tin khuyến mãi\n" +
-//                        "Bước 3: Chọn ngày bắt đầu/kết thúc và phần trăm giảm giá\n" +
-//                        "Bước 4: Nhấn nút THÊM'"
-//        ));
 
-        faqList.add(new FAQItem( //ca 2
+        faqList.add(new FAQItem(
                 "1. Cách xem thống kê doanh thu?",
                 "• Dashboard hiển thị tự động doanh thu theo ngày\n" +
                         "• Biểu đồ cột: Top 5 món bán chạy\n" +
@@ -82,14 +75,14 @@ public class HoTroControllerNV implements Initializable {
                         "• Nhấn vào trang thống kê để xem chi tiết"
         ));
 
-        faqList.add(new FAQItem( //nhan vien
+        faqList.add(new FAQItem(
                 "2. Xử lý thông báo hẹn giờ như thế nào?",
                 "🟢 Màu xanh: Đã đến giờ hẹn - Chuẩn bị bàn\n" +
                         "🔴 Màu đỏ: Quá giờ hẹn - Liên hệ khách hàng\n" +
                         "🟡 Màu vàng: Sắp đến giờ hẹn - Nhắc nhở"
         ));
 
-        faqList.add(new FAQItem( //ca 2
+        faqList.add(new FAQItem(
                 "3. Cách đổi mật khẩu tài khoản?",
                 "1. Từ Dashboard, nhấn nút 'Đổi Mật Khẩu'\n" +
                         "2. Nhập mật khẩu cũ\n" +
@@ -97,14 +90,7 @@ public class HoTroControllerNV implements Initializable {
                         "4. Xác nhận mật khẩu mới và nhấn 'Lưu'"
         ));
 
-//        faqList.add(new FAQItem( //quan li
-//                "5. Quản lý món ăn trong menu?",
-//                "• Thêm món: Vào trang Quản Lý Menu > Dấu + ở góc phải trên > Nhấn nút Thêm mới\n" +
-//                        "• Sửa món: Chọn món cần sửa và nhập thông tin thay đổi > Nhấn nút Xác nhận\n" +
-//                        "• Xóa món: Chọn món > Nhấn nút Xóa (chỉ khi không có đơn hàng)\n"
-//        ));
-
-        faqList.add(new FAQItem( //nhan vien
+        faqList.add(new FAQItem(
                 "4. Xử lý đơn đặt bàn và thanh toán?",
                 "1. Chọn bàn, nhập thông tin khách hàng và thêm món vào đơn\n" +
                         "2. Xem tổng tiền và áp dụng khuyến mãi (nếu có)\n" +
@@ -113,13 +99,6 @@ public class HoTroControllerNV implements Initializable {
                         "5. In hóa đơn và hoàn tất"
         ));
 
-//        faqList.add(new FAQItem( //quản lí
-//                "7. Quản lý nhân viên và phân quyền?",
-//                "Chỉ Quản lý có quyền:\n" +
-//                        "• Thêm/Sửa/Xóa nhân viên\n" +
-//                        "• Phân quyền truy cập\n" +
-//                        "• Xem báo cáo toàn hệ thống\n"
-//        ));
     }
 
     private void khoiTaoDuLieuHelpCards() {
@@ -127,11 +106,6 @@ public class HoTroControllerNV implements Initializable {
                 "📊", "Dashboard", "Theo dõi thống kê & báo cáo", "#3498db",
                 "dashboard"
         ));
-
-//        helpCardList.add(new HelpCard(
-//                "🎯", "Khuyến Mãi", "Quản lý chương trình khuyến mãi", "#2ecc71",
-//                "khuyenmai"
-//        ));
 
         helpCardList.add(new HelpCard(
                 "👥", "Quản Lý Thành Viên", "Quản lý khách hàng là thành viên", "#9b59b6",
@@ -147,11 +121,6 @@ public class HoTroControllerNV implements Initializable {
                 "📦", "Hóa Đơn", "Quản lý hóa đơn", "#f39c12",
                 "hoadon"
         ));
-
-//        helpCardList.add(new HelpCard(
-//                "💰", "Báo Cáo Thống Kê", "Xuất báo cáo doanh thu", "#16a085",
-//                "baocao"
-//        ));
 
         helpCardList.add(new HelpCard(
                 "⚙️", "Tài khoản", "Vấn đề tài khoản", "#34495e",
@@ -173,9 +142,7 @@ public class HoTroControllerNV implements Initializable {
 
     private void hienThiHelpCards() {
         helpCardsContainer.getChildren().clear();
-//        for (HelpCard card : helpCardList) {
-//            helpCardsContainer.getChildren().add(taoHelpCard(card));
-//        }
+
         int columns = 3; // số card mỗi hàng
         int row = 0;
         int col = 0;
@@ -193,76 +160,39 @@ public class HoTroControllerNV implements Initializable {
         }
     }
 
-//    private TitledPane taoTitledPaneFAQ(FAQItem faq) {
-//        TitledPane pane = new TitledPane();
-//        pane.setText(faq.getQuestion());
-//        pane.setExpanded(false);
-//        pane.setAnimated(true);
-//
-//        // Style cho title
-//        pane.setStyle("-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-border-color: #dfe6e9;");
-//
-//        // Content
-//        VBox content = new VBox();
-//        content.setPadding(new Insets(15));
-//        content.setSpacing(10);
-//
-//        TextFlow textFlow = new TextFlow();
-//        String[] lines = faq.getAnswer().split("\n");
-//        for (String line : lines) {
-//            Text text = new Text(line + "\n");
-//            text.setStyle("-fx-font-size: 14px; -fx-fill: #2c3e50;");
-//            textFlow.getChildren().add(text);
-//        }
-//
-//        content.getChildren().add(textFlow);
-//        pane.setContent(content);
-//
-//        // Thêm icon indicator
-//        pane.setGraphic(new Label("▶"));
-//        pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
-//            if (newVal) {
-//                pane.setGraphic(new Label("▼"));
-//            } else {
-//                pane.setGraphic(new Label("▶"));
-//            }
-//        });
-//
-//        return pane;
-//    }
-private TitledPane taoTitledPaneFAQ(FAQItem faq) {
-    TitledPane pane = new TitledPane();
-    pane.setText(faq.getQuestion());
-    pane.setExpanded(false);
-    pane.setAnimated(true);
+    private TitledPane taoTitledPaneFAQ(FAQItem faq) {
+        TitledPane pane = new TitledPane();
+        pane.setText(faq.getQuestion());
+        pane.setExpanded(false);
+        pane.setAnimated(true);
 
-    pane.getStyleClass().add("faq-pane");
+        pane.getStyleClass().add("faq-pane");
 
-    // Content
-    VBox content = new VBox(10);
-    content.setPadding(new Insets(15));
+        // Content
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(15));
 
-    TextFlow textFlow = new TextFlow();
-    for (String line : faq.getAnswer().split("\n")) {
-        Text text = new Text(line + "\n");
-        text.getStyleClass().add("faq-text");
-        textFlow.getChildren().add(text);
+        TextFlow textFlow = new TextFlow();
+        for (String line : faq.getAnswer().split("\n")) {
+            Text text = new Text(line + "\n");
+            text.getStyleClass().add("faq-text");
+            textFlow.getChildren().add(text);
+        }
+
+        content.getChildren().add(textFlow);
+        pane.setContent(content);
+
+        // Icon mở / đóng
+        Label arrow = new Label("▶");
+        arrow.getStyleClass().add("faq-arrow");
+        pane.setGraphic(arrow);
+
+        pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
+            arrow.setText(newVal ? "▼" : "▶");
+        });
+
+        return pane;
     }
-
-    content.getChildren().add(textFlow);
-    pane.setContent(content);
-
-    // Icon mở / đóng
-    Label arrow = new Label("▶");
-    arrow.getStyleClass().add("faq-arrow");
-    pane.setGraphic(arrow);
-
-    pane.expandedProperty().addListener((obs, oldVal, newVal) -> {
-        arrow.setText(newVal ? "▼" : "▶");
-    });
-
-    return pane;
-}
 
 
     private VBox taoHelpCard(HelpCard card) {
@@ -341,8 +271,6 @@ private TitledPane taoTitledPaneFAQ(FAQItem faq) {
             );
         });
         //nut
-
-
         // Hover vào
         String baseColor = card.getColor(); // màu gốc từ card
         String hoverColor = "#2c3e50";      // màu hover bạn muốn
@@ -504,15 +432,6 @@ private void timKiemHelpCards(String keyword) {
                         "- Biểu đồ top 5 món bán chạy\n" +
                         "- Biểu đồ lượng khách theo giờ\n";
                 break;
-//            case "khuyenmai":
-//                content = "Quản lý khuyến mãi:\n\n" +
-//                        "1. Thêm khuyến mãi mới\n" +
-//                        "2. Xem danh sách khuyến mãi\n" +
-//                        "3. Lọc theo trạng thái và ưu đãi\n" +
-//                        "4. Sửa/Xóa khuyến mãi\n" +
-//                        "5. In mã QR cho khuyến mãi\n" +
-//                        "6. Chọn món áp dụng khuyến mãi";
-//                break;
             case "khachhang":
                 content = "Quản lý thành viên:\n\n" +
                         "1. Tự động thêm khách hàng mới khi đặt bàn\n" +
@@ -615,11 +534,6 @@ private void timKiemHelpCards(String keyword) {
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
 
         }
-
-//        alert.setContentText(content);
-//        alert.setWidth(400);
-//        alert.setHeight(300);
-//        alert.showAndWait();
         showCustomDialog("Hướng dẫn: " + card.getTitle(), content);
     }
 
@@ -660,15 +574,11 @@ private void timKiemHelpCards(String keyword) {
     }
 
     // Phương thức để tích hợp với MainController (tương tự DashboardController)
-    public void setMainController(Object controller) {
-        // Tương tự như DashboardController, có thể nhận MainController_NV hoặc MainController_QL
-        // Nếu cần thông tin nhân viên để tùy chỉnh hướng dẫn
-    }
+//    public void setMainController(Object controller) {
+//        // Tương tự như DashboardController, có thể nhận MainController_NV hoặc MainController_QL
+//        // Nếu cần thông tin nhân viên để tùy chỉnh hướng dẫn
+//    }
 
-    // Phương thức để cập nhật dữ liệu real-time nếu cần
-    public void refreshData() {
-        // Có thể cập nhật thông tin mới nhất nếu cần
-    }
 
     @FXML
     private void onExpandAllFAQ() {
@@ -779,122 +689,5 @@ private void timKiemHelpCards(String keyword) {
         dialog.showAndWait();
     }
 
-
-//    private void showCustomDialog(String title, String content) {
-//        Stage dialog = new Stage();
-//        dialog.initModality(Modality.APPLICATION_MODAL);
-//        dialog.setTitle(title);
-//
-//        VBox box = new VBox(20);
-//        box.setPadding(new Insets(25));
-//        box.setStyle(
-//                "-fx-background-color: white;" +
-//                        "-fx-background-radius: 15;" +
-//                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);"
-//        );
-//
-//        Label lblTitle = new Label(title);
-//        lblTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-//
-//        Label lblContent = new Label(content);
-//        lblContent.setWrapText(true);
-//        lblContent.setStyle("-fx-font-size: 15px; -fx-text-fill: #34495e;");
-//        lblContent.setMaxWidth(400);
-//
-//        Button btnClose = new Button("Đóng");
-//        btnClose.setStyle(
-//                "-fx-background-color: #3498db;" +
-//                        "-fx-text-fill: white;" +
-//                        "-fx-background-radius: 18;" +
-//                        "-fx-padding: 8 20;" +
-//                        "-fx-font-size: 14px; -fx-font-weight: bold;"
-//        );
-//        btnClose.setOnAction(e -> dialog.close());
-//
-//        box.getChildren().addAll(lblTitle, lblContent, btnClose);
-//        box.setAlignment(Pos.CENTER);
-//
-//        Scene scene = new Scene(box);
-//        dialog.setScene(scene);
-//        dialog.setResizable(false);
-//        dialog.show();
-//    }
-
-
-//    // =======================
-//// Hộp thoại thông báo đẹp
-//// =======================
-//    private void hienThongBao(String tieuDe, String noiDung, String loai) {
-//        Alert alert;
-//
-//        switch (loai.toLowerCase()) {
-//            case "success":
-//                alert = new Alert(Alert.AlertType.INFORMATION);
-//                break;
-//            case "warning":
-//                alert = new Alert(Alert.AlertType.WARNING);
-//                break;
-//            case "error":
-//                alert = new Alert(Alert.AlertType.ERROR);
-//                break;
-//            default:
-//                alert = new Alert(Alert.AlertType.INFORMATION);
-//        }
-//
-//        DialogPane dialogPane = alert.getDialogPane();
-//
-//        // Style tổng thể
-//        dialogPane.setStyle(
-//                "-fx-background-color: #ffffff;" +
-//                        "-fx-border-radius: 15;" +
-//                        "-fx-background-radius: 15;" +
-//                        "-fx-padding: 20;"
-//        );
-//
-//        // Style nội dung text
-//        dialogPane.lookup(".header-panel").setStyle(
-//                "-fx-background-color: transparent;" +
-//                        "-fx-padding: 0 0 10 0;"
-//        );
-//
-//        dialogPane.lookup(".content.label").setStyle(
-//                "-fx-font-size: 14px;" +
-//                        "-fx-text-fill: #2c3e50;"
-//        );
-//
-//        // Style nút OK
-//        Button btnOk = (Button) dialogPane.lookupButton(ButtonType.OK);
-//        btnOk.setText("Đóng");
-//        btnOk.setStyle(
-//                "-fx-background-color: #3498db;" +
-//                        "-fx-background-radius: 20;" +
-//                        "-fx-text-fill: white;" +
-//                        "-fx-font-weight: bold;" +
-//                        "-fx-padding: 8 20;"
-//        );
-//
-//        btnOk.setOnMouseEntered(e -> btnOk.setStyle(
-//                "-fx-background-color: #2c3e50;" +
-//                        "-fx-background-radius: 20;" +
-//                        "-fx-text-fill: white;" +
-//                        "-fx-font-weight: bold;" +
-//                        "-fx-padding: 8 20;"
-//        ));
-//
-//        btnOk.setOnMouseExited(e -> btnOk.setStyle(
-//                "-fx-background-color: #3498db;" +
-//                        "-fx-background-radius: 20;" +
-//                        "-fx-text-fill: white;" +
-//                        "-fx-font-weight: bold;" +
-//                        "-fx-padding: 8 20;"
-//        ));
-//
-//        // Gán tiêu đề – nội dung
-//        alert.setTitle(tieuDe);
-//        alert.setHeaderText(tieuDe);
-//        alert.setContentText(noiDung);
-//
-//        alert.showAndWait();
-//    }
 
 }
