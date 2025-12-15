@@ -52,7 +52,7 @@ public class BanGiaoCaController {
 
         System.out.println("Initializing BanGiaoCaController");
 
-        btnKetCa.setOnAction(e -> ketCa());
+        btnKetCa.setOnAction(e -> KiemTraTruocKetCa());
 
         searchIcon.setOnMouseClicked(e -> timKiemHoaDon());
 
@@ -71,10 +71,10 @@ public class BanGiaoCaController {
 
     public void initData(NhanVien nv) {
         this.nhanVien = nv;
-        loadTatCaHoaDon();
+        loadHoaDonTrongCaLam();
     }
 
-    private void loadTatCaHoaDon() {
+    private void loadHoaDonTrongCaLam() {
         int slHoaDon = 0;
         double tongTienMat = 0;
         double tongTienCK = 0;
@@ -207,7 +207,7 @@ public class BanGiaoCaController {
     }
 
     @FXML
-    private void ketCa() {
+    private void KiemTraTruocKetCa() {
         if (nhanVien == null || thoiGianVaoCa == null) return;
 
         PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
@@ -256,7 +256,7 @@ public class BanGiaoCaController {
             if (success) {
                 AlertCus.show("Bàn giao ca", "Đã lưu báo cáo kết ca!");
                 javafx.application.Platform.exit();
-                System.exit(0);
+                dangXuat();
             } else {
                 AlertCus.show("Bàn giao ca", "Lỗi lưu báo cáo kết ca!");
             }
@@ -287,7 +287,7 @@ public class BanGiaoCaController {
         vboxHoaDon.getChildren().clear();
 
         if (keyword.isEmpty()) {
-            loadTatCaHoaDon();
+            loadHoaDonTrongCaLam();
             return;
         }
 
@@ -383,6 +383,10 @@ public class BanGiaoCaController {
         lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
         lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
         lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
+    }
+
+    public void dangXuat(){
+        System.exit(0);
     }
 
 }
