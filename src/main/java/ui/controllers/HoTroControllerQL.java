@@ -23,12 +23,10 @@ public class HoTroControllerQL implements Initializable {
 
     @FXML private TextField txtTimKiem;
     @FXML private VBox faqContainer;
-
     @FXML private ScrollPane scrollPane;
     @FXML private GridPane helpCardsContainer;
 
 
-    // Danh sách FAQ
     private List<FAQItem> faqList = new ArrayList<>();
     private List<HelpCard> helpCardList = new ArrayList<>();
 
@@ -40,13 +38,10 @@ public class HoTroControllerQL implements Initializable {
         hienThiHelpCards();
         setupTimKiem();
         setupScrollPaneStyle();
-
         // Tự điều chỉnh kích thước card theo GridPane width
         helpCardsContainer.widthProperty().addListener((obs, oldWidth, newWidth) -> {
             capNhatDoRongCard(newWidth.doubleValue());
         });
-
-
     }
     private void capNhatDoRongCard(double containerWidth) {
 
@@ -63,7 +58,6 @@ public class HoTroControllerQL implements Initializable {
             }
         }
     }
-
 
     private void khoiTaoDuLieuFAQ() {
         faqList.add(new FAQItem( //quan li
@@ -163,18 +157,14 @@ public class HoTroControllerQL implements Initializable {
 
     private void hienThiHelpCards() {
         helpCardsContainer.getChildren().clear();
-//        for (HelpCard card : helpCardList) {
-//            helpCardsContainer.getChildren().add(taoHelpCard(card));
-//        }
+
         int columns = 3; // số card mỗi hàng
         int row = 0;
         int col = 0;
 
         for (HelpCard card : helpCardList) {
             VBox cardBox = taoHelpCard(card);
-
             helpCardsContainer.add(cardBox, col, row);
-
             col++;
             if (col >= columns) {
                 col = 0;
@@ -190,7 +180,6 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
     pane.setAnimated(true);
 
     pane.getStyleClass().add("faq-pane");
-
     // Content
     VBox content = new VBox(10);
     content.setPadding(new Insets(15));
@@ -217,109 +206,49 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
     return pane;
 }
 
-    private VBox taoHelpCard(HelpCard card) {
-        VBox cardBox = new VBox();
-        cardBox.setAlignment(javafx.geometry.Pos.CENTER);
-        cardBox.setSpacing(15);
+    private VBox taoHelpCard(HoTroControllerQL.HelpCard card) {
 
+        VBox cardBox = new VBox(15);
+        cardBox.setAlignment(Pos.CENTER);
         cardBox.setMinWidth(250);
-        cardBox.setPrefWidth(250);      // mỗi card cùng độ rộng
-        cardBox.setMaxWidth(Double.MAX_VALUE); // cho phép giãn khi FlowPane đủ chỗ
-
-
+        cardBox.setPrefWidth(250);
+        cardBox.setMaxWidth(Double.MAX_VALUE);
         cardBox.setPadding(new Insets(20));
-        cardBox.setStyle(
-                "-fx-background-color: #ffffff; " +
-                        "-fx-background-radius: 15; " +
-                        "-fx-padding: 20; " +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3); " +
-                        "-fx-cursor: hand;"
-        );
+
+        cardBox.getStyleClass().add("help-card");
 
         // Icon
         Label iconLabel = new Label(card.getIcon());
-        iconLabel.setStyle("-fx-font-size: 40px;");
+        iconLabel.getStyleClass().add("help-card-icon");
 
         // Title
         Label titleLabel = new Label(card.getTitle());
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #2c3e50;");
+        titleLabel.getStyleClass().add("help-card-title");
 
         // Description
         Label descLabel = new Label(card.getDescription());
         descLabel.setWrapText(true);
         descLabel.setMaxWidth(200);
-        descLabel.setStyle(
-                "-fx-font-size: 14px; " +
-                        "-fx-text-fill: #7f8c8d; " +
-                        "-fx-wrap-text: true; " +
-                        "-fx-text-alignment: center;" +
-                        "-fx-alignment: center"
-        );
+        descLabel.getStyleClass().add("help-card-desc");
 
         // Button
         Button actionBtn = new Button("Xem hướng dẫn");
-        actionBtn.setStyle(
-                "-fx-background-color: " + card.getColor() + "; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-background-radius: 20; " +
-                        "-fx-padding: 8 20; " +
-                        "-fx-font-weight: bold;"
-        );
+        actionBtn.getStyleClass().add("help-card-button");
 
-        // Gắn sự kiện click
+        // Màu động từ model
+        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+
+        // Sự kiện
         actionBtn.setOnAction(e -> moHuongDanChiTiet(card));
         cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
 
-        // Hiệu ứng hover
-        cardBox.setOnMouseEntered(e -> {
-            cardBox.setStyle(
-                    "-fx-background-color: #ffffff; " +
-                            "-fx-background-radius: 15; " +
-                            "-fx-padding: 20; " +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 5); " +
-                            "-fx-translate-y: -5; " +
-                            "-fx-cursor: hand;"
-            );
-        });
+        cardBox.getChildren().addAll(
+                iconLabel,
+                titleLabel,
+                descLabel,
+                actionBtn
+        );
 
-        cardBox.setOnMouseExited(e -> {
-            cardBox.setStyle(
-                    "-fx-background-color: #ffffff; " +
-                            "-fx-background-radius: 15; " +
-                            "-fx-padding: 20; " +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3); " +
-                            "-fx-translate-y: 0; " +
-                            "-fx-cursor: hand;"
-            );
-        });
-        //nut
-
-
-        // Hover vào
-        String baseColor = card.getColor(); // màu gốc từ card
-        String hoverColor = "#2c3e50";      // màu hover bạn muốn
-        actionBtn.setOnMouseEntered(e -> {
-            actionBtn.setStyle(
-                    "-fx-background-color: " + hoverColor + ";" +
-                            "-fx-text-fill: white;" +
-                            "-fx-background-radius: 20;" +
-                            "-fx-padding: 8 20;" +
-                            "-fx-font-weight: bold;"
-            );
-        });
-
-// Hover ra
-        actionBtn.setOnMouseExited(e -> {
-            actionBtn.setStyle(
-                    "-fx-background-color: " + baseColor + ";" +
-                            "-fx-text-fill: white;" +
-                            "-fx-background-radius: 20;" +
-                            "-fx-padding: 8 20;" +
-                            "-fx-font-weight: bold;"
-            );
-        });
-
-        cardBox.getChildren().addAll(iconLabel, titleLabel, descLabel, actionBtn);
         return cardBox;
     }
 
@@ -333,7 +262,6 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
                 timKiemHelpCards(newValue.trim().toLowerCase());
             }
         });
-
         // Sự kiện nhấn Enter
         txtTimKiem.setOnAction(e -> {
             String keyword = txtTimKiem.getText().trim().toLowerCase();
@@ -415,26 +343,6 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
             timKiemFAQ(keyword);
             timKiemHelpCards(keyword);
         }
-    }
-
-    @FXML
-    private void onTaiTaiLieuPDF() {
-        // TODO: Implement PDF download functionality
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Tải tài liệu");
-        alert.setHeaderText("Tải tài liệu hướng dẫn PDF");
-        alert.setContentText("Chức năng này đang được phát triển. Tài liệu sẽ được tải xuống sớm.");
-        alert.showAndWait();
-    }
-
-    @FXML
-    private void onLienHeHotline() {
-        // TODO: Implement call functionality
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Liên hệ hỗ trợ");
-        alert.setHeaderText("Hotline: 1900 1234");
-        alert.setContentText("Vui lòng gọi số trên để được hỗ trợ trực tiếp.");
-        alert.showAndWait();
     }
 
     private void moHuongDanChiTiet(HelpCard card) {
@@ -588,7 +496,6 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
                 content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
 
         }
-
         showCustomDialog("Hướng dẫn: " + card.getTitle(), content);
     }
 
@@ -628,13 +535,6 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
         public String getTag() { return tag; }
     }
 
-    // Phương thức để tích hợp với MainController (tương tự DashboardController)
-    public void setMainController(Object controller) {
-        // Tương tự như DashboardController, có thể nhận MainController_NV hoặc MainController_QL
-        // Nếu cần thông tin nhân viên để tùy chỉnh hướng dẫn
-    }
-
-
     @FXML
     private void onExpandAllFAQ() {
         // Mở rộng tất cả FAQ
@@ -654,92 +554,49 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
             }
         }
     }
+
     private void showCustomDialog(String title, String content) {
+
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle(title);
 
-        // ===== Root VBox =====
+        // ===== Root =====
         VBox root = new VBox(15);
         root.setPadding(new Insets(25));
         root.setAlignment(Pos.CENTER);
-        root.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-background-radius: 15;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);"
-        );
+        root.getStyleClass().add("custom-dialog-root");
 
         // ===== Title =====
         Label lblTitle = new Label(title);
-        lblTitle.setStyle(
-                "-fx-font-size: 22px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #2c3e50;"
-        );
+        lblTitle.getStyleClass().add("custom-dialog-title");
 
         // ===== Content =====
         Label lblContent = new Label(content);
         lblContent.setWrapText(true);
-        lblContent.setStyle(
-                "-fx-font-size: 15px;" +
-                        "-fx-text-fill: #34495e;"
-        );
         lblContent.setMaxWidth(450);
+        lblContent.getStyleClass().add("custom-dialog-content");
 
-        // ===== ScrollPane cho nội dung =====
+        // ===== ScrollPane =====
         ScrollPane scrollPane = new ScrollPane(lblContent);
         scrollPane.setFitToWidth(true);
-        scrollPane.setPrefViewportHeight(300);   // ⭐ chiều cao cố định
-        scrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-border-color: #dcdcdc;" +
-                        "-fx-border-radius: 10;" +
-                        "-fx-background-radius: 10;"
-        );
+        scrollPane.setPrefViewportHeight(300);
+        scrollPane.getStyleClass().add("custom-dialog-scroll");
 
-        // Ẩn nền viewport
-//        scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;");
-
-        // ===== Button Đóng =====
+        // ===== Button =====
         Button btnClose = new Button("Đóng");
-        btnClose.setStyle(
-                "-fx-background-color: #3498db;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-background-radius: 18;" +
-                        "-fx-padding: 8 25;" +
-                        "-fx-font-size: 14px;" +
-                        "-fx-font-weight: bold;"
-        );
+        btnClose.getStyleClass().add("custom-dialog-button");
         btnClose.setOnAction(e -> dialog.close());
 
-        // Hover cho nút
-        btnClose.setOnMouseEntered(e ->
-                btnClose.setStyle(
-                        "-fx-background-color: #2c3e50;" +
-                                "-fx-text-fill: white;" +
-                                "-fx-background-radius: 18;" +
-                                "-fx-padding: 8 25;" +
-                                "-fx-font-size: 14px;" +
-                                "-fx-font-weight: bold;"
-                )
-        );
-
-        btnClose.setOnMouseExited(e ->
-                btnClose.setStyle(
-                        "-fx-background-color: #3498db;" +
-                                "-fx-text-fill: white;" +
-                                "-fx-background-radius: 18;" +
-                                "-fx-padding: 8 25;" +
-                                "-fx-font-size: 14px;" +
-                                "-fx-font-weight: bold;"
-                )
-        );
-
-        // ===== Add vào root =====
+        // ===== Add =====
         root.getChildren().addAll(lblTitle, scrollPane, btnClose);
 
-        Scene scene = new Scene(root, 520, 450); // ⭐ size cố định, đẹp
+        Scene scene = new Scene(root, 520, 450);
+        scene.getStylesheets().add(
+                getClass().getResource("/CSS/hotronv.css").toExternalForm()
+        );
         dialog.setScene(scene);
+
         dialog.setResizable(false);
         dialog.showAndWait();
     }
