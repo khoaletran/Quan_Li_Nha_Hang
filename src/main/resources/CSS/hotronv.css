@@ -1,4 +1,4 @@
-/* hotro.css */
+
 
 /* Main background */
 .root {
@@ -18,7 +18,6 @@
     -fx-effect: dropshadow(gaussian, rgba(230, 118, 62, 0.2), 8, 0, 0, 3);
 }
 
-/* Help cards - dynamic styling will be applied in controller */
 /* =======================
    Help Card
    ======================= */
@@ -72,7 +71,7 @@
 }
 
 
-/* FAQ TitledPane */
+/* ==FAQ TitledPane ==*/
 .titled-pane {
     -fx-border-color: #dfe6e9;
     -fx-border-radius: 10;
@@ -99,7 +98,7 @@
     -fx-border-width: 0 0 0 3;
 }
 
-/* ScrollPane styling */
+/*== ScrollPane styling ==*/
 .transparent-scroll {
     -fx-background-color: transparent;
 }

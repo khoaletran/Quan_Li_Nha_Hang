@@ -23,12 +23,10 @@ public class HoTroControllerNV implements Initializable {
 
     @FXML private TextField txtTimKiem;
     @FXML private VBox faqContainer;
-
     @FXML private ScrollPane scrollPane;
     @FXML private GridPane helpCardsContainer;
 
 
-    // Danh sách FAQ
     private List<FAQItem> faqList = new ArrayList<>();
     private List<HelpCard> helpCardList = new ArrayList<>();
 
@@ -40,31 +38,23 @@ public class HoTroControllerNV implements Initializable {
         hienThiHelpCards();
         setupTimKiem();
         setupScrollPaneStyle();
-
         // Tự điều chỉnh kích thước card theo GridPane width
         helpCardsContainer.widthProperty().addListener((obs, oldWidth, newWidth) -> {
             capNhatDoRongCard(newWidth.doubleValue());
         });
-
-
     }
     private void capNhatDoRongCard(double containerWidth) {
 
         int columns = 3;
         double hgap = helpCardsContainer.getHgap();
-
         double totalGap = (columns - 1) * hgap;
-
         double cardWidth = (containerWidth - totalGap) / columns - 5;
-
         for (Node node : helpCardsContainer.getChildren()) {
             if (node instanceof VBox card) {
                 card.setPrefWidth(cardWidth);
             }
         }
     }
-
-
     private void khoiTaoDuLieuFAQ() {
 
         faqList.add(new FAQItem(
@@ -98,7 +88,6 @@ public class HoTroControllerNV implements Initializable {
                         "4. Chọn phương thức thanh toán (tiền mặt/Chuyển khoản)\n" +
                         "5. In hóa đơn và hoàn tất"
         ));
-
     }
 
     private void khoiTaoDuLieuHelpCards() {
@@ -149,9 +138,7 @@ public class HoTroControllerNV implements Initializable {
 
         for (HelpCard card : helpCardList) {
             VBox cardBox = taoHelpCard(card);
-
             helpCardsContainer.add(cardBox, col, row);
-
             col++;
             if (col >= columns) {
                 col = 0;
@@ -167,7 +154,6 @@ public class HoTroControllerNV implements Initializable {
         pane.setAnimated(true);
 
         pane.getStyleClass().add("faq-pane");
-
         // Content
         VBox content = new VBox(10);
         content.setPadding(new Insets(15));
@@ -194,13 +180,10 @@ public class HoTroControllerNV implements Initializable {
         return pane;
     }
 
-
-//
     private VBox taoHelpCard(HelpCard card) {
 
         VBox cardBox = new VBox(15);
         cardBox.setAlignment(Pos.CENTER);
-
         cardBox.setMinWidth(250);
         cardBox.setPrefWidth(250);
         cardBox.setMaxWidth(Double.MAX_VALUE);
@@ -243,7 +226,6 @@ public class HoTroControllerNV implements Initializable {
         return cardBox;
     }
 
-
     private void setupTimKiem() {
         txtTimKiem.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.trim().isEmpty()) {
@@ -254,7 +236,6 @@ public class HoTroControllerNV implements Initializable {
                 timKiemHelpCards(newValue.trim().toLowerCase());
             }
         });
-
         // Sự kiện nhấn Enter
         txtTimKiem.setOnAction(e -> {
             String keyword = txtTimKiem.getText().trim().toLowerCase();
@@ -284,30 +265,30 @@ public class HoTroControllerNV implements Initializable {
         }
     }
 
-private void timKiemHelpCards(String keyword) {
-    helpCardsContainer.getChildren().clear();
+    private void timKiemHelpCards(String keyword) {
+        helpCardsContainer.getChildren().clear();
 
-    List<HelpCard> ketQua = helpCardList.stream()
-            .filter(card -> card.getTitle().toLowerCase().contains(keyword)
-                    || card.getDescription().toLowerCase().contains(keyword)
-                    || card.getTag().toLowerCase().contains(keyword))
-            .collect(Collectors.toList());
+        List<HelpCard> ketQua = helpCardList.stream()
+                .filter(card -> card.getTitle().toLowerCase().contains(keyword)
+                        || card.getDescription().toLowerCase().contains(keyword)
+                        || card.getTag().toLowerCase().contains(keyword))
+                .collect(Collectors.toList());
 
-    if (ketQua.isEmpty()) {
-        hienThiHelpCards();
-        return;
-    }
+        if (ketQua.isEmpty()) {
+            hienThiHelpCards();
+            return;
+        }
 
-    int col = 0, row = 0;
-    for (HelpCard card : ketQua) {
-        helpCardsContainer.add(taoHelpCard(card), col, row);
-        col++;
-        if (col >= 3) {
-            col = 0;
-            row++;
+        int col = 0, row = 0;
+        for (HelpCard card : ketQua) {
+            helpCardsContainer.add(taoHelpCard(card), col, row);
+            col++;
+            if (col >= 3) {
+                col = 0;
+                row++;
+            }
         }
     }
-}
 
 
     private void setupScrollPaneStyle() {
@@ -338,28 +319,7 @@ private void timKiemHelpCards(String keyword) {
         }
     }
 
-    @FXML
-    private void onTaiTaiLieuPDF() {
-        // TODO: Implement PDF download functionality
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Tải tài liệu");
-        alert.setHeaderText("Tải tài liệu hướng dẫn PDF");
-        alert.setContentText("Chức năng này đang được phát triển. Tài liệu sẽ được tải xuống sớm.");
-        alert.showAndWait();
-    }
-
-    @FXML
-    private void onLienHeHotline() {
-        // TODO: Implement call functionality
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Liên hệ hỗ trợ");
-        alert.setHeaderText("Hotline: 1900 1234");
-        alert.setContentText("Vui lòng gọi số trên để được hỗ trợ trực tiếp.");
-        alert.showAndWait();
-    }
-
     private void moHuongDanChiTiet(HelpCard card) {
-        // TODO: Implement detailed guide opening
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Hướng dẫn chi tiết");
         alert.setHeaderText("Hướng dẫn: " + card.getTitle());
@@ -518,13 +478,6 @@ private void timKiemHelpCards(String keyword) {
         public String getTag() { return tag; }
     }
 
-    // Phương thức để tích hợp với MainController (tương tự DashboardController)
-//    public void setMainController(Object controller) {
-//        // Tương tự như DashboardController, có thể nhận MainController_NV hoặc MainController_QL
-//        // Nếu cần thông tin nhân viên để tùy chỉnh hướng dẫn
-//    }
-
-
     @FXML
     private void onExpandAllFAQ() {
         // Mở rộng tất cả FAQ
@@ -545,51 +498,51 @@ private void timKiemHelpCards(String keyword) {
         }
     }
 
-private void showCustomDialog(String title, String content) {
+    private void showCustomDialog(String title, String content) {
 
-    Stage dialog = new Stage();
-    dialog.initModality(Modality.APPLICATION_MODAL);
-    dialog.setTitle(title);
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle(title);
 
-    // ===== Root =====
-    VBox root = new VBox(15);
-    root.setPadding(new Insets(25));
-    root.setAlignment(Pos.CENTER);
-    root.getStyleClass().add("custom-dialog-root");
+        // ===== Root =====
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(25));
+        root.setAlignment(Pos.CENTER);
+        root.getStyleClass().add("custom-dialog-root");
 
-    // ===== Title =====
-    Label lblTitle = new Label(title);
-    lblTitle.getStyleClass().add("custom-dialog-title");
+        // ===== Title =====
+        Label lblTitle = new Label(title);
+        lblTitle.getStyleClass().add("custom-dialog-title");
 
-    // ===== Content =====
-    Label lblContent = new Label(content);
-    lblContent.setWrapText(true);
-    lblContent.setMaxWidth(450);
-    lblContent.getStyleClass().add("custom-dialog-content");
+        // ===== Content =====
+        Label lblContent = new Label(content);
+        lblContent.setWrapText(true);
+        lblContent.setMaxWidth(450);
+        lblContent.getStyleClass().add("custom-dialog-content");
 
-    // ===== ScrollPane =====
-    ScrollPane scrollPane = new ScrollPane(lblContent);
-    scrollPane.setFitToWidth(true);
-    scrollPane.setPrefViewportHeight(300);
-    scrollPane.getStyleClass().add("custom-dialog-scroll");
+        // ===== ScrollPane =====
+        ScrollPane scrollPane = new ScrollPane(lblContent);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefViewportHeight(300);
+        scrollPane.getStyleClass().add("custom-dialog-scroll");
 
-    // ===== Button =====
-    Button btnClose = new Button("Đóng");
-    btnClose.getStyleClass().add("custom-dialog-button");
-    btnClose.setOnAction(e -> dialog.close());
+        // ===== Button =====
+        Button btnClose = new Button("Đóng");
+        btnClose.getStyleClass().add("custom-dialog-button");
+        btnClose.setOnAction(e -> dialog.close());
 
-    // ===== Add =====
-    root.getChildren().addAll(lblTitle, scrollPane, btnClose);
+        // ===== Add =====
+        root.getChildren().addAll(lblTitle, scrollPane, btnClose);
 
-    Scene scene = new Scene(root, 520, 450);
-    scene.getStylesheets().add(
-            getClass().getResource("/CSS/hotronv.css").toExternalForm()
-    );
-    dialog.setScene(scene);
+        Scene scene = new Scene(root, 520, 450);
+        scene.getStylesheets().add(
+                getClass().getResource("/CSS/hotronv.css").toExternalForm()
+        );
+        dialog.setScene(scene);
 
-    dialog.setResizable(false);
-    dialog.showAndWait();
-}
+        dialog.setResizable(false);
+        dialog.showAndWait();
+    }
 
 
 
