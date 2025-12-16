@@ -19,6 +19,58 @@
 }
 
 /* Help cards - dynamic styling will be applied in controller */
+/* =======================
+   Help Card
+   ======================= */
+
+.help-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);
+    -fx-cursor: hand;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.help-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 5);
+    -fx-translate-y: -5;
+}
+
+/* Icon */
+.help-card-icon {
+    -fx-font-size: 40px;
+}
+
+/* Title */
+.help-card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Description */
+.help-card-desc {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7f8c8d;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+/* Button */
+.help-card-button {
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+    -fx-font-weight: bold;
+}
+
+.help-card-button:hover {
+    -fx-background-color: #2c3e50;
+}
+
 
 /* FAQ TitledPane */
 .titled-pane {
@@ -149,6 +201,7 @@
     -fx-text-fill: #e74c3c;
 }
 
+
 /* Print section */
 .print-section {
     -fx-background-color: #ffffff;
@@ -204,4 +257,53 @@
 .faq-arrow {
     -fx-font-size: 14px;
     -fx-text-fill: #2c3e50;
+}
+
+/* =======================
+   Custom Dialog
+   ======================= */
+
+.custom-dialog-root {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);
+}
+
+/* Title */
+.custom-dialog-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Content text */
+.custom-dialog-content {
+    -fx-font-size: 15px;
+    -fx-text-fill: #34495e;
+}
+
+/* ScrollPane */
+.custom-dialog-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.custom-dialog-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Close button */
+.custom-dialog-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-background-radius: 18;
+    -fx-padding: 8 25;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.custom-dialog-button:hover {
+    -fx-background-color: #2c3e50;
 }

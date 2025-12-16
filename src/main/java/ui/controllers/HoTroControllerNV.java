@@ -77,9 +77,9 @@ public class HoTroControllerNV implements Initializable {
 
         faqList.add(new FAQItem(
                 "2. Xử lý thông báo hẹn giờ như thế nào?",
-                "🟢 Màu xanh: Đã đến giờ hẹn - Chuẩn bị bàn\n" +
-                        "🔴 Màu đỏ: Quá giờ hẹn - Liên hệ khách hàng\n" +
-                        "🟡 Màu vàng: Sắp đến giờ hẹn - Nhắc nhở"
+                "Màu xanh: Đã đến giờ hẹn - Chuẩn bị bàn\n" +
+                        "Màu đỏ: Quá giờ hẹn - Liên hệ khách hàng\n" +
+                        "Màu vàng: Sắp đến giờ hẹn - Nhắc nhở"
         ));
 
         faqList.add(new FAQItem(
@@ -195,109 +195,54 @@ public class HoTroControllerNV implements Initializable {
     }
 
 
+//
     private VBox taoHelpCard(HelpCard card) {
-        VBox cardBox = new VBox();
-        cardBox.setAlignment(javafx.geometry.Pos.CENTER);
-        cardBox.setSpacing(15);
+
+        VBox cardBox = new VBox(15);
+        cardBox.setAlignment(Pos.CENTER);
 
         cardBox.setMinWidth(250);
-        cardBox.setPrefWidth(250);      // mỗi card cùng độ rộng
-        cardBox.setMaxWidth(Double.MAX_VALUE); // cho phép giãn khi FlowPane đủ chỗ
-
-
+        cardBox.setPrefWidth(250);
+        cardBox.setMaxWidth(Double.MAX_VALUE);
         cardBox.setPadding(new Insets(20));
-        cardBox.setStyle(
-                "-fx-background-color: #ffffff; " +
-                        "-fx-background-radius: 15; " +
-                        "-fx-padding: 20; " +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3); " +
-                        "-fx-cursor: hand;"
-        );
+
+        cardBox.getStyleClass().add("help-card");
 
         // Icon
         Label iconLabel = new Label(card.getIcon());
-        iconLabel.setStyle("-fx-font-size: 40px;");
+        iconLabel.getStyleClass().add("help-card-icon");
 
         // Title
         Label titleLabel = new Label(card.getTitle());
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #2c3e50;");
+        titleLabel.getStyleClass().add("help-card-title");
 
         // Description
         Label descLabel = new Label(card.getDescription());
         descLabel.setWrapText(true);
         descLabel.setMaxWidth(200);
-        descLabel.setStyle(
-                "-fx-font-size: 14px; " +
-                        "-fx-text-fill: #7f8c8d; " +
-                        "-fx-wrap-text: true; " +
-                        "-fx-text-alignment: center;" +
-                        "-fx-alignment: center"
-        );
+        descLabel.getStyleClass().add("help-card-desc");
 
         // Button
         Button actionBtn = new Button("Xem hướng dẫn");
-        actionBtn.setStyle(
-                "-fx-background-color: " + card.getColor() + "; " +
-                        "-fx-text-fill: white; " +
-                        "-fx-background-radius: 20; " +
-                        "-fx-padding: 8 20; " +
-                        "-fx-font-weight: bold;"
-        );
+        actionBtn.getStyleClass().add("help-card-button");
 
-        // Gắn sự kiện click
+        // Màu động từ model
+        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+
+        // Sự kiện
         actionBtn.setOnAction(e -> moHuongDanChiTiet(card));
         cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
 
-        // Hiệu ứng hover
-        cardBox.setOnMouseEntered(e -> {
-            cardBox.setStyle(
-                    "-fx-background-color: #ffffff; " +
-                            "-fx-background-radius: 15; " +
-                            "-fx-padding: 20; " +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 5); " +
-                            "-fx-translate-y: -5; " +
-                            "-fx-cursor: hand;"
-            );
-        });
+        cardBox.getChildren().addAll(
+                iconLabel,
+                titleLabel,
+                descLabel,
+                actionBtn
+        );
 
-        cardBox.setOnMouseExited(e -> {
-            cardBox.setStyle(
-                    "-fx-background-color: #ffffff; " +
-                            "-fx-background-radius: 15; " +
-                            "-fx-padding: 20; " +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3); " +
-                            "-fx-translate-y: 0; " +
-                            "-fx-cursor: hand;"
-            );
-        });
-        //nut
-        // Hover vào
-        String baseColor = card.getColor(); // màu gốc từ card
-        String hoverColor = "#2c3e50";      // màu hover bạn muốn
-        actionBtn.setOnMouseEntered(e -> {
-            actionBtn.setStyle(
-                    "-fx-background-color: " + hoverColor + ";" +
-                            "-fx-text-fill: white;" +
-                            "-fx-background-radius: 20;" +
-                            "-fx-padding: 8 20;" +
-                            "-fx-font-weight: bold;"
-            );
-        });
-
-// Hover ra
-        actionBtn.setOnMouseExited(e -> {
-            actionBtn.setStyle(
-                    "-fx-background-color: " + baseColor + ";" +
-                            "-fx-text-fill: white;" +
-                            "-fx-background-radius: 20;" +
-                            "-fx-padding: 8 20;" +
-                            "-fx-font-weight: bold;"
-            );
-        });
-
-        cardBox.getChildren().addAll(iconLabel, titleLabel, descLabel, actionBtn);
         return cardBox;
     }
+
 
     private void setupTimKiem() {
         txtTimKiem.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -599,95 +544,53 @@ private void timKiemHelpCards(String keyword) {
             }
         }
     }
-    private void showCustomDialog(String title, String content) {
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setTitle(title);
 
-        // ===== Root VBox =====
-        VBox root = new VBox(15);
-        root.setPadding(new Insets(25));
-        root.setAlignment(Pos.CENTER);
-        root.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-background-radius: 15;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);"
-        );
+private void showCustomDialog(String title, String content) {
 
-        // ===== Title =====
-        Label lblTitle = new Label(title);
-        lblTitle.setStyle(
-                "-fx-font-size: 22px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #2c3e50;"
-        );
+    Stage dialog = new Stage();
+    dialog.initModality(Modality.APPLICATION_MODAL);
+    dialog.setTitle(title);
 
-        // ===== Content =====
-        Label lblContent = new Label(content);
-        lblContent.setWrapText(true);
-        lblContent.setStyle(
-                "-fx-font-size: 15px;" +
-                        "-fx-text-fill: #34495e;"
-        );
-        lblContent.setMaxWidth(450);
+    // ===== Root =====
+    VBox root = new VBox(15);
+    root.setPadding(new Insets(25));
+    root.setAlignment(Pos.CENTER);
+    root.getStyleClass().add("custom-dialog-root");
 
-        // ===== ScrollPane cho nội dung =====
-        ScrollPane scrollPane = new ScrollPane(lblContent);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setPrefViewportHeight(300);   // ⭐ chiều cao cố định
-        scrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-border-color: #dcdcdc;" +
-                        "-fx-border-radius: 10;" +
-                        "-fx-background-radius: 10;"
-        );
+    // ===== Title =====
+    Label lblTitle = new Label(title);
+    lblTitle.getStyleClass().add("custom-dialog-title");
 
-        // Ẩn nền viewport
-//        scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;");
+    // ===== Content =====
+    Label lblContent = new Label(content);
+    lblContent.setWrapText(true);
+    lblContent.setMaxWidth(450);
+    lblContent.getStyleClass().add("custom-dialog-content");
 
-        // ===== Button Đóng =====
-        Button btnClose = new Button("Đóng");
-        btnClose.setStyle(
-                "-fx-background-color: #3498db;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-background-radius: 18;" +
-                        "-fx-padding: 8 25;" +
-                        "-fx-font-size: 14px;" +
-                        "-fx-font-weight: bold;"
-        );
-        btnClose.setOnAction(e -> dialog.close());
+    // ===== ScrollPane =====
+    ScrollPane scrollPane = new ScrollPane(lblContent);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setPrefViewportHeight(300);
+    scrollPane.getStyleClass().add("custom-dialog-scroll");
 
-        // Hover cho nút
-        btnClose.setOnMouseEntered(e ->
-                btnClose.setStyle(
-                        "-fx-background-color: #2c3e50;" +
-                                "-fx-text-fill: white;" +
-                                "-fx-background-radius: 18;" +
-                                "-fx-padding: 8 25;" +
-                                "-fx-font-size: 14px;" +
-                                "-fx-font-weight: bold;"
-                )
-        );
+    // ===== Button =====
+    Button btnClose = new Button("Đóng");
+    btnClose.getStyleClass().add("custom-dialog-button");
+    btnClose.setOnAction(e -> dialog.close());
 
-        btnClose.setOnMouseExited(e ->
-                btnClose.setStyle(
-                        "-fx-background-color: #3498db;" +
-                                "-fx-text-fill: white;" +
-                                "-fx-background-radius: 18;" +
-                                "-fx-padding: 8 25;" +
-                                "-fx-font-size: 14px;" +
-                                "-fx-font-weight: bold;"
-                )
-        );
+    // ===== Add =====
+    root.getChildren().addAll(lblTitle, scrollPane, btnClose);
 
-        // ===== Add vào root =====
-        root.getChildren().addAll(lblTitle, scrollPane, btnClose);
+    Scene scene = new Scene(root, 520, 450);
+    scene.getStylesheets().add(
+            getClass().getResource("/CSS/hotronv.css").toExternalForm()
+    );
+    dialog.setScene(scene);
 
-        Scene scene = new Scene(root, 520, 450); // ⭐ size cố định, đẹp
-        dialog.setScene(scene);
-        dialog.setResizable(false);
-        dialog.showAndWait();
-    }
+    dialog.setResizable(false);
+    dialog.showAndWait();
+}
+
 
 
 }
