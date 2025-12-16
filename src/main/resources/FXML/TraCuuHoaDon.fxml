@@ -56,8 +56,6 @@
                                         <Label styleClass="order-phone" text="SDT: 0283765432" />
                                     </VBox>
                                 </HBox>
-
-
                                 <!-- Mẫu thẻ khác -->
                                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="order-card">
                                     <StackPane style="-fx-background-radius: 10 0 0 10; -fx-overflow: hidden;">
