@@ -18,7 +18,6 @@ import ui.ConfirmCus;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -41,8 +40,7 @@ public class QLDatBanController {
     @FXML private ComboBox<String> eventCombo;
 
     //tìm kiếm
-    @FXML private TextField searchField;
-    @FXML private Button btnSearch;
+
     @FXML
     private DatePicker dpNgay;
     @FXML private ComboBox<Integer> cbGio;
@@ -62,8 +60,6 @@ public class QLDatBanController {
     private final LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
 
     // BIẾN TOÀN CỤC
-    private final HoaDonDAO hoaDonDAO = new HoaDonDAO();
-    private final KhachHangDAO khachHangDAO = new KhachHangDAO();
     private final ChiTietHDDAO chiTietHDDAO = new ChiTietHDDAO();
     private final MonDAO monDAO = new MonDAO();
 
@@ -87,20 +83,15 @@ public class QLDatBanController {
     @FXML
     public void initialize() {
         System.out.println("QLDatBanController initialized");
-
-
         txtSoLuongKhach.setEditable(false);
 
         khoiTaoComboBox();
         ganSuKienChoNut();
         taiDanhSachDatTruoc();
         taiDanhSachDaNhan();
-
         khoiTaoChonMon();   // load ds món, combo loại, search, cache card
-
         resetForm();
         showDanhSachMode();
-
         if (back != null) {
             back.setOnAction(e -> showDanhSachMode());
         }
@@ -109,26 +100,16 @@ public class QLDatBanController {
     }
 
     private void khoiTaoComboBox() {
-        if (eventCombo != null) {
-            eventCombo.getItems().clear();
-            eventCombo.getItems().addAll("Sinh Nhật", "Họp Mặt", "Tiệc Cưới");
-            eventCombo.setValue(null);
+        if (eventCombo == null) return;
+        List<SuKien> dsSuKien = SuKienDAO.getAll();
+        eventCombo.getItems().clear();
+        for (SuKien sk : dsSuKien) {
+            eventCombo.getItems().add(sk.getTenSK());
         }
+
+        eventCombo.setValue(null);
     }
-    //tao combobox loc
-//    private void initComboNgay() {
-//        cbNgay.getItems().clear();
-//
-//        // Ví dụ: cho chọn từ hôm nay lùi về 7 ngày trước
-//        LocalDate today = LocalDate.now();
-//        for (int i = 0; i <= 7; i++) {
-//            cbNgay.getItems().add(today.minusDays(i));
-//        }
-//
-//        cbNgay.setPromptText("Chọn ngày");
-//
-//        cbNgay.setOnAction(e -> locTheoNgayGio());
-//    }
+
     private void initDatePicker() {
         dpNgay.setValue(LocalDate.now());
 
@@ -149,57 +130,6 @@ public class QLDatBanController {
 
         cbGio.setOnAction(e -> locTheoNgayGio());
     }
-//    private void locTheoNgayGio() {
-//
-//        LocalDate ngay = cbNgay.getValue();
-//        Integer gio = cbGio.getValue();
-//
-//        if (ngay == null || gio == null) return;
-//
-//        LocalDateTime start = ngay.atTime(gio, 0, 0);
-//        LocalDateTime end   = ngay.atTime(gio, 59, 59);
-//
-//        danhSachDatTruoc.getChildren().clear();
-//
-//        for (HoaDon hd : dsDatTruoc) {
-//            LocalDateTime tg = hd.getTgLapHD();
-//
-//            if (tg != null && !tg.isBefore(start) && !tg.isAfter(end)) {
-//                danhSachDatTruoc.getChildren().add(taoCardHoaDon(hd));
-//            }
-//        }
-//    }
-//private void locTheoNgayGio() {
-//
-//    LocalDate ngay = dpNgay.getValue();
-//    Integer gio = cbGio.getValue();
-//
-//    if (ngay == null) return;
-//
-//    LocalDateTime start;
-//    LocalDateTime end;
-//
-//    if (gio == null) {
-//        // lọc toàn bộ ngày
-//        start = ngay.atStartOfDay();
-//        end   = ngay.atTime(23, 59, 59);
-//    } else {
-//        // lọc theo giờ
-//        start = ngay.atTime(gio, 0, 0);
-//        end   = ngay.atTime(gio, 59, 59);
-//    }
-//
-//    danhSachDatTruoc.getChildren().clear();
-//
-//    for (HoaDon hd : dsDatTruoc) {
-//        LocalDateTime tg = hd.getTgLapHD();
-//
-//        if (tg != null && !tg.isBefore(start) && !tg.isAfter(end)) {
-//            danhSachDatTruoc.getChildren().add(taoCardHoaDon(hd));
-//        }
-//    }
-//}
-
 
     private void locTheoNgayGio() {
 
@@ -245,28 +175,19 @@ public class QLDatBanController {
         }
     }
 
-
-
     private void ganSuKienChoNut() {
         if (btnXacNhan != null) btnXacNhan.setOnAction(e -> xacNhanDatBan());
         if (btnHuyBan != null) btnHuyBan.setOnAction(e -> huyDatBan());
-        if (btnSearch != null && searchField != null) {
-            btnSearch.setOnAction(e -> timKiemMon());
-            searchField.setOnAction(e -> timKiemMon()); // Enter -> tìm
-        }
     }
-
     //tải danh sách đặt trước / đã nhận
     private void taiDanhSachDatTruoc() {
         try {
             // CHỈ LẤY TRANGTHAI = 0 TỪ DB
             List<HoaDon> listHD = HoaDonDAO.getAllDatTruoc();
-
             dsDatTruoc.clear();
             if (listHD != null) {
                 dsDatTruoc.addAll(listHD);
             }
-
             hienThiDanhSachDatTruoc();
         } catch (Exception ex) {
             System.err.println("Lỗi khi tải ds đặt trước: " + ex.getMessage());
@@ -274,23 +195,19 @@ public class QLDatBanController {
         }
     }
 
-
     private void taiDanhSachDaNhan() {
         try {
             List<HoaDon> listHD = HoaDonDAO.getAllDaNhan();
-
             dsDaNhan.clear();
             if (listHD != null) {
                 dsDaNhan.addAll(listHD);
             }
-
             hienThiDanhSachDaNhan();
         } catch (Exception ex) {
             System.err.println("Lỗi khi tải ds đã nhận: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
-
 
     private void hienThiDanhSachDatTruoc() {
         if (danhSachDatTruoc == null) return;
@@ -390,13 +307,11 @@ public class QLDatBanController {
                     ((Label) node).setStyle("-fx-text-fill: white;");
                 }
             }
-
             hoaDonSelected = hd;
             hienThiThongTinChiTiet(hd);
 
             showMenuMode();
         });
-
         return card;
     }
 
@@ -424,11 +339,8 @@ public class QLDatBanController {
 
     private void hienThiThongTinChiTiet(HoaDon hd) {
         if (hd == null) return;
-
         System.out.println("Hiển thị chi tiết hóa đơn: " + hd.getMaHD());
-
         if (lblMaHoaDon != null) lblMaHoaDon.setText(hd.getMaHD());
-
         KhachHang kh = hd.getKhachHang();
         if (kh != null) {
             if (lblHoTen != null) lblHoTen.setText(kh.getTenKhachHang());
@@ -438,7 +350,6 @@ public class QLDatBanController {
             if (lblSDT != null) lblSDT.setText("Chưa có thông tin");
             System.out.println("Không có thông tin khách hàng");
         }
-
         if (hd.getBan() != null && lblBan != null) {
             lblBan.setText(hd.getBan().getMaBan());
         } else if (lblBan != null) {
@@ -475,7 +386,6 @@ public class QLDatBanController {
                         soLuongGocMap.put(ct.getMon().getMaMon(), ct.getSoLuong());
                     }
                 }
-
                 capNhatUIChiTiet();
                 System.out.println("Đã tải " + chiTietHoaDonData.size() + " chi tiết hóa đơn");
             } else {
@@ -502,13 +412,10 @@ public class QLDatBanController {
             AlertCus.show("Thông Báo", "Vui lòng chọn hóa đơn để xác nhận thay đổi");
             return;
         }
-
         try {
             System.out.println("Xác nhận cập nhật chi tiết hóa đơn: " + hoaDonSelected.getMaHD());
-
             // lấy danh sách chi tiết cũ từ DB
             List<ChiTietHoaDon> dsChiTietCu = chiTietHDDAO.getByMaHD(hoaDonSelected.getMaHD());
-
             // xóa những món không còn trong UI
             for (ChiTietHoaDon ctCu : dsChiTietCu) {
                 boolean stillExists = false;
@@ -523,14 +430,12 @@ public class QLDatBanController {
                     chiTietHDDAO.delete(ctCu.getHoaDon().getMaHD(), ctCu.getMon().getMaMon());
                 }
             }
-
             boolean allOk = true;
             for (ChiTietHoaDon ct : chiTietHoaDonData) {
                 boolean ok = chiTietHDDAO.update(ct);
                 if (!ok) ok = chiTietHDDAO.insert(ct);
                 if (!ok) allOk = false;
             }
-
             if (allOk) {
                 AlertCus.show("Thông Báo", "Cập nhật chi tiết hóa đơn thành công");
                 capNhatBangDonHang();
@@ -573,9 +478,7 @@ public class QLDatBanController {
         else if (diffMinutes < 18 * 60L) phanTram = 50;    // <18h: 50%
         else if (diffMinutes < 24 * 60L) phanTram = 70;    // <24h: 70%
         else phanTram = 100;                               // >=24h: 100%
-
         long diffHoursShow = diffMinutes / 60;
-
         boolean answer = ConfirmCus.show(
                 "Xác nhận hủy đơn",
                 "Bạn có chắc muốn hủy đơn đặt bàn này?\n" +
@@ -583,7 +486,6 @@ public class QLDatBanController {
                         "Voucher quy đổi: " + phanTram + "% (1 lần dùng)"
         );
         if (!answer) return;
-
         try {
             hoaDonSelected.setTrangthai(3);
             boolean ok = HoaDonDAO.update(hoaDonSelected);
@@ -591,7 +493,6 @@ public class QLDatBanController {
                 AlertCus.show("Thông Báo", "Hủy thất bại");
                 return;
             }
-
             // 2) tạo voucher nếu có %
             if (phanTram > 0) {
                 double tienCoc = hoaDonSelected.getCoc();
@@ -640,10 +541,8 @@ public class QLDatBanController {
             dsMonToanBo = new ArrayList<>();
             ex.printStackTrace();
         }
-
         // hiển thị danh sách món nhỏ (foodList) nếu có dùng
         hienThiDanhSachMon(dsMonToanBo);
-
         // build cache card cho menu center
         menuCardCache.clear();
         if (dsMonToanBo != null) {
@@ -653,12 +552,9 @@ public class QLDatBanController {
                 menuCardCache.put(m.getMaMon(), card);
             }
         }
-
         loadComboDanhMuc();
-
         // hiển thị toàn bộ món ban đầu
         locMonTheoTenVaLoai();
-
         if (tfTimKiem != null) {
             tfTimKiem.textProperty().addListener((obs, oldV, newV) -> locMonTheoTenVaLoai());
         }
@@ -729,14 +625,12 @@ public class QLDatBanController {
             AlertCus.show("Thông Báo", "Vui lòng chọn hóa đơn trước khi thêm món.");
             return;
         }
-
         int tonKho = m.getSoLuong();
         if (tonKho <= 0) {
             AlertCus.show("Thông Báo",
                     "Món \"" + m.getTenMon() + "\" đã hết hàng, không thể chọn.");
             return;
         }
-
         ChiTietHoaDon found = null;
         for (ChiTietHoaDon ct : chiTietHoaDonData) {
             if (ct.getMon() != null && m.getMaMon().equals(ct.getMon().getMaMon())) {
@@ -744,7 +638,6 @@ public class QLDatBanController {
                 break;
             }
         }
-
         int soLuongDaChon = (found != null) ? found.getSoLuong() : 0;
 
         if (soLuongDaChon >= tonKho) {
@@ -752,7 +645,6 @@ public class QLDatBanController {
                     "Món \"" + m.getTenMon() + "\" chỉ còn " + tonKho + " phần.\nKhông thể chọn thêm.");
             return;
         }
-
         if (found != null) {
             int slMoi = soLuongDaChon + 1;
             found.setSoLuong(slMoi);
@@ -764,7 +656,6 @@ public class QLDatBanController {
             chiTietHoaDonData.add(ct);
             AlertCus.show("Thông Báo", "Đã thêm món: " + m.getTenMon());
         }
-
         capNhatBangDonHang();
         capNhatUIChiTiet();
     }
@@ -775,28 +666,9 @@ public class QLDatBanController {
                 ct.setThanhTien(ct.getMon().getGiaBanTaiLucLapHD(hoaDonSelected) * ct.getSoLuong());
             }
         }
-
         double tong = 0;
         for (ChiTietHoaDon ct : chiTietHoaDonData) tong += ct.getThanhTien();
         System.out.println("Tổng đơn hàng hiện tại: " + nf.format(tong) + " VNĐ");
-    }
-
-    private void timKiemMon() {
-        String keyword = searchField != null ? searchField.getText().trim().toLowerCase() : "";
-        if (keyword.isEmpty()) {
-            hienThiDanhSachMon(dsMonToanBo);
-            return;
-        }
-
-        List<Mon> ketQua = new ArrayList<>();
-        for (Mon m : dsMonToanBo) {
-            if (m.getTenMon() != null && m.getTenMon().toLowerCase().contains(keyword)) {
-                ketQua.add(m);
-            } else if (m.getMaMon() != null && m.getMaMon().toLowerCase().contains(keyword)) {
-                ketQua.add(m);
-            }
-        }
-        hienThiDanhSachMon(ketQua);
     }
 
     private void resetForm() {
@@ -807,10 +679,8 @@ public class QLDatBanController {
         if (lblBan != null) lblBan.setText("");
         if (eventCombo != null) eventCombo.setValue(null);
         if (txtSoLuongKhach != null) txtSoLuongKhach.clear();
-
         chiTietHoaDonData.clear();
         vboxChiTietDonHang.getChildren().clear();
-
         clearSelectedStyles(danhSachDatTruoc);
         clearSelectedStyles(danhSachDaNhan);
     }
@@ -934,9 +804,7 @@ public class QLDatBanController {
         if (paneDanhSach != null && paneMenu != null) {
             paneDanhSach.setVisible(true);
             paneDanhSach.setManaged(true);
-
             resetForm();
-
             paneMenu.setVisible(false);
             paneMenu.setManaged(false);
         }
@@ -951,7 +819,6 @@ public class QLDatBanController {
             paneMenu.setManaged(true);
         }
     }
-
     // ====== MENU CENTER: COMBO LOẠI + SEARCH + CARD MÓN ======
 
     private void loadComboDanhMuc() {

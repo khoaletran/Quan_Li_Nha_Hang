@@ -34,7 +34,6 @@
                         <HBox alignment="CENTER" spacing="10" styleClass="list-name">
                             <Label text="Danh sách bàn đặt trước" />
                         </HBox>
-<!--                    moi-->
                         <!-- FILTER NGÀY + GIỜ -->
                         <HBox spacing="12" alignment="CENTER_LEFT" styleClass="filter-bar">
 <!--                            <ComboBox fx:id="cbNgay"-->
