@@ -291,6 +291,8 @@ public class TraCuuHoaDonController {
                             ((Label) child).setStyle("-fx-text-fill: #f39c12; -fx-font-weight: bold; -fx-font-size: 11px;");
                         } else if (text.contains("Đã thanh toán")) {
                             ((Label) child).setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 11px;");
+                        } else if (text.contains("Không nhận đơn")) {
+                            ((Label) child).setStyle("-fx-text-fill: #d62c01ff; -fx-font-weight: bold; -fx-font-size: 11px;");
                         }
                     }
                 }
