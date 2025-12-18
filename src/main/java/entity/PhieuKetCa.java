@@ -36,8 +36,8 @@ public class PhieuKetCa {
     }
 
     public void setMaPhieu(String maPhieu) {
-        if(maPhieu == null || !maPhieu.matches("^MP\\d{4}$")) {
-            throw new IllegalArgumentException("Mã Phiếu sai định dạng.");
+        if(maPhieu == null || !maPhieu.matches("^MP[01]\\d{6}\\d{4}$")) {
+            throw new IllegalArgumentException("Mã Phiếu sai định dạng."); // (Định dạng đúng: MPxDDMMYYnnnn)
         }this.maPhieu = maPhieu;
     }
 

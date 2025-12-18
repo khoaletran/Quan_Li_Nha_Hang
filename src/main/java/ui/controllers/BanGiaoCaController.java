@@ -200,6 +200,7 @@ public class BanGiaoCaController {
 
         String caLam = xacDinhCaLam(thoiGian);
         txtCaLam.setText(caLam);
+        System.out.println(thoiGianVaoCa);
     }
 
     public void setNhanVien(NhanVien nhanVien) {
@@ -211,7 +212,7 @@ public class BanGiaoCaController {
         if (nhanVien == null || thoiGianVaoCa == null) return;
 
         PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
-        String maPhieu = phieuKCDAO.generateNewMaPhieu();
+        String maPhieu = tuSinhMaPhieuKC();
 
         if (isEmpty(txtsLHD, "Số hóa đơn không được để trống!")) return;
         if (isEmpty(txtSoTienMat, "Số tiền mặt không được để trống!")) return;
@@ -383,6 +384,24 @@ public class BanGiaoCaController {
         lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
         lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
         lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
+    }
+
+    private String tuSinhMaPhieuKC() {
+        int hour = java.time.LocalTime.now().getHour();
+        String ca = (hour < 12) ? "0" : "1";
+
+        String datePart = thoiGianVaoCa.format(DateTimeFormatter.ofPattern("ddMMyy"));
+
+        PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
+        String maHDCuoi = phieuKCDAO.getMaPhieuKCCuoiTheoNgay(ca, datePart);
+
+        int so = 0;
+        if (maHDCuoi != null) {
+            String phanSo = maHDCuoi.substring(maHDCuoi.length() - 4);
+            so = Integer.parseInt(phanSo);
+        }
+
+        return String.format("MP%s%s%04d", ca, datePart, so + 1);
     }
 
     public void dangXuat(){

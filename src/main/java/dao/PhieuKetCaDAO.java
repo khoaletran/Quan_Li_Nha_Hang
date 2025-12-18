@@ -135,4 +135,29 @@ public class PhieuKetCaDAO {
 
         return String.format("MP%04d", next);
     }
+
+    public static String getMaPhieuKCCuoiTheoNgay(String ca, String ngay) {
+        String prefix = "HD" + ca + ngay;
+
+        String sql = """
+            SELECT TOP 1 maHD
+            FROM PhieuKetCa
+            WHERE maPhieu LIKE ?
+            ORDER BY maPhieu DESC
+        """;
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, prefix + "%");
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getString("maPhieu");
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi getMaPhieuKCCuoiTheoNgay: " + e.getMessage());
+        }
+
+        return null;
+    }
 }

@@ -316,3 +316,19 @@ ALTER COLUMN ngayApDung SMALLDATETIME;
 
 ALTER TABLE KhuyenMai
     DROP CONSTRAINT chk_phanTramGiamGia_KM;
+
+--drop pk
+ALTER TABLE PhieuKetCa
+    DROP CONSTRAINT PK__PhieuKet__49A5B11F0A3189BC;
+--sửa pk
+ALTER TABLE PhieuKetCa
+    ALTER COLUMN maPhieu NVARCHAR(13) NOT NULL;
+--thêm lại pk
+ALTER TABLE PhieuKetCa
+    ADD CONSTRAINT PK_PhieuKetCa
+        PRIMARY KEY (maPhieu);
+
+--drop pk kh dc thì chạy cái này r dán lại tên cái pk
+SELECT name
+FROM sys.key_constraints
+WHERE parent_object_id = OBJECT_ID('PhieuKetCa');
