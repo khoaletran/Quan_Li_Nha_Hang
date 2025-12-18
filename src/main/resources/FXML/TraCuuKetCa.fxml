@@ -111,7 +111,7 @@
                     <!-- Thêm fx:id txtSDT -->
                     <TextField fx:id="txtSDT" prefHeight="30.0" prefWidth="372.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                    <Label styleClass="label_filter" text="Trạng thái:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <Label styleClass="label_filter" text="Ca làm:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                     <!-- Thêm fx:id cboTrangThai -->
                     <ComboBox fx:id="cboTrangThai" prefHeight="27.0" prefWidth="297.0" promptText="-- chọn --" styleClass="uudai_combobox filter-tf" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                     <rowConstraints>
@@ -156,37 +156,40 @@
                     </columnConstraints>
 
                     <Label styleClass="label_infoOrder" text="Mã phiếu:" GridPane.rowIndex="0" />
-                    <TextField fx:id="txtMaPhieu"  GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <TextField fx:id="txtMaPhieu"  GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="info-tf"/>
 
                     <Label styleClass="label_infoOrder" text="Tên nhân viên:" GridPane.rowIndex="1" />
-                    <TextField fx:id="txtTenNV" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <TextField fx:id="txtTenNV" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Ca làm:" GridPane.rowIndex="2" />
-                    <TextField fx:id="txtCaLam"  GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label styleClass="label_infoOrder" text="Số điện thoại:" GridPane.rowIndex="2" />
+                    <TextField fx:id="txtSDTPK" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Số đơn trong ca:" GridPane.rowIndex="3" />
-                    <TextField fx:id="txtSoDon"  GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label styleClass="label_infoOrder" text="Ca làm:" GridPane.rowIndex="3" />
+                    <TextField fx:id="txtCaLam"  GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Thời gian vào ca:" GridPane.rowIndex="4" />
-                    <TextField fx:id="txtTgVaoCa"  GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    <Label styleClass="label_infoOrder" text="Số đơn trong ca:" GridPane.rowIndex="4" />
+                    <TextField fx:id="txtSoDon"  GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Thời gian kết ca:" GridPane.rowIndex="5" />
-                    <TextField fx:id="txtTgKetCa"  GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    <Label styleClass="label_infoOrder" text="Thời gian vào ca:" GridPane.rowIndex="5" />
+                    <TextField fx:id="txtTgVaoCa"  GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Số tiền mặt:" GridPane.rowIndex="6" />
-                    <TextField fx:id="txtTienMat"  GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                    <Label styleClass="label_infoOrder" text="Thời gian kết ca:" GridPane.rowIndex="6" />
+                    <TextField fx:id="txtTgKetCa"  GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Số tiền chuyển khoản:" GridPane.rowIndex="7" />
-                    <TextField fx:id="txtChuyenKhoan"  GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                    <Label styleClass="label_infoOrder" text="Số tiền mặt:" GridPane.rowIndex="7" />
+                    <TextField fx:id="txtTienMat"  GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Tổng tiền trong ca:" GridPane.rowIndex="8" />
-                    <TextField fx:id="txtTongTien"  GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                    <Label styleClass="label_infoOrder" text="Số tiền chuyển khoản:" GridPane.rowIndex="8" />
+                    <TextField fx:id="txtChuyenKhoan"  GridPane.columnIndex="1" GridPane.rowIndex="8" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Tiền chênh lệch:" GridPane.rowIndex="9" />
-                    <TextField fx:id="txtTienChenhLech"  GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                    <Label styleClass="label_infoOrder" text="Tổng tiền trong ca:" GridPane.rowIndex="9" />
+                    <TextField fx:id="txtTongTien"  GridPane.columnIndex="1" GridPane.rowIndex="9" styleClass="info-tf"/>
 
-                    <Label styleClass="label_infoOrder" text="Mô tả:" GridPane.rowIndex="10" />
-                    <TextArea fx:id="taMoTa"  GridPane.columnIndex="1" GridPane.rowIndex="10" prefRowCount="4"/>
+                    <Label styleClass="label_infoOrder" text="Tiền chênh lệch:" GridPane.rowIndex="10" />
+                    <TextField fx:id="txtTienChenhLech"  GridPane.columnIndex="1" GridPane.rowIndex="10" styleClass="info-tf"/>
+
+                    <Label styleClass="label_infoOrder" text="Mô tả:" GridPane.rowIndex="11" />
+                    <TextArea fx:id="taMoTa"  GridPane.columnIndex="1" GridPane.rowIndex="11" prefRowCount="4" styleClass="info-ta"/>
 
                     <rowConstraints>
                         <RowConstraints />

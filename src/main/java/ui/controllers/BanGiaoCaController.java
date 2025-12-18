@@ -45,6 +45,10 @@ public class BanGiaoCaController {
     private HoaDonDAO hoaDonDAO = new HoaDonDAO();
     private NhanVien nhanVien;
     private LocalDateTime thoiGianVaoCa;
+    private double heThongTienMat = 0;
+    private double heThongTienCK = 0;
+    private double heThongTongTien = 0;
+
 
 
     @FXML
@@ -179,6 +183,10 @@ public class BanGiaoCaController {
         lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
         lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
         lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
+        heThongTienMat = tongTienMat;
+        heThongTienCK = tongTienCK;
+        heThongTongTien = tongTienMat + tongTienCK;
+
     }
 
 
@@ -239,6 +247,34 @@ public class BanGiaoCaController {
         double tongCK = Double.parseDouble(txtSoTienCK.getText());
         double chenhLech = Double.parseDouble(txtTongTien.getText()) - (tongTM + tongCK);
 
+        NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
+
+        double nvTienMat = tongTM;
+        double nvTienCK = tongCK;
+        double nvTongTien = Double.parseDouble(txtTongTien.getText());
+
+        boolean lech =
+                Double.compare(nvTienMat, heThongTienMat) != 0 ||
+                        Double.compare(nvTienCK, heThongTienCK) != 0 ||
+                        Double.compare(nvTongTien, heThongTongTien) != 0;
+
+        String moTaNhanVien = taMoTa.getText().trim();
+        String moTaCuoi = moTaNhanVien;
+
+        if (lech) {
+            String moTaHeThong =
+                    "[Tiền trên hệ thống khi kết ca: tiền mặt = " + nf.format(heThongTienMat) + "đ"
+                            + ", chuyển khoản = " + nf.format(heThongTienCK) + "đ"
+                            + ", tổng = " + nf.format(heThongTongTien) + "đ]" +"\n Tin nhắn nhân viên :";
+
+            if (!moTaNhanVien.isEmpty()) {
+                moTaCuoi = moTaHeThong + "\n" + moTaNhanVien;
+            } else {
+                moTaCuoi = moTaHeThong;
+            }
+        }
+
+
         PhieuKetCa phieu = new PhieuKetCa(
                 maPhieu,
                 nhanVien,
@@ -249,7 +285,7 @@ public class BanGiaoCaController {
                 chenhLech,
                 LocalDateTime.now(),
                 thoiGianVaoCa,
-                taMoTa.getText().trim()
+                moTaCuoi
         );
         boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận kết ca");
         if (answer) {

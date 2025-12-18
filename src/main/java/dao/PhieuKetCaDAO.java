@@ -92,7 +92,7 @@ public class PhieuKetCaDAO {
         List<PhieuKetCa> ds = new ArrayList<>();
 
         String sql = """
-        SELECT p.*, n.tenNV
+        SELECT p.*, n.tenNV,n.sdt
         FROM PhieuKetCa p
         JOIN NhanVien n ON p.maNV = n.maNV
         ORDER BY p.maPhieu DESC
@@ -121,10 +121,11 @@ public class PhieuKetCaDAO {
 
                 p.setMoTa(rs.getString("moTa"));
 
-                // ===== Nhân viên (KHÔNG gọi DAO khác)
+                // ===== Nhân viên
                 NhanVien nv = new NhanVien();
                 nv.setMaNV(rs.getString("maNV"));
                 nv.setTenNV(rs.getString("tenNV"));
+                nv.setSdt(rs.getString("sdt"));
 
                 p.setNhanVien(nv);
 

@@ -68,60 +68,6 @@
     -fx-effect: dropshadow(gaussian, rgba(30, 144, 255, 0.25), 10, 0, 0, 4);
 }
 
-/* Hiệu ứng cho text khi hover và selected */
-.order-card:hover .promo-id,
-.order-card.selected-card .promo-id {
-    -fx-text-fill: #1e90ff;
-}
-
-.order-card:hover .promo-date,
-.order-card.selected-card .promo-date {
-    -fx-text-fill: #5d6d7e;
-}
-
-/* Hiệu ứng cho indicator khi hover và selected */
-.order-card:hover .order-status,
-.order-card.selected-card .order-status {
-    -fx-background-color: #1a7e37;
-}
-
-.order-card:hover .order-status02,
-.order-card.selected-card .order-status02 {
-    -fx-background-color: #a71e2a;
-}
-
-.order-card:hover .order-status03,
-.order-card.selected-card .order-status03 {
-    -fx-background-color: #e6a700;
-}
-
-.order-status {
-    -fx-background-color: #28a745; /* Xanh - Đang hoạt động */
-    -fx-background-radius: 0 10 10 0;
-    -fx-pref-height: 60;
-}
-
-.order-status02 {
-    -fx-background-color: #dc3545; /* Đỏ - Hết hạn */
-    -fx-background-radius: 0 10 10 0;
-    -fx-pref-height: 60;
-}
-
-.order-status03 {
-    -fx-background-color: #ffc107; /* Vàng - Chưa đến hạn */
-    -fx-background-radius: 0 10 10 0;
-    -fx-pref-height: 60;
-}
-
-.order-card ImageView {
-    -fx-fit-height: 60;
-    -fx-fit-width: 60;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-padding: 0;
-    -fx-margin: 0;
-}
-
 .filter-box {
     -fx-background-color: #efefef;
     -fx-background-radius: 15;
@@ -199,15 +145,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0, 0, 3);
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
-}
-
-.center_section-background {
-    -fx-background-color: #efefef;
-    -fx-padding: 15;
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-border-color: #ddd;
-    -fx-border-width: 1;
 }
 
 .borderPane_main {
@@ -637,16 +574,45 @@
 /* ===== NHÂN VIÊN ===== */
 
 .kc-card-staff {
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
-    -fx-text-fill: #111827;
+    /*-fx-text-fill: #111827;*/
 }
 
 /* ===== TỔNG TIỀN ===== */
 
 .kc-card-total {
-    -fx-font-size: 15px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    /*-fx-text-fill: #16a34a;*/
+    -fx-text-fill: #1b8f3c;
 }
+
+.kc-card-shift {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.info-tf {
+    -fx-pref-height: 35px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+
+    -fx-font-size: 14px;
+    -fx-padding: 0 10 0 10;
+}
+
+.info-ta {
+    -fx-pref-height: 110px;
+    -fx-min-height: 110px;
+    -fx-max-height: 110px;
+
+    -fx-font-size: 14px;
+    -fx-padding: 8 10 8 10;
+
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #d2a679;
+    -fx-background-color: white;
+}
+
 
