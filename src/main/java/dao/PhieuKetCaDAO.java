@@ -28,6 +28,9 @@ public class PhieuKetCaDAO {
         Timestamp ts = rs.getTimestamp("ngayKetCa");
         LocalDateTime ngayKetCa = ts != null ? ts.toLocalDateTime() : null;
 
+        Timestamp ls = rs.getTimestamp("tgLogIn");
+        LocalDateTime tgLogIn = ts != null ? ts.toLocalDateTime() : null;
+
         String moTa = rs.getString("moTa");
 
         // Load nhân viên đầy đủ
@@ -42,6 +45,7 @@ public class PhieuKetCaDAO {
                 tienCK,
                 tienChenhLech,
                 ngayKetCa,
+                tgLogIn,
                 moTa
         );
     }
@@ -72,8 +76,8 @@ public class PhieuKetCaDAO {
     public boolean insert(PhieuKetCa phieu) {
         String sql = """
             INSERT INTO PhieuKetCa
-            (maPhieu, maNV, ca, soHoaDon, tienMat, tienCK, tienChenhLech, ngayKetCa, moTa)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (maPhieu, maNV, ca, soHoaDon, tienMat, tienCK, tienChenhLech, ngayKetCa, moTa,tgLogIn)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
 
         try (Connection con = connectDB.getConnection();
@@ -94,6 +98,11 @@ public class PhieuKetCaDAO {
             );
 
             ps.setString(9, phieu.getMoTa());
+            ps.setTimestamp(10,
+                    phieu.getTgLogIn() != null
+                            ? Timestamp.valueOf(phieu.getTgLogIn())
+                            : null
+            );
 
             return ps.executeUpdate() > 0;
 
@@ -137,14 +146,14 @@ public class PhieuKetCaDAO {
     }
 
     public static String getMaPhieuKCCuoiTheoNgay(String ca, String ngay) {
-        String prefix = "HD" + ca + ngay;
+        String prefix = "MP" + ca + ngay;
 
         String sql = """
-            SELECT TOP 1 maHD
-            FROM PhieuKetCa
-            WHERE maPhieu LIKE ?
-            ORDER BY maPhieu DESC
-        """;
+        SELECT TOP 1 maPhieu
+        FROM PhieuKetCa
+        WHERE maPhieu LIKE ?
+        ORDER BY maPhieu DESC
+    """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -152,7 +161,9 @@ public class PhieuKetCaDAO {
             ps.setString(1, prefix + "%");
 
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getString("maPhieu");
+            if (rs.next()) {
+                return rs.getString("maPhieu");
+            }
 
         } catch (SQLException e) {
             System.err.println("Lỗi getMaPhieuKCCuoiTheoNgay: " + e.getMessage());
@@ -160,4 +171,5 @@ public class PhieuKetCaDAO {
 
         return null;
     }
+
 }

@@ -12,13 +12,14 @@ public class PhieuKetCa {
     private double tienCK;
     private double tienChenhLech;
     private LocalDateTime ngayKetCa;
+    private LocalDateTime tgLogIn;
     private String moTa;
 
     public PhieuKetCa() {}
 
     public PhieuKetCa(String maPhieu, NhanVien nhanVien, boolean ca, int soHoaDon,
                       double tienMat, double tienCK, double tienChenhLech,
-                      LocalDateTime ngayKetCa, String moTa) {
+                      LocalDateTime ngayKetCa, LocalDateTime tgLogIn, String moTa) {
         setMaPhieu(maPhieu);
         setNhanVien(nhanVien);
         setCa(ca);
@@ -27,6 +28,7 @@ public class PhieuKetCa {
         setTienCK(tienCK);
         setTienChenhLech(tienChenhLech);
         setNgayKetCa(ngayKetCa);
+        setTgLogIn(tgLogIn);
         setMoTa(moTa);
     }
 
@@ -80,6 +82,14 @@ public class PhieuKetCa {
         this.ngayKetCa = ngayKetCa;
     }
 
+    public LocalDateTime getTgLogIn() {
+        return tgLogIn;
+    }
+
+    public void setTgLogIn(LocalDateTime tgLogIn) {
+        this.tgLogIn = tgLogIn;
+    }
+
     public String getMoTa() { return moTa; }
 
     public void setMoTa(String moTa) { this.moTa = moTa; }
@@ -95,6 +105,7 @@ public class PhieuKetCa {
                 ", tienCK=" + tienCK +
                 ", tienChenhLech=" + tienChenhLech +
                 ", ngayKetCa=" + ngayKetCa +
+                ", tgLogIn=" + tgLogIn +
                 ", moTa='" + moTa + '\'' +
                 '}';
     }

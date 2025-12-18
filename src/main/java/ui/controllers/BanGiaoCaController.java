@@ -200,7 +200,6 @@ public class BanGiaoCaController {
 
         String caLam = xacDinhCaLam(thoiGian);
         txtCaLam.setText(caLam);
-        System.out.println(thoiGianVaoCa);
     }
 
     public void setNhanVien(NhanVien nhanVien) {
@@ -249,6 +248,7 @@ public class BanGiaoCaController {
                 tongCK,
                 chenhLech,
                 LocalDateTime.now(),
+                thoiGianVaoCa,
                 taMoTa.getText().trim()
         );
         boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận kết ca");
@@ -387,7 +387,7 @@ public class BanGiaoCaController {
     }
 
     private String tuSinhMaPhieuKC() {
-        int hour = java.time.LocalTime.now().getHour();
+        int hour = thoiGianVaoCa.getHour();
         String ca = (hour < 12) ? "0" : "1";
 
         String datePart = thoiGianVaoCa.format(DateTimeFormatter.ofPattern("ddMMyy"));

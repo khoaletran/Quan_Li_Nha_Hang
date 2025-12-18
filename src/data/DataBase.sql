@@ -332,3 +332,8 @@ ALTER TABLE PhieuKetCa
 SELECT name
 FROM sys.key_constraints
 WHERE parent_object_id = OBJECT_ID('PhieuKetCa');
+
+--nhớ thêm cột mới
+ALTER TABLE PhieuKetCa
+    ADD tgLogIn SMALLDATETIME;
+
