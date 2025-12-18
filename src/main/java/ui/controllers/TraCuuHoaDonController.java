@@ -10,10 +10,8 @@ import connectDB.connectDB;
 import dao.HoaDonDAO;
 import dao.KhachHangDAO;
 import dao.ChiTietHDDAO;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.ChiTietHoaDon;
-import entity.Mon;
+import dao.KhuVucDAO;
+import entity.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -30,6 +28,7 @@ import javafx.scene.Scene;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ui.AlertCus;
 import ui.HoaDonIn;
 
 import java.lang.reflect.Method;
@@ -39,10 +38,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 public class TraCuuHoaDonController {
 
@@ -87,7 +83,6 @@ public class TraCuuHoaDonController {
             hienThiThongBaoLoi("Không thể kết nối database. Vui lòng kiểm tra kết nối.");
             return;
         }
-
         khoiTaoComboBox();
         khoiTaoDatePicker();
         ganSuKienChoNut();
@@ -133,11 +128,13 @@ public class TraCuuHoaDonController {
 
     // KHỞI TẠO CONTROL
     private void khoiTaoComboBox() {
-        if (cboKhuVuc != null) {
-            cboKhuVuc.getItems().clear();
-            cboKhuVuc.getItems().addAll("Tất cả", "Indoor", "Outdoor", "VIP");
-            cboKhuVuc.setValue("Tất cả");
+        if(cboKhuVuc == null) return;
+        List<KhuVuc> dsKhuVuc = KhuVucDAO.getAll();
+        cboKhuVuc.getItems().clear();
+        for (KhuVuc kv : dsKhuVuc) {
+            cboKhuVuc.getItems().add(kv.getTenKhuVuc());
         }
+        cboKhuVuc.setValue(null);
     }
 
     private void khoiTaoDatePicker() {
@@ -151,8 +148,6 @@ public class TraCuuHoaDonController {
         if (btnXoaTrang != null) btnXoaTrang.setOnAction(e -> xoaTrangBoLoc());
         if (confirm_btn != null) confirm_btn.setOnAction(e -> HoaDonIn.previewHoaDon(hoaDonSelected));
     }
-
-
     // TẢI & HIỂN THỊ DANH SÁCH HÓA ĐƠN
     private void taiDanhSachHoaDon() {
         try {
@@ -296,6 +291,8 @@ public class TraCuuHoaDonController {
                             ((Label) child).setStyle("-fx-text-fill: #f39c12; -fx-font-weight: bold; -fx-font-size: 11px;");
                         } else if (text.contains("Đã thanh toán")) {
                             ((Label) child).setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 11px;");
+                        } else if (text.contains("Không nhận đơn")) {
+                            ((Label) child).setStyle("-fx-text-fill: #d62c01ff; -fx-font-weight: bold; -fx-font-size: 11px;");
                         }
                     }
                 }
@@ -485,8 +482,8 @@ public class TraCuuHoaDonController {
             dsHoaDon.addAll(ketQua);
             hienThiDanhSachHoaDon();
 
-            if (ketQua.isEmpty()) hienThiThongBao("Không tìm thấy hóa đơn nào phù hợp với điều kiện tìm kiếm");
-            else hienThiThongBao("Tìm thấy " + ketQua.size() + " hóa đơn phù hợp");
+            if (ketQua.isEmpty()) AlertCus.show("Thông báo","Không tìm thấy hóa đơn nào phù hợp với điều kiện tìm kiếm");
+            else AlertCus.show("Thông báo","Tìm thấy " + ketQua.size() + " hóa đơn phù hợp");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -520,16 +517,7 @@ public class TraCuuHoaDonController {
         chiTietHoaDonData.clear();
         clearSelectedStyles();
     }
-
     // HỘP THOẠI
-    private void hienThiThongBao(String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
-
     private void hienThiThongBaoLoi(String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Lỗi");

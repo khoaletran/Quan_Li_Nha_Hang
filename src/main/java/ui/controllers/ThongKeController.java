@@ -2,6 +2,7 @@ package ui.controllers;
 
 import dao.ChiTietHDDAO;
 import dao.HoaDonDAO;
+import dao.MonDAO;
 import entity.ChiTietHoaDon;
 import entity.HoaDon;
 
@@ -35,7 +36,6 @@ import javafx.scene.paint.Color;
 
 import java.io.InputStream;
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -224,21 +224,49 @@ public class ThongKeController {
         String thangString = comboThangMon.getValue();
 
         int nam = Integer.parseInt(namString);
-        int thang = (thangString != null && !thangString.equals("Tất cả")) 
-        ? Integer.parseInt(thangString) : 0;
+        int thang = (thangString != null && !thangString.equals("Tất cả"))
+                ? Integer.parseInt(thangString) : 0;
 
-        // Tháng hiện tại
-        LocalDate now = LocalDate.now();
-        boolean isThangHienTai = (thang == now.getMonthValue() && nam == now.getYear());
-
+        // ===== LẤY DỮ LIỆU THÁNG NÀY =====
         List<ChiTietHoaDon> dscthd = ChiTietHDDAO.getAllCTHDTheoThangNam(nam, thang);
+
+        // Map tháng này: maMon -> ChiTietHoaDon
+        Map<String, ChiTietHoaDon> mapThangNay = new HashMap<>();
+        for (ChiTietHoaDon ct : dscthd) {
+            mapThangNay.put(ct.getMon().getMaMon(), ct);
+        }
+
+        // Tổng số lượng bán trong tháng (để tính tỉ lệ)
+        int tongSoLuongThang = dscthd.stream()
+                .mapToInt(ChiTietHoaDon::getSoLuong)
+                .sum();
+
+        // ===== XÁC ĐỊNH THÁNG TRƯỚC =====
         int thangTruoc = thang - 1;
         int namTruoc = nam;
         if (thangTruoc == 0) {
             thangTruoc = 12;
             namTruoc = nam - 1;
         }
-        Map<String, Integer> mapThangTruoc = ChiTietHDDAO.getSoLuongTheoThangNam(namTruoc, thangTruoc);
+
+        // Map tháng trước: maMon -> số lượng
+        Map<String, Integer> mapThangTruoc =
+                ChiTietHDDAO.getSoLuongTheoThangNam(namTruoc, thangTruoc);
+
+        // ===== BỔ SUNG MÓN CHỈ CÓ Ở THÁNG TRƯỚC =====
+        for (String maMon : mapThangTruoc.keySet()) {
+            if (!mapThangNay.containsKey(maMon)) {
+
+                Mon m = MonDAO.findByID(maMon); // lấy info món
+
+                ChiTietHoaDon ctGia = new ChiTietHoaDon();
+                ctGia.setMon(m);
+                ctGia.setSoLuong(0); // tháng này không bán
+
+                dscthd.add(ctGia);
+            }
+        }
+
         vboxDishList.setFillWidth(true);
         vboxDishList.getChildren().clear();
 
@@ -275,51 +303,32 @@ public class ThongKeController {
             VBox statusBox = new VBox();
             Label status = new Label();
 
-            if (isThangHienTai) {
-                // Nếu là tháng hiện tại => dựa trên tồn kho + số lượng bán
-                if (cthd.getSoLuong() >= 300 && m.getSoLuong() < 30) {
-                    status.setText("🔥 Bán rất chạy - Cần nhập hàng ngay");
-                    status.getStyleClass().add("dish-status-green");
+            double tiLe = tongSoLuongThang == 0 ? 0
+                    : (double) cthd.getSoLuong() / tongSoLuongThang * 100;
+            if (cthd.getSoLuong() == 0) {
+                status.setText("Không có lượt bán");
+                status.getStyleClass().add("dish-status-gray");
+            } else if (tiLe >= 40) {
+                status.setText("Best Seller (" + Math.round(tiLe) + "% tổng bán)");
+                status.getStyleClass().add("dish-status-red");
 
-                } else if (cthd.getSoLuong() >= 150 && m.getSoLuong() < 20) {
-                    status.setText("⚠️ Cần nhập hàng gấp");
-                    status.getStyleClass().add("dish-status-orange");
+            } else if (tiLe >= 20) {
+                status.setText("Bán Rất Chạy (" + Math.round(tiLe) + "%)");
+                status.getStyleClass().add("dish-status-orange");
 
-                } else if (cthd.getSoLuong() >= 80 && m.getSoLuong() < 30) {
-                    status.setText("Nên nhập thêm hàng");
-                    status.getStyleClass().add("dish-status-yellow");
+            } else if (tiLe >= 10) {
+                status.setText("Bán Ổn Định (" + Math.round(tiLe) + "%)");
+                status.getStyleClass().add("dish-status-green");
 
-                } else if (cthd.getSoLuong() >= 50) {
-                    status.setText("Bán ổn định");
-                    status.getStyleClass().add("dish-status-green");
-
-                } else if (cthd.getSoLuong() < 50 && m.getSoLuong() > 80) {
-                    status.setText("🛒 Cần khuyến mãi hoặc giảm giá");
-                    status.getStyleClass().add("dish-status-yellow");
-
-                } else {
-                    status.setText("Ít bán");
-                    status.getStyleClass().add("dish-status-red");
-                }
+            } else if (tiLe >= 5) {
+                status.setText("Cần Khuyến Mãi (" + Math.round(tiLe) + "%)");
+                status.getStyleClass().add("dish-status-yellow");
 
             } else {
-                // Nếu là tháng trước => đánh giá theo mức bán
-                String text = trangThaiTheoSoLuong(cthd.getSoLuong());
-                status.setText(text);
-
-                // Gán style theo trạng thái
-                if (text.contains("Best Seller")) {
-                    status.getStyleClass().add("dish-status-red");       // đỏ nổi bật
-                } else if (text.contains("Bán Rất Chạy")) {
-                    status.getStyleClass().add("dish-status-orange");    // cam
-                } else if (text.contains("Bán Ổn Định")) {
-                    status.getStyleClass().add("dish-status-green");     // xanh lá
-                } else if (text.contains("Cần Có Khuyến Mãi")) {
-                    status.getStyleClass().add("dish-status-yellow");    // vàng
-                } else { // Ít Người Mua
-                    status.getStyleClass().add("dish-status-gray");      // xám
-                }
+                status.setText("Ít Người Mua (" + Math.round(tiLe) + "%)");
+                status.getStyleClass().add("dish-status-gray");
             }
+
 
             statusBox.getChildren().add(status);
 
@@ -327,19 +336,49 @@ public class ThongKeController {
             HBox percentBox = new HBox();
             percentBox.setAlignment(Pos.CENTER);
             percentBox.getStyleClass().add("dish-inc");
-            percentBox.setStyle("-fx-background-color: #4CAF50; -fx-background-radius: 0 8 8 0;");
+            // percentBox.setStyle("-fx-background-color: #4CAF50; -fx-background-radius: 0 8 8 0;");
 
             int soLuongThangTruoc = mapThangTruoc.getOrDefault(m.getMaMon(), 0);
             int soLuongHienTai = cthd.getSoLuong();
-            double percent;
-            if (soLuongThangTruoc != 0)
-                percent = ((double) (soLuongHienTai - soLuongThangTruoc) / soLuongThangTruoc) * 100;
-            else if (soLuongHienTai > 0)
-                percent = 100;
-            else
-                percent = 0;
 
-            Label percentLabel = new Label((percent >= 0 ? "↑" : "↓") + Math.abs(Math.round(percent)) + "%");
+            String percentText;
+
+            if (soLuongThangTruoc == 0 && soLuongHienTai > 0) {
+                percentText = "↑ NEW";          // Tháng trước không bán, tháng này có bán
+
+            } else if (soLuongThangTruoc > 0 && soLuongHienTai == 0) {
+                percentText = "↓100%";          // Tháng này không bán nữa
+
+            } else if (soLuongThangTruoc == 0 && soLuongHienTai == 0) {
+                percentText = "";              // Không có dữ liệu
+
+            } else {
+                double percent = ((double) (soLuongHienTai - soLuongThangTruoc)
+                        / soLuongThangTruoc) * 100;
+
+                percentText = (percent >= 0 ? "↑" : "↓")
+                        + Math.abs(Math.round(percent)) + "%";
+            }
+
+            Label percentLabel = new Label(percentText);
+            percentLabel.getStyleClass().add("dish-row-label");
+
+            // ===== SET MÀU THEO TRẠNG THÁI =====
+            if (percentText.startsWith("↓")) {
+                // Giảm → nền đỏ
+                percentBox.setStyle("-fx-background-color: #F44336; -fx-background-radius: 0 8 8 0;");
+
+            } else if (percentText.startsWith("↑")) {
+                // Tăng → nền xanh
+                percentBox.setStyle("-fx-background-color: #4CAF50; -fx-background-radius: 0 8 8 0;");
+
+            } else {
+                // NEW hoặc –
+                percentBox.setStyle("-fx-background-color: #9E9E9E; -fx-background-radius: 0 8 8 0;");
+            }
+
+            
+
             percentLabel.getStyleClass().add("dish-row-label");
             percentBox.getChildren().add(percentLabel);
 
@@ -358,13 +397,6 @@ public class ThongKeController {
         }
     }
 
-    private String trangThaiTheoSoLuong(int sl) {
-        if (sl >= 300) return "🔥 Best Seller";              // ~10 món/ngày
-        if (sl >= 150) return "Bán Rất Chạy";                // ~5 món/ngày
-        if (sl >= 80)  return "Bán Ổn Định";                 // ~2–3 món/ngày
-        if (sl >= 30)  return "Cần Có Khuyến Mãi Hoặc Giảm Giá";
-        return "Ít Người Mua";                               // < 1 món/ngày
-    }
 
     // Tìm kiếm món ăn
     private void timKiemMonAn(){
@@ -387,7 +419,7 @@ public class ThongKeController {
                     found = true;
             }
         }
-        removeNoResultLabel(); // xóa label cũ nếu có
+        removeNoResultLabel(); // xóa label cũ
 
         if (!found) {
             Label noResult = new Label("Không tìm thấy món ăn\nHoặc món ăn không có đơn bán");
@@ -667,6 +699,7 @@ public class ThongKeController {
         Tooltip tipFind = new Tooltip("Tìm món ăn (Ctrl + F)");
         Tooltip.install(searchField, tipFind);
     }
+    
     private void addShortcuts(Scene scene){
         KeyCodeCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
         scene.getAccelerators().put(ctrlF, () -> {

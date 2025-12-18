@@ -374,11 +374,26 @@ try {
     private void xacNhan() {
         String maMon = lblMaMon.getText().trim();
         String tenMon = txtTenMon.getText().trim();
+        if (tenMon.isEmpty()) {
+            AlertCus.show("Thông báo", "Tên món không được để trống!");
+            txtTenMon.requestFocus();
+            return;
+        }
+
         String moTa = txtMoTa.getText().trim();
         String giaStr = txtGiaGoc.getText().trim();
+        if (giaStr.isEmpty()) {
+            AlertCus.show("Thông báo", "Giá gốc không được để trống!");
+            txtGiaGoc.requestFocus();
+            return;
+        }
         giaStr = giaStr.replace(".", "");
         String soLuongStr = txtSoLuong.getText().trim();
-
+        if (cboLoaiMon.getSelectionModel().getSelectedItem() == null) {
+            AlertCus.show("Thông báo", "Vui lòng chọn loại món!");
+            cboLoaiMon.requestFocus();
+            return;
+        }
         String maLoai = "";
         if (cboLoaiMon.getSelectionModel().getSelectedItem() != null) {
             maLoai = LoaiMonDAO.getMaLoaiMonByTen(cboLoaiMon.getSelectionModel().getSelectedItem());
@@ -389,7 +404,17 @@ try {
         int soLuong;
         try {
             giaGoc = Double.parseDouble(giaStr);
+            if (giaGoc <= 0) {
+                AlertCus.show("Thông báo", "Giá gốc phải lớn hơn 0!");
+                txtGiaGoc.requestFocus();
+                return;
+            }
             soLuong = Integer.parseInt(soLuongStr);
+            if (soLuong < 0) {
+                AlertCus.show("Thông báo", "Số lượng không được âm!");
+                txtSoLuong.requestFocus();
+                return;
+            }
         } catch (NumberFormatException e) {
             AlertCus.show("Thông báo", "Giá hoặc số lượng không hợp lệ!");
             return;

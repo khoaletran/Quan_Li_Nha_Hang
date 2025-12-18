@@ -1,11 +1,8 @@
 package ui.controllers;
 import dao.KhuyenMaiDAO;
-import dao.MonDAO;
 import entity.KhuyenMai;
-import entity.Mon;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -24,7 +21,6 @@ import ui.ConfirmCus;
 import java.io.File;
 import java.io.FileInputStream;
 
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -32,12 +28,10 @@ import java.util.*;
 public class KhuyenMaiController {
 
     // FXML - DANH SÁCH
-    @FXML private ScrollPane scrollList;
-    @FXML private VBox vboxCenterScroll, boxChonMon;
-    @FXML private FlowPane foodList;
+    @FXML private VBox vboxCenterScroll;
 
     // FXML - FORM
-    @FXML private TextField txtMaKM, txtTenKM, txtSoLuong, txtMaThayThe, txtPhanTram, txtTimKiem, txtTimMon;
+    @FXML private TextField txtMaKM, txtTenKM, txtSoLuong, txtMaThayThe, txtPhanTram, txtTimKiem;
     @FXML private DatePicker dpNgayBatDau, dpNgayKetThuc;
     @FXML private ComboBox<String> cbUudai, cbTrangThai, cbUuDaiTimKiem;
 
@@ -48,12 +42,6 @@ public class KhuyenMaiController {
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private KhuyenMai selectedKM = null;
     private final KhuyenMaiDAO kmDAO = new KhuyenMaiDAO();
-
-    // --- CHỌN MÓN ---
-    private final MonDAO monDAO = new MonDAO();
-    private List<Mon> dsMonToanBo = new ArrayList<>();
-    private ObservableList<Mon> monDaChon = FXCollections.observableArrayList();
-    private final NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 
     @FXML
     public void initialize() {
@@ -277,7 +265,6 @@ public class KhuyenMaiController {
             taiDanhSachKhuyenMai();
             return;
         }
-
         List<KhuyenMai> ketQua = timKiemKhuyenMai(q, trangThai, uuDai);
         hienThiKetQuaTimKiem(ketQua);
     }
@@ -288,13 +275,12 @@ public class KhuyenMaiController {
         if (tatCa == null) return ketQua;
 
         for (KhuyenMai km : tatCa) {
-            boolean khopMa = q.isEmpty() ||
+            boolean khopMa = q.isEmpty() || // trường hợp k nhập
                     km.getMaKM().toLowerCase().contains(q.toLowerCase()) ||
                     km.getTenKM().toLowerCase().contains(q.toLowerCase());
 
             boolean khopTrangThai = kiemTraTrangThai(km, trangThai);
             boolean khopUuDai = kiemTraUuDai(km, uuDai);
-
             if (khopMa && khopTrangThai && khopUuDai) ketQua.add(km);
         }
         return ketQua;
