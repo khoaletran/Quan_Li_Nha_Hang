@@ -1,187 +1,210 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="root"
-            prefHeight="800.0" prefWidth="1400.0"
-            stylesheets="@../CSS/tracuuketca.css, @../CSS/AppMD.css"
-            xmlns="http://javafx.com/javafx/24.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ui.controllers.TraCuuKetCaController">
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" styleClass="borderPane_main" stylesheets="@../CSS/tracuuketca.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.TraCuuKetCaController">
 
-    <!-- ================== TRUNG TÂM ================== -->
+    <!-- Trung tâm -->
     <center>
-        <AnchorPane fx:id="center_Panel" styleClass="center-content"
-                    AnchorPane.topAnchor="0.0"
-                    AnchorPane.bottomAnchor="0.0"
-                    AnchorPane.leftAnchor="0.0"
-                    AnchorPane.rightAnchor="0.0">
+        <VBox spacing="10" styleClass="center-section">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+            <VBox prefHeight="816.0" prefWidth="700.0" style="-fx-background-color: #efefef; -fx-background-radius: 20;">
+                <children>
+                    <HBox prefHeight="55.0" prefWidth="624.0" styleClass="tt_box">
+                        <children>
+                            <Label prefHeight="73.0" prefWidth="1056.0" styleClass="center-title" text="Danh Sách Phiếu Kết Ca" />
+                        </children>
+                    </HBox>
+                    <!-- Danh sách hóa đơn -->
+                    <ScrollPane fitToWidth="true" prefWidth="668.0" styleClass="scroll-list" VBox.vgrow="ALWAYS">
+                        <content>
+                            <!-- Thêm fx:id cho VBox chứa danh sách để inject vào controller -->
+                            <VBox fx:id="vbox_center_scroll" prefHeight="521.0" prefWidth="690.0" spacing="8" styleClass="vbox_center-scroll">
+                                <padding>
+                                    <Insets bottom="5" left="5" right="5" top="5" />
+                                </padding>
 
-            <!-- KHU VỰC DANH SÁCH HÓA ĐƠN -->
-            <VBox spacing="10"
-                  style="-fx-background-color: #EFEFEF; -fx-background-radius: 20 20 28 28;"
-                  AnchorPane.topAnchor="20.0"
-                  AnchorPane.leftAnchor="20.0"
-                  AnchorPane.rightAnchor="20.0"
-                  AnchorPane.bottomAnchor="230.0"
-                  VBox.vgrow="ALWAYS">
-
-                <!-- Thanh tìm kiếm -->
-                <HBox alignment="CENTER_LEFT" spacing="8"
-                      styleClass="menu-search-box">
-                    <Label text="🔍" fx:id="searchIcon" styleClass="search-icon" />
-                    <TextField fx:id="searchField" promptText="Tìm kiếm: bàn, số điện thoại, tên khách"
-                               styleClass="search-field"
-                               HBox.hgrow="ALWAYS"/>
-                </HBox>
-
-                <!-- Danh sách hóa đơn -->
-                <ScrollPane fitToWidth="true" fitToHeight="true"
-                            styleClass="scroll_order"
-                            VBox.vgrow="ALWAYS">
-                    <content>
-                        <VBox fx:id="vboxHoaDon" spacing="10">
-                            <padding>
-                                <Insets top="10" right="10" bottom="10" left="10"/>
-                            </padding>
-
-
-                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="invoice-card">
-                                <!-- BÊN TRÁI -->
-                                <HBox spacing="10" alignment="CENTER_LEFT">
-                                    <Circle radius="20" style="-fx-fill: #d8d8d8;" />
+                                <!-- Một thẻ đặt bàn (mẫu) -->
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="order-card">
+                                    <StackPane style="-fx-background-radius: 10 0 0 10; -fx-overflow: hidden;">
+                                        <ImageView fitHeight="60" fitWidth="60" preserveRatio="false">
+                                            <image>
+                                                <Image url="@../IMG/avatar.png" />
+                                            </image>
+                                        </ImageView>
+                                    </StackPane>
                                     <VBox spacing="2">
-                                        <Label styleClass="invoice-id" text="HD000002"/>
-                                        <Label styleClass="invoice-phone" text="SDT: 0912345678"/>
-                                        <Label styleClass="invoice-name" text="Tên: Nguyễn Văn A"/>
+                                        <Label styleClass="order-id" text="HD1210820250002" />
+                                        <Label styleClass="order-phone" text="SDT: 0283765432" />
+                                    </VBox>
+                                </HBox>
+                                <!-- Mẫu thẻ khác -->
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="order-card">
+                                    <StackPane style="-fx-background-radius: 10 0 0 10; -fx-overflow: hidden;">
+                                        <ImageView fitHeight="60" fitWidth="60" preserveRatio="false">
+                                            <image>
+                                                <Image url="@../IMG/avatar.png" />
+                                            </image>
+                                        </ImageView>
+                                    </StackPane>
+                                    <VBox spacing="2">
+                                        <Label styleClass="order-id" text="HD1210820250002" />
+                                        <Label styleClass="order-phone" text="SDT: 0283765432" />
                                     </VBox>
                                 </HBox>
 
-                                <!-- ĐẨY NỘI DUNG BÊN PHẢI -->
-                                <Pane HBox.hgrow="ALWAYS" />
-
-                                <!-- BÊN PHẢI: Tổng tiền -->
-                                <Label styleClass="invoice-total" text="125.000đ" />
-                            </HBox>
-
-                        </VBox>
-                    </content>
-                </ScrollPane>
-            </VBox>
-
-            <!-- Ô tổng kết doanh thu -->
-            <AnchorPane prefHeight="180.0"
-                        AnchorPane.bottomAnchor="20.0"
-                        AnchorPane.leftAnchor="20.0"
-                        AnchorPane.rightAnchor="20.0"
-                        styleClass="anchorPane_LabelBaoCao"
-                        xmlns="http://javafx.com/javafx"
-                        xmlns:fx="http://javafx.com/fxml">
-
-                <children>
-
-                    <!-- TITLE FULL WIDTH -->
-                    <HBox styleClass="summary-title-bar"
-                          AnchorPane.topAnchor="0.0"
-                          AnchorPane.leftAnchor="0.0"
-                          AnchorPane.rightAnchor="0.0"
-                          prefHeight="40">
-                        <children>
-                            <Label text="Tổng kết ca" styleClass="summary-title"/>
-                        </children>
-                    </HBox>
-
-                    <!-- GRIDPANE NỘI DUNG -->
-                    <GridPane alignment="CENTER" hgap="40" vgap="20"
-                              AnchorPane.topAnchor="50.0"
-                              AnchorPane.bottomAnchor="10.0"
-                              AnchorPane.leftAnchor="10.0"
-                              AnchorPane.rightAnchor="10.0">
-
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="50"/>
-                            <ColumnConstraints percentWidth="50"/>
-                        </columnConstraints>
-
-                        <rowConstraints>
-                            <RowConstraints/>
-                            <RowConstraints/>
-                        </rowConstraints>
-
-                        <children>
-                            <Label fx:id="lblTienMat" styleClass="summary-label"
-                                   text="Tiền mặt: 1.230.000 VND"
-                                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-
-                            <Label fx:id="lblCKhoan" styleClass="summary-label"
-                                   text="Chuyển khoản: 20.000 VND"
-                                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-
-                            <Label fx:id="lblsoHD" styleClass="summary-label"
-                                   text="Số hóa đơn: 36"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-                            <Label fx:id="lblDThu" styleClass="summary-label"
-                                   text="Doanh thu: 1.250.000 VND"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                        </children>
-                    </GridPane>
+                            </VBox>
+                        </content>
+                        <VBox.margin>
+                            <Insets bottom="10.0" />
+                        </VBox.margin>
+                    </ScrollPane>
 
                 </children>
-            </AnchorPane>
+            </VBox>
 
+            <!-- Bộ lọc và tìm kiếm -->
+            <VBox prefHeight="162.0" prefWidth="624.0" spacing="8" styleClass="filter-box">
+                <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 20 20 28 28;">
+                    <children>
+                        <Label prefHeight="33.0" prefWidth="1162.0" styleClass="filter-title" text="Bộ lọc" />
+                    </children>
+                </HBox>
 
-        </AnchorPane>
+                <GridPane hgap="10" prefHeight="98.0" prefWidth="614.0" style="-fx-padding: 10;" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="20.0" />
+                        <ColumnConstraints percentWidth="30.0" />
+                        <ColumnConstraints percentWidth="20.0" />
+                        <ColumnConstraints percentWidth="30.0" />
+                    </columnConstraints>
+                    <!-- Hàng 1 -->
+                    <Label styleClass="label_filter" text="Họ tên:" GridPane.columnIndex="0" />
+                    <!-- Thêm fx:id txtMaBan -->
+                    <TextField fx:id="txtTimKiem" prefHeight="21.0" prefWidth="360.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" />
+
+                    <Label styleClass="label_filter" text="Thời gian:" GridPane.columnIndex="2" />
+                    <!-- Thay TextField bằng DatePicker -->
+                    <DatePicker fx:id="dpThoiGian" prefHeight="28.0" prefWidth="297.0" promptText="Chọn ngày" styleClass="filter-tf" GridPane.columnIndex="3" />
+
+                    <!-- Hàng 2 -->
+                    <Label styleClass="label_filter" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <!-- Thêm fx:id txtSDT -->
+                    <TextField fx:id="txtSDT" prefHeight="30.0" prefWidth="372.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label styleClass="label_filter" text="Trạng thái:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <!-- Thêm fx:id cboTrangThai -->
+                    <ComboBox fx:id="cboTrangThai" prefHeight="27.0" prefWidth="297.0" promptText="-- chọn --" styleClass="uudai_combobox filter-tf" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </GridPane>
+
+                <!-- Hàng nút -->
+                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10;">
+                    <!-- Thêm fx:id cho 2 nút -->
+                    <Button fx:id="btnXoaTrang" styleClass="btn-clear" text="Xóa trắng" />
+                    <Button fx:id="btnTimKiem" styleClass="btn-search" text="Tìm kiếm" />
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </HBox>
+            </VBox>
+        </VBox>
     </center>
 
-    <!-- ================== BÊN PHẢI ================== -->
+    <!-- ========== PHẢI (Form khuyến mãi + chọn món) ========== -->
     <right>
-        <VBox fx:id="rightSidebar"
-              BorderPane.alignment="CENTER"
-              VBox.vgrow="ALWAYS"
-              styleClass="right">
-            <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
-            </padding>
+        <VBox prefWidth="360" spacing="15" styleClass="right-section">
+            <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
 
-            <!-- Tiêu đề -->
-            <VBox alignment="CENTER" prefHeight="55" styleClass="header-section">
-                <Label minHeight="40.0" minWidth="350.0" styleClass="section-title" text="Báo Cáo Kết Ca" />
+            <!-- FORM THÔNG TIN KHUYẾN MÃI -->
+            <VBox prefHeight="700.0" prefWidth="396.0" spacing="15" styleClass="right-content">
+                <AnchorPane prefHeight="39.0" prefWidth="403.0">
+                    <children>
+                        <Label prefHeight="39.0" prefWidth="356.0" styleClass="section-title" text="Thông Tin Ca Làm" />
+                    </children>
+                </AnchorPane>
+
+                <GridPane hgap="10" prefHeight="311.0" prefWidth="356.0" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="40" />
+                        <ColumnConstraints percentWidth="60" />
+                    </columnConstraints>
+
+                    <Label styleClass="label_infoOrder" text="Mã phiếu:" GridPane.rowIndex="0" />
+                    <TextField fx:id="txtMaPhieu"  GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label styleClass="label_infoOrder" text="Tên nhân viên:" GridPane.rowIndex="1" />
+                    <TextField fx:id="txtTenNV" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label styleClass="label_infoOrder" text="Ca làm:" GridPane.rowIndex="2" />
+                    <TextField fx:id="txtCaLam"  GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label styleClass="label_infoOrder" text="Số đơn trong ca:" GridPane.rowIndex="3" />
+                    <TextField fx:id="txtSoDon"  GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                    <Label styleClass="label_infoOrder" text="Thời gian vào ca:" GridPane.rowIndex="4" />
+                    <TextField fx:id="txtTgVaoCa"  GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                    <Label styleClass="label_infoOrder" text="Thời gian kết ca:" GridPane.rowIndex="5" />
+                    <TextField fx:id="txtTgKetCa"  GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                    <Label styleClass="label_infoOrder" text="Số tiền mặt:" GridPane.rowIndex="6" />
+                    <TextField fx:id="txtTienMat"  GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+                    <Label styleClass="label_infoOrder" text="Số tiền chuyển khoản:" GridPane.rowIndex="7" />
+                    <TextField fx:id="txtChuyenKhoan"  GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+                    <Label styleClass="label_infoOrder" text="Tổng tiền trong ca:" GridPane.rowIndex="8" />
+                    <TextField fx:id="txtTongTien"  GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+                    <Label styleClass="label_infoOrder" text="Tiền chênh lệch:" GridPane.rowIndex="9" />
+                    <TextField fx:id="txtTienChenhLech"  GridPane.columnIndex="1" GridPane.rowIndex="9" />
+
+                    <Label styleClass="label_infoOrder" text="Mô tả:" GridPane.rowIndex="10" />
+                    <TextArea fx:id="taMoTa"  GridPane.columnIndex="1" GridPane.rowIndex="10" prefRowCount="4"/>
+
+                    <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
+                </GridPane>
             </VBox>
-
-            <!-- Form nội dung -->
-            <VBox spacing="10" styleClass="form-section" VBox.vgrow="ALWAYS">
-                <Label styleClass="label_form-section" text="Ca làm"/>
-                <TextField fx:id="txtCaLam" editable="false" promptText="Ca làm" style="-fx-opacity: 1;"/>
-
-                <Label styleClass="label_form-section" text="Thời gian vào ca"/>
-                <TextField fx:id="txtTGVC" editable="false" promptText="..." style="-fx-opacity: 1;"/>
-
-                <Label styleClass="label_form-section" text="Số hóa đơn"/>
-                <TextField fx:id="txtsLHD"/>
-
-                <Label styleClass="label_form-section" text="Số tiền mặt"/>
-                <TextField fx:id="txtSoTienMat"/>
-
-                <Label styleClass="label_form-section" text="Số tiền chuyển khoản"/>
-                <TextField fx:id="txtSoTienCK"/>
-
-                <Label styleClass="label_form-section" text="Tổng tiền trong ca"/>
-                <TextField fx:id="txtTongTien"/>
-
-                <Label styleClass="label_form-section" text="Ghi chú"/>
-                <TextArea fx:id="taMoTa" prefRowCount="4"/>
-            </VBox>
-
-            <!-- Nút kết ca -->
-            <HBox alignment="CENTER" spacing="10">
-                <Button fx:id="btnKetCa" text="Kết Ca"
-                        prefHeight="45" prefWidth="165"
-                        styleClass="end-shift-btn"/>
-            </HBox>
+<!--            &lt;!&ndash; Hàng nút hành động &ndash;&gt;-->
+<!--            <HBox alignment="CENTER" spacing="10">-->
+<!--                <Button fx:id="btnBoDanhDau" style="-fx-background-color: #ff383c" styleClass="btn-action" text="Bỏ đánh dấu" />-->
+<!--                <Button fx:id="btnDanhDau" style="-fx-background-color: #1CD446FF" styleClass="btn-action" text="Đánh dấu" />-->
+<!--            </HBox>-->
         </VBox>
     </right>
 </BorderPane>

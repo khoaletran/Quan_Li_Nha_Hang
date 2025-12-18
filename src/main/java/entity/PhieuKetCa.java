@@ -82,6 +82,10 @@ public class PhieuKetCa {
         this.ngayKetCa = ngayKetCa;
     }
 
+    public void setNgayKetCaFromDB(LocalDateTime ngayKetCa) {
+        this.ngayKetCa = ngayKetCa;
+    }
+
     public LocalDateTime getTgLogIn() {
         return tgLogIn;
     }

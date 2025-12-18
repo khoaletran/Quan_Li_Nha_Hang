@@ -36,18 +36,35 @@ public class PhieuKetCaDAO {
         // Load nhân viên đầy đủ
         NhanVien nv = NhanVienDAO.getByID(maNV);
 
-        return new PhieuKetCa(
-                maPhieu,
-                nv,
-                ca,
-                soHoaDon,
-                tienMat,
-                tienCK,
-                tienChenhLech,
-                ngayKetCa,
-                tgLogIn,
-                moTa
-        );
+//        return new PhieuKetCa(
+//                maPhieu,
+//                nv,
+//                ca,
+//                soHoaDon,
+//                tienMat,
+//                tienCK,
+//                tienChenhLech,
+//                ngayKetCa,
+//                tgLogIn,
+//                moTa
+//        );
+        PhieuKetCa p = new PhieuKetCa();
+
+        p.setMaPhieu(maPhieu);
+        p.setNhanVien(nv);
+        p.setCa(ca);
+        p.setSoHoaDon(soHoaDon);
+        p.setTienMat(tienMat);
+        p.setTienCK(tienCK);
+        p.setTienChenhLech(tienChenhLech);
+
+        p.setNgayKetCaFromDB(ngayKetCa);
+        p.setTgLogIn(tgLogIn);
+
+        p.setMoTa(moTa);
+
+        return p;
+
     }
 
     // ============================================
@@ -69,6 +86,58 @@ public class PhieuKetCaDAO {
 
         return ds;
     }
+
+    public static List<PhieuKetCa> getAllForTraCuu() {
+
+        List<PhieuKetCa> ds = new ArrayList<>();
+
+        String sql = """
+        SELECT p.*, n.tenNV
+        FROM PhieuKetCa p
+        JOIN NhanVien n ON p.maNV = n.maNV
+        ORDER BY p.maPhieu DESC
+    """;
+
+        try (Connection con = connectDB.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                PhieuKetCa p = new PhieuKetCa();
+
+                p.setMaPhieu(rs.getString("maPhieu"));
+                p.setCa(rs.getBoolean("ca"));
+                p.setSoHoaDon(rs.getInt("soHoaDon"));
+                p.setTienMat(rs.getDouble("tienMat"));
+                p.setTienCK(rs.getDouble("tienCK"));
+                p.setTienChenhLech(rs.getDouble("tienChenhLech"));
+
+                Timestamp ts = rs.getTimestamp("ngayKetCa");
+                p.setNgayKetCaFromDB(ts != null ? ts.toLocalDateTime() : null);
+
+                Timestamp lg = rs.getTimestamp("tgLogIn");
+                p.setTgLogIn(lg != null ? lg.toLocalDateTime() : null);
+
+                p.setMoTa(rs.getString("moTa"));
+
+                // ===== Nhân viên (KHÔNG gọi DAO khác)
+                NhanVien nv = new NhanVien();
+                nv.setMaNV(rs.getString("maNV"));
+                nv.setTenNV(rs.getString("tenNV"));
+
+                p.setNhanVien(nv);
+
+                ds.add(p);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("PhieuKetCaDAO.getAll(): " + e.getMessage());
+        }
+
+        return ds;
+    }
+
 
     // ============================================
     // INSERT

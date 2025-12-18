@@ -1,412 +1,136 @@
 package ui.controllers;
 
-import dao.ChiTietHDDAO;
-import dao.HoaDonDAO;
 import dao.PhieuKetCaDAO;
-import entity.ChiTietHoaDon;
-import entity.HoaDon;
-import entity.NhanVien;
 import entity.PhieuKetCa;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
-import javafx.geometry.Pos;
-import ui.AlertCus;
-import ui.ConfirmCus;
 
+import java.net.URL;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
-public class TraCuuKetCaController {
-    @FXML
-    private VBox vboxHoaDon;
-    @FXML
-    private TextField txtCaLam, txtTGVC, txtsLHD, txtSoTienMat, txtSoTienCK, txtTongTien,searchField;
-    @FXML
-    private TextArea taMoTa;
-    @FXML
-    private Label lblTienMat, lblCKhoan, lblsoHD, lblDThu,searchIcon;
-    @FXML
-    private Button btnKetCa;
+public class TraCuuKetCaController implements Initializable {
 
-    private HoaDonDAO hoaDonDAO = new HoaDonDAO();
-    private NhanVien nhanVien;
-    private LocalDateTime thoiGianVaoCa;
+    @FXML private VBox vbox_center_scroll;
+    @FXML private TextField txtMaPhieu;
+    @FXML private TextField txtTenNV;
+    @FXML private TextField txtCaLam;
+    @FXML private TextField txtSoDon;
+    @FXML private TextField txtTgVaoCa;
+    @FXML private TextField txtTgKetCa;
+    @FXML private TextField txtTienMat;
+    @FXML private TextField txtChuyenKhoan;
+    @FXML private TextField txtTongTien;
+    @FXML private TextField txtTienChenhLech;
+    @FXML private TextArea taMoTa;
+
+    private static final DateTimeFormatter DT_FORMAT =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    private static final NumberFormat VND_FORMAT =
+            NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 
 
-    @FXML
-    public void initialize() {
 
-        System.out.println("Initializing BanGiaoCaController");
+    private final PhieuKetCaDAO phieuKetCaDAO = new PhieuKetCaDAO();
 
-        btnKetCa.setOnAction(e -> KiemTraTruocKetCa());
-
-        searchIcon.setOnMouseClicked(e -> timKiemHoaDon());
-
-        searchField.setOnAction(e -> timKiemHoaDon());
-
-        javafx.application.Platform.runLater(() -> {
-            searchField.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
-                if (event.isControlDown() && event.getCode() == javafx.scene.input.KeyCode.F) {
-                    searchField.requestFocus();
-                    searchField.selectAll();
-                    event.consume();
-                }
-            });
-        });
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        loadDanhSachPhieuKetCa();
     }
 
-    public void initData(NhanVien nv) {
-        this.nhanVien = nv;
-        loadHoaDonTrongCaLam();
-    }
+    private void loadDanhSachPhieuKetCa() {
+        vbox_center_scroll.getChildren().clear();
 
-    private void loadHoaDonTrongCaLam() {
-        int slHoaDon = 0;
-        double tongTienMat = 0;
-        double tongTienCK = 0;
-        double tienHoaDon = 0;
+        List<PhieuKetCa> list = phieuKetCaDAO.getAllForTraCuu();
 
-        vboxHoaDon.getChildren().clear();
-
-        if (nhanVien == null || thoiGianVaoCa == null) return;
-
-        List<HoaDon> danhSach = hoaDonDAO.getTheoMaNV(nhanVien.getMaNV());
-        for (HoaDon hd : danhSach) {
-
-            // Lọc theo trạng thái
-            //if (hd.getTrangthai() == 0) continue;
-
-            LocalDateTime tgCheckout = hd.getTgCheckOut();
-            if (tgCheckout == null) continue;
-
-            // Lọc theo ngày và giờ
-            if (!tgCheckout.toLocalDate().equals(thoiGianVaoCa.toLocalDate())) continue;
-            if (!tgCheckout.isAfter(thoiGianVaoCa)) continue;
-
-            List<ChiTietHoaDon> dsCTHD = ChiTietHDDAO.getByMaHD(hd.getMaHD());
-
-            for (ChiTietHoaDon ct : dsCTHD) {
-                tienHoaDon += ct.getMon().getGiaGoc() * ct.getSoLuong();
-            }
-
-            if (hd.getKhuyenMai() != null) {
-                double giamGia = hd.getKhuyenMai().getPhanTRamGiamGia();
-                tienHoaDon = tienHoaDon * (1 - giamGia / 100.0);
-            }
-            tienHoaDon = tienHoaDon * 1.1;
-
-            if (hd.isKieuThanhToan()) {
-                tongTienCK += tienHoaDon; // Chuyển khoản
-            } else {
-                tongTienMat += tienHoaDon; // Tiền mặt
-            }
-
-            String maBan = hd.getBan().getMaBan();
-            String prefix = maBan.substring(0, 2);
-
-            String imgPath = "/IMG/ban/IN.png";
-
-            switch (prefix) {
-                case "BV":
-                    imgPath = "/IMG/ban/vip.png";
-                    break;
-                case "BI":
-                    imgPath = "/IMG/ban/IN.png";
-                    break;
-                case "BO":
-                    imgPath = "/IMG/ban/out.png";
-                    break;
-            }
-            ImageView imgBan = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
-            imgBan.setFitWidth(60);
-            imgBan.setFitHeight(60);
-            imgBan.setPreserveRatio(true);
-
-
-            Label lblMaHD = new Label(hd.getMaHD());
-            lblMaHD.getStyleClass().add("invoice-id");
-
-            Label lblSDT = new Label("SDT: " + hd.getKhachHang().getSdt());
-            lblSDT.getStyleClass().add("invoice-phone");
-
-            Label lblTenKH = new Label("Tên: " + hd.getKhachHang().getTenKhachHang());
-            lblTenKH.getStyleClass().add("invoice-name");
-
-            Label lblSoLuong = new Label("Số khách: " + hd.getSoLuong());
-            lblTenKH.getStyleClass().add("invoice-name");
-
-            VBox boxThongTin = new VBox(2, lblMaHD, lblSDT,lblTenKH,lblSoLuong);
-
-            Label lblTongTien = new Label(NumberFormat
-                    .getInstance(new Locale("vi", "VN"))
-                    .format(tienHoaDon) + " đ");
-            lblTongTien.getStyleClass().add("invoice-total");
-
-            HBox left = new HBox(10, imgBan, boxThongTin);
-            left.setAlignment(Pos.CENTER_LEFT);
-
-            Pane spacer = new Pane();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
-
-            HBox card = new HBox(10, left, spacer, lblTongTien);
-            card.setAlignment(Pos.CENTER_LEFT);
-            card.getStyleClass().add("invoice-card");
-
-//            HBox card = new HBox(10, imgBan, boxThongTin);
-//            card.setAlignment(Pos.CENTER_LEFT);
-//            card.getStyleClass().add("invoice-card");
-            VBox.setMargin(card, new Insets(5, 0, 5, 0));
-
-            vboxHoaDon.getChildren().add(card);
-            slHoaDon++;
-        }
-        NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
-        lblsoHD.setText("Số hóa đơn: " + slHoaDon);
-        lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
-        lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
-        lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
-    }
-
-
-    private String xacDinhCaLam(LocalDateTime thoiGian) {
-        int gio = thoiGian.getHour();
-        int phut = thoiGian.getMinute();
-
-        if (gio < 12 || (gio == 12 && phut == 0)) {
-            return "Ca sáng";
-        } else {
-            return "Ca tối";
+        for (PhieuKetCa p : list) {
+            VBox orderCard = createOrderCard(p);
+            vbox_center_scroll.getChildren().add(orderCard);
         }
     }
 
-    public void setThoiGianVaoCa(LocalDateTime thoiGian) {
-        this.thoiGianVaoCa = thoiGian;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        txtTGVC.setText(thoiGian.format(formatter));
+    private VBox createOrderCard(PhieuKetCa p) {
 
-        String caLam = xacDinhCaLam(thoiGian);
-        txtCaLam.setText(caLam);
-    }
+        VBox card = new VBox(10);
+        card.getStyleClass().add("kc-card");
 
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
-    }
-
-    @FXML
-    private void KiemTraTruocKetCa() {
-        if (nhanVien == null || thoiGianVaoCa == null) return;
-
-        PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
-        String maPhieu = tuSinhMaPhieuKC();
-
-        if (isEmpty(txtsLHD, "Số hóa đơn không được để trống!")) return;
-        if (isEmpty(txtSoTienMat, "Số tiền mặt không được để trống!")) return;
-        if (isEmpty(txtSoTienCK, "Số tiền chuyển khoản không được để trống!")) return;
-        if (isEmpty(txtTongTien, "Tổng tiền không được để trống!")) return;
-        if (!isNumeric(txtsLHD.getText())) {
-            AlertCus.show("Thông báo lỗi", "Số hóa đơn phải là số!");
-            return;
-        }
-        if (!isNumeric(txtSoTienMat.getText())) {
-            AlertCus.show("Thông báo lỗi", "Số tiền mặt phải là số!");
-            return;
-        }
-        if (!isNumeric(txtSoTienCK.getText())) {
-            AlertCus.show("Thông báo lỗi", "Số tiền chuyển khoản phải là số!");
-            return;
-        }
-        if (!isNumeric(txtTongTien.getText())) {
-            AlertCus.show("Thông báo lỗi", "Số tổng tiền phải là số!");
-            return;
-        }
-        boolean ca = txtCaLam.getText().equals("Ca sáng") ? false : true;
-        int soHoaDon = Integer.parseInt(txtsLHD.getText());
-        double tongTM = Double.parseDouble(txtSoTienMat.getText());
-        double tongCK = Double.parseDouble(txtSoTienCK.getText());
-        double chenhLech = Double.parseDouble(txtTongTien.getText()) - (tongTM + tongCK);
-
-        PhieuKetCa phieu = new PhieuKetCa(
-                maPhieu,
-                nhanVien,
-                ca,
-                soHoaDon,
-                tongTM,
-                tongCK,
-                chenhLech,
-                LocalDateTime.now(),
-                thoiGianVaoCa,
-                taMoTa.getText().trim()
+        // ===== Ảnh =====
+        ImageView img = new ImageView(
+                new Image(getClass().getResource("/IMG/avatar.png").toExternalForm())
         );
-        boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận kết ca");
-        if (answer) {
-            boolean success = new PhieuKetCaDAO().insert(phieu);
-            if (success) {
-                AlertCus.show("Bàn giao ca", "Đã lưu báo cáo kết ca!");
-                javafx.application.Platform.exit();
-                dangXuat();
-            } else {
-                AlertCus.show("Bàn giao ca", "Lỗi lưu báo cáo kết ca!");
-            }
-        }
+        img.setFitWidth(56);
+        img.setFitHeight(56);
+        img.getStyleClass().add("kc-card-image");
+
+        // ===== Thông tin =====
+        VBox infoBox = new VBox(4);
+
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        Label lblTime = new Label(
+                p.getNgayKetCa() != null
+                        ? "Thời gian: " +p.getTgLogIn().format(fmt)+" - "+p.getNgayKetCa().format(fmt)
+                        : "Chưa kết ca"
+        );
+        lblTime.getStyleClass().add("kc-card-time");
+
+        Label lblNhanVien = new Label("Nhân viên: "+p.getNhanVien().getTenNV());
+        lblNhanVien.getStyleClass().add("kc-card-staff");
+
+        Label lblTongTien = new Label(
+                String.format("Tổng tiền: %,.0f ₫", p.getTienMat() + p.getTienCK())
+        );
+        lblTongTien.getStyleClass().add("kc-card-total");
+
+        infoBox.getChildren().addAll(lblTime, lblNhanVien, lblTongTien);
+
+        // ===== Layout ngang =====
+        HBox row = new HBox(12, img, infoBox);
+        row.setAlignment(Pos.CENTER_LEFT);
+
+        card.getChildren().add(row);
+        card.setOnMouseClicked(e -> hienThiPhieuKetCa(p));
+
+        return card;
     }
 
-    private boolean isNumeric(String str) {
-        if (str == null || str.isEmpty()) return false;
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    private void hienThiPhieuKetCa(PhieuKetCa p) {
+        txtMaPhieu.setText(String.valueOf(p.getMaPhieu()));
+        txtTenNV.setText(p.getNhanVien().getTenNV());
+        txtCaLam.setText(p.isCa() ? "Ca tối" : "Ca sáng");
+        txtSoDon.setText(String.valueOf(p.getSoHoaDon()));
+
+        txtTgVaoCa.setText(
+                p.getTgLogIn() != null ? p.getTgLogIn().format(DT_FORMAT) : ""
+        );
+
+        txtTgKetCa.setText(
+                p.getNgayKetCa() != null ? p.getNgayKetCa().format(DT_FORMAT) : ""
+        );
+
+        txtTienMat.setText(VND_FORMAT.format(p.getTienMat()));
+        txtChuyenKhoan.setText(VND_FORMAT.format(p.getTienCK()));
+
+        double tongTien = p.getTienMat() + p.getTienCK();
+        txtTongTien.setText(VND_FORMAT.format(tongTien));
+
+        txtTienChenhLech.setText(VND_FORMAT.format(p.getTienChenhLech()));
+
+        taMoTa.setText(p.getMoTa());
     }
 
-    private boolean isEmpty(TextField txt, String message) {
-        if (txt.getText().trim().isEmpty()) {
-            AlertCus.show("Thông báo lỗi", message);
-            return true;
-        }
-        return false;
-    }
 
-    private void timKiemHoaDon() {
-        String keyword = searchField.getText().trim().toLowerCase();
-
-        vboxHoaDon.getChildren().clear();
-
-        if (keyword.isEmpty()) {
-            loadHoaDonTrongCaLam();
-            return;
-        }
-
-        int slHoaDon = 0;
-        double tongTienMat = 0;
-        double tongTienCK = 0;
-
-        List<HoaDon> danhSach = hoaDonDAO.getTheoMaNV(nhanVien.getMaNV());
-
-        for (HoaDon hd : danhSach) {
-
-            LocalDateTime tgCheckout = hd.getTgCheckOut();
-            if (tgCheckout == null) continue;
-
-            if (!tgCheckout.toLocalDate().equals(thoiGianVaoCa.toLocalDate())) continue;
-            if (!tgCheckout.isAfter(thoiGianVaoCa)) continue;
-
-            String maHD = hd.getMaHD().toLowerCase();
-            String tenKH = hd.getKhachHang().getTenKhachHang().toLowerCase();
-            String sdt = hd.getKhachHang().getSdt().toLowerCase();
-
-            String soKhachStr = String.valueOf(hd.getSoLuong());
-
-            boolean match =
-                    maHD.startsWith(keyword) ||
-                            tenKH.startsWith(keyword) ||
-                            sdt.startsWith(keyword) ||
-                            soKhachStr.startsWith(keyword);
-
-            if (!match) continue;
-
-            double tienHoaDon = 0;
-            List<ChiTietHoaDon> dsCT = ChiTietHDDAO.getByMaHD(hd.getMaHD());
-            for (ChiTietHoaDon ct : dsCT) {
-                tienHoaDon += ct.getMon().getGiaGoc() * ct.getSoLuong();
-            }
-
-            if (hd.getKhuyenMai() != null) {
-                double giam = hd.getKhuyenMai().getPhanTRamGiamGia();
-                tienHoaDon = tienHoaDon * (1 - giam / 100.0);
-            }
-
-            tienHoaDon *= 1.1;
-
-            if (hd.isKieuThanhToan()) tongTienCK += tienHoaDon;
-            else tongTienMat += tienHoaDon;
-
-            String maBan = hd.getBan().getMaBan();
-            String prefix = maBan.substring(0, 2);
-            String imgPath = "/IMG/ban/IN.png";
-
-            switch (prefix) {
-                case "BV": imgPath = "/IMG/ban/vip.png"; break;
-                case "BI": imgPath = "/IMG/ban/IN.png"; break;
-                case "BO": imgPath = "/IMG/ban/out.png"; break;
-            }
-
-            ImageView imgBan = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
-            imgBan.setFitWidth(60);
-            imgBan.setFitHeight(60);
-
-            Label lblMaHD = new Label(hd.getMaHD());
-            Label lblSDT = new Label("SDT: " + hd.getKhachHang().getSdt());
-            Label lblTenKH = new Label("Tên: " + hd.getKhachHang().getTenKhachHang());
-            Label lblSoLuong = new Label("Số khách: " + hd.getSoLuong());
-            lblMaHD.getStyleClass().add("invoice-id");
-
-            VBox info = new VBox(2, lblMaHD, lblSDT, lblTenKH, lblSoLuong);
-            HBox left = new HBox(10, imgBan, info);
-            left.setAlignment(Pos.CENTER_LEFT);
-
-            Pane spacer = new Pane();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
-
-            Label lblTongTien = new Label(NumberFormat.getInstance(new Locale("vi", "VN"))
-                    .format(tienHoaDon) + " đ");
-            lblTongTien.getStyleClass().add("invoice-total");
-
-            HBox card = new HBox(10, left, spacer, lblTongTien);
-            card.setAlignment(Pos.CENTER_LEFT);
-            card.getStyleClass().add("invoice-card");
-            card.setPadding(new Insets(10));
-            VBox.setMargin(card, new Insets(5, 0, 5, 0));
-
-            vboxHoaDon.getChildren().add(card);
-
-
-            slHoaDon++;
-        }
-
-        NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
-        lblsoHD.setText("Số hóa đơn: " + slHoaDon);
-        lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
-        lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
-        lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
-    }
-
-    private String tuSinhMaPhieuKC() {
-        int hour = thoiGianVaoCa.getHour();
-        String ca = (hour < 12) ? "0" : "1";
-
-        String datePart = thoiGianVaoCa.format(DateTimeFormatter.ofPattern("ddMMyy"));
-
-        PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
-        String maHDCuoi = phieuKCDAO.getMaPhieuKCCuoiTheoNgay(ca, datePart);
-
-        int so = 0;
-        if (maHDCuoi != null) {
-            String phanSo = maHDCuoi.substring(maHDCuoi.length() - 4);
-            so = Integer.parseInt(phanSo);
-        }
-
-        return String.format("MP%s%s%04d", ca, datePart, so + 1);
-    }
-
-    public void dangXuat(){
-        System.exit(0);
-    }
 
 }
-
