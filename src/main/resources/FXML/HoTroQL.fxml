@@ -80,7 +80,7 @@
                     <HBox spacing="20" style="-fx-background-color: #e86535; -fx-background-radius: 15; -fx-padding: 25;"
                           alignment="CENTER_LEFT">
                         <VBox spacing="10" alignment="CENTER_LEFT" prefWidth="350">
-                            <Label text="📞 Liên Hệ Hỗ Trợ"
+                            <Label text="Liên Hệ Hỗ Trợ"
                                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
                             <Label text="Hotline: 1900 1234"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
@@ -93,22 +93,22 @@
                         <Separator orientation="VERTICAL" style="-fx-background-color: #4a6572;" />
 
                         <VBox spacing="10" alignment="CENTER_LEFT" prefWidth="350">
-                            <Label text="💡 Mẹo Sử Dụng"
+                            <Label text="Khuyến Nghị Vận Hành"
                                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
-                            <Label text="• Lưu dữ liệu thường xuyên"
+                            <Label text="• Kiểm tra báo cáo doanh thu mỗi ngày"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
-                            <Label text="• Kiểm tra thông báo hàng ngày"
+                            <Label text="• Không chia sẻ tài khoản cho người không liên quan"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
-                            <Label text="• Sao lưu dữ liệu định kỳ"
+                            <Label text="• Phân quyền tài khoản rõ ràng cho từng nhân viên"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
-                            <Label text="• Đổi mật khẩu định kỳ 3 tháng/lần"
+                            <Label text="• Kiểm tra bàn giao ca của nhân viên"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
                         </VBox>
 
                         <Separator orientation="VERTICAL" style="-fx-background-color: #4a6572;" />
 
                         <VBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="💡 Thành viên phát triển"
+                            <Label text="Thành viên phát triển"
                                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
                             <Label text="• Trần Lê Khoa"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />

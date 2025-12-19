@@ -79,7 +79,7 @@ public class HoTroControllerQL implements Initializable {
                 "• Hóa đơn chưa được thanh toán\n" +
                         "• Đang lọc sai thời gian thống kê\n" +
                         "• Có hóa đơn bị hủy hoặc hoàn tiền\n" +
-                        "→ Kiểm tra lại bộ lọc ngày/tháng"
+                        "• Kiểm tra lại bộ lọc ngày/tháng"
         ));
 
         faqList.add(new FAQItem(

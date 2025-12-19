@@ -93,22 +93,26 @@
                         <Separator orientation="VERTICAL" style="-fx-background-color: #4a6572;" />
 
                         <VBox spacing="10" alignment="CENTER_LEFT" prefWidth="350">
-                            <Label text="💡 Mẹo Sử Dụng"
+                            <Label text="Hướng Dẫn Làm Việc"
                                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
-                            <Label text="• Lưu dữ liệu thường xuyên"
+
+                            <Label text="• Kiểm tra ca làm việc trước khi bắt đầu"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
-                            <Label text="• Kiểm tra thông báo hàng ngày"
+                            <Label text="• Nhập đơn hàng chính xác trước khi xác nhận"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
-                            <Label text="• Sao lưu dữ liệu định kỳ"
+                            <Label text="• Báo quản lý ngay khi phát sinh lỗi hệ thống"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
-                            <Label text="• Đổi mật khẩu định kỳ 3 tháng/lần"
+                            <Label text="• Không tự ý sửa hoặc xoá dữ liệu"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
+                            <Label text="• Thực hiện kết ca sau khi kết thúc ca làm"
+                                   style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
+
                         </VBox>
 
                         <Separator orientation="VERTICAL" style="-fx-background-color: #4a6572;" />
 
                         <VBox spacing="10" alignment="CENTER_LEFT">
-                            <Label text="💡 Thành viên phát triển"
+                            <Label text="Thành viên phát triển"
                                    style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
                             <Label text="• Trần Lê Khoa"
                                    style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;" />
