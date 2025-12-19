@@ -586,6 +586,8 @@ public class HoaDonDAO {
                 hd.setMaHD(rs.getString("maHD"));
                 hd.setTgLapHD(rs.getTimestamp("tgLapHD") != null
                         ? rs.getTimestamp("tgLapHD").toLocalDateTime() : null);
+                hd.setTgCheckIn(rs.getTimestamp("tgCheckIn") != null
+                        ? rs.getTimestamp("tgCheckIn").toLocalDateTime() : null);
                 hd.setTgCheckOut(rs.getTimestamp("tgCheckOut") != null
                         ? rs.getTimestamp("tgCheckOut").toLocalDateTime() : null);
                 hd.setTrangthai(rs.getInt("trangThai"));

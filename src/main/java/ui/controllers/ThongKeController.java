@@ -56,7 +56,7 @@ public class ThongKeController {
     @FXML
     private Label lblDoanhThu;
     @FXML
-    private Label lblTongHoaDon;
+    private Label lblTongHoaDon, lblHoaDonHuy,lblTongTienHuy;
     @FXML
     private Label lblTieuDeSoSanh;
     @FXML
@@ -105,11 +105,28 @@ public class ThongKeController {
         for (Map.Entry<HoaDon, Double> entry : mapHoaDon.entrySet()) {
             HoaDon hd = entry.getKey();
             LocalDateTime tgCheckOut = hd.getTgCheckOut();
-
+            LocalDateTime tgCheckIn = hd.getTgCheckIn();
             if (tgCheckOut != null && hd.getTrangthai() == 2) {
                 LocalDate ngay = tgCheckOut.toLocalDate();
                 if (!ngay.isBefore(ngayDauTuan) && !ngay.isAfter(ngayCuoiTuan)) {
                     DayOfWeek dow = tgCheckOut.getDayOfWeek();
+                    String tenThu = switch (dow) {
+                        case MONDAY -> "Thứ 2";
+                        case TUESDAY -> "Thứ 3";
+                        case WEDNESDAY -> "Thứ 4";
+                        case THURSDAY -> "Thứ 5";
+                        case FRIDAY -> "Thứ 6";
+                        case SATURDAY -> "Thứ 7";
+                        case SUNDAY -> "Chủ nhật";
+                    };
+                    soLuongTheoThu.put(tenThu, soLuongTheoThu.get(tenThu) + 1);
+                }
+            }
+            else if (tgCheckIn!=null && hd.getTrangthai() == 1) {  
+                // đang phục vụ, KHÔNG dùng tgCheckOut
+                LocalDate ngay = tgCheckIn.toLocalDate();
+                if (!ngay.isBefore(ngayDauTuan) && !ngay.isAfter(ngayCuoiTuan)) {
+                    DayOfWeek dow = tgCheckIn.getDayOfWeek();
                     String tenThu = switch (dow) {
                         case MONDAY -> "Thứ 2";
                         case TUESDAY -> "Thứ 3";
@@ -466,6 +483,8 @@ public class ThongKeController {
         }
         double tong = 0;
         int tongHoaDon = 0;
+        double tongHuy = 0;
+        int soHoaDonHuy = 0;
         int in = 0, out = 0, vip = 0;
         double tongIn = 0, tongOut = 0, tongVip = 0;
 
@@ -478,6 +497,11 @@ public class ThongKeController {
             boolean matchThang = (thang==null) || (ngayLap.getMonthValue() == thang);
             boolean matchNgay = (ngay==null) || (ngayLap.getDayOfMonth()== ngay);
             if(matchNam && matchThang && matchNgay){
+                if (hd.getTrangthai() == 3) {
+                    soHoaDonHuy++;
+                    tongHuy += tongTienSau;
+                    continue;
+                }
                 tong+= tongTienSau;
                 tongHoaDon++;
                 String kv = hd.getBan().getKhuVuc().getTenKhuVuc();
@@ -516,6 +540,9 @@ public class ThongKeController {
 
         lblDoanhThu.setText(String.format("%,.0f VNĐ", tong));
         lblTongHoaDon.setText(tongHoaDon + "");
+        lblHoaDonHuy.setText(soHoaDonHuy + " HD");
+        lblTongTienHuy.setText(String.format("%,.0f VNĐ", tongHuy));
+
         lblTiLe.setText(String.format("(%.1f%%)", tile));
         lblKhuVucIn.setText(String.format("IN: %.1f tr VNĐ (%d hd)", tongIn / 1_000_000.0, in));
         lblKhuVucOut.setText(String.format("OUT: %.1f tr VNĐ (%d hd)", tongOut / 1_000_000.0, out));
