@@ -280,7 +280,8 @@ public class ChiTietHDDAO {
                 AND p4.maMon IS NULL
                 AND p4.ngayApDung <= hd.tgLapHD
         )
-    WHERE hd.tgCheckIn = GETDATE();
+    WHERE hd.tgCheckin >= CAST(GETDATE() AS DATE)
+		AND hd.tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
         """;
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
