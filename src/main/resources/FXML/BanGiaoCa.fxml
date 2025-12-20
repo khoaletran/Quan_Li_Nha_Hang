@@ -161,7 +161,7 @@
                 <TextField fx:id="txtTGVC" editable="false" promptText="..." style="-fx-opacity: 1;"/>
 
                 <Label styleClass="label_form-section" text="Số hóa đơn"/>
-                <TextField fx:id="txtsLHD"/>
+                <TextField fx:id="txtsLHD" editable="false"/>
 
                 <Label styleClass="label_form-section" text="Số tiền mặt"/>
                 <TextField fx:id="txtSoTienMat"/>

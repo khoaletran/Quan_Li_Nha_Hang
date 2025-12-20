@@ -82,17 +82,14 @@ public class BanGiaoCaController {
         int slHoaDon = 0;
         double tongTienMat = 0;
         double tongTienCK = 0;
-        double tienHoaDon = 0;
 
         vboxHoaDon.getChildren().clear();
 
         if (nhanVien == null || thoiGianVaoCa == null) return;
 
-        List<HoaDon> danhSach = hoaDonDAO.getTheoMaNV(nhanVien.getMaNV());
+//        List<HoaDon> danhSach = hoaDonDAO.getTheoMaNV(nhanVien.getMaNV());
+        List<HoaDon> danhSach = hoaDonDAO.getAll();
         for (HoaDon hd : danhSach) {
-
-            // Lọc theo trạng thái
-            //if (hd.getTrangthai() == 0) continue;
 
             LocalDateTime tgCheckout = hd.getTgCheckOut();
             if (tgCheckout == null) continue;
@@ -101,22 +98,12 @@ public class BanGiaoCaController {
             if (!tgCheckout.toLocalDate().equals(thoiGianVaoCa.toLocalDate())) continue;
             if (!tgCheckout.isAfter(thoiGianVaoCa)) continue;
 
-            List<ChiTietHoaDon> dsCTHD = ChiTietHDDAO.getByMaHD(hd.getMaHD());
-
-            for (ChiTietHoaDon ct : dsCTHD) {
-                tienHoaDon += ct.getMon().getGiaGoc() * ct.getSoLuong();
-            }
-
-            if (hd.getKhuyenMai() != null) {
-                double giamGia = hd.getKhuyenMai().getPhanTRamGiamGia();
-                tienHoaDon = tienHoaDon * (1 - giamGia / 100.0);
-            }
-            tienHoaDon = tienHoaDon * 1.1;
+            double tienHoaDonCuoiCung = hd.getTongTienSau();
 
             if (hd.isKieuThanhToan()) {
-                tongTienCK += tienHoaDon; // Chuyển khoản
+                tongTienCK += tienHoaDonCuoiCung; // Chuyển khoản
             } else {
-                tongTienMat += tienHoaDon; // Tiền mặt
+                tongTienMat += tienHoaDonCuoiCung; // Tiền mặt
             }
 
             String maBan = hd.getBan().getMaBan();
@@ -157,7 +144,7 @@ public class BanGiaoCaController {
 
             Label lblTongTien = new Label(NumberFormat
                     .getInstance(new Locale("vi", "VN"))
-                    .format(tienHoaDon) + " đ");
+                    .format(tienHoaDonCuoiCung) + " đ");
             lblTongTien.getStyleClass().add("invoice-total");
 
             HBox left = new HBox(10, imgBan, boxThongTin);
@@ -169,10 +156,6 @@ public class BanGiaoCaController {
             HBox card = new HBox(10, left, spacer, lblTongTien);
             card.setAlignment(Pos.CENTER_LEFT);
             card.getStyleClass().add("invoice-card");
-
-//            HBox card = new HBox(10, imgBan, boxThongTin);
-//            card.setAlignment(Pos.CENTER_LEFT);
-//            card.getStyleClass().add("invoice-card");
             VBox.setMargin(card, new Insets(5, 0, 5, 0));
 
             vboxHoaDon.getChildren().add(card);
@@ -180,6 +163,7 @@ public class BanGiaoCaController {
         }
         NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
         lblsoHD.setText("Số hóa đơn: " + slHoaDon);
+        txtsLHD.setText(String.valueOf(slHoaDon));
         lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
         lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
         lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
@@ -221,7 +205,7 @@ public class BanGiaoCaController {
         PhieuKetCaDAO phieuKCDAO = new PhieuKetCaDAO();
         String maPhieu = tuSinhMaPhieuKC();
 
-        if (isEmpty(txtsLHD, "Số hóa đơn không được để trống!")) return;
+//        if (isEmpty(txtsLHD, "Số hóa đơn không được để trống!")) return;
         if (isEmpty(txtSoTienMat, "Số tiền mặt không được để trống!")) return;
         if (isEmpty(txtSoTienCK, "Số tiền chuyển khoản không được để trống!")) return;
         if (isEmpty(txtTongTien, "Tổng tiền không được để trống!")) return;
