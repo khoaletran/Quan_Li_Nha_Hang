@@ -235,13 +235,17 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
         // Button
         Button actionBtn = new Button("Xem hướng dẫn");
         actionBtn.getStyleClass().add("help-card-button");
+        //moi
+        actionBtn.setUserData(card.getColor());
+
 
         // Màu động từ model
-        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+//        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+        actionBtn.setStyle("-card-color: " + card.getColor() + ";");
 
         // Sự kiện
         actionBtn.setOnAction(e -> moHuongDanChiTiet(card));
-        cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
+//        cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
 
         cardBox.getChildren().addAll(
                 iconLabel,
@@ -438,6 +442,7 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
         dialog.setScene(scene);
         dialog.setResizable(false);
         dialog.showAndWait();
+
     }
 
     private VBox taoNoiDungHuongDanVBox(HelpCard card) {

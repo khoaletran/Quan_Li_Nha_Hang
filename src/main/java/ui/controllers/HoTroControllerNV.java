@@ -226,13 +226,16 @@ public class HoTroControllerNV implements Initializable {
         // Button
         Button actionBtn = new Button("Xem hướng dẫn");
         actionBtn.getStyleClass().add("help-card-button");
+        actionBtn.setUserData(card.getColor());
 
         // Màu động từ model
-        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+//        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+        actionBtn.setStyle("-card-color: " + card.getColor() + ";");
+
 
         // Sự kiện
         actionBtn.setOnAction(e -> moHuongDanChiTiet(card));
-        cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
+//        cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
 
         cardBox.getChildren().addAll(
                 iconLabel,
