@@ -19,8 +19,10 @@ import ui.AlertCus;
 
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class ChinhSachController {
@@ -32,7 +34,9 @@ public class ChinhSachController {
     private Button btnXacNhanBanDatTruoc;
     @FXML
     private Button btnXacNhanBanDoi;
-
+    DecimalFormatSymbols symbols =
+            new DecimalFormatSymbols(new Locale("vi", "VN"));
+    DecimalFormat df = new DecimalFormat("#,###", symbols);
     private final ThoiGianDoiBanDAO tgdbDAO = new ThoiGianDoiBanDAO();
 
 
@@ -670,7 +674,7 @@ private void xacNhanPhanTramLoi() {
         txtGiaBan.setText(String.valueOf((long) giaBan));
     } 
     private void addCurrencyFormat(TextField tf, boolean skipIfPhanTram) {
-        DecimalFormat df = new DecimalFormat("#,###");
+    
         tf.textProperty().addListener((obs, oldText, newText) -> {
             if ((skipIfPhanTram && rbPhanTram.isSelected()) || newText == null || newText.isEmpty()) return;
 
