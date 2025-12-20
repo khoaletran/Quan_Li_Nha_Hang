@@ -676,7 +676,8 @@ public class HoaDonDAO {
         JOIN Ban b ON b.maBan = hd.maBan
         JOIN LoaiBan lb ON lb.maLoaiBan = b.maLoaiBan
         JOIN KhuVuc kv ON kv.maKhuVuc = b.maKhuVuc
-        WHERE hd.tgCheckin = GETDATE()
+        WHERE hd.tgCheckin >= CAST(GETDATE() AS DATE)
+		AND hd.tgCheckin < DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
         ORDER BY hd.tgLapHD
     """;
 

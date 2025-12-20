@@ -63,7 +63,9 @@
     -fx-background-radius: 20;
     -fx-padding: 8 20;
     -fx-font-weight: bold;
+    -fx-background-color: -card-color;
 }
+
 
 .help-card-button:hover {
     -fx-background-color: #2c3e50;

@@ -226,13 +226,16 @@ public class HoTroControllerNV implements Initializable {
         // Button
         Button actionBtn = new Button("Xem hướng dẫn");
         actionBtn.getStyleClass().add("help-card-button");
+        actionBtn.setUserData(card.getColor());
 
         // Màu động từ model
-        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+//        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+        actionBtn.setStyle("-card-color: " + card.getColor() + ";");
+
 
         // Sự kiện
         actionBtn.setOnAction(e -> moHuongDanChiTiet(card));
-        cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
+//        cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
 
         cardBox.getChildren().addAll(
                 iconLabel,
@@ -338,126 +341,7 @@ public class HoTroControllerNV implements Initializable {
     }
 
     private void moHuongDanChiTiet(HelpCard card) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Hướng dẫn chi tiết");
-        alert.setHeaderText("Hướng dẫn: " + card.getTitle());
-
-        // Nội dung hướng dẫn chi tiết cho từng module
-        String content = "";
-        switch (card.getTag()) {
-            case "dashboard":
-                content = "Dashboard cung cấp:\n\n" +
-                        "- Thông tin nhân viên đăng nhập\n" +
-                        "- Thông báo các đơn đặt bàn, check in\n" +
-                        "- Thống kê số đơn\n" +
-                        "- Thống kê khu vực\n" +
-                        "- Thống kê doanh thu và số khách\n" +
-                        "- Biểu đồ top 5 món bán chạy\n" +
-                        "- Biểu đồ lượng khách theo giờ\n";
-                break;
-            case "khachhang":
-                content = "Quản lý thành viên:\n\n" +
-                        "1. Tự động thêm khách hàng mới khi đặt bàn\n" +
-                        "2. Thêm khách hàng bằng tay:\n" +
-                        "   - Bước 1: Nhấn nút + bên góc phải trên màn hình\n" +
-                        "   - Bước 2: Nhập thông tin khách hàng\n" +
-                        "   - Bước 3: Nhấn thêm\n" +
-                        "3. Sửa khách hàng\n" +
-                        "   - Bước 1: Nhấn vào khách hàng cần sửa\n" +
-                        "   - Bước 2: Nhập thông tin mới vào form\n" +
-                        "   - Bước 3: Nhấn xác nhận\n" +
-                        "4. Tìm kiếm khách hàng\n" +
-                        "   - Bước 1: Nhập sdt hoặc mã khách hàng vào ô tìm kiếm\n" +
-                        "   - Bước 2: Nhấn tìm kiếm\n";
-                break;
-            case "datban":
-                content = "Quản lý đặt bàn:\n\n" +
-                        "1. Đặt bàn\n" +
-                        "   - Bước 1: Nhập số lượng người và chọn thời gian đặt bàn\n" +
-                        "   - Bước 2: Chọn loại bàn phù hợp\n" +
-                        "   - Bước 3: Hệ thống tự chuyển sang trang chọn món\n" +
-                        "   - Bước 4: Nhập thông tin khách hàng\n" +
-                        "   - Bước 5: Chọn món ăn và số lượng\n" +
-                        "   - Bước 6: Nhấn đặt bàn\n" +
-                        "2. Check In\n" +
-                        "   - Bước 1: Trang này hiển thị 2 danh sách đơn đặt trước và danh sách chờ\n" +
-                        "   - Bước 2: Chọn đơn cần check in, xem thông tin đơn ở from bên phải\n" +
-                        "   - Bước 3: Nhấn checkin\n" +
-                        "   - Bước 4: Nhập các thông tin cần lọc để tìm kiếm đơn ở bên dưới trang\n" +
-                        "3. Check Out\n" +
-                        "   - Bước 1: Trang hiển thị danh sách các hóa đơn chưa check out\n" +
-                        "   - Bước 2: Nhập thông tin tìm kiếm đơn vào ô tìm kiếm trên cùng\n" +
-                        "   - Bước 3: Chọn một đơn cầnc check out\n" +
-                        "   - Bước 4: Khi chọn đơn sẽ hiển thị danh sách các món ăn bên dưới và thông tin đơn hàng bên phải\n" +
-                        "   - Bước 5: Chọn phương thức thanh toán chuyển khoản hay tiền mặt\n" +
-                        "   - Bước 6: Thực hiện thanh toán và nhấn nút thanh toán\n" +
-                        "4. Cập nhật đơn bàn\n" +
-                        "   - Bước 1: Trang hiển thị danh sách các đơn đặt trước và đơn đã nhận\n" +
-                        "   - Bước 2: Chọn một đơn sẽ hiển thị thông tin đơn bên phải\n" +
-                        "   - Bước 3: Có thể thay đổi món ăn cho đơn, nhưng không thể xóa món của đơn đã nhận\n" +
-                        "   - Bước 4: Chỉ có thể hủy được đơn đặt trước";
-                break;
-            case "hoadon":
-                content = "Quản lý hóa đơn:\n" +
-                        "1. Trang hiển thị danh sách các hoá đơn:\n" +
-                        "   - Có 3 trạng thái: Đặt trước, đang phục vụ, đã thanh toán\n" +
-                        "2. Khi nhấn vào đơn sẽ hiển thị thông tin đơn đó bên phải\n" +
-                        "   - Bước 1: Nhấn nút in hóa đơn nếu muốn\n" +
-                        "3. Tìm kiếm hóa đơn\n" +
-                        "   - Bước 1: Nhập thông tin đơn cần tìm\n" +
-                        "   - Bước 2: Nhấn nút tìm kiếm\n" +
-                        "   - Bước 3: Có thể nhấn nút xóa trắng để nhập thông tin khác\n";
-                break;
-            case "caidat":
-                content = "Vấn đề tài khoản:\n" +
-                        "1. Có thể thay đổi mật khẩu bằng cách nhấn nút đổi mật khẩu ở trang dashboard\n" +
-                        "2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi\n";
-                break;
-            case "phimtat":
-                content = "Check in:\n" +
-                        "- Ctrl F : tìm số điện thoại\n" +
-                        "- Ctrl B: Check in\n" +
-                        "- Ctrl L: Clear thông tin\n" +
-                        "\n" +
-                        "Check out:\n" +
-                        "- Ctrl F: tìm kiếm hóa đơn\n" +
-                        "- Ctrl B: check out\n" +
-                        "\n" +
-                        "Chọn món:\n" +
-                        "- Ctrl F: Tìm kiếm món ăn\n" +
-                        "- Ctrl D: Điền sđt khách hàng\n" +
-                        "- Ctrl B: Đặt bàn\n" +
-                        "\n" +
-                        "Đặt bàn:\n" +
-                        "- Ctrl D: Nhập số lượng chỗ\n" +
-                        "\n" +
-                        "QL Thành Viên:\n" +
-                        "- Ctrl F: Tìm kiếm thành viên\n" +
-                        "- Ctrl N: Thêm thành viên mới\n" +
-                        "\n" +
-                        "Tra cứu hóa đơn:\n" +
-                        "- Ctrl D: Nhập số điện thoại\n" +
-                        "- Ctrl F: Tìm kiếm\n" +
-                        "- Ctrl L: Xóa trắng\n" +
-                        "- Ctrl P: In hóa đơn\n" +
-                        "\n" +
-                        "Chuyển Trang NV:\n" +
-                        "Phím 1: Dashboard\n" +
-                        "Phím 2: \n" +
-                        "Phím 3: QL thành viên\n" +
-                        "Phím 4: Tra cứu hóa đơn\n" +
-                        "Phím 5: Hỗ trợ\n" +
-                        "Phím 6: Bàn giao ca\n" +
-                        "Phím F1: Đặt bàn\n" +
-                        "Phím F2: Check in\n" +
-                        "Phím F3: Check out\n" +
-                        "Phím F4: QL Đặt bàn\n";
-                break;
-            default:
-                content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
-
-        }
-        showCustomDialog("Hướng dẫn: " + card.getTitle(), content);
+        showCustomDialog(card.getTitle(), taoNoiDungHuongDanVBox(card));
     }
 
     // Inner classes for data model
@@ -516,51 +400,215 @@ public class HoTroControllerNV implements Initializable {
         }
     }
 
-    private void showCustomDialog(String title, String content) {
+    private void showCustomDialog(String title, VBox contentBox) {
 
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setTitle(title);
+        dialog.setTitle("Hướng dẫn: " + title);
 
-        // ===== Root =====
         VBox root = new VBox(15);
         root.setPadding(new Insets(25));
         root.setAlignment(Pos.CENTER);
-        root.getStyleClass().add("custom-dialog-root");
 
-        // ===== Title =====
-        Label lblTitle = new Label(title);
-        lblTitle.getStyleClass().add("custom-dialog-title");
+        Label lblTitle = new Label("Hướng dẫn: " + title);
+        lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        // ===== Content =====
-        Label lblContent = new Label(content);
-        lblContent.setWrapText(true);
-        lblContent.setMaxWidth(450);
-        lblContent.getStyleClass().add("custom-dialog-content");
-
-        // ===== ScrollPane =====
-        ScrollPane scrollPane = new ScrollPane(lblContent);
+        ScrollPane scrollPane = new ScrollPane(contentBox);
         scrollPane.setFitToWidth(true);
-        scrollPane.setPrefViewportHeight(300);
-        scrollPane.getStyleClass().add("custom-dialog-scroll");
+        scrollPane.setPrefViewportHeight(320);
 
-        // ===== Button =====
         Button btnClose = new Button("Đóng");
         btnClose.getStyleClass().add("custom-dialog-button");
         btnClose.setOnAction(e -> dialog.close());
 
-        // ===== Add =====
         root.getChildren().addAll(lblTitle, scrollPane, btnClose);
 
-        Scene scene = new Scene(root, 520, 450);
+        Scene scene = new Scene(root, 550, 480);
         scene.getStylesheets().add(
                 getClass().getResource("/CSS/hotronv.css").toExternalForm()
         );
-        dialog.setScene(scene);
 
+
+
+        dialog.setScene(scene);
         dialog.setResizable(false);
         dialog.showAndWait();
     }
+    private VBox taoNoiDungHuongDanVBox(HelpCard card) {
+
+        VBox box = new VBox(6);
+        box.setPadding(new Insets(10));
+        box.setMaxWidth(480);
+
+        switch (card.getTag()) {
+
+            case "dashboard":
+                box.getChildren().addAll(
+                        tieuDeLbl("Dashboard cung cấp:"),
+
+                        noiDungLbl("- Thông tin nhân viên đăng nhập"),
+                        noiDungLbl("- Thông báo các đơn đặt bàn, check in"),
+                        noiDungLbl("- Thống kê số đơn"),
+                        noiDungLbl("- Thống kê khu vực"),
+                        noiDungLbl("- Thống kê doanh thu và số khách"),
+                        noiDungLbl("- Biểu đồ top 5 món bán chạy"),
+                        noiDungLbl("- Biểu đồ lượng khách theo giờ")
+                );
+                break;
+
+            case "khachhang":
+                box.getChildren().addAll(
+                        tieuDeLbl("Quản lý thành viên:"),
+
+                        mucLonLbl("1. Tự động thêm khách hàng mới khi đặt bàn"),
+
+                        mucLonLbl("2. Thêm khách hàng bằng tay:"),
+                        noiDungLbl("- Bước 1: Nhấn nút + bên góc phải trên màn hình"),
+                        noiDungLbl("- Bước 2: Nhập thông tin khách hàng"),
+                        noiDungLbl("- Bước 3: Nhấn thêm"),
+
+                        mucLonLbl("3. Sửa khách hàng"),
+                        noiDungLbl("- Bước 1: Nhấn vào khách hàng cần sửa"),
+                        noiDungLbl("- Bước 2: Nhập thông tin mới vào form"),
+                        noiDungLbl("- Bước 3: Nhấn xác nhận"),
+
+                        mucLonLbl("4. Tìm kiếm khách hàng"),
+                        noiDungLbl("- Bước 1: Nhập sdt hoặc mã khách hàng vào ô tìm kiếm"),
+                        noiDungLbl("- Bước 2: Nhấn tìm kiếm")
+                );
+                break;
+
+            case "datban":
+                box.getChildren().addAll(
+                        tieuDeLbl("Quản lý đặt bàn:"),
+
+                        mucLonLbl("1. Đặt bàn"),
+                        noiDungLbl("- Bước 1: Nhập số lượng người và chọn thời gian đặt bàn"),
+                        noiDungLbl("- Bước 2: Chọn loại bàn phù hợp"),
+                        noiDungLbl("- Bước 3: Hệ thống tự chuyển sang trang chọn món"),
+                        noiDungLbl("- Bước 4: Nhập thông tin khách hàng"),
+                        noiDungLbl("- Bước 5: Chọn món ăn và số lượng"),
+                        noiDungLbl("- Bước 6: Nhấn đặt bàn"),
+
+                        mucLonLbl("2. Check In"),
+                        noiDungLbl("- Bước 1: Hiển thị danh sách đơn đặt trước và danh sách chờ"),
+                        noiDungLbl("- Bước 2: Chọn đơn cần check in, xem thông tin bên phải"),
+                        noiDungLbl("- Bước 3: Nhấn check in"),
+                        noiDungLbl("- Bước 4: Nhập thông tin lọc để tìm kiếm đơn"),
+
+                        mucLonLbl("3. Check Out"),
+                        noiDungLbl("- Bước 1: Trang hiển thị danh sách hóa đơn chưa check out"),
+                        noiDungLbl("- Bước 2: Nhập thông tin tìm kiếm vào ô tìm kiếm trên cùng"),
+                        noiDungLbl("- Bước 3: Chọn đơn cần check out"),
+                        noiDungLbl("- Bước 4: Khi chọn đơn sẽ hiển thị danh sách các món ăn bên dưới và thông tin đơn hàng bên phải"),
+                        noiDungLbl("- Bước 5: Chọn phương thức thanh toán"),
+                        noiDungLbl("- Bước 6: Thực hiện thanh toán và Nhấn thanh toán"),
+
+                        mucLonLbl("4. Cập nhật đơn bàn"),
+                        noiDungLbl("- Bước 1: Trang hiển thị đơn đặt trước và đơn đã nhận"),
+                        noiDungLbl("- Bước 2: Chọn đơn để xem thông tin ở form bên phải"),
+                        noiDungLbl("- Bước 3: Có thể đổi món, nhưng không thể xóa món của đơn đã nhận"),
+                        noiDungLbl("- Bước 4: Chỉ hủy được đơn đặt trước")
+                );
+                break;
+
+            case "hoadon":
+                box.getChildren().addAll(
+                        tieuDeLbl("Quản lý hóa đơn:"),
+
+                        mucLonLbl("1. Trang hiển thị danh sách các hóa đơn"),
+                        noiDungLbl("- Có 3 trạng thái: Đặt trước, đang phục vụ, đã thanh toán"),
+
+                        mucLonLbl("2. Xem chi tiết hóa đơn"),
+                        noiDungLbl("- Nhấn vào đơn để xem thông tin bên phải"),
+                        noiDungLbl("- Nhấn nút in hóa đơn nếu cần"),
+
+                        mucLonLbl("3. Tìm kiếm hóa đơn"),
+                        noiDungLbl("- Bước 1: Nhập thông tin cần tìm"),
+                        noiDungLbl("- Bước 2: Nhấn tìm kiếm"),
+                        noiDungLbl("- Bước 3: Có thể xóa trắng để tìm lại")
+                );
+                break;
+
+            case "caidat":
+                box.getChildren().addAll(
+                        tieuDeLbl("Vấn đề tài khoản:"),
+
+                        noiDungLbl("1. Có thể đổi mật khẩu tại trang dashboard"),
+                        noiDungLbl("2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi")
+                );
+                break;
+
+            case "phimtat":
+                box.getChildren().addAll(
+                        tieuDeLbl("Check in:"),
+                        noiDungLbl("- Ctrl + F : Tìm số điện thoại"),
+                        noiDungLbl("- Ctrl + B : Check in"),
+                        noiDungLbl("- Ctrl + L : Clear thông tin"),
+
+                        tieuDeLbl("Check out:"),
+                        noiDungLbl("- Ctrl + F : Tìm kiếm hóa đơn"),
+                        noiDungLbl("- Ctrl + B : Check out"),
+
+                        tieuDeLbl("Chọn món:"),
+                        noiDungLbl("- Ctrl + F : Tìm món ăn"),
+                        noiDungLbl("- Ctrl + D : Điền SĐT khách hàng"),
+                        noiDungLbl("- Ctrl + B : Đặt bàn"),
+
+                        tieuDeLbl("Đặt bàn:"),
+                        noiDungLbl("- Ctrl + D : Nhập số lượng chỗ"),
+
+                        tieuDeLbl("QL Thành Viên:"),
+                        noiDungLbl("- Ctrl + F : Tìm kiếm"),
+                        noiDungLbl("- Ctrl + N : Thêm mới"),
+
+                        tieuDeLbl("Tra cứu hóa đơn:"),
+                        noiDungLbl("- Ctrl + D : Nhập số điện thoại"),
+                        noiDungLbl("- Ctrl + F : Tìm kiếm"),
+                        noiDungLbl("- Ctrl + L : Xóa trắng"),
+                        noiDungLbl("- Ctrl + P : In hóa đơn"),
+
+                        tieuDeLbl("Chuyển trang NV:"),
+                        noiDungLbl("Phím 1 : Dashboard"),
+                        noiDungLbl("Phím 3 : QL thành viên"),
+                        noiDungLbl("Phím 4 : Tra cứu hóa đơn"),
+                        noiDungLbl("Phím 5 : Hỗ trợ"),
+                        noiDungLbl("Phím 6 : Bàn giao ca"),
+                        noiDungLbl("F1 : Đặt bàn"),
+                        noiDungLbl("F2 : Check in"),
+                        noiDungLbl("F3 : Check out"),
+                        noiDungLbl("F4 : QL Đặt bàn")
+                );
+                break;
+
+            default:
+                box.getChildren().add(
+                        noiDungLbl("Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.")
+                );
+        }
+
+        return box;
+    }
+
+    private Label tieuDeLbl(String text) {
+        Label lb = new Label(text);
+        lb.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        return lb;
+    }
+
+    private Label mucLonLbl(String text) {
+        Label lb = new Label(text);
+        lb.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2980b9;");
+        return lb;
+    }
+
+    private Label noiDungLbl(String text) {
+        Label lb = new Label(text);
+        lb.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
+        lb.setWrapText(true);
+        return lb;
+    }
+
 
 
 

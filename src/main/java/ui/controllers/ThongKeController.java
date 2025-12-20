@@ -541,8 +541,12 @@ public class ThongKeController {
         lblDoanhThu.setText(String.format("%,.0f VNĐ", tong));
         lblTongHoaDon.setText(tongHoaDon + "");
         lblHoaDonHuy.setText(soHoaDonHuy + " HD");
-        lblTongTienHuy.setText(String.format("%,.0f VNĐ", tongHuy));
-
+        if(tongHuy<=0){
+            lblTongTienHuy.setText(String.format("%,.0f VNĐ", tongHuy));
+        }
+        else {
+            lblTongTienHuy.setText(String.format("-%,.0f VNĐ", tongHuy));
+        }
         lblTiLe.setText(String.format("(%.1f%%)", tile));
         lblKhuVucIn.setText(String.format("IN: %.1f tr VNĐ (%d hd)", tongIn / 1_000_000.0, in));
         lblKhuVucOut.setText(String.format("OUT: %.1f tr VNĐ (%d hd)", tongOut / 1_000_000.0, out));

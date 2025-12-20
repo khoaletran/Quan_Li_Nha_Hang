@@ -192,6 +192,9 @@ public class DashboardController {
             double tongDoanhThu = 0;
 
             for (Map.Entry<HoaDon, Double> entry : danhSach.entrySet()) {
+                if(entry.getKey().getTrangthai()==3){
+                    continue;
+                }
                 HoaDon hd = entry.getKey();
                 double tongSau = entry.getValue();
 

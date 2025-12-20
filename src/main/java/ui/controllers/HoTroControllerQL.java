@@ -235,13 +235,17 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
         // Button
         Button actionBtn = new Button("Xem hướng dẫn");
         actionBtn.getStyleClass().add("help-card-button");
+        //moi
+        actionBtn.setUserData(card.getColor());
+
 
         // Màu động từ model
-        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+//        actionBtn.setStyle("-fx-background-color: " + card.getColor() + ";");
+        actionBtn.setStyle("-card-color: " + card.getColor() + ";");
 
         // Sự kiện
         actionBtn.setOnAction(e -> moHuongDanChiTiet(card));
-        cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
+//        cardBox.setOnMouseClicked(e -> moHuongDanChiTiet(card));
 
         cardBox.getChildren().addAll(
                 iconLabel,
@@ -347,157 +351,7 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
     }
 
     private void moHuongDanChiTiet(HelpCard card) {
-        // TODO: Implement detailed guide opening
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Hướng dẫn chi tiết");
-        alert.setHeaderText("Hướng dẫn: " + card.getTitle());
-
-        // Nội dung hướng dẫn chi tiết cho từng module
-        String content = "";
-        switch (card.getTag()) {
-            case "dashboard":
-                content = "Dashboard cung cấp:\n" +
-                        "- Thông tin nhân viên đăng nhập\n" +
-                        "- Thông báo các đơn đặt bàn, check in\n" +
-                        "- Thống kê số đơn\n" +
-                        "- Thống kê khu vực\n" +
-                        "- Thống kê doanh thu và số khách\n" +
-                        "- Biểu đồ top 5 món bán chạy\n" +
-                        "- Biểu đồ lượng khách theo giờ\n";
-                break;
-            case "khuyenmai":
-                content = "Quản lý khuyến mãi:\n" +
-                        "1. Trang hiện danh sách các khuyến mãi\n" +
-                        "   - Có 3 loại khuyến mãi: Chưa tới hạn màu vàng, hết hạn màu đỏ và đang trong hạn màu xanh\n" +
-                        "2. Thêm khuyến mãi\n" +
-                        "   - Bước 1: Nhập các thông tin khuyến mãi vào form bên phải\n" +
-                        "   - Bước 2: Nhấn nút thêm\n" +
-                        "3. Khi nhấn vào một khuyến mãi\n" +
-                        "   - Bước 1: Thông tin khuyến mãi sẽ hiển thị bên phải\n" +
-                        "   - Bước 2: Có thể nhập thông tin mới và nhấn nút sửa\n" +
-                        "   - Bước 3: Có thể nhấn nút xóa khuyến mãi\n" +
-                        "   - Bước 4: Có thể nhấn nút in QR cho khuyến mãi\n" +
-                        "4. Tìm kiếm khuyến mãi\n" +
-                        "   - Bước 1: Nhập thông tin khuyến mãi cần tìm ở bộ lọc bên dưới\n" +
-                        "   - Bước 2: Nhấn nút tìm kiếm\n" +
-                        "   - Bước 3: Nhấn nút xóa trắng để làm mới bộ lọc";
-                break;
-            case "nhanvien":
-                content = "Quản lý nhân viên:\n" +
-                        "1. Trang hiển thị danh sách nhân viên\n" +
-                        "2. Thêm nhân viên\n" +
-                        "   - Bước 1: Nhấn nút dấu + cột bên góc phải trang\n" +
-                        "   - Bước 2: Nhập thông tin nhân viên vào form bên phải\n" +
-                        "   - Bước 3: Nhấn nút xác nhận\n" +
-                        "3. Khi nhấn vào một nhân viên\n" +
-                        "   - Bước 1: Nhập thông tin mới cần sửa vào formn\n" +
-                        "   - Bước 2: Nhấn nút lưu thay đổi\n" +
-                        "   - Bước 3: Có thể nhấn nút xóa nhân viên\n" +
-                        "4. Tìm kiếm nhân viên\n" +
-                        "   - Bước 1: Nhập thông tin nhân viên cần tìm vào ô tìm kiếm ở trên\n" +
-                        "   - Bước 2: Nhấn nút tìm\n";
-                break;
-            case "menu":
-                content = "Quản lý menu:\n" +
-                        "1. Trang hiển thị danh sách món ăn\n" +
-                        "2. Thêm món mới\n" +
-                        "   - Bước 1: Nhấn nút dấu + cột bên góc phải trang\n" +
-                        "   - Bước 2: Nhập thông tin món vào form bên phải\n" +
-                        "   - Bước 3: Nhấn nút thêm mới\n" +
-                        "3. Khi nhấn vào một món ăn\n" +
-                        "   - Bước 1: Nhập thông tin mới cần sửa vào formn\n" +
-                        "   - Bước 2: Nhấn nút lưu thay đổi\n" +
-                        "   - Bước 3: Có thể nhấn nút xóa món ăn\n" +
-                        "4. Tìm kiếm món ăn\n" +
-                        "   - Bước 1: Nhập thông tin món cần tìm vào ô tìm kiếm ở trên\n" +
-                        "   - Bước 2: Nhấn nút tìm\n" +
-                        "   - Bước 3: Lọc các loại món ăn ở ô combobox trên thanh tìm kiếm\n";
-                break;
-            case "ban":
-                content = "Quản lý bàn:\n" +
-                        "1. Trang hiển thị danh sách các bàn của nhà hàng\n" +
-                        "2. Thêm bàn mới\n" +
-                        "   - Bước 1: Nhấn nút dấu + cột bên góc phải trang\n" +
-                        "   - Bước 2: Form thông tin sẽ hiện lên và nhập thông tin bàn vào form\n" +
-                        "   - Bước 3: Nhấn nút thêm hoặc hủy (nếu không muốn thêm nữa)\n" +
-                        "3. Tìm kiếm bàn\n" +
-                        "   - Bước 1: Nhập thông tin bàn cần tìm vào ô tìm kiếm ở trên\n" +
-                        "   - Bước 2: Nhấn nút tìm\n" +
-                        "   - Bước 3: Lọc các loại bàn hoặc khu vực ở ô combobox trên thanh tìm kiếm\n";
-                break;
-            case "chinhsach":
-                content = "Quản lý chính sách:\n" +
-                        "1. Cài đặt thời gian đợi bàn\n" +
-                        "   - Bước 1: Nhập thời gian bàn đặt trước hoặc bàn đợi\n" +
-                        "   - Bước 2: Nhấn xác nhận\n" +
-                        "2. Cập nhật tiền cọc\n" +
-                        "   - Bước 1: Chọn loại bàn và khu vực ở bên phải\n" +
-                        "   - Bước 2: Thông tin loại bàn đã chọn sẽ hiện trên form thông tin bên trái\n" +
-                        "   - Bước 3: Nhập các thông tin cần sửa và nhấn xác nhận nếu muốn sửa\n" +
-                        "   - Bước 4: Có thể nhấn nút xóa để xóa cọc\n" +
-                        "   - Bước 5: Có thể nhấn nút xóa trắng để xóa dữ liệu trong form\n" +
-                        "3. Cập nhật phần trăm lời cho món\n" +
-                        "   - Bước 1: Chọn món ăn ở bên phải\n" +
-                        "   - Bước 2: Thông tin món ăn đã chọn sẽ hiện trên form thông tin bên trái\n" +
-                        "   - Bước 3: Nhập các thông tin cần sửa và nhấn xác nhận nếu muốn sửa\n" +
-                        "   - Bước 4: Có thể nhấn nút xóa trắng để xóa dữ liệu trong form\n";
-                break;
-            case "thongke":
-                content = "Báo cáo thống kê:\n\n" +
-                        "1. Trang hiển thị danh sách món ăn ở góc trái trên\n" +
-                        "   - Bước 1: Hiển thị các món ăn và phân trăm bán ra so với tháng, năm trước\n" +
-                        "   - Bước 2: Có thể thay đổi thời gian để so sánh ở 2 combobox bên trên\n" +
-                        "   - Bước 3: Nhập thông tin để tìm món ăn ở ô tìm kiếm bên trên\n" +
-                        "   - Bước 4: Có thể nhấn nút reset để quay lại thời gian hiện tại và hiển thị tất cả món\n" +
-                        "2. Trang hiển thị thông tin thống kê đối với tổng hóa đơn, doanh thu, doanh thu so với tháng trước, khu vực\n" +
-                        "   - Bước 1: Có thể lọc thống kê theo ngày tháng năm ở các combobox bên trên\n" +
-                        "   - Bước 2: Có thể nhấn nút reset để quay lại ngày hiện tại\n" +
-                        "3. Phía dưới là 2 biểu đồ thống kê doanh thu theo giờ và số lượng đơn theo ngày\n" +
-                        "   - Bước 1: Có thể điều chỉnh thời gian của 2 biểu đồ bằng ô combobox ở trên\n";
-                break;
-            case "caidat":
-                content = "Vấn đề tài khoản:\n" +
-                        "1. Có thể thay đổi mật khẩu bằng cách nhấn nút đổi mật khẩu ở trang dashboard\n" +
-                        "2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi\n";
-                break;
-            case "phimtat":
-                content = "Chính sách:\n" +
-                        "- Ctrl F: tìm kiếm món ăn\n" +
-                        "\n" +
-                        "Khuyến Mãi\n" +
-                        "- Ctrl F: Tìm kiếm khuyến mãi\n" +
-                        "\n" +
-                        "QL Bàn:\n" +
-                        "- Ctrl F: Tìm kiếm bàn\n" +
-                        "- Ctrl N: Thêm bàn mới\n" +
-                        "\n" +
-                        "QL Menu:\n" +
-                        "- Ctrl F: Tìm kiếm món ăn\n" +
-                        "- Ctrl N: Thêm món mới\n" +
-                        "\n" +
-                        "QL Nhân Viên:\n" +
-                        "- Ctrl F: Tìm kiếm nhân viên\n" +
-                        "- Ctrl N: Thêm nhân viên mới\n" +
-                        "\n" +
-                        "Thống kê:\n" +
-                        "- Ctrl F: Tìm món ăn\n" +
-                        "\n" +
-                        "Chuyển Trang QL:\n" +
-                        "Phím 1: Dashboard\n" +
-                        "Phím 2: QL Menu\n" +
-                        "Phím 3: QL Bàn\n" +
-                        "Phím 4: QL Nhân viên\n" +
-                        "Phím 5: Khuyến mãi\n" +
-                        "Phím 6: Chính sách\n" +
-                        "Phím 7: Thống kê\n" +
-                        "Phím 8: Hỗ trợ\n" +
-                        "\n";
-                break;
-            default:
-                content = "Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.";
-
-        }
-        showCustomDialog("Hướng dẫn: " + card.getTitle(), content);
+        showCustomDialog(card.getTitle(), taoNoiDungHuongDanVBox(card));
     }
 
     // Inner classes for data model
@@ -555,51 +409,262 @@ private TitledPane taoTitledPaneFAQ(HoTroControllerQL.FAQItem faq) {
             }
         }
     }
-
-    private void showCustomDialog(String title, String content) {
+    private void showCustomDialog(String title, VBox contentBox) {
 
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setTitle(title);
+        dialog.setTitle("Hướng dẫn: " + title);
 
-        // ===== Root =====
         VBox root = new VBox(15);
         root.setPadding(new Insets(25));
         root.setAlignment(Pos.CENTER);
-        root.getStyleClass().add("custom-dialog-root");
 
-        // ===== Title =====
-        Label lblTitle = new Label(title);
-        lblTitle.getStyleClass().add("custom-dialog-title");
+        Label lblTitle = new Label("Hướng dẫn: " + title);
+        lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        // ===== Content =====
-        Label lblContent = new Label(content);
-        lblContent.setWrapText(true);
-        lblContent.setMaxWidth(450);
-        lblContent.getStyleClass().add("custom-dialog-content");
-
-        // ===== ScrollPane =====
-        ScrollPane scrollPane = new ScrollPane(lblContent);
+        ScrollPane scrollPane = new ScrollPane(contentBox);
         scrollPane.setFitToWidth(true);
-        scrollPane.setPrefViewportHeight(300);
-        scrollPane.getStyleClass().add("custom-dialog-scroll");
+        scrollPane.setPrefViewportHeight(320);
 
-        // ===== Button =====
         Button btnClose = new Button("Đóng");
         btnClose.getStyleClass().add("custom-dialog-button");
         btnClose.setOnAction(e -> dialog.close());
 
-        // ===== Add =====
         root.getChildren().addAll(lblTitle, scrollPane, btnClose);
 
-        Scene scene = new Scene(root, 520, 450);
+        Scene scene = new Scene(root, 550, 480);
         scene.getStylesheets().add(
                 getClass().getResource("/CSS/hotronv.css").toExternalForm()
         );
-        dialog.setScene(scene);
 
+
+
+        dialog.setScene(scene);
         dialog.setResizable(false);
         dialog.showAndWait();
+
     }
+
+    private VBox taoNoiDungHuongDanVBox(HelpCard card) {
+
+        VBox box = new VBox(6);
+        box.setPadding(new Insets(10));
+        box.setMaxWidth(480);
+
+        switch (card.getTag()) {
+
+            case "dashboard":
+                box.getChildren().addAll(
+                        tieuDeLbl("Dashboard cung cấp:"),
+
+                        noiDungLbl("- Thông tin nhân viên đăng nhập"),
+                        noiDungLbl("- Thông báo các đơn đặt bàn, check in"),
+                        noiDungLbl("- Thống kê số đơn"),
+                        noiDungLbl("- Thống kê khu vực"),
+                        noiDungLbl("- Thống kê doanh thu và số khách"),
+                        noiDungLbl("- Biểu đồ top 5 món bán chạy"),
+                        noiDungLbl("- Biểu đồ lượng khách theo giờ")
+                );
+                break;
+
+            case "khuyenmai":
+                box.getChildren().addAll(
+                        tieuDeLbl("Quản lý khuyến mãi:"),
+
+                        mucLonLbl("1. Trang hiện danh sách các khuyến mãi"),
+                        noiDungLbl("- Có 3 loại khuyến mãi: Chưa tới hạn màu vàng, hết hạn màu đỏ và đang trong hạn màu xanh"),
+
+                        mucLonLbl("2. Thêm khuyến mãi"),
+                        noiDungLbl("- Bước 1: Nhập các thông tin khuyến mãi vào form bên phải"),
+                        noiDungLbl("- Bước 2: Nhấn nút thêm"),
+
+                        mucLonLbl("3. Khi nhấn vào một khuyến mãi"),
+                        noiDungLbl("- Bước 1: Thông tin khuyến mãi sẽ hiển thị bên phải"),
+                        noiDungLbl("- Bước 2: Có thể nhập thông tin mới và nhấn nút sửa"),
+                        noiDungLbl("- Bước 3: Có thể nhấn nút xóa khuyến mãi"),
+                        noiDungLbl("- Bước 4: Có thể nhấn nút in QR cho khuyến mãi"),
+
+                        mucLonLbl("4. Tìm kiếm khuyến mãi"),
+                        noiDungLbl("- Bước 1: Nhập thông tin khuyến mãi cần tìm ở bộ lọc bên dưới"),
+                        noiDungLbl("- Bước 2: Nhấn nút tìm kiếm"),
+                        noiDungLbl("- Bước 3: Nhấn nút xóa trắng để làm mới bộ lọc")
+                );
+                break;
+
+            case "nhanvien":
+                box.getChildren().addAll(
+                        tieuDeLbl("Quản lý nhân viên:"),
+
+                        mucLonLbl("1. Trang hiển thị danh sách nhân viên"),
+
+                        mucLonLbl("2. Thêm nhân viên"),
+                        noiDungLbl("- Bước 1: Nhấn nút dấu + cột bên góc phải trang"),
+                        noiDungLbl("- Bước 2: Nhập thông tin nhân viên vào form bên phải"),
+                        noiDungLbl("- Bước 3: Nhấn nút xác nhận"),
+
+                        mucLonLbl("3. Khi nhấn vào một nhân viên"),
+                        noiDungLbl("- Bước 1: Nhập thông tin mới cần sửa vào formn"),
+                        noiDungLbl("- Bước 2: Nhấn nút lưu thay đổi"),
+                        noiDungLbl("- Bước 3: Có thể nhấn nút xóa nhân viên"),
+
+                        mucLonLbl("4. Tìm kiếm nhân viên"),
+                        noiDungLbl("- Bước 1: Nhập thông tin nhân viên cần tìm vào ô tìm kiếm ở trên"),
+                        noiDungLbl("- Bước 2: Nhấn nút tìm")
+                );
+                break;
+
+            case "menu":
+                box.getChildren().addAll(
+                        tieuDeLbl("Quản lý menu:"),
+
+                        mucLonLbl("1. Trang hiển thị danh sách món ăn"),
+
+                        mucLonLbl("2. Thêm món mới"),
+                        noiDungLbl("- Bước 1: Nhấn nút dấu + cột bên góc phải trang"),
+                        noiDungLbl("- Bước 2: Nhập thông tin món vào form bên phải"),
+                        noiDungLbl("- Bước 3: Nhấn nút thêm mới"),
+
+                        mucLonLbl("3. Khi nhấn vào một món ăn"),
+                        noiDungLbl("- Bước 1: Nhập thông tin mới cần sửa vào formn"),
+                        noiDungLbl("- Bước 2: Nhấn nút lưu thay đổi"),
+                        noiDungLbl("- Bước 3: Có thể nhấn nút xóa món ăn"),
+
+                        mucLonLbl("4. Tìm kiếm món ăn"),
+                        noiDungLbl("- Bước 1: Nhập thông tin món cần tìm vào ô tìm kiếm ở trên"),
+                        noiDungLbl("- Bước 2: Nhấn nút tìm"),
+                        noiDungLbl("- Bước 3: Lọc các loại món ăn ở ô combobox trên thanh tìm kiếm")
+                );
+                break;
+
+            case "ban":
+                box.getChildren().addAll(
+                        tieuDeLbl("Quản lý bàn:"),
+
+                        mucLonLbl("1. Trang hiển thị danh sách các bàn của nhà hàng"),
+
+                        mucLonLbl("2. Thêm bàn mới"),
+                        noiDungLbl("- Bước 1: Nhấn nút dấu + cột bên góc phải trang"),
+                        noiDungLbl("- Bước 2: Form thông tin sẽ hiện lên và nhập thông tin bàn vào form"),
+                        noiDungLbl("- Bước 3: Nhấn nút thêm hoặc hủy (nếu không muốn thêm nữa)"),
+
+                        mucLonLbl("3. Tìm kiếm bàn"),
+                        noiDungLbl("- Bước 1: Nhập thông tin bàn cần tìm vào ô tìm kiếm ở trên"),
+                        noiDungLbl("- Bước 2: Nhấn nút tìm"),
+                        noiDungLbl("- Bước 3: Lọc các loại bàn hoặc khu vực ở ô combobox trên thanh tìm kiếm")
+                );
+                break;
+
+            case "chinhsach":
+                box.getChildren().addAll(
+                        tieuDeLbl("Quản lý chính sách:"),
+
+                        mucLonLbl("1. Cài đặt thời gian đợi bàn"),
+                        noiDungLbl("- Bước 1: Nhập thời gian bàn đặt trước hoặc bàn đợi"),
+                        noiDungLbl("- Bước 2: Nhấn xác nhận"),
+
+                        mucLonLbl("2. Cập nhật tiền cọc"),
+                        noiDungLbl("- Bước 1: Chọn loại bàn và khu vực ở bên phải"),
+                        noiDungLbl("- Bước 2: Thông tin loại bàn đã chọn sẽ hiện trên form thông tin bên trái"),
+                        noiDungLbl("- Bước 3: Nhập các thông tin cần sửa và nhấn xác nhận nếu muốn sửa"),
+                        noiDungLbl("- Bước 4: Có thể nhấn nút xóa để xóa cọc"),
+                        noiDungLbl("- Bước 5: Có thể nhấn nút xóa trắng để xóa dữ liệu trong form"),
+
+                        mucLonLbl("3. Cập nhật phần trăm lời cho món"),
+                        noiDungLbl("- Bước 1: Chọn món ăn ở bên phải"),
+                        noiDungLbl("- Bước 2: Thông tin món ăn đã chọn sẽ hiện trên form thông tin bên trái"),
+                        noiDungLbl("- Bước 3: Nhập các thông tin cần sửa và nhấn xác nhận nếu muốn sửa"),
+                        noiDungLbl("- Bước 4: Có thể nhấn nút xóa trắng để xóa dữ liệu trong form")
+                );
+                break;
+
+            case "thongke":
+                box.getChildren().addAll(
+                        tieuDeLbl("Báo cáo thống kê:"),
+
+                        mucLonLbl("1. Trang hiển thị danh sách món ăn ở góc trái trên"),
+                        noiDungLbl("- Bước 1: Hiển thị các món ăn và phân trăm bán ra so với tháng, năm trước"),
+                        noiDungLbl("- Bước 2: Có thể thay đổi thời gian để so sánh ở 2 combobox bên trên"),
+                        noiDungLbl("- Bước 3: Nhập thông tin để tìm món ăn ở ô tìm kiếm bên trên"),
+                        noiDungLbl("- Bước 4: Có thể nhấn nút reset để quay lại thời gian hiện tại và hiển thị tất cả món"),
+
+                        mucLonLbl("2. Trang hiển thị thông tin thống kê đối với tổng hóa đơn, doanh thu, doanh thu so với tháng trước, khu vực"),
+                        noiDungLbl("- Bước 1: Có thể lọc thống kê theo ngày tháng năm ở các combobox bên trên"),
+                        noiDungLbl("- Bước 2: Có thể nhấn nút reset để quay lại ngày hiện tại"),
+
+                        mucLonLbl("3. Phía dưới là 2 biểu đồ thống kê doanh thu theo giờ và số lượng đơn theo ngày"),
+                        noiDungLbl("- Bước 1: Có thể điều chỉnh thời gian của 2 biểu đồ bằng ô combobox ở trên")
+                );
+                break;
+
+            case "caidat":
+                box.getChildren().addAll(
+                        tieuDeLbl("Vấn đề tài khoản:"),
+                        noiDungLbl("1. Có thể thay đổi mật khẩu bằng cách nhấn nút đổi mật khẩu ở trang dashboard"),
+                        noiDungLbl("2. Khi đăng nhập nếu quên mật khẩu thì nhấn nút quên mật khẩu để thay đổi")
+                );
+                break;
+
+            case "phimtat":
+                box.getChildren().addAll(
+                        tieuDeLbl("Chính sách:"),
+                        noiDungLbl("- Ctrl F: tìm kiếm món ăn"),
+
+                        tieuDeLbl("Khuyến Mãi"),
+                        noiDungLbl("- Ctrl F: Tìm kiếm khuyến mãi"),
+
+                        tieuDeLbl("QL Bàn:"),
+                        noiDungLbl("- Ctrl F: Tìm kiếm bàn"),
+                        noiDungLbl("- Ctrl N: Thêm bàn mới"),
+
+                        tieuDeLbl("QL Menu:"),
+                        noiDungLbl("- Ctrl F: Tìm kiếm món ăn"),
+                        noiDungLbl("- Ctrl N: Thêm món mới"),
+
+                        tieuDeLbl("QL Nhân Viên:"),
+                        noiDungLbl("- Ctrl F: Tìm kiếm nhân viên"),
+                        noiDungLbl("- Ctrl N: Thêm nhân viên mới"),
+
+                        tieuDeLbl("Thống kê:"),
+                        noiDungLbl("- Ctrl F: Tìm món ăn"),
+
+                        tieuDeLbl("Chuyển Trang QL:"),
+                        noiDungLbl("Phím 1: Dashboard"),
+                        noiDungLbl("Phím 2: QL Menu"),
+                        noiDungLbl("Phím 3: QL Bàn"),
+                        noiDungLbl("Phím 4: QL Nhân viên"),
+                        noiDungLbl("Phím 5: Khuyến mãi"),
+                        noiDungLbl("Phím 6: Chính sách"),
+                        noiDungLbl("Phím 7: Thống kê"),
+                        noiDungLbl("Phím 8: Hỗ trợ")
+                );
+                break;
+
+            default:
+                box.getChildren().add(
+                        noiDungLbl("Hướng dẫn chi tiết cho " + card.getTitle() + " đang được cập nhật.")
+                );
+        }
+
+        return box;
+    }
+        private Label tieuDeLbl(String text) {
+            Label lb = new Label(text);
+            lb.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+            return lb;
+        }
+
+        private Label mucLonLbl(String text) {
+            Label lb = new Label(text);
+            lb.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2980b9;");
+            return lb;
+        }
+
+        private Label noiDungLbl(String text) {
+            Label lb = new Label(text);
+            lb.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
+            lb.setWrapText(true);
+            return lb;
+        }
+
 
 }
