@@ -90,6 +90,9 @@
                                             <children>
                                                 <Label text="TỔNG HÓA ĐƠN" />
                                                 <Label fx:id="lblTongHoaDon" styleClass="money-label" text="36" />
+                                                <Label text="HÓA ĐƠN BỊ HỦY" />
+                                                <Label fx:id="lblHoaDonHuy" styleClass="money-label-v2" text="36" />
+                                                <Label fx:id="lblTongTienHuy" styleClass="money-label-v2" text="36" />
                                             </children>
                                         </VBox>
                                         <VBox alignment="TOP_CENTER" prefWidth="250.0" styleClass="info-box">
