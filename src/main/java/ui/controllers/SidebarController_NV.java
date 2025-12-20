@@ -11,6 +11,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -56,13 +57,13 @@ public class SidebarController_NV {
         btnKetCa.setTooltip(new Tooltip("Phím tắt: Esc"));
         Platform.runLater(() -> {
             Scene scene = avatarImage.getScene();
-            if (scene != null) {
-                scene.setOnKeyPressed(event -> {
-                    if (event.getCode() == KeyCode.ESCAPE) {
-                        selectTab(6); // Ban giao ca
-                    }
-                });
-            }
+            if (scene == null) return;
+            scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    selectTab(6); // Bàn giao ca
+                    event.consume(); // chặn lan nếu cần
+                }
+            });
         });
     }
 
