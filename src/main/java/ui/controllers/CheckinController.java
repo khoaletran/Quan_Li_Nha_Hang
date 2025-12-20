@@ -355,6 +355,7 @@ public class CheckinController {
             // showAlert(Alert.AlertType.INFORMATION, "Thông báo",
             //         "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
             hd.setTrangthai(3);
+            BanDAO.update(hd.getBan(), false);
             HoaDonDAO.update(hd);
             loadDanhSach();
             return;
