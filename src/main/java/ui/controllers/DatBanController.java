@@ -327,7 +327,7 @@ public class DatBanController {
         tableIN_03.setOnMouseClicked(e -> chonBanNeuDuoc("KV0002", "LB0003", 8));
         tableIN_04.setOnMouseClicked(e -> chonBanNeuDuoc("KV0002", "LB0004", 12));
         tableVIP_01.setOnMouseClicked(e -> chonBanNeuDuoc("KV0003", "LB0004", 12));
-        tableVIP_02.setOnMouseClicked(e -> chonBanNeuDuoc("KV0003", "LB0005", 20));
+        tableVIP_02.setOnMouseClicked(e -> chonBanNeuDuoc("KV0003", "LB0005", 25));
     }
 
     private int getThoiGianDatTruocToiThieu(String maLoaiBan) {

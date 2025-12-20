@@ -271,7 +271,7 @@ CREATE TABLE ChiTietHoaDon
 -- =========================================
 CREATE TABLE PhieuKetCa
 (
-    maPhieu       NVARCHAR(6) PRIMARY KEY,
+    maPhieu       NVARCHAR(13) PRIMARY KEY,
     maNV          NVARCHAR(6) FOREIGN KEY REFERENCES NhanVien (maNV),
     ca            BIT, -- 0: ca sáng, 1: ca tối
     soHoaDon      INT,
