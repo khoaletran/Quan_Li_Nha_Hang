@@ -230,6 +230,15 @@
   -fx-font-size: 14px;
 }
 
+.form-input-img {
+    -fx-background-color: #f8f8f8;
+    -fx-background-radius: 8;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 8;
+    -fx-padding: 8 12;
+    -fx-font-size: 10px;
+}
+
 .form-combo {
   -fx-background-color: #f8f8f8;
   -fx-background-radius: 8;

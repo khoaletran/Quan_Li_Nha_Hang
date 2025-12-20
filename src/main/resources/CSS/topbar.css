@@ -1,7 +1,21 @@
 .root {
     -fx-font-family: "Segoe UI", sans-serif;
 }
-
+.tooltip {
+  -fx-font-family: "Segoe UI";
+  -fx-font-size: 12px;
+  -fx-text-fill: #333;
+  -fx-padding: 8px 12px;
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+  -fx-border-color: #cccccc;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+  -fx-pref-width: 200px;
+  -fx-wrap-text: true;
+  -fx-font-weight: normal;
+}
 /* TOP BAR thấp, đều */
 .top-bar {
     -fx-background-color: white;

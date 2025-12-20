@@ -215,7 +215,12 @@ public class QLNhanVienController {
     // THÊM / CẬP NHẬT / XÓA
     // =========================
     private void themNV() {
-        NhanVien nv = taoNhanVienTuForm(tuSinhMaNV(NhanVienDAO.maNVCuoi()));
+        NhanVien nv;
+        try {
+            nv = taoNhanVienTuForm(tuSinhMaNV(NhanVienDAO.maNVCuoi()));
+        } catch (IllegalArgumentException e) {
+            return;
+        }
         boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận thêm nhân viên mới");
         if (answer) {
             boolean success = NhanVienDAO.insert(nv);
@@ -230,7 +235,12 @@ public class QLNhanVienController {
     }
 
     private void capNhatNV(String maNV) {
-        NhanVien nv = taoNhanVienTuForm(maNV);
+        NhanVien nv;
+        try {
+            nv = taoNhanVienTuForm(maNV);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
         boolean answer = ConfirmCus.show("Xác nhận", "Xác nhận cập nhật thông tin nhân viên");
         if (answer) {
             boolean success = NhanVienDAO.update(nv);
@@ -277,7 +287,14 @@ public class QLNhanVienController {
         nv.setQuanLi(quanLi);
         nv.setNgayVaoLam(ngayVaoLam);
         nv.setTrangThai(trangThai);
-        nv.setMatKhau(matKhau);
+
+        try {
+            nv.setMatKhau(matKhau);
+        } catch (IllegalArgumentException e) {
+            AlertCus.show("Mật khẩu không hợp lệ", e.getMessage());
+            txtMatKhau.requestFocus();
+            throw e;
+        }
         return nv;
     }
 }

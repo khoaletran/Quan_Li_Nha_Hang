@@ -1,169 +1,174 @@
 .root {
-    -fx-font-family: "Segoe UI", sans-serif;
+  -fx-font-family: "Segoe UI", sans-serif;
 }
-
+.tooltip {
+  -fx-font-family: "Segoe UI";
+  -fx-font-size: 12px;
+  -fx-text-fill: #333;
+  -fx-padding: 8px 12px;
+  -fx-background-color: #ffffff;
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+  -fx-border-color: #cccccc;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+  -fx-pref-width: 200px;
+  -fx-wrap-text: true;
+  -fx-font-weight: normal;
+}
 /* Tổng sidebar */
 .sidebar {
-    -fx-background-color: #ffffff;
-    -fx-pref-width: 320;
-    -fx-pref-height: 1000;
-    -fx-spacing: 18;
-    -fx-alignment: top-center;
-    -fx-background-radius: 0 32 32 0;
-    -fx-border-radius: 0 32 32 0;
+  -fx-background-color: #ffffff;
+  -fx-pref-width: 320;
+  -fx-pref-height: 1000;
+  -fx-spacing: 18;
+  -fx-alignment: top-center;
+  -fx-background-radius: 0 32 32 0;
+  -fx-border-radius: 0 32 32 0;
 }
-
 
 /* Phần avatar */
 .avatar_section {
-    -fx-background-color: #E6763E;
-    -fx-pref-width: 320;
-    -fx-pref-height: 167;
-    -fx-alignment: center;
-    -fx-spacing: 6;
-    -fx-background-radius: 0 32 0 0;
+  -fx-background-color: #e6763e;
+  -fx-pref-width: 320;
+  -fx-pref-height: 167;
+  -fx-alignment: center;
+  -fx-spacing: 6;
+  -fx-background-radius: 0 32 0 0;
 }
 
 .username {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-    -fx-wrap-text: true;
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+  -fx-wrap-text: true;
 }
 
 .role {
-    -fx-font-size: 16px;
-    -fx-text-fill: white;
+  -fx-font-size: 16px;
+  -fx-text-fill: white;
 }
 
 /* Các nút menu */
 .menu-item {
-    -fx-pref-width: 320;
-    -fx-pref-height: 60;
-    -fx-background-color: transparent;
-    -fx-text-fill: #111;
-    -fx-font-weight: bold;
-    -fx-font-size: 18px;
-    -fx-alignment: center-left;
-    -fx-padding: 0 0 0 35;
-    -fx-cursor: hand;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
-    -fx-spacing: 18;
+  -fx-pref-width: 320;
+  -fx-pref-height: 60;
+  -fx-background-color: transparent;
+  -fx-text-fill: #111;
+  -fx-font-weight: bold;
+  -fx-font-size: 18px;
+  -fx-alignment: center-left;
+  -fx-padding: 0 0 0 35;
+  -fx-cursor: hand;
+  -fx-background-radius: 0;
+  -fx-border-width: 0;
+  -fx-spacing: 18;
 }
-
 
 .menu-item:hover {
-    -fx-background-color: #E6763E;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
-    -fx-cursor: hand;
-    -fx-background-radius: 32;
-    -fx-text-fill: white;
+  -fx-background-color: #e6763e;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+  -fx-cursor: hand;
+  -fx-background-radius: 32;
+  -fx-text-fill: white;
 }
 
-.menu-item:selected, .menu-item.selected {
-    -fx-background-color: #E6763E;
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
-    -fx-effect: none;
-    -fx-background-radius: 32;
-    -fx-text-fill: white;
+.menu-item:selected,
+.menu-item.selected {
+  -fx-background-color: #e6763e;
+  -fx-scale-x: 1;
+  -fx-scale-y: 1;
+  -fx-effect: none;
+  -fx-background-radius: 32;
+  -fx-text-fill: white;
 }
-
 
 .menu-item.selected {
-    -fx-background-color: #E6763E;
+  -fx-background-color: #e6763e;
 }
 
-
 .logout-btn {
-    -fx-background-color: #e53935;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-size: 16px;
-    -fx-background-radius: 25;
-    -fx-pref-height: 45;
-    -fx-alignment: center;
+  -fx-background-color: #e53935;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 16px;
+  -fx-background-radius: 25;
+  -fx-pref-height: 45;
+  -fx-alignment: center;
 }
 
 .logout-btn:hover {
-    -fx-background-color: #c62828;
+  -fx-background-color: #c62828;
 }
-
-
 
 .menu-btn:hover {
-    -fx-pref-width: 320;
-    -fx-pref-height: 60;
-    -fx-background-color: transparent;
-    -fx-text-fill: #111;
-    -fx-font-weight: bold;
-    -fx-font-size: 18px;
-    -fx-alignment: center-left;
-    -fx-padding: 0 0 0 35;
-    -fx-cursor: hand;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
-    -fx-spacing: 18;
+  -fx-pref-width: 320;
+  -fx-pref-height: 60;
+  -fx-background-color: transparent;
+  -fx-text-fill: #111;
+  -fx-font-weight: bold;
+  -fx-font-size: 18px;
+  -fx-alignment: center-left;
+  -fx-padding: 0 0 0 35;
+  -fx-cursor: hand;
+  -fx-background-radius: 0;
+  -fx-border-width: 0;
+  -fx-spacing: 18;
 }
 
-
 #subMenuDatBan {
-    -fx-alignment: CENTER;
-    -fx-spacing: 10;
-    -fx-padding: 12;
+  -fx-alignment: CENTER;
+  -fx-spacing: 10;
+  -fx-padding: 12;
 }
 
 .sub-btn {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #111;
-    -fx-font-size: 14px;
-    -fx-pref-width: 220px;
-    -fx-pref-height: 40px;
-    -fx-background-radius: 10;
-    -fx-alignment: CENTER_LEFT;
-    -fx-padding: 0 0 0 50;
-    -fx-cursor: hand;
-    -fx-effect: none;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+  -fx-background-color: #ffffff;
+  -fx-text-fill: #111;
+  -fx-font-size: 14px;
+  -fx-pref-width: 220px;
+  -fx-pref-height: 40px;
+  -fx-background-radius: 10;
+  -fx-alignment: CENTER_LEFT;
+  -fx-padding: 0 0 0 50;
+  -fx-cursor: hand;
+  -fx-effect: none;
+  -fx-border-color: transparent;
+  -fx-border-width: 0;
 }
 
-
-
 .sub-btn:hover {
-    -fx-background-color: #FFE6D1;
+  -fx-background-color: #ffe6d1;
 }
 
 .sub-btn.selected {
-    -fx-background-color: #FFE6D1;
+  -fx-background-color: #ffe6d1;
 }
 
 .scroll-bar:vertical {
-    -fx-pref-width: 12px;
-    -fx-background-color: transparent;
+  -fx-pref-width: 12px;
+  -fx-background-color: transparent;
 }
 
 .scroll-bar:vertical .track {
-    -fx-background-color: transparent;
-    -fx-background-radius: 16;
-    -fx-padding: 30;
+  -fx-background-color: transparent;
+  -fx-background-radius: 16;
+  -fx-padding: 30;
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color: #E6763E;
-    -fx-background-radius: 8;
-    -fx-max-height: 60px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0,0,1);
+  -fx-background-color: #e6763e;
+  -fx-background-radius: 8;
+  -fx-max-height: 60px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 3, 0, 0, 1);
 }
 
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: #c1915f;
+  -fx-background-color: #c1915f;
 }
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
-    -fx-opacity: 0;
-    -fx-pref-height: 0;
-    -fx-pref-width: 0;
+  -fx-opacity: 0;
+  -fx-pref-height: 0;
+  -fx-pref-width: 0;
 }
-

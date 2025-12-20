@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import ui.AlertCus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -95,6 +96,11 @@ public class LoginController {
         List<NhanVien> listNV = NhanVienDAO.getAll();
         for (NhanVien nv : listNV) {
             if (nv.getMaNV().equals(username) && nv.getMatKhau().equals(password)) {
+                if (!nv.isTrangThai()) {
+                    AlertCus.show("Thông báo","Tài khoản không còn quyền truy cập!");
+                    DN = true;
+                    break;
+                }
                 if(nv.isQuanLi()) {
                     try {
                         // Đóng màn hình đăng nhập
@@ -131,15 +137,10 @@ public class LoginController {
                     break;
                 }
             }
-
         }
 
         if (!DN){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Đăng nhập thất bại");
-            alert.setHeaderText(null);
-            alert.setContentText("Sai mã nhân viên hoặc mật khẩu!");
-            alert.showAndWait();
+            AlertCus.show("Thông báo","Sai tên đăng nhập hoặc mật khẩu");
         }
     }
     public void showResetPane() {
@@ -160,19 +161,19 @@ public class LoginController {
 
         // Kiểm tra mật khẩu không được trống
         if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            showAlert("Lỗi", "Vui lòng nhập đầy đủ mật khẩu!");
+            AlertCus.show("Lỗi","Vui lòng nhập đầy đủ mật khẩu!");
             return;
         }
         // Kiểm tra mật khẩu khớp nhau
         if (!newPassword.equals(confirmPassword)) {
-            showAlert("Lỗi", "Mật khẩu xác nhận không khớp!");
+            AlertCus.show("Lỗi","Mật khẩu xác nhận không khớp!");
             return;
         }
 
 
 
         if (nhanvien.getMaNV() == null) {
-            showAlert("Lỗi", "Không tìm thấy thông tin nhân viên!");
+            AlertCus.show("Lỗi","Không tìm thấy thông tin nhân viên!");
             return;
         }
 
@@ -180,7 +181,7 @@ public class LoginController {
         boolean updateSuccess = NhanVienDAO.updateMatKhau(nhanvien.getMaNV(), newPassword);
 
         if (updateSuccess) {
-            showAlert("Thành công", "Đổi mật khẩu thành công!");
+            AlertCus.show("Thành công","Đổi mật khẩu thành công!");
 
             // Xóa dữ liệu trong các field
             newPassField.clear();
@@ -189,7 +190,7 @@ public class LoginController {
             // Quay lại màn hình đăng nhập
             switchPane(resetPane, loginPane);
         } else {
-            showAlert("Lỗi", "Đổi mật khẩu thất bại!");
+            AlertCus.show("Lỗi","Đổi mật khẩu thất bại!");
         }
     }
 
@@ -201,7 +202,4 @@ public class LoginController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
-
-
 }
