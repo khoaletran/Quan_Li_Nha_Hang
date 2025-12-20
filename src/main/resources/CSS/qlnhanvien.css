@@ -165,7 +165,7 @@
 }
 
 .form-label {
-  -fx-font-size: 14px;
+  -fx-font-size: 12px;
   -fx-font-weight: bold;
   -fx-text-fill: #2b1406;
   -fx-alignment: CENTER_LEFT;
@@ -276,8 +276,7 @@
 
 .right-pane {
     -fx-background-color: white;
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
+    -fx-background-radius: 20 0 0 20;
 }
 
 /* Nút xác nhận */
