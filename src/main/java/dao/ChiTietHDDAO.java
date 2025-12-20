@@ -242,6 +242,59 @@ public class ChiTietHDDAO {
         return ds;
     }
 
+    public static List<ChiTietHoaDon> getAllInDay() {
+        List<ChiTietHoaDon> ds = new ArrayList<>();
+
+        String sql = """
+                SELECT 
+        cthd.maHD, cthd.maMon, cthd.soLuong, hd.tgLapHD, hd.tgCheckIn,
+        m.tenMon, m.giaGoc, m.hinhAnh,
+        lm.maLoaiMon, lm.tenLoaiMon,
+
+        COALESCE(ptMon.phanTramLoi, ptLoai.phanTramLoi, 0) AS phanTramLoi
+
+    FROM ChiTietHoaDon cthd
+    JOIN Mon m ON cthd.maMon = m.maMon
+    JOIN LoaiMon lm ON m.loaiMon = lm.maLoaiMon
+    JOIN HoaDon hd ON hd.maHD = cthd.maHD
+
+    LEFT JOIN (
+        SELECT p1.maMon, p1.phanTramLoi, p1.ngayApDung
+        FROM PhanTramGiaBan p1
+    ) ptMon ON ptMon.maMon = m.maMon
+        AND ptMon.ngayApDung = (
+            SELECT MAX(p2.ngayApDung)
+            FROM PhanTramGiaBan p2
+            WHERE p2.maMon = m.maMon
+                AND p2.ngayApDung <= hd.tgLapHD
+        )
+    LEFT JOIN (
+        SELECT p3.maLoaiMon, p3.phanTramLoi, p3.ngayApDung
+        FROM PhanTramGiaBan p3
+        WHERE p3.maMon IS NULL
+    ) ptLoai ON ptLoai.maLoaiMon = lm.maLoaiMon
+            AND ptLoai.ngayApDung = (
+                SELECT MAX(p4.ngayApDung)
+                FROM PhanTramGiaBan p4
+                WHERE p4.maLoaiMon = lm.maLoaiMon
+                AND p4.maMon IS NULL
+                AND p4.ngayApDung <= hd.tgLapHD
+        )
+    WHERE hd.tgCheckIn = GETDATE();
+        """;
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) ds.add(mapCTHDFull(rs));
+
+        } catch (Exception e) {
+            System.err.println("Lỗi getAll CTHD: " + e.getMessage());
+        }
+
+        return ds;
+    }
 
     // ============================================================================
     // 7. THỐNG KÊ THEO THÁNG NĂM 

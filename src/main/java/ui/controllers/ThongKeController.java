@@ -278,11 +278,11 @@ public class ThongKeController {
             if (isThangHienTai) {
                 // Nếu là tháng hiện tại => dựa trên tồn kho + số lượng bán
                 if (cthd.getSoLuong() >= 300 && m.getSoLuong() < 30) {
-                    status.setText("🔥 Bán rất chạy - Cần nhập hàng ngay");
+                    status.setText("Bán rất chạy - Cần nhập hàng ngay");
                     status.getStyleClass().add("dish-status-green");
 
                 } else if (cthd.getSoLuong() >= 150 && m.getSoLuong() < 20) {
-                    status.setText("⚠️ Cần nhập hàng gấp");
+                    status.setText("Cần nhập hàng gấp");
                     status.getStyleClass().add("dish-status-orange");
 
                 } else if (cthd.getSoLuong() >= 80 && m.getSoLuong() < 30) {
