@@ -92,7 +92,7 @@ public class BanGiaoCaController {
         List<HoaDon> danhSach = hoaDonDAO.getAll();
         for (HoaDon hd : danhSach) {
 
-            if (hd.getTrangthai() == 0) {
+            if (hd.getTrangthai() == 0 && hd.getTgLapHD().isAfter(thoiGianVaoCa)) {
                 tienCoc += hd.getCoc();
             }
 
