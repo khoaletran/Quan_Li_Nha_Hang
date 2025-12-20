@@ -46,9 +46,9 @@ public class TraCuuHoaDonController {
     @FXML private VBox vbox_center_scroll, vboxChiTietDonHang;
 
     // FXML - bộ lọc và tìm kiếm
-    @FXML private TextField txtMaBan;
+    @FXML private TextField txtTimKiem;
     @FXML private DatePicker dpThoiGian;
-    @FXML private TextField txtSDT;
+    @FXML private ComboBox<String> cboTrangThai;
     @FXML private ComboBox<String> cboKhuVuc;
     @FXML private Button btnXoaTrang;
     @FXML private Button btnTimKiem;
@@ -83,15 +83,13 @@ public class TraCuuHoaDonController {
             hienThiThongBaoLoi("Không thể kết nối database. Vui lòng kiểm tra kết nối.");
             return;
         }
+        khoiTaoTrangThai();
         khoiTaoComboBox();
         khoiTaoDatePicker();
         ganSuKienChoNut();
         taiDanhSachHoaDon();
         resetForm();
 
-        Platform.runLater(() -> addShortcuts(txtSDT.getScene()));
-        Tooltip tipSdt = new Tooltip("Nhập Số điện thoại (Ctrl + D)");
-        Tooltip.install(txtSDT, tipSdt);
         Tooltip tipFind = new Tooltip("Tìm kiếm nhanh (Ctrl + F)");
         Tooltip.install(btnTimKiem, tipFind);
         Tooltip tipClear = new Tooltip("Clear nhanh (Ctrl + L)");
@@ -102,12 +100,7 @@ public class TraCuuHoaDonController {
     }
     private void addShortcuts(Scene scene){
         KeyCombination ctrlD = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
-        scene.getAccelerators().put(ctrlD, () -> {
-            txtSDT.requestFocus();
-            txtSDT.selectAll();
-        });
         KeyCombination ctrlF = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
-        scene.getAccelerators().put(ctrlF, () -> timKiemHoaDon());
         KeyCombination ctrlL = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
         scene.getAccelerators().put(ctrlL, () -> xoaTrangBoLoc());
         KeyCombination ctrlP = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
@@ -144,7 +137,7 @@ public class TraCuuHoaDonController {
     }
 
     private void ganSuKienChoNut() {
-        if (btnTimKiem != null) btnTimKiem.setOnAction(e -> timKiemHoaDon());
+        if (btnTimKiem != null) btnTimKiem.setOnAction(e -> locHoaDon());
         if (btnXoaTrang != null) btnXoaTrang.setOnAction(e -> xoaTrangBoLoc());
         if (confirm_btn != null) confirm_btn.setOnAction(e -> HoaDonIn.previewHoaDon(hoaDonSelected));
     }
@@ -388,115 +381,14 @@ public class TraCuuHoaDonController {
         }
     }
 
-    // TÌM KIẾM
-    @FXML
-    private void timKiemHoaDon() {
-        String maBan = txtMaBan != null ? txtMaBan.getText().trim() : "";
-        String sdt = txtSDT != null ? txtSDT.getText().trim() : "";
-        String khuVuc = cboKhuVuc != null && cboKhuVuc.getValue() != null ? cboKhuVuc.getValue() : "Tất cả";
-        LocalDate ngay = dpThoiGian != null ? dpThoiGian.getValue() : null;
 
-        try {
-            List<HoaDon> allHD = hoaDonDAO.getAll();
-            List<HoaDon> ketQua = new java.util.ArrayList<>();
-
-            for (HoaDon hd : allHD) {
-                boolean match = true;
-
-                // mã bàn
-                if (!maBan.isEmpty()) {
-                    if (hd.getBan() == null || hd.getBan().getMaBan() == null ||
-                            !hd.getBan().getMaBan().toLowerCase().contains(maBan.toLowerCase())) {
-                        match = false;
-                    }
-                }
-
-                // sdt
-                if (!sdt.isEmpty()) {
-                    String sdtHD = null;
-                    if (hd.getKhachHang() != null && hd.getKhachHang().getSdt() != null) {
-                        sdtHD = hd.getKhachHang().getSdt();
-                    } else {
-                        try {
-                            String maKH = null;
-                            try {
-                                Method m = hd.getClass().getMethod("getMaKH");
-                                Object obj = m.invoke(hd);
-                                if (obj != null) maKH = obj.toString();
-                            } catch (NoSuchMethodException nsme) { maKH = null; }
-                            if (maKH != null && !maKH.isEmpty()) {
-                                KhachHang kh = khachHangDAO.getById(maKH);
-                                if (kh != null) sdtHD = kh.getSdt();
-                            }
-                        } catch (Exception ex) { /* ignore */ }
-                    }
-
-                    if (sdtHD == null || !sdtHD.contains(sdt)) match = false;
-                }
-
-                // khu vực
-                if (!khuVuc.equals("Tất cả")) {
-                    if (hd.getBan() == null || hd.getBan().getKhuVuc() == null ||
-                            hd.getBan().getKhuVuc().getTenKhuVuc() == null ||
-                            !hd.getBan().getKhuVuc().getTenKhuVuc().equals(khuVuc)) {
-                        match = false;
-                    }
-                }
-
-                // ngày
-                if (ngay != null) {
-                    try {
-                        Object tgObj = null;
-                        Method m = null;
-                        try { m = hd.getClass().getMethod("getTgCheckin"); }
-                        catch (NoSuchMethodException nsme) {
-                            try { m = hd.getClass().getMethod("getTgCheckout"); }
-                            catch (NoSuchMethodException ex2) { m = null; }
-                        }
-                        if (m != null) tgObj = m.invoke(hd);
-
-                        LocalDate ngayHD = null;
-                        if (tgObj == null) ngayHD = null;
-                        else if (tgObj instanceof LocalDate) ngayHD = (LocalDate) tgObj;
-                        else if (tgObj instanceof LocalDateTime) ngayHD = ((LocalDateTime) tgObj).toLocalDate();
-                        else if (tgObj instanceof Date) ngayHD = ((Date) tgObj).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        else {
-                            String s = tgObj.toString();
-                            try { ngayHD = LocalDate.parse(s, dtf); }
-                            catch (Exception ex) {
-                                try { ngayHD = LocalDate.parse(s); } catch (Exception ex2) { ngayHD = null; }
-                            }
-                        }
-
-                        if (ngayHD == null || !ngayHD.equals(ngay)) match = false;
-                    } catch (Exception ex) {
-                        System.out.println("Không thể lấy ngày từ HoaDon bằng reflection: " + ex.getMessage());
-                        match = false;
-                    }
-                }
-
-                if (match) ketQua.add(hd);
-            }
-
-            dsHoaDon.clear();
-            dsHoaDon.addAll(ketQua);
-            hienThiDanhSachHoaDon();
-
-            if (ketQua.isEmpty()) AlertCus.show("Thông báo","Không tìm thấy hóa đơn nào phù hợp với điều kiện tìm kiếm");
-            else AlertCus.show("Thông báo","Tìm thấy " + ketQua.size() + " hóa đơn phù hợp");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            hienThiThongBaoLoi("Lỗi khi tìm kiếm hóa đơn: " + e.getMessage());
-        }
-    }
 
     // XÓA TRẮNG BỘ LỌC / IN / RESET
     @FXML
     private void xoaTrangBoLoc() {
-        if (txtMaBan != null) txtMaBan.clear();
+        if (txtTimKiem != null) txtTimKiem.clear();
         if (dpThoiGian != null) dpThoiGian.setValue(null);
-        if (txtSDT != null) txtSDT.clear();
+        if (cboTrangThai != null) cboTrangThai.setValue("Tất cả");
         if (cboKhuVuc != null) cboKhuVuc.setValue("Tất cả");
 
         taiDanhSachHoaDon();
@@ -577,4 +469,106 @@ public class TraCuuHoaDonController {
 
         return row;
     }
+
+    private void khoiTaoTrangThai() {
+        cboTrangThai.getItems().clear();
+        cboTrangThai.getItems().addAll(
+                "Đặt trước",
+                "Đang dùng",
+                "Đã thanh toán",
+                "Không nhận đơn"
+        );
+        cboTrangThai.setValue(null);
+    }
+
+
+    private void locHoaDon() {
+        List<HoaDon> all = hoaDonDAO.getAll();
+        dsHoaDon.clear();
+
+        String keyword = txtTimKiem.getText() != null
+                ? txtTimKiem.getText().trim().toLowerCase()
+                : "";
+
+        String trangThai = cboTrangThai.getValue();
+        LocalDate ngay = dpThoiGian.getValue();
+        String khuVuc = cboKhuVuc.getValue();
+
+        for (HoaDon hd : all) {
+
+            // ===== txtTimKiem: tên KH / mã bàn / mã HD / SĐT =====
+            if (!keyword.isEmpty()) {
+                boolean match = false;
+
+                if (hd.getMaHD() != null && hd.getMaHD().toLowerCase().startsWith(keyword))
+                    match = true;
+
+                if (hd.getBan() != null && hd.getBan().getMaBan() != null
+                        && hd.getBan().getMaBan().toLowerCase().startsWith(keyword))
+                    match = true;
+
+                if (hd.getKhachHang() != null) {
+                    if (hd.getKhachHang().getTenKhachHang() != null
+                            && hd.getKhachHang().getTenKhachHang().toLowerCase().startsWith(keyword))
+                        match = true;
+
+                    if (hd.getKhachHang().getSdt() != null
+                            && hd.getKhachHang().getSdt().startsWith(keyword))
+                        match = true;
+                }
+
+                if (!match) continue;
+            }
+
+            // ===== Trạng thái =====
+            if (trangThai != null) {
+                int tt = hd.getTrangthai();
+                switch (trangThai) {
+                    case "Đặt trước":
+                        if (tt != 0) continue;
+                        break;
+                    case "Đang dùng":
+                        if (tt != 1) continue;
+                        break;
+                    case "Đã thanh toán":
+                        if (tt != 2) continue;
+                        break;
+                    case "Không nhận đơn":
+                        if (tt != 3) continue;
+                        break;
+                }
+            }
+
+            // ===== Ngày check-in =====
+            if (ngay != null) {
+                if (hd.getTgCheckIn() == null
+                        || !hd.getTgCheckIn().toLocalDate().equals(ngay))
+                    continue;
+            }
+
+            // ===== Khu vực (theo mã bàn) =====
+            if (khuVuc != null) {
+                if (hd.getBan() == null || hd.getBan().getMaBan() == null) continue;
+
+                String maBan = hd.getBan().getMaBan();
+                switch (khuVuc) {
+                    case "Indoor":
+                        if (!maBan.startsWith("BI")) continue;
+                        break;
+                    case "Outdoor":
+                        if (!maBan.startsWith("BO")) continue;
+                        break;
+                    case "VIP":
+                        if (!maBan.startsWith("BV")) continue;
+                        break;
+                }
+            }
+
+            dsHoaDon.add(hd);
+        }
+
+
+        hienThiDanhSachHoaDon();
+    }
+
 }

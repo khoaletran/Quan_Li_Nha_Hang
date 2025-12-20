@@ -97,18 +97,18 @@
                         <ColumnConstraints percentWidth="30.0" />
                     </columnConstraints>
                     <!-- Hàng 1 -->
-                    <Label styleClass="label_filter" text="Mã bàn:" GridPane.columnIndex="0" />
+                    <Label styleClass="label_filter" text="Tìm kiếm:" GridPane.columnIndex="0" />
                     <!-- Thêm fx:id txtMaBan -->
-                    <TextField fx:id="txtMaBan" prefHeight="21.0" prefWidth="360.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" />
+                    <TextField fx:id="txtTimKiem" prefHeight="21.0" prefWidth="360.0" promptText="Tên,SĐT,Mã bàn,Mã HD" styleClass="filter-tf" GridPane.columnIndex="1" />
 
                     <Label styleClass="label_filter" text="Thời gian:" GridPane.columnIndex="2" />
                     <!-- Thay TextField bằng DatePicker -->
                     <DatePicker fx:id="dpThoiGian" prefHeight="28.0" prefWidth="297.0" promptText="Chọn ngày" styleClass="filter-tf" GridPane.columnIndex="3" />
 
                     <!-- Hàng 2 -->
-                    <Label styleClass="label_filter" text="SDT:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <Label styleClass="label_filter" text="Trạng thái:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                     <!-- Thêm fx:id txtSDT -->
-                    <TextField fx:id="txtSDT" prefHeight="30.0" prefWidth="372.0" promptText="Value" styleClass="filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <ComboBox fx:id="cboTrangThai" prefHeight="27.0" prefWidth="297.0" promptText="-- chọn --" styleClass="uudai_combobox filter-tf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                     <Label styleClass="label_filter" text="Khu vực:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                     <!-- Thêm fx:id cboKhuVuc -->
