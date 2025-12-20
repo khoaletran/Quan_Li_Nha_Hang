@@ -151,6 +151,10 @@
                                     <Label fx:id="lblSuKien" styleClass="info-value" text="" />
                                 </HBox>
                                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
+                                    <Label styleClass="info-label" text="Bàn:" />
+                                    <Label fx:id="lblBan" styleClass="info-value" text="" />
+                                </HBox>
+                                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-row">
                                     <Label styleClass="info-label" text="Khu Vực:" />
                                     <Label fx:id="lblKhuVuc" styleClass="info-value" text="" />
                                 </HBox>

@@ -382,6 +382,7 @@ public class CheckinController {
         lblSDT.setText("");
         lblSoLuong.setText("");
         lblSuKien.setText("");
+        lblBan.setText("");
         lblKhuVuc.setText("");
 
         // xóa các dòng detail (row >= 1)
@@ -405,6 +406,7 @@ public class CheckinController {
         lblSDT.setText(hd.getKhachHang() != null ? hd.getKhachHang().getSdt() : "-");
         lblSoLuong.setText(String.valueOf(hd.getSoLuong()));
         lblSuKien.setText(hd.getSuKien() != null ? hd.getSuKien().getTenSK() : "-");
+        lblBan.setText(hd.getBan()!= null ? hd.getBan().getMaBan() : "-");
         lblKhuVuc.setText(hd.getBan().getKhuVuc() != null ? hd.getBan().getKhuVuc().getTenKhuVuc() : "-");
 
         List<ChiTietHoaDon> chiTietList = ChiTietHDDAO.getAllByMaHD(hd.getMaHD());
