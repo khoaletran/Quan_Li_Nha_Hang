@@ -46,9 +46,10 @@
             <Button fx:id="btnQLNhanVien" onAction="#handleMenuAction" styleClass="menu-item" text="⚙ QUẢN LÍ NHÂN VIÊN" />
             <Button fx:id="btnQLKhuyenMai" onAction="#handleMenuAction" styleClass="menu-item" text="⚙ QUẢN LÍ KHUYẾN MÃI" />
             <Button fx:id="btnQLChinhSach" onAction="#handleMenuAction" styleClass="menu-item" text="⚙ QUẢN LÍ CHÍNH SÁCH" />
+            <Button fx:id="btnTraCuuKetCa" onAction="#handleMenuAction" styleClass="menu-item" text="⚙ TRA CỨU KẾT CA" />
             <Button fx:id="btnThongKe" onAction="#handleMenuAction" styleClass="menu-item" text="⚙ THỐNG KÊ" />
             <Button fx:id="btnHoTro" onAction="#handleMenuAction" styleClass="menu-item" text="⚙ HỖ TRỢ" />
-            <Button fx:id="btnTraCuuKetCa" onAction="#handleMenuAction" styleClass="menu-item" text="⚙ TRA CỨU KẾT CA" />
+
         </VBox>
     </center>
 
