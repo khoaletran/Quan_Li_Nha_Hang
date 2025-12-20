@@ -58,35 +58,53 @@ public class HoTroControllerNV implements Initializable {
     private void khoiTaoDuLieuFAQ() {
 
         faqList.add(new FAQItem(
-                "1. Cách xem thống kê doanh thu?",
-                "• Dashboard hiển thị tự động doanh thu theo ngày\n" +
-                        "• Biểu đồ cột: Top 5 món bán chạy\n" +
-                        "• Biểu đồ đường: Lượng khách theo giờ\n" +
-                        "• Nhấn vào trang thống kê để xem chi tiết"
+                "1. Vì sao không thể check in đơn đặt bàn?",
+                "• Đơn chưa đến thời gian hẹn\n" +
+                        "• Đơn đã bị hủy hoặc đã check in trước đó\n" +
+                        "• Bàn chưa sẵn sàng\n" +
+                        "• Kiểm tra lại trạng thái đơn trong danh sách"
         ));
 
         faqList.add(new FAQItem(
-                "2. Xử lý thông báo hẹn giờ như thế nào?",
-                "Màu xanh: Đã đến giờ hẹn - Chuẩn bị bàn\n" +
-                        "Màu đỏ: Quá giờ hẹn - Liên hệ khách hàng\n" +
-                        "Màu vàng: Sắp đến giờ hẹn - Nhắc nhở"
+                "2. Không tìm thấy đơn đặt bàn thì phải làm sao?",
+                "• Kiểm tra đúng ngày đặt bàn\n" +
+                        "• Kiểm tra số điện thoại khách hàng\n" +
+                        "• Thử tìm theo mã đơn\n" +
+                        "• Kiểm tra bộ lọc trạng thái đơn"
         ));
 
         faqList.add(new FAQItem(
-                "3. Cách đổi mật khẩu tài khoản?",
-                "1. Từ Dashboard, nhấn nút 'Đổi Mật Khẩu'\n" +
-                        "2. Nhập mật khẩu cũ\n" +
-                        "3. Nhập mật khẩu mới\n" +
-                        "4. Xác nhận mật khẩu mới và nhấn 'Lưu'"
+                "3. Khi nào đơn đặt bàn bị tự động hủy?",
+                "• Khách không đến sau thời gian hẹn cho phép\n" +
+                        "• Nhân viên hủy đơn thủ công\n"
         ));
 
         faqList.add(new FAQItem(
-                "4. Xử lý đơn đặt bàn và thanh toán?",
-                "1. Chọn bàn, nhập thông tin khách hàng và thêm món vào đơn\n" +
-                        "2. Xem tổng tiền và áp dụng khuyến mãi (nếu có)\n" +
-                        "3. Xác nhận đơn hàng\n" +
-                        "4. Chọn phương thức thanh toán (tiền mặt/Chuyển khoản)\n" +
-                        "5. In hóa đơn và hoàn tất"
+                "4. Có thể chỉnh sửa đơn sau khi đã check in không?",
+                "• Có thể thêm món ăn\n" +
+                        "• Không thể xóa món đã phục vụ\n" +
+                        "• Không thể xóa đơn bàn đã nhận"
+        ));
+
+        faqList.add(new FAQItem(
+                "5. Vì sao tôi không truy cập được một số chức năng?",
+                "• Tài khoản chưa được cấp quyền\n" +
+                        "• Bạn đang đăng nhập sai vai trò\n" +
+                        "• Tài khoản bị khóa tạm thời\n" +
+                        "→ Liên hệ quản lý để kiểm tra"
+        ));
+
+        faqList.add(new FAQItem(
+                "6. Có mẹo nào thao tác nhanh hơn không?",
+                "• Sử dụng phím tắt thay vì chuột\n" +
+                        "• Tìm kiếm bằng số điện thoại\n" +
+                        "• Xóa bộ lọc khi không cần thiết"
+        ));
+
+        faqList.add(new FAQItem(
+                "7. Thanh toán xong có sửa lại hóa đơn được không?",
+                "• Không thể chỉnh sửa hóa đơn đã thanh toán\n" +
+                        "• Chỉ có thể xem hoặc in lại hóa đơn"
         ));
     }
 

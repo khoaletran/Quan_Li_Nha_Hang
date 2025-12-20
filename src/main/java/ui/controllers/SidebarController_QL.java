@@ -19,6 +19,7 @@ public class SidebarController_QL {
     @FXML private Button btnQLChinhSach;
     @FXML private Button btnThongKe;
     @FXML private Button btnHoTro;
+    @FXML private Button btnTraCuuKetCa;
     @FXML private Button btnDangXuat;
     @FXML private Label lblTenNV;
     @FXML private Label lblChucVu;
@@ -46,6 +47,7 @@ public class SidebarController_QL {
             case 6 -> setSelected(btnQLChinhSach);
             case 7 -> setSelected(btnThongKe);
             case 8 -> setSelected(btnHoTro);
+            case 9 -> setSelected(btnTraCuuKetCa);
         }
 
         // Load nội dung
@@ -62,6 +64,7 @@ public class SidebarController_QL {
             case 6 -> mainController.setCenterContent("/FXML/ChinhSach.fxml");
             case 7 -> mainController.setCenterContent("/FXML/ThongKe.fxml");
             case 8 -> mainController.setCenterContent("/FXML/HoTroQL.fxml");
+            case 9 -> mainController.setCenterContent("/FXML/TraCuuKetCa.fxml");
         }
     }           
 
@@ -117,6 +120,9 @@ public class SidebarController_QL {
         } else if (source == btnHoTro) {
             mainController.setCenterContent("/FXML/HoTroQL.fxml");
             setSelected(btnHoTro);
+        } else if (source == btnTraCuuKetCa) {
+            mainController.setCenterContent("/FXML/TraCuuKetCa.fxml");
+            setSelected(btnTraCuuKetCa);
         } else if (source == btnDangXuat) {
             Stage stage = (Stage) btnDangXuat.getScene().getWindow();
             ui.DangXuat.showDialog(stage);

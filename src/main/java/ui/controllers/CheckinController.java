@@ -20,6 +20,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import ui.AlertCus;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -343,15 +344,18 @@ public class CheckinController {
         LocalDateTime tgChoPhep = tgDat.plusMinutes(thoiGianChoPhut);
 
         if (now.isBefore(tgDat)) {
-            showAlert(Alert.AlertType.INFORMATION, "Thông báo",
-                    "Chưa tới giờ check-in!\nGiờ đặt: " + tgDat.toLocalTime());
+            AlertCus.show("Thông báo", "Chưa tới giờ check-in!\nGiờ đặt: " + tgDat.toLocalTime());
+            // showAlert(Alert.AlertType.INFORMATION, "Thông báo",
+            //         "Chưa tới giờ check-in!\nGiờ đặt: " + tgDat.toLocalTime());
             return;
         }
 
         if (now.isAfter(tgChoPhep)) {
-            showAlert(Alert.AlertType.INFORMATION, "Thông báo",
-                    "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
+            AlertCus.show("Thông báo", "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
+            // showAlert(Alert.AlertType.INFORMATION, "Thông báo",
+            //         "Đã quá hạn check-in!\nHạn cuối: " + tgChoPhep.toLocalTime());
             hd.setTrangthai(3);
+            BanDAO.update(hd.getBan(), false);
             HoaDonDAO.update(hd);
             loadDanhSach();
             return;
@@ -362,8 +366,9 @@ public class CheckinController {
 
         boolean ok = HoaDonDAO.update(hd);
         if (ok) {
-            showAlert(Alert.AlertType.INFORMATION, "Thành công",
-                    "Check-in thành công cho hóa đơn " + maHD + "!");
+            AlertCus.show("Thành công", "Check-in thành công cho hóa đơn " + maHD + "!");
+            // showAlert(Alert.AlertType.INFORMATION, "Thành công",
+            //         "Check-in thành công cho hóa đơn " + maHD + "!");
             loadDanhSach();
             clearThongTin();
         } else {
