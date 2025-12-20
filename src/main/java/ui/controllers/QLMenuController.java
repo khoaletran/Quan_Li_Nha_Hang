@@ -25,8 +25,10 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class QLMenuController {
 
@@ -52,14 +54,18 @@ public class QLMenuController {
     private TextField searchField;
     private MainController_QL mainController;
     private boolean isProgrammaticChange = false;
-
-
+    private static final Map<String, Image> imageCache = new HashMap<>();
+    private final Image fallbackImage =
+        new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png"),
+                180, 180, true, true);
 
     private List<Mon> dsMon = new ArrayList<>();
     private List<LoaiMon> dsLoaiMon = new ArrayList<>();
     private Mon monDuocChonTuDashboard;
     private File selectedFile;
-    DecimalFormat df = new DecimalFormat("#,###");
+    DecimalFormatSymbols symbols =
+        new DecimalFormatSymbols(new Locale("vi", "VN"));
+    DecimalFormat df = new DecimalFormat("#,###", symbols);
     @FXML
     public void initialize() {
         dsMon = MonDAO.getAll();
@@ -155,6 +161,26 @@ public class QLMenuController {
         this.monDuocChonTuDashboard = mon;
     }
 
+private Image getMenuImageCached(String fileName) {
+    if (fileName == null || fileName.isBlank()) {
+        return fallbackImage;
+    }
+
+    String path = "/IMG/food/" + fileName.replaceFirst("^/", "");
+
+    return imageCache.computeIfAbsent(path, p -> {
+        try {
+            return new Image(
+                    getClass().getResourceAsStream(p),
+                    180, 180, true, true
+            );
+        } catch (Exception e) {
+            return fallbackImage;
+        }
+    });
+}
+
+
     // Hàm lọc món kết hợp tên + loại
     private void filterMon() {
         String keyword = searchField.getText().toLowerCase().trim();
@@ -190,6 +216,10 @@ public class QLMenuController {
     private void loadDanhSachMon() {
         dsMon = MonDAO.getAll();
         flowMonAn.getChildren().clear();
+        // preload ảnh
+        for (Mon mon : dsMon) {
+            getMenuImageCached(mon.getHinhAnh());
+        }
         for (Mon mon : dsMon) {
             flowMonAn.getChildren().add(taoCardMon(mon, null));
         }
@@ -238,20 +268,7 @@ public class QLMenuController {
         imageView.setClip(clip);
 
         // ===== 3. Load hình =====
-        try {
-            if (file != null && file.exists()) {
-                imageView.setImage(new Image(file.toURI().toString()));
-            } else {
-                File localFile = new File("src/main/resources/IMG/food/" + mon.getHinhAnh());
-                if (localFile.exists()) {
-                    imageView.setImage(new Image(localFile.toURI().toString()));
-                } else {
-                    imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
-                }
-            }
-        } catch (Exception e) {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/IMG/food/restaurant.png")));
-        }
+        imageView.setImage(getMenuImageCached(mon.getHinhAnh()));
 
 
         imagePane.getChildren().add(imageView);
