@@ -60,44 +60,45 @@ public class HoTroControllerQL implements Initializable {
     }
 
     private void khoiTaoDuLieuFAQ() {
-        faqList.add(new FAQItem( //quan li
-                "1. Làm thế nào để thêm khuyến mãi mới?",
-                "Bước 1: Truy cập trang Khuyến Mãi\n" +
-                        "Bước 2: Nhập thông tin khuyến mãi\n" +
-                        "Bước 3: Chọn ngày bắt đầu/kết thúc và phần trăm giảm giá\n" +
-                        "Bước 4: Nhấn nút THÊM'"
+        faqList.add(new FAQItem(
+                "1. Vì sao tôi không chỉnh sửa được một số chức năng?",
+                "• Tài khoản chưa được cấp quyền quản lý\n" +
+                        "• Bạn cần đăng nhập bằng tài khoản nhân viên\n" +
+                        "• Thử đăng xuất và đăng nhập lại"
         ));
 
-        faqList.add(new FAQItem( //ca 2
-                "2. Cách xem thống kê doanh thu?",
-                "• Dashboard hiển thị tự động doanh thu theo ngày\n" +
-                        "• Biểu đồ cột: Top 5 món bán chạy\n" +
-                        "• Biểu đồ đường: Lượng khách theo giờ\n" +
-                        "• Nhấn vào trang thống kê để xem chi tiết"
+        faqList.add(new FAQItem(
+                "2. Có thể phân quyền chi tiết cho từng nhân viên không?",
+                "• Hiện tại hệ thống phân quyền theo vai trò\n" +
+                        "• Nhân viên chỉ thao tác nghiệp vụ\n" +
+                        "• Quản lý có toàn quyền cấu hình hệ thống"
         ));
 
-
-        faqList.add(new FAQItem( //ca 2
-                "3. Cách đổi mật khẩu tài khoản?",
-                "1. Từ Dashboard, nhấn nút 'Đổi Mật Khẩu'\n" +
-                        "2. Nhập mật khẩu cũ\n" +
-                        "3. Nhập mật khẩu mới\n" +
-                        "4. Xác nhận mật khẩu mới và nhấn 'Lưu'"
+        faqList.add(new FAQItem(
+                "3. Doanh thu hiển thị không khớp thực tế thì do đâu?",
+                "• Hóa đơn chưa được thanh toán\n" +
+                        "• Đang lọc sai thời gian thống kê\n" +
+                        "• Có hóa đơn bị hủy hoặc hoàn tiền\n" +
+                        "• Kiểm tra lại bộ lọc ngày/tháng"
         ));
 
-        faqList.add(new FAQItem( //quan li
-                "4. Quản lý món ăn trong menu?",
-                "• Thêm món: Vào trang Quản Lý Menu > Dấu + ở góc phải trên > Nhấn nút Thêm mới\n" +
-                        "• Sửa món: Chọn món cần sửa và nhập thông tin thay đổi > Nhấn nút Xác nhận\n" +
-                        "• Xóa món: Chọn món > Nhấn nút Xóa (chỉ khi không có đơn hàng)\n"
+        faqList.add(new FAQItem(
+                "4. Vì sao không thể xuất báo cáo?",
+                "• Chưa chọn khoảng thời gian thống kê\n" +
+                        "• Không có dữ liệu trong khoảng thời gian đó\n"
         ));
 
-        faqList.add(new FAQItem( //quản lí
-                "5. Quản lý nhân viên và phân quyền?",
-                "Chỉ Quản lý có quyền:\n" +
-                        "• Thêm/Sửa/Xóa nhân viên\n" +
-                        "• Phân quyền truy cập\n" +
-                        "• Xem báo cáo toàn hệ thống\n"
+        faqList.add(new FAQItem(
+                "5. Vì sao không thể xóa món ăn trong menu?",
+                "• Món đã phát sinh đơn hàng\n" +
+                        "• Món đang được áp dụng trong khuyến mãi\n" +
+                        "• Món đang được sử dụng trong báo cáo thống kê"
+        ));
+
+        faqList.add(new FAQItem(
+                "6. Khi thay đổi chính sách, đơn cũ có bị ảnh hưởng không?",
+                "• Không ảnh hưởng đơn đã tạo\n" +
+                        "• Chỉ áp dụng cho các đơn phát sinh sau thời điểm thay đổi"
         ));
     }
 
