@@ -731,7 +731,7 @@ public class HoaDonDAO {
     public static List<HoaDon> getAllTrangThai(int trangThai) {
         List<HoaDon> ds = new ArrayList<>();
 
-        String sql = SELECT_FULL + " WHERE hd.trangThai = ? AND hd.tgCheckin > GETDATE()";
+        String sql = SELECT_FULL + " WHERE hd.trangThai = ? "; //AND hd.tgCheckin > GETDATE()
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
