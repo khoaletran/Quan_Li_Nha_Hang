@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" styleClass="borderPane_main" stylesheets="@../CSS/tracuuketca.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.TraCuuKetCaController">
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1400.0" styleClass="borderPane_main" stylesheets="@../CSS/tracuuketca.css, @../CSS/AppMD.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.TraCuuKetCaController">
 
     <!-- Trung tâm -->
     <center>

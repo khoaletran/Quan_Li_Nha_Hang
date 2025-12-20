@@ -606,6 +606,126 @@ public class HoaDonDAO {
         return ds;
     }
 
+    public static Map<HoaDon, Double> getAllForThongKeInDay() {
+        Map<HoaDon, Double> ds = new LinkedHashMap<>();
+
+        String sql = """
+        WITH ChiTiet_TinhTien AS (
+            SELECT
+                hd.maHD,
+                cthd.maMon,
+                cthd.soLuong,
+                m.loaiMon,
+                m.giaGoc,
+                COALESCE(
+                    (
+                        SELECT TOP 1 p1.phanTramLoi
+                        FROM PhanTramGiaBan p1
+                        WHERE p1.maMon = m.maMon
+                          AND p1.ngayApDung <= hd.tgLapHD
+                        ORDER BY p1.ngayApDung DESC
+                    ),
+                    (
+                        SELECT TOP 1 p2.phanTramLoi
+                        FROM PhanTramGiaBan p2
+                        WHERE p2.maLoaiMon = m.loaiMon
+                          AND p2.ngayApDung <= hd.tgLapHD
+                        ORDER BY p2.ngayApDung DESC
+                    ),
+                    0
+                ) AS phanTramLoi
+            FROM HoaDon hd
+            JOIN ChiTietHoaDon cthd ON hd.maHD = cthd.maHD
+            JOIN Mon m ON cthd.maMon = m.maMon
+        ),
+        TongTien AS (
+            SELECT
+                hd.maHD,
+                SUM(COALESCE(ct.soLuong * ct.giaGoc * (1 + ct.phanTramLoi / 100.0), 0)) AS tongTienMon,
+                COALESCE(MAX(sk.gia), 0) AS giaSuKien
+            FROM HoaDon hd
+            LEFT JOIN ChiTiet_TinhTien ct ON hd.maHD = ct.maHD
+            LEFT JOIN SuKien sk ON sk.maSK = hd.maSK
+            GROUP BY hd.maHD
+        )
+        SELECT
+            hd.*, 
+            b.maBan,
+            b.maLoaiBan,
+            lb.tenLoaiBan,
+            lb.soLuong,
+            kv.maKhuVuc,
+            kv.tenKhuVuc,
+            (t.tongTienMon + t.giaSuKien) AS tongTienTruoc,
+            ((COALESCE(kh.hangGiam, 0) + COALESCE(km.phanTramGiamGia, 0)) / 100.0)
+                * (t.tongTienMon + t.giaSuKien) AS tongTienKhuyenMai,
+            (t.tongTienMon + t.giaSuKien) * 0.1 AS thue,
+            (t.tongTienMon + t.giaSuKien)
+              - ((COALESCE(kh.hangGiam, 0) + COALESCE(km.phanTramGiamGia, 0)) / 100.0)
+                * (t.tongTienMon + t.giaSuKien)
+              + ((t.tongTienMon + t.giaSuKien) * 0.1) AS tongTienSau
+        FROM HoaDon hd
+
+        JOIN TongTien t ON hd.maHD = t.maHD
+        LEFT JOIN KhuyenMai km ON km.maKM = hd.maKM
+        LEFT JOIN (
+            SELECT kh.maKH, hh.giamGia AS hangGiam
+            FROM KhachHang kh
+            JOIN HangKhachHang hh ON kh.maHang = hh.maHang
+        ) kh ON kh.maKH = hd.maKH
+        JOIN Ban b ON b.maBan = hd.maBan
+        JOIN LoaiBan lb ON lb.maLoaiBan = b.maLoaiBan
+        JOIN KhuVuc kv ON kv.maKhuVuc = b.maKhuVuc
+        WHERE hd.tgCheckin = GETDATE()
+        ORDER BY hd.tgLapHD
+    """;
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                // ===== KHU VỰC =====
+                KhuVuc kv = new KhuVuc();
+                kv.setMaKhuVuc(rs.getString("maKhuVuc"));
+                kv.setTenKhuVuc(rs.getString("tenKhuVuc"));
+
+                // ===== LOẠI BÀN =====
+                LoaiBan lb = new LoaiBan();
+                lb.setMaLoaiBan(rs.getString("maLoaiBan"));
+                lb.setTenLoaiBan(rs.getString("tenLoaiBan"));
+                lb.setSoLuong(rs.getInt("soLuong"));
+
+                // ===== BÀN =====
+                Ban b = new Ban();
+                b.setMaBan(rs.getString("maBan"));
+                b.setKhuVuc(kv);
+                b.setLoaiBan(lb);
+
+                // ===== HÓA ĐƠN =====
+                HoaDon hd = new HoaDon();
+                hd.setMaHD(rs.getString("maHD"));
+                hd.setTgLapHD(rs.getTimestamp("tgLapHD") != null
+                        ? rs.getTimestamp("tgLapHD").toLocalDateTime() : null);
+                hd.setTgCheckOut(rs.getTimestamp("tgCheckOut") != null
+                        ? rs.getTimestamp("tgCheckOut").toLocalDateTime() : null);
+                hd.setTrangthai(rs.getInt("trangThai"));
+                hd.setSoLuong(rs.getInt("soLuong"));
+                hd.setBan(b);
+
+                double tongTienSau = rs.getDouble("tongTienSau");
+
+                ds.put(hd, tongTienSau);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Lỗi thống kê: " + e.getMessage());
+        }
+
+        return ds;
+    }
+
     // Lấy tất cả hóa đơn có trangThai = 0 (ví dụ: ĐẶT TRƯỚC)
     public static List<HoaDon> getAllTrangThai(int trangThai) {
         List<HoaDon> ds = new ArrayList<>();

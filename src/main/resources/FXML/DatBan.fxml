@@ -251,7 +251,7 @@
                                                     <Image url="@../IMG/icon/StarWhite.png" />
                                                 </image>
                                             </ImageView>
-                                            <Label text="&gt;20-30" />
+                                            <Label text="&gt;12-25" />
                                         </children>
                                     </VBox>
                                 </children>

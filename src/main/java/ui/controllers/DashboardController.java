@@ -121,7 +121,7 @@ public class DashboardController {
         }
 
         if (nv == null) {
-            System.out.println("[DashboardController] ⚠️ NhanVien chưa được truyền vào!");
+            System.out.println("[DashboardController] NhanVien chưa được truyền vào!");
             return;
         }
 
@@ -164,7 +164,7 @@ public class DashboardController {
     }
     private void taiThongKeDashboard() {
         try {
-            Map<HoaDon, Double> danhSach = HoaDonDAO.getAllForThongKe(); // Lấy dữ liệu đã tính sẵn từ DB
+            Map<HoaDon, Double> danhSach = HoaDonDAO.getAllForThongKeInDay(); // Lấy dữ liệu đã tính sẵn từ DB
 
             if (danhSach == null || danhSach.isEmpty()) {
                 lblTongDonDangDoi.setText("0");
@@ -237,7 +237,7 @@ public class DashboardController {
 
     private void hienThiTop5MonAn() {
         ChiTietHDDAO cthdDAO = new ChiTietHDDAO();
-        List<ChiTietHoaDon> dsChiTiet = cthdDAO.getAll(); // Lấy toàn bộ chi tiết hóa đơn
+        List<ChiTietHoaDon> dsChiTiet = cthdDAO.getAllInDay(); // Lấy toàn bộ chi tiết hóa đơn
 
         if (dsChiTiet == null || dsChiTiet.isEmpty()) return;
 
@@ -274,7 +274,7 @@ public class DashboardController {
         attachBarTooltips();
     }
     private void hienThiBieuDoLuongKhachTheoGio() {
-        List<HoaDon> danhSach = HoaDonDAO.getAll(); // cái này sẽ lấy hd trong ngày
+        List<HoaDon> danhSach = HoaDonDAO.getAllNgayHomNay(); // cái này sẽ lấy hd trong ngày
         if (danhSach == null || danhSach.isEmpty()) return;
 
         // Tạo map 0-23 giờ, khách = 0
