@@ -252,7 +252,7 @@ public class TraCuuHoaDonController {
 
     private String getTrangThaiStyle(int trangThai) {
         switch (trangThai) {
-            case 0: return "-fx-text-fill: yellow; -fx-font-weight: bold; -fx-font-size: 11px;";
+            case 0: return "-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-font-size: 11px;";
             case 1: return "-fx-text-fill: #f39c12; -fx-font-weight: bold; -fx-font-size: 11px;";
             case 2: return "-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 11px;";
             case 3: return "-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 11px;";
