@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -47,6 +48,7 @@ public class TopBarController {
         initSearch();
         initActionButton();
         initWindowButtons();
+        
     }
 
     /* ========= API cho MainController ========= */
@@ -124,6 +126,7 @@ public class TopBarController {
 
     private void initWindowButtons() {
         if (btnMinimize != null) {
+            
             btnMinimize.setOnAction(e -> {
                 if (stage != null) {
                     stage.setIconified(true);   // Thu nhỏ xuống taskbar

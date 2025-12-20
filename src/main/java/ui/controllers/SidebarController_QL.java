@@ -1,11 +1,15 @@
 package ui.controllers;
 
 import entity.NhanVien;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class SidebarController_QL {
@@ -32,6 +36,26 @@ public class SidebarController_QL {
     public void initialize() {
         javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(55, 55, 55);
         avatarImage.setClip(clip);
+        Platform.runLater(() -> {
+            Scene scene = btnDangXuat.getScene();
+            if (scene != null) {
+                scene.setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.ESCAPE) {
+                        xuLyDangXuat();
+                    }
+                });
+            }
+        });
+        btnDashboard.setTooltip(new Tooltip("Phím tắt: 1"));
+        btnQLMenu.setTooltip(new Tooltip("Phím tắt: 2"));
+        btnQLBan.setTooltip(new Tooltip("Phím tắt: 3"));
+        btnQLNhanVien.setTooltip(new Tooltip("Phím tắt: 4"));
+        btnQLKhuyenMai.setTooltip(new Tooltip("Phím tắt: 5"));
+        btnQLChinhSach.setTooltip(new Tooltip("Phím tắt: 6"));
+        btnThongKe.setTooltip(new Tooltip("Phím tắt: 7"));
+        btnHoTro.setTooltip(new Tooltip("Phím tắt: 8"));
+        btnTraCuuKetCa.setTooltip(new Tooltip("Phím tắt: 9"));
+        btnDangXuat.setTooltip(new Tooltip("Phím tắt: ESC"));
     }
     public void selectTab(int index) {
         // Xóa highlight nút cũ
@@ -124,12 +148,14 @@ public class SidebarController_QL {
             mainController.setCenterContent("/FXML/TraCuuKetCa.fxml");
             setSelected(btnTraCuuKetCa);
         } else if (source == btnDangXuat) {
-            Stage stage = (Stage) btnDangXuat.getScene().getWindow();
-            ui.DangXuat.showDialog(stage);
+            xuLyDangXuat();
         }
-
-
     }
+    private void xuLyDangXuat() {
+        Stage stage = (Stage) btnDangXuat.getScene().getWindow();
+        ui.DangXuat.showDialog(stage);
+    }
+
 
     // Làm sáng nút đang chọn
     private void setSelected(Button btn) {

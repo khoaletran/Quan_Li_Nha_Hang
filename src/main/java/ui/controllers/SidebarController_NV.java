@@ -2,11 +2,15 @@ package ui.controllers;
 
 import entity.NhanVien;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -38,6 +42,28 @@ public class SidebarController_NV {
     public void initialize() {
         javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(55, 55, 55);
         avatarImage.setClip(clip);
+        // TOOLTIP SHORTCUT
+        btnDashboard.setTooltip(new Tooltip("Phím tắt: 1"));
+        btnQuanLiDatBan.setTooltip(new Tooltip("Phím tắt: 2"));
+        btnQuanLiThanhVien.setTooltip(new Tooltip("Phím tắt: 3"));
+        btnTraCuu.setTooltip(new Tooltip("Phím tắt: 4"));
+        btnHoTro.setTooltip(new Tooltip("Phím tắt: 5"));
+        btnKetCa.setTooltip(new Tooltip("Phím tắt: ESC"));
+        btnDatBan.setTooltip(new Tooltip("Phím tắt: F1"));
+        btnCheckIn.setTooltip(new Tooltip("Phím tắt: F2"));
+        btnCheckOut.setTooltip(new Tooltip("Phím tắt: F3"));
+        btnCapNhatDonBan.setTooltip(new Tooltip("Phím tắt: F4"));
+        btnKetCa.setTooltip(new Tooltip("Phím tắt: Esc"));
+        Platform.runLater(() -> {
+            Scene scene = avatarImage.getScene();
+            if (scene != null) {
+                scene.setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.ESCAPE) {
+                        selectTab(6); // Ban giao ca
+                    }
+                });
+            }
+        });
     }
 
     public void setThongTinNhanVien(NhanVien nv) {
