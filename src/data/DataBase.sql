@@ -192,6 +192,7 @@ CREATE TABLE KhuyenMai
     CONSTRAINT chk_uuDai_KM CHECK (uuDai IN (0, 1))
 );
 
+
 -- =========================================
 -- BẢNG MÓN
 -- =========================================
@@ -208,6 +209,9 @@ CREATE TABLE Mon
     CONSTRAINT chk_giaGoc_MON CHECK (giaGoc > 0),
     CONSTRAINT chk_soLuong_MON CHECK (soLuong >= 0)
 );
+
+
+
 -- =========================================
 -- BẢNG PHẦN TRĂM GIÁ BÁN
 -- =========================================
@@ -337,3 +341,14 @@ WHERE parent_object_id = OBJECT_ID('PhieuKetCa');
 ALTER TABLE PhieuKetCa
     ADD tgLogIn SMALLDATETIME;
 
+--
+--CONSTRAINT
+ALTER TABLE KhuyenMai
+    DROP CONSTRAINT chk_phanTramGiamGia_KM;
+---
+ALTER TABLE KhuyenMai
+    ADD CONSTRAINT chk_phanTramGiamGia_KM
+        CHECK (
+            (uuDai = 0 AND phanTramGiamGia BETWEEN 1 AND 100)
+                OR (uuDai = 1 AND phanTramGiamGia >= 0)
+            );

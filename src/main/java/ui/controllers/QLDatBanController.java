@@ -116,20 +116,60 @@ public class QLDatBanController {
         dpNgay.setOnAction(e -> locTheoNgayGio());
     }
 
-    private void initComboGio() {
-        cbGio.getItems().clear();
+//    private void initComboGio() {
+//        cbGio.getItems().clear();
+//
+//        for (int h = 0; h <= 23; h++) {
+//            cbGio.getItems().add(h);
+//        }
+//
+//        cbGio.setPromptText("Giờ");
+//
+//        // Có thể bỏ nếu không muốn mặc định
+//        cbGio.getSelectionModel().selectFirst();
+//
+//        cbGio.setOnAction(e -> locTheoNgayGio());
+//    }
+private void initComboGio() {
+    cbGio.getItems().clear();
 
-        for (int h = 0; h <= 23; h++) {
-            cbGio.getItems().add(h);
-        }
-
-        cbGio.setPromptText("Giờ");
-
-        // Có thể bỏ nếu không muốn mặc định
-        cbGio.getSelectionModel().selectFirst();
-
-        cbGio.setOnAction(e -> locTheoNgayGio());
+    for (int h = 0; h <= 23; h++) {
+        cbGio.getItems().add(h);
     }
+
+    cbGio.setPromptText("Giờ");
+
+    // ===== Hiển thị: "Giờ: X" =====
+    cbGio.setCellFactory(param -> new ListCell<>() {
+        @Override
+        protected void updateItem(Integer item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null) {
+                setText(null);
+            } else {
+                setText(item + " giờ");
+            }
+        }
+    });
+
+    cbGio.setButtonCell(new ListCell<>() {
+        @Override
+        protected void updateItem(Integer item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null) {
+                setText("Giờ");
+            } else {
+                setText(item + " giờ");
+            }
+        }
+    });
+
+    // Không chọn mặc định để cho phép lọc chỉ theo ngày
+    cbGio.getSelectionModel().clearSelection();
+
+    cbGio.setOnAction(e -> locTheoNgayGio());
+}
+
 
     private void locTheoNgayGio() {
 
