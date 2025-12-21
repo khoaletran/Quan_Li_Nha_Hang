@@ -336,29 +336,66 @@ public class KhuyenMaiController {
             LocalDate bd = dpNgayBatDau.getValue();
             LocalDate kt = dpNgayKetThuc.getValue();
             String maThayThe = txtMaThayThe.getText().trim();
-            String phStr = txtPhanTram.getText().replace("%", "").trim();
             String uuDai = cbUudai != null ? cbUudai.getValue() : null;
-            boolean loaiThanhToan = "Phần Trăm".equalsIgnoreCase(uuDai);
 
-            if (ma.isEmpty() || ten.isEmpty() || soStr.isEmpty() || bd == null || kt == null || phStr.isEmpty() || uuDai == null) {
-               AlertCus.show("Thông báo","Vui lòng điền đầy đủ thông tin");
+            // true = Tiền Mặt, false = Phần Trăm
+            boolean loaiThanhToan = "Tiền Mặt".equalsIgnoreCase(uuDai);
+
+            // Validate chung
+            if (ma.isEmpty() || ten.isEmpty() || soStr.isEmpty()
+                    || bd == null || kt == null || uuDai == null) {
+                AlertCus.show("Thông báo", "Vui lòng điền đầy đủ thông tin");
                 return null;
             }
+
             if (bd.isAfter(kt)) {
-                AlertCus.show("Thông báo","Ngày bắt đầu phải trước ngày kết thúc");
+                AlertCus.show("Thông báo", "Ngày bắt đầu phải trước ngày kết thúc");
                 return null;
             }
+
             int soLuong = Integer.parseInt(soStr);
-            int phanTram = Integer.parseInt(phStr);
-            return new KhuyenMai(ma, ten, soLuong, bd, kt, maThayThe, phanTram, loaiThanhToan);
+
+            String giaTriStr = txtPhanTram.getText().replace("%", "").trim();
+            if (giaTriStr.isEmpty()) {
+                AlertCus.show("Thông báo", "Vui lòng nhập giá trị ưu đãi");
+                return null;
+            }
+
+            int giaTri = Integer.parseInt(giaTriStr);
+
+            // VALIDATE THEO LOẠI ƯU ĐÃI
+            if (!loaiThanhToan) { // PHẦN TRĂM
+                if (giaTri < 1 || giaTri > 100) {
+                    AlertCus.show("Thông báo", "Phần trăm giảm phải từ 1 đến 100");
+                    return null;
+                }
+            } else { // TIỀN MẶT
+                if (giaTri < 0) {
+                    AlertCus.show("Thông báo", "Tiền giảm không được âm");
+                    return null;
+                }
+            }
+
+            return new KhuyenMai(
+                    ma,
+                    ten,
+                    soLuong,
+                    bd,
+                    kt,
+                    maThayThe,
+                    giaTri,       // % hoặc tiền
+                    loaiThanhToan // true = tiền mặt
+            );
+
         } catch (NumberFormatException e) {
-            AlertCus.show("Thông báo","Số lượng và phần trăm phải là số nguyên");
+            AlertCus.show("Thông báo", "Số lượng và giá trị ưu đãi phải là số");
             return null;
         } catch (Exception ex) {
-            AlertCus.show("Thông báo","Dữ liệu không hợp lệ: " + ex.getMessage());
+            AlertCus.show("Thông báo", "Dữ liệu không hợp lệ: " + ex.getMessage());
             return null;
         }
     }
+
 
     private void xoaTrangForm() {
         txtMaKM.setText(tuSinhMaKM(KhuyenMaiDAO.maKMCuoi()));
