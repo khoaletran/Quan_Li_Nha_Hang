@@ -493,8 +493,12 @@ public class DashboardController {
             box_not.getChildren().clear();
             List<HoaDon> danhSachHoaDon = hoaDonDAO.getAllToday();
             LocalDateTime now = LocalDateTime.now();
-            danhSachHoaDon.sort(Comparator.comparing(HoaDon::getTgCheckIn).reversed());
-
+            danhSachHoaDon.sort(
+                    Comparator.comparing(
+                            HoaDon::getTgCheckIn,
+                            Comparator.nullsLast(Comparator.naturalOrder())
+                    ).reversed()
+            );
             for (HoaDon hd : danhSachHoaDon) {
                 LocalDateTime tgCheckIn = hd.getTgCheckIn();
                 if (tgCheckIn == null) continue;

@@ -262,7 +262,8 @@ public class BanDAO {
         SELECT TOP 1 1
         FROM Ban b
         JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
-        WHERE b.maKhuVuc = ?
+        WHERE b.maBan like 'B%'
+          AND  b.maKhuVuc = ?
           AND lb.soLuong >= ?
           AND NOT EXISTS (
               SELECT 1
@@ -298,7 +299,8 @@ public class BanDAO {
         SELECT TOP 1 1
         FROM Ban b
         JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
-        WHERE b.maKhuVuc = ?
+        WHERE b.maBan like 'B%'
+          AND b.maKhuVuc = ?
           AND b.maLoaiBan = ?      -- FIX: bàn trống
           AND lb.soLuong >= ?
           AND NOT EXISTS (
@@ -339,7 +341,8 @@ public class BanDAO {
         FROM Ban b
         JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
         JOIN KhuVuc kv ON b.maKhuVuc = kv.maKhuVuc
-        WHERE b.maKhuVuc = ?
+        WHERE b.maBan like 'B%'
+          AND b.maKhuVuc = ?
           AND b.maLoaiBan = ?      -- FIX: bàn trống
           AND lb.soLuong >= ?
           AND NOT EXISTS (
@@ -377,7 +380,8 @@ public class BanDAO {
         SELECT ISNULL(MAX(lb.soLuong), 0) AS maxSL
         FROM Ban b
         JOIN LoaiBan lb ON b.maLoaiBan = lb.maLoaiBan
-        WHERE b.maKhuVuc = ?
+        WHERE b.maBan like 'B%'
+          AND b.maKhuVuc = ?
     """;
 
         try (Connection con = connectDB.getConnection();

@@ -380,6 +380,7 @@ public class HoaDonDAO {
                 LEFT JOIN KhuyenMai km ON km.maKM = hd.maKM
                 LEFT JOIN SuKien sk ON hd.maSK = sk.maSK
                 WHERE
+                    tgCheckin is not null and
                 (
                    (hd.kieuDatBan = 1
                     AND (hd.tgCheckin IS NULL OR
@@ -829,7 +830,8 @@ public class HoaDonDAO {
     public static List<HoaDon> getAllTrangThai(int trangThai) {
         List<HoaDon> ds = new ArrayList<>();
 
-        String sql = SELECT_FULL + " WHERE hd.trangThai = ? "; //AND hd.tgCheckin > GETDATE()
+        String sql = SELECT_FULL + " WHERE hd.trangThai = ? AND b.maBan LIKE 'B%'";
+        //AND hd.tgCheckin > GETDATE()
 
         try (Connection conn = connectDB.getInstance().getNewConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -852,6 +854,7 @@ public class HoaDonDAO {
 
         String sql = SELECT_FULL + """
         WHERE
+            b.maBan like 'B%' and
         (
             (hd.trangThai = 0
              AND hd.tgLapHD IS NOT NULL
