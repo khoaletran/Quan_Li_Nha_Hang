@@ -12,7 +12,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import ui.AlertCus;
+import ui.AppConstants;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -137,6 +139,25 @@ public class LoginController {
                     break;
                 }
             }
+        }
+
+        if (username.equals(AppConstants.ADMIN) && password.equals(AppConstants.ADPASS)) {
+            try {
+                // Đóng màn hình đăng nhập
+                Stage currentStage = (Stage) usernameField.getScene().getWindow();
+                currentStage.close();
+
+                // Mở giao diện chính (class MainNV)
+                ui.MainQL mainQL = new ui.MainQL();
+                Stage stage = new Stage();
+                NhanVien nv = new NhanVien("NV0000","ADMIN","099999999",false,true, LocalDate.now(),true,AppConstants.ADPASS);
+                mainQL.setNhanVienDangNhap(nv);
+                mainQL.show(stage);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            DN = true;
         }
 
         if (!DN){

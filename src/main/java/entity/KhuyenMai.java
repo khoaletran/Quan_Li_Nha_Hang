@@ -100,12 +100,18 @@ public class KhuyenMai {
         return phanTRamGiamGia;
     }
 
-    public void setPhanTRamGiamGia(int phanTramGiamGia) {
-        if(phanTramGiamGia < 0 || phanTramGiamGia >100) {
-            throw new IllegalArgumentException("Phần trăm giảm giá từ 0 đến 100");
+    public void setPhanTRamGiamGia(int value) {
+        if (isUuDai()) { // giảm tiền
+            if (value < 0)
+                throw new IllegalArgumentException("Giảm tiền phải >= 0");
+            this.phanTRamGiamGia = value;
+        } else { // giảm %
+            if (value < 0 || value > 100)
+                throw new IllegalArgumentException("Giảm % phải từ 0 đến 100");
+            this.phanTRamGiamGia = value;
         }
-        this.phanTRamGiamGia = phanTramGiamGia;
     }
+
 
     public Mon getSanPhamKM() {
         return sanPhamKM;

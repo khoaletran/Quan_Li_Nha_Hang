@@ -30,6 +30,10 @@ public class AppConstants {
     public static final int WINDOW_WIDTH = 1400;
     public static final int WINDOW_HEIGHT = 800;
 
+    //ADMIN
+    public static final String ADMIN = "AD0000";
+    public static final String ADPASS = "admin";
+
 
     private AppConstants() {
         // Chặn khởi tạo class (chỉ chứa hằng số)

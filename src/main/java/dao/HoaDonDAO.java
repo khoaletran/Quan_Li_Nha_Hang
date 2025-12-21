@@ -71,6 +71,7 @@ public class HoaDonDAO {
             km = new KhuyenMai();
             km.setMaKM(rs.getString("maKM"));
             km.setTenKM(rs.getString("tenKM"));
+            km.setUuDai(rs.getBoolean("uuDai"));
             km.setPhanTRamGiamGia(rs.getInt("phanTramGiamGia"));
         }
 
@@ -123,7 +124,7 @@ public class HoaDonDAO {
                b.trangThai AS trangThaiBan, b.maKhuVuc, b.maLoaiBan,
                kv.tenKhuVuc,
                lb.tenLoaiBan, lb.soLuong,
-               km.tenKM, km.phanTramGiamGia,
+               km.tenKM, km.uuDai ,km.phanTramGiamGia,
                sk.tenSK, sk.gia AS giaSK
         FROM HoaDon hd
         LEFT JOIN KhachHang kh ON hd.maKH = kh.maKH
