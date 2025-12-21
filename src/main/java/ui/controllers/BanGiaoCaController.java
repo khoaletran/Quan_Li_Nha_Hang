@@ -48,6 +48,7 @@ public class BanGiaoCaController {
     private double heThongTienMat = 0;
     private double heThongTienCK = 0;
     private double heThongTongTien = 0;
+    private double tienCoc = 0;
 
 
 
@@ -90,6 +91,10 @@ public class BanGiaoCaController {
 //        List<HoaDon> danhSach = hoaDonDAO.getTheoMaNV(nhanVien.getMaNV());
         List<HoaDon> danhSach = hoaDonDAO.getAll();
         for (HoaDon hd : danhSach) {
+
+            if (hd.getTrangthai() == 0 && hd.getTgLapHD().isAfter(thoiGianVaoCa)) {
+                tienCoc += hd.getCoc();
+            }
 
             LocalDateTime tgCheckout = hd.getTgCheckOut();
             if (tgCheckout == null) continue;
@@ -166,10 +171,10 @@ public class BanGiaoCaController {
         txtsLHD.setText(String.valueOf(slHoaDon));
         lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
         lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
-        lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
+        lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK + tienCoc) + " VND");
         heThongTienMat = tongTienMat;
         heThongTienCK = tongTienCK;
-        heThongTongTien = tongTienMat + tongTienCK;
+        heThongTongTien = tongTienMat + tongTienCK + tienCoc;
 
     }
 
@@ -229,7 +234,7 @@ public class BanGiaoCaController {
         int soHoaDon = Integer.parseInt(txtsLHD.getText());
         double tongTM = Double.parseDouble(txtSoTienMat.getText());
         double tongCK = Double.parseDouble(txtSoTienCK.getText());
-        double chenhLech = Double.parseDouble(txtTongTien.getText()) - (tongTM + tongCK);
+        double chenhLech = Double.parseDouble(txtTongTien.getText()) - heThongTongTien;
 
         NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
 
