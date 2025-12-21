@@ -60,7 +60,7 @@ public class ChonMonController {
     private LocalDateTime thoiGianDat;
     private int soLuongKhach;
     private SuKien sk;
-
+    private double tongTien;
 
     @FXML
     public void initialize() {
@@ -576,7 +576,7 @@ public class ChonMonController {
     }
 
     private void capNhatTongTien() {
-        double tongTien = 0;
+        tongTien = 0;
 
         for (Map.Entry<String, Integer> entry : soLuongMap.entrySet()) {
             String maMon = entry.getKey();
@@ -717,8 +717,16 @@ public class ChonMonController {
         double tienCoc = 0;
         if (coc.isLoaiCoc()) {
             tienCoc = tong * coc.getPhanTramCoc() / 100;
-        } else{
-            tienCoc = coc.getSoTienCoc();
+        }
+//        else{
+//            tienCoc = coc.getSoTienCoc();
+//        }
+        else{
+            if(tongTien >= coc.getSoTienCoc()*10){
+                tienCoc = tongTien* 0.4;
+            }
+
+            else tienCoc = coc.getSoTienCoc();
         }
 
         lblCoc.setText(formatCurrency(tienCoc));
