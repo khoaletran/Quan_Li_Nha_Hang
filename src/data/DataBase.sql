@@ -191,6 +191,16 @@ CREATE TABLE KhuyenMai
     CONSTRAINT chk_ngayKetThuc_KM CHECK (ngayKetThuc > ngayPhatHanh),
     CONSTRAINT chk_uuDai_KM CHECK (uuDai IN (0, 1))
 );
+--CONSTRAINT
+ALTER TABLE KhuyenMai
+    DROP CONSTRAINT chk_phanTramGiamGia_KM;
+---
+ALTER TABLE KhuyenMai
+    ADD CONSTRAINT chk_phanTramGiamGia_KM
+        CHECK (
+            (uuDai = 0 AND phanTramGiamGia BETWEEN 1 AND 100)
+                OR (uuDai = 1 AND phanTramGiamGia >= 0)
+            );
 
 -- =========================================
 -- BẢNG MÓN
@@ -208,6 +218,9 @@ CREATE TABLE Mon
     CONSTRAINT chk_giaGoc_MON CHECK (giaGoc > 0),
     CONSTRAINT chk_soLuong_MON CHECK (soLuong >= 0)
 );
+
+
+
 -- =========================================
 -- BẢNG PHẦN TRĂM GIÁ BÁN
 -- =========================================
