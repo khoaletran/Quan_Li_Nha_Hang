@@ -83,8 +83,6 @@ Dự án hướng đến các mục tiêu chính:
 ---
 ### Cách 1: Cài và Sử dụng nhanh
 
----
-
 ### 2️⃣ Thiết lập cơ sở dữ liệu
 
 1. Mở **SQL Server Management Studio (SSMS)**  
@@ -98,8 +96,6 @@ Quan_Li_Nha_Hang/src/data/DataBase.sql
 → Hệ thống sẽ tự động tạo database **QuanLyNhaHang** và dữ liệu mẫu
 → Khi database đã được tạo thành công
 
----
-
 ### 3️⃣ Cài và chạy ứng dụng
 1.tải "CrabKing Restaurant.exe"
 2.Phần mềm sẽ được tải về mở App 'CrabKing Restaurant' để mở ứng dụng
@@ -107,8 +103,6 @@ Quan_Li_Nha_Hang/src/data/DataBase.sql
 ---
 
 ### Cách 2: Tùy chỉnh và Cài đặt
-
----
 
 ### 2️⃣ Thiết lập cơ sở dữ liệu
 
@@ -122,8 +116,6 @@ Quan_Li_Nha_Hang/src/data/DataBase.sql
 3. Nhấn **F5** để thực thi  
 → Hệ thống sẽ tự động tạo database **QuanLyNhaHang** và dữ liệu mẫu
 
----
-
 ### 3️⃣ Cấu hình kết nối CSDL
 
 Mở file `ConnectDB.java` (hoặc file cấu hình tương đương) và chỉnh sửa:
@@ -134,7 +126,6 @@ String user = "sa";
 String password = "YOUR_PASSWORD_HERE"; // Thay bằng mật khẩu SQL Server
 ```
 
----
 
 ### 4️⃣ Build và chạy ứng dụng
 
@@ -306,4 +297,5 @@ src/
 
 - Dự án phục vụ mục đích **học tập**
 - Không sử dụng cho mục đích thương mại
+
 
