@@ -101,9 +101,9 @@ public class HoaDonInController {
         double tong = dsCT.stream().mapToDouble(ChiTietHoaDon::getThanhTien).sum();
         double giamGia = hd.getTongTienKhuyenMai();
         double thue = hd.getThue();
-        double tongSauThue = hd.getTongTienSau();
+        double tongSauThue = hd.getTongTienSau() + hd.getCoc();
         double coc = hd.getCoc();
-        double conLai = tongSauThue - coc;
+        double conLai = hd.getTongTienSau();
 
         // ===== Gán dữ liệu =====
         lblTongTien.setText(df.format(tong));

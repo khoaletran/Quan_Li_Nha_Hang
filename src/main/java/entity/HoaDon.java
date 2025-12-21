@@ -161,7 +161,14 @@ public class HoaDon {
         }
         if (c != null) {
             if (c.isLoaiCoc()) coc = getTongTienTruoc() * c.getPhanTramCoc() / 100;
-            else coc = c.getSoTienCoc();
+//            else coc = c.getSoTienCoc();
+            else{
+                if(getTongTienTruoc() >= c.getSoTienCoc()*10){
+                    coc = getTongTienTruoc()* 0.4;
+                }
+
+                else coc = c.getSoTienCoc();
+            }
         }
         return coc;
     }
