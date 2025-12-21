@@ -435,7 +435,7 @@ public class CheckoutController {
 
 
     private void congDiemTichLuy(KhachHang khachHang, double tongTien) {
-        int diem = (int) (tongTien * 0.1 / 100 );
+        int diem = (int) (tongTien * 0.01 / 100 );
         if (khachHang == null) return;
         khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() + diem);
         KhachHangDAO.update(khachHang);

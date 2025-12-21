@@ -327,7 +327,7 @@ public class BanGiaoCaController {
         double tongTienMat = 0;
         double tongTienCK = 0;
 
-        List<HoaDon> danhSach = hoaDonDAO.getTheoMaNV(nhanVien.getMaNV());
+        List<HoaDon> danhSach = hoaDonDAO.getAll();
 
         for (HoaDon hd : danhSach) {
 
