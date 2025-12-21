@@ -97,6 +97,7 @@ Quan_Li_Nha_Hang/src/data/DataBase.sql
 → Khi database đã được tạo thành công
 
 ### 3️⃣ Cài và chạy ứng dụng
+Tài khoản demo ADMIN: AD0000 | ADPASS: admin
 1.tải "CrabKing Restaurant.exe"
 2.Phần mềm sẽ được tải về mở App 'CrabKing Restaurant' để mở ứng dụng
 
@@ -128,7 +129,7 @@ String password = "YOUR_PASSWORD_HERE"; // Thay bằng mật khẩu SQL Server
 
 
 ### 4️⃣ Build và chạy ứng dụng
-
+Tài khoản demo ADMIN: AD0000 | ADPASS: admin
 ```bash
 mvn clean install
 mvn javafx:run
@@ -297,5 +298,6 @@ src/
 
 - Dự án phục vụ mục đích **học tập**
 - Không sử dụng cho mục đích thương mại
+
 
 
