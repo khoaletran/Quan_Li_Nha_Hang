@@ -117,11 +117,14 @@ public class HoaDon {
     }
 
     public double getTienMaKM(){
-        if (khuyenMai != null)
-            if(!khuyenMai.isUuDai())
+        if (khuyenMai != null){
+            if(!khuyenMai.isUuDai()){
                 return (khuyenMai.getPhanTRamGiamGia() / 100.0) * getTongTienTruoc();
-            else
+            }
+            else{
                 return khuyenMai.getPhanTRamGiamGia();
+            }
+        }
         return 0;
     }
 
@@ -140,7 +143,7 @@ public class HoaDon {
         if (khuyenMai != null)
             giamKM = khuyenMai.getPhanTRamGiamGia();
 
-        tongTienKhuyenMai = getTongTienTruoc() * (giamKH + giamKM) / 100;
+        tongTienKhuyenMai = (getTongTienTruoc() * giamKH / 100) + getTienHangKM();
         return tongTienKhuyenMai;
     }
 

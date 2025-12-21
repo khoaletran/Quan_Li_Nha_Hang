@@ -181,7 +181,7 @@ public class DatBanController {
             return;
         }
 
-        List<HoaDon> dsHD = HoaDonDAO.getAll();
+        List<HoaDon> dsHD = HoaDonDAO.getHoaDonTuHomNayTroVeSau();
 
         capNhatHienThi(starOut_01, tableOut_01, "KV0001", "LB0001", 1, 2, dsHD);
         capNhatHienThi(starOut_02, tableOut_02, "KV0001", "LB0002", 3, 4, dsHD);

@@ -847,6 +847,42 @@ public class HoaDonDAO {
 
         return ds;
     }
+    public static List<HoaDon> getHoaDonTuHomNayTroVeSau() {
+        List<HoaDon> ds = new ArrayList<>();
+
+        String sql = SELECT_FULL + """
+        WHERE
+        (
+            (hd.trangThai = 0
+             AND hd.tgLapHD IS NOT NULL
+             AND CAST(hd.tgLapHD AS DATE) >= CAST(GETDATE() AS DATE)
+            )
+            OR
+            (hd.trangThai <> 0
+             AND hd.tgCheckin IS NOT NULL
+             AND CAST(hd.tgCheckin AS DATE) >= CAST(GETDATE() AS DATE)
+            )
+        )
+        ORDER BY COALESCE(hd.tgCheckin, hd.tgLapHD) DESC
+    """;
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                ds.add(mapFullHoaDon(rs));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Lỗi getHoaDonTuHomNayTroVeSau: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return ds;
+    }
+
+
 
     public static List<HoaDon> getAllDatTruoc() {
         return getAllTrangThai(0);   // 0 = Đặt trước
