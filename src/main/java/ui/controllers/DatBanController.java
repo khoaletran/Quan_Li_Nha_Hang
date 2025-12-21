@@ -235,10 +235,11 @@ public class DatBanController {
         ImageView[] stars = {starOut_01, starOut_02, starOut_03, starOut_04,
                 starIN_01, starIN_02, starIN_03, starIN_04,
                 starVIP_01, starVIP_02};
+        Image starWhite = loadImage("/IMG/icon/starwhite.png");
         for (int i = 0; i < tables.length; i++) {
             tables[i].setDisable(true);
             stars[i].setOpacity(0.2);
-            stars[i].setImage(new Image(getClass().getResourceAsStream("/IMG/icon/starwhite.png")));
+            if (starWhite != null) stars[i].setImage(starWhite);
         }
     }
 
@@ -293,28 +294,35 @@ public class DatBanController {
 
 
 
+    private static Image loadImage(String path) {
+        var url = DatBanController.class.getResource(path);
+        if (url == null) {
+            System.err.println("Missing resource: " + path);
+            return null;
+        }
+        return new Image(url.toExternalForm());
+    }
+
     private void tatBan(ImageView star, VBox table) {
         table.setDisable(true);
         star.setOpacity(0.2);
-        star.setImage(new Image(getClass().getResourceAsStream("/IMG/icon/starwhite.png")));
-    }
 
-    private void moBanSaoMo(ImageView star, VBox table) {
-        table.setDisable(true);
-        star.setOpacity(0.4);
-        star.setImage(new Image(getClass().getResourceAsStream("/IMG/icon/starwhite.png")));
+        Image img = loadImage("/IMG/icon/starwhite.png"); // đúng theo resource đang có
+        if (img != null) star.setImage(img);
     }
 
     private void moBanSaoTrang(ImageView star, VBox table) {
         table.setDisable(false);
         star.setOpacity(0.7);
-        star.setImage(new Image(getClass().getResourceAsStream("/IMG/icon/starwhite.png")));
+        Image img = loadImage("/IMG/icon/starwhite.png"); // đúng theo resource đang có
+        if (img != null) star.setImage(img);
     }
 
     private void moBanSaoSang(ImageView star, VBox table) {
         table.setDisable(false);
         star.setOpacity(1.0);
-        star.setImage(new Image(getClass().getResourceAsStream("/IMG/icon/star.png")));
+        Image img = loadImage("/IMG/icon/star.png"); // đúng theo resource đang có
+        if (img != null) star.setImage(img);
     }
 
     private void ganSuKienChoBan() {
