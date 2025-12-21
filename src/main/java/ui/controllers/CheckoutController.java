@@ -137,7 +137,7 @@ public class CheckoutController {
         vboxHoaDon.getChildren().clear();
 
 //        List<HoaDon> dsHoaDon = HoaDonDAO.getAll();
-        allHoaDon = HoaDonDAO.getAll();
+        allHoaDon = HoaDonDAO.getAllNgayHomNay();
         List<KhachHang> dsKH = KhachHangDAO.getAll();
         List<KhuVuc> dsKV = KhuVucDAO.getAll();
         List<ChiTietHoaDon> dsCTAll = ChiTietHDDAO.getAll();
