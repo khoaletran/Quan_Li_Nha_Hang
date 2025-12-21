@@ -1,4 +1,4 @@
-# 🍽️ HỆ THỐNG QUẢN LÝ NHÀ HÀNG (RESTRICT)
+# 🍽️ HỆ THỐNG QUẢN LÝ NHÀ HÀNG (CrabKing Restaurant)
 
 **Dự án môn học:** Phát triển ứng dụng (Java)  
 **Trường:** Đại học Công nghiệp TP. Hồ Chí Minh (IUH)
@@ -306,3 +306,4 @@ src/
 
 - Dự án phục vụ mục đích **học tập**
 - Không sử dụng cho mục đích thương mại
+
