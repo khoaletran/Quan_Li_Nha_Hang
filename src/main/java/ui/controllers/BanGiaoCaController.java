@@ -61,9 +61,11 @@ public class BanGiaoCaController {
 
         btnKetCa.setOnAction(e -> KiemTraTruocKetCa());
 
-        searchIcon.setOnMouseClicked(e -> timKiemHoaDon());
+        // Click icon tìm kiếm
+        searchIcon.setOnMouseClicked(e -> thucHienTimKiem());
 
-        searchField.setOnAction(e -> timKiemHoaDon());
+        // Nhấn Enter để tìm
+        searchField.setOnAction(e -> thucHienTimKiem());
 
         javafx.application.Platform.runLater(() -> {
             searchField.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
@@ -313,109 +315,6 @@ public class BanGiaoCaController {
         return false;
     }
 
-    private void timKiemHoaDon() {
-        String keyword = searchField.getText().trim().toLowerCase();
-
-        vboxHoaDon.getChildren().clear();
-
-        if (keyword.isEmpty()) {
-            loadHoaDonTrongCaLam();
-            return;
-        }
-
-        int slHoaDon = 0;
-        double tongTienMat = 0;
-        double tongTienCK = 0;
-
-        List<HoaDon> danhSach = hoaDonDAO.getAll();
-
-        for (HoaDon hd : danhSach) {
-
-            LocalDateTime tgCheckout = hd.getTgCheckOut();
-            if (tgCheckout == null) continue;
-
-            if (!tgCheckout.toLocalDate().equals(thoiGianVaoCa.toLocalDate())) continue;
-            if (!tgCheckout.isAfter(thoiGianVaoCa)) continue;
-
-            String maHD = hd.getMaHD().toLowerCase();
-            String tenKH = hd.getKhachHang().getTenKhachHang().toLowerCase();
-            String sdt = hd.getKhachHang().getSdt().toLowerCase();
-
-            String soKhachStr = String.valueOf(hd.getSoLuong());
-
-            boolean match =
-                    maHD.startsWith(keyword) ||
-                            tenKH.startsWith(keyword) ||
-                            sdt.startsWith(keyword) ||
-                            soKhachStr.startsWith(keyword);
-
-            if (!match) continue;
-
-            double tienHoaDon = 0;
-            List<ChiTietHoaDon> dsCT = ChiTietHDDAO.getByMaHD(hd.getMaHD());
-            for (ChiTietHoaDon ct : dsCT) {
-                tienHoaDon += ct.getMon().getGiaGoc() * ct.getSoLuong();
-            }
-
-            if (hd.getKhuyenMai() != null) {
-                double giam = hd.getKhuyenMai().getPhanTRamGiamGia();
-                tienHoaDon = tienHoaDon * (1 - giam / 100.0);
-            }
-
-            tienHoaDon *= 1.1;
-
-            if (hd.isKieuThanhToan()) tongTienCK += tienHoaDon;
-            else tongTienMat += tienHoaDon;
-
-            String maBan = hd.getBan().getMaBan();
-            String prefix = maBan.substring(0, 2);
-            String imgPath = "/IMG/ban/IN.png";
-
-            switch (prefix) {
-                case "BV": imgPath = "/IMG/ban/vip.png"; break;
-                case "BI": imgPath = "/IMG/ban/IN.png"; break;
-                case "BO": imgPath = "/IMG/ban/out.png"; break;
-            }
-
-            ImageView imgBan = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
-            imgBan.setFitWidth(60);
-            imgBan.setFitHeight(60);
-
-            Label lblMaHD = new Label(hd.getMaHD());
-            Label lblSDT = new Label("SDT: " + hd.getKhachHang().getSdt());
-            Label lblTenKH = new Label("Tên: " + hd.getKhachHang().getTenKhachHang());
-            Label lblSoLuong = new Label("Số khách: " + hd.getSoLuong());
-            lblMaHD.getStyleClass().add("invoice-id");
-
-            VBox info = new VBox(2, lblMaHD, lblSDT, lblTenKH, lblSoLuong);
-            HBox left = new HBox(10, imgBan, info);
-            left.setAlignment(Pos.CENTER_LEFT);
-
-            Pane spacer = new Pane();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
-
-            Label lblTongTien = new Label(NumberFormat.getInstance(new Locale("vi", "VN"))
-                    .format(tienHoaDon) + " đ");
-            lblTongTien.getStyleClass().add("invoice-total");
-
-            HBox card = new HBox(10, left, spacer, lblTongTien);
-            card.setAlignment(Pos.CENTER_LEFT);
-            card.getStyleClass().add("invoice-card");
-            card.setPadding(new Insets(10));
-            VBox.setMargin(card, new Insets(5, 0, 5, 0));
-
-            vboxHoaDon.getChildren().add(card);
-
-
-            slHoaDon++;
-        }
-
-        NumberFormat nf = NumberFormat.getInstance(new Locale("vi", "VN"));
-        lblsoHD.setText("Số hóa đơn: " + slHoaDon);
-        lblTienMat.setText("Tiền mặt: " + nf.format(tongTienMat) + " VND");
-        lblCKhoan.setText("Chuyển khoản: " + nf.format(tongTienCK) + " VND");
-        lblDThu.setText("Doanh thu: " + nf.format(tongTienMat + tongTienCK) + " VND");
-    }
 
     private String tuSinhMaPhieuKC() {
         int hour = thoiGianVaoCa.getHour();
@@ -434,6 +333,77 @@ public class BanGiaoCaController {
 
         return String.format("MP%s%s%04d", ca, datePart, so + 1);
     }
+
+    private void loadHoaDonTrongCaLamTimKiem(String keyword) {
+        int slHoaDon = 0;
+        vboxHoaDon.getChildren().clear();
+
+        if (nhanVien == null || thoiGianVaoCa == null) return;
+
+        String kw = keyword.toLowerCase();
+
+        List<HoaDon> danhSach = hoaDonDAO.getAll();
+        for (HoaDon hd : danhSach) {
+
+            if (hd.getTgCheckOut() == null) continue;
+            if (!hd.getTgCheckOut().toLocalDate().equals(thoiGianVaoCa.toLocalDate())) continue;
+            if (!hd.getTgCheckOut().isAfter(thoiGianVaoCa)) continue;
+
+            boolean match =
+                    hd.getMaHD().toLowerCase().contains(kw) ||
+                            hd.getBan().getMaBan().toLowerCase().contains(kw) ||
+                            hd.getKhachHang().getTenKhachHang().toLowerCase().contains(kw) ||
+                            hd.getKhachHang().getSdt().startsWith(keyword);
+
+            if (!kw.isEmpty() && !match) continue;
+
+            double tien = hd.getTongTienSau();
+
+            String imgPath = "/IMG/ban/IN.png";
+            String prefix = hd.getBan().getMaBan().substring(0, 2);
+            if (prefix.equals("BV")) imgPath = "/IMG/ban/vip.png";
+            else if (prefix.equals("BO")) imgPath = "/IMG/ban/out.png";
+
+            ImageView imgBan = new ImageView(new Image(getClass().getResourceAsStream(imgPath)));
+            imgBan.setFitWidth(60);
+            imgBan.setFitHeight(60);
+
+            Label lblMaHD = new Label(hd.getMaHD());
+            lblMaHD.getStyleClass().add("invoice-id");
+            Label lblSDT = new Label("SDT: " + hd.getKhachHang().getSdt());
+            lblSDT.getStyleClass().add("invoice-phone");
+            Label lblTen = new Label("Tên: " + hd.getKhachHang().getTenKhachHang());
+            lblTen.getStyleClass().add("invoice-name");
+
+            VBox info = new VBox(2, lblMaHD, lblSDT, lblTen);
+
+            Label lblTien = new Label(NumberFormat
+                    .getInstance(new Locale("vi", "VN"))
+                    .format(tien) + " đ");
+            lblTien.getStyleClass().add("invoice-total");
+
+            Pane spacer = new Pane();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
+            HBox card = new HBox(10, imgBan, info, spacer, lblTien);
+            card.getStyleClass().add("invoice-card");
+            card.setAlignment(Pos.CENTER_LEFT);
+            VBox.setMargin(card, new Insets(5, 0, 5, 0));
+
+            vboxHoaDon.getChildren().add(card);
+            slHoaDon++;
+        }
+
+        txtsLHD.setText(String.valueOf(slHoaDon));
+    }
+
+
+    private void thucHienTimKiem() {
+        String keyword = searchField.getText().trim();
+        loadHoaDonTrongCaLamTimKiem(keyword);
+    }
+
+
 
     public void dangXuat(){
         System.exit(0);
