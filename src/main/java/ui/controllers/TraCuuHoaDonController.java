@@ -87,7 +87,7 @@ public class TraCuuHoaDonController {
         khoiTaoComboBox();
         khoiTaoDatePicker();
         ganSuKienChoNut();
-        taiDanhSachHoaDon();
+        taiDanhSachHoaDon(null);
         resetForm();
 
         Tooltip tipFind = new Tooltip("Tìm kiếm nhanh (Ctrl + F)");
@@ -142,9 +142,9 @@ public class TraCuuHoaDonController {
         if (confirm_btn != null) confirm_btn.setOnAction(e -> HoaDonIn.previewHoaDon(hoaDonSelected));
     }
     // TẢI & HIỂN THỊ DANH SÁCH HÓA ĐƠN
-    private void taiDanhSachHoaDon() {
+    private void taiDanhSachHoaDon(List<HoaDon> hoaDonSelected) {
         try {
-            List<HoaDon> listHD = hoaDonDAO.getAll();
+            List<HoaDon> listHD = hoaDonSelected;
             dsHoaDon.clear();
             if (listHD != null) dsHoaDon.addAll(listHD);
             hienThiDanhSachHoaDon();
@@ -391,7 +391,7 @@ public class TraCuuHoaDonController {
         if (cboTrangThai != null) cboTrangThai.setValue("Tất cả");
         if (cboKhuVuc != null) cboKhuVuc.setValue("Tất cả");
 
-        taiDanhSachHoaDon();
+        taiDanhSachHoaDon(null);
         resetForm();
     }
 
@@ -483,92 +483,29 @@ public class TraCuuHoaDonController {
 
 
     private void locHoaDon() {
-        List<HoaDon> all = hoaDonDAO.getAll();
-        dsHoaDon.clear();
-
-        String keyword = txtTimKiem.getText() != null
-                ? txtTimKiem.getText().trim().toLowerCase()
+        String keyword = (txtTimKiem.getText() != null)
+                ? txtTimKiem.getText().trim()
                 : "";
 
-        String trangThai = cboTrangThai.getValue();
-        LocalDate ngay = dpThoiGian.getValue();
-        String khuVuc = cboKhuVuc.getValue();
+        String trangThaiTxt = (cboTrangThai != null) ? cboTrangThai.getValue() : null;
+        LocalDate ngay = (dpThoiGian != null) ? dpThoiGian.getValue() : null;
+        String khuVuc = (cboKhuVuc != null) ? cboKhuVuc.getValue() : null;
 
-        for (HoaDon hd : all) {
-
-            // ===== txtTimKiem: tên KH / mã bàn / mã HD / SĐT =====
-            if (!keyword.isEmpty()) {
-                boolean match = false;
-
-                if (hd.getMaHD() != null && hd.getMaHD().toLowerCase().startsWith(keyword))
-                    match = true;
-
-                if (hd.getBan() != null && hd.getBan().getMaBan() != null
-                        && hd.getBan().getMaBan().toLowerCase().startsWith(keyword))
-                    match = true;
-
-                if (hd.getKhachHang() != null) {
-                    if (hd.getKhachHang().getTenKhachHang() != null
-                            && hd.getKhachHang().getTenKhachHang().toLowerCase().startsWith(keyword))
-                        match = true;
-
-                    if (hd.getKhachHang().getSdt() != null
-                            && hd.getKhachHang().getSdt().startsWith(keyword))
-                        match = true;
-                }
-
-                if (!match) continue;
+        Integer trangThai = null;
+        if (trangThaiTxt != null && !"Tất cả".equalsIgnoreCase(trangThaiTxt)) {
+            switch (trangThaiTxt) {
+                case "Đặt trước":     trangThai = 0; break;
+                case "Đang dùng":     trangThai = 1; break;
+                case "Đã thanh toán": trangThai = 2; break;
+                case "Không nhận đơn":trangThai = 3; break;
             }
-
-            // ===== Trạng thái =====
-            if (trangThai != null) {
-                int tt = hd.getTrangthai();
-                switch (trangThai) {
-                    case "Đặt trước":
-                        if (tt != 0) continue;
-                        break;
-                    case "Đang dùng":
-                        if (tt != 1) continue;
-                        break;
-                    case "Đã thanh toán":
-                        if (tt != 2) continue;
-                        break;
-                    case "Không nhận đơn":
-                        if (tt != 3) continue;
-                        break;
-                }
-            }
-
-            // ===== Ngày check-in =====
-            if (ngay != null) {
-                if (hd.getTgCheckIn() == null
-                        || !hd.getTgCheckIn().toLocalDate().equals(ngay))
-                    continue;
-            }
-
-            // ===== Khu vực (theo mã bàn) =====
-            if (khuVuc != null) {
-                if (hd.getBan() == null || hd.getBan().getMaBan() == null) continue;
-
-                String maBan = hd.getBan().getMaBan();
-                switch (khuVuc) {
-                    case "Indoor":
-                        if (!maBan.startsWith("BI")) continue;
-                        break;
-                    case "Outdoor":
-                        if (!maBan.startsWith("BO")) continue;
-                        break;
-                    case "VIP":
-                        if (!maBan.startsWith("BV")) continue;
-                        break;
-                }
-            }
-
-            dsHoaDon.add(hd);
         }
 
+        List<HoaDon> list = hoaDonDAO.searchHoaDon(keyword, trangThai, ngay, khuVuc);
 
+        dsHoaDon.setAll(list);
         hienThiDanhSachHoaDon();
     }
+
 
 }

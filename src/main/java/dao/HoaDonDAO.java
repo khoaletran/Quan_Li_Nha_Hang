@@ -4,6 +4,7 @@ import connectDB.connectDB;
 import entity.*;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -212,6 +213,102 @@ public class HoaDonDAO {
 
         return null;
     }
+
+    public List<HoaDon> searchHoaDon(String keyword,
+                                     Integer trangThai,
+                                     LocalDate ngay,
+                                     String tenKhuVuc) {
+
+        List<HoaDon> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(SELECT_FULL).append(" WHERE 1=1 ");
+
+        List<Object> params = new ArrayList<>();
+
+        // ===== KEYWORD (tìm dưới DB) =====
+        if (keyword != null && !keyword.isBlank()) {
+            String kw = keyword.trim();
+
+            boolean isPhone = kw.matches("^0[3-9]\\d{8}$");   // sđt 10 số
+            boolean isMaHD  = kw.toUpperCase().startsWith("HD");
+
+            if (isMaHD) {
+                sql.append(" AND hd.maHD LIKE ? ");
+                params.add(kw.toUpperCase() + "%");
+            } else if (isPhone) {
+                sql.append(" AND kh.sdt LIKE ? ");
+                params.add(kw + "%");
+            } else {
+                sql.append(" AND (hd.maHD LIKE ? OR kh.sdt LIKE ? OR kh.tenKH LIKE ? OR b.maBan LIKE ?) ");
+                params.add(kw.toUpperCase() + "%");
+                params.add(kw + "%");
+                params.add("%" + kw + "%");          // tên KH nên contains
+                params.add(kw.toUpperCase() + "%");
+            }
+        }
+
+        // ===== TRẠNG THÁI =====
+        if (trangThai != null) {
+            sql.append(" AND hd.trangThai = ? ");
+            params.add(trangThai);
+        }
+
+        // ===== NGÀY (đặt trước theo tgLapHD, còn lại theo tgCheckin) =====
+        if (ngay != null) {
+            if (trangThai != null && trangThai == 0) {
+                sql.append(" AND hd.tgLapHD IS NOT NULL AND CAST(hd.tgLapHD AS DATE) = ? ");
+                params.add(java.sql.Date.valueOf(ngay));
+            } else if (trangThai != null) {
+                sql.append(" AND hd.tgCheckin IS NOT NULL AND CAST(hd.tgCheckin AS DATE) = ? ");
+                params.add(java.sql.Date.valueOf(ngay));
+            } else {
+                sql.append(" AND ( (hd.trangThai = 0 AND hd.tgLapHD IS NOT NULL AND CAST(hd.tgLapHD AS DATE) = ?) ")
+                        .append("    OR (hd.trangThai <> 0 AND hd.tgCheckin IS NOT NULL AND CAST(hd.tgCheckin AS DATE) = ?) ) ");
+                params.add(java.sql.Date.valueOf(ngay));
+                params.add(java.sql.Date.valueOf(ngay));
+            }
+        }
+
+        // ===== KHU VỰC (combo đang load tenKhuVuc từ DB) =====
+        // Nếu tenKhuVuc = null/"Tất cả" -> không lọc.
+        if (tenKhuVuc != null && !tenKhuVuc.isBlank() && !"Tất cả".equalsIgnoreCase(tenKhuVuc)) {
+            sql.append(" AND kv.tenKhuVuc = ? ");
+            params.add(tenKhuVuc);
+        }
+
+        sql.append(" ORDER BY hd.tgLapHD DESC ")
+                .append(" OFFSET 0 ROWS FETCH NEXT 100 ROWS ONLY ");
+
+
+        try (Connection conn = connectDB.getInstance().getNewConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                Object p = params.get(i);
+                if (p instanceof java.sql.Date) {
+                    ps.setDate(i + 1, (java.sql.Date) p);
+                } else if (p instanceof Integer) {
+                    ps.setInt(i + 1, (Integer) p);
+                } else {
+                    ps.setString(i + 1, String.valueOf(p));
+                }
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapFullHoaDon(rs));
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Lỗi searchHoaDon: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 
 
     // =====================================================================
